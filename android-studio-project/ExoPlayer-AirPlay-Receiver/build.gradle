@@ -1,0 +1,58 @@
+apply from: '../constants.gradle'
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+
+    compileOptions {
+        sourceCompatibility project.ext.javaVersion
+        targetCompatibility project.ext.javaVersion
+    }
+
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+
+        applicationId "com.github.warren_bank.exoplayer_airplay_receiver"
+        versionName project.ext.releaseVersion
+        versionCode project.ext.releaseVersionCode
+    }
+
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled   true
+            proguardFiles = [
+                "proguard-rules.txt",
+                getDefaultProguardFile('proguard-android.txt')
+            ]
+        }
+        debug {
+            debuggable    true
+            jniDebuggable true
+        }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+        abortOnError true
+    }
+}
+
+dependencies {
+    compileOnly         'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidX           // ( 27 KB) https://mvnrepository.com/artifact/androidx.annotation/annotation
+    annotationProcessor 'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidX
+
+    implementation      'com.google.android.exoplayer:exoplayer-core:'            + project.ext.libVersionExoPlayer          // (1.3 MB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-core?repo=bt-google-exoplayer
+    implementation      'com.google.android.exoplayer:exoplayer-dash:'            + project.ext.libVersionExoPlayer          // (107 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-dash?repo=bt-google-exoplayer
+    implementation      'com.google.android.exoplayer:exoplayer-hls:'             + project.ext.libVersionExoPlayer          // ( 98 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-hls?repo=bt-google-exoplayer
+    implementation      'com.google.android.exoplayer:exoplayer-smoothstreaming:' + project.ext.libVersionExoPlayer          // ( 44 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-smoothstreaming?repo=bt-google-exoplayer
+    implementation      'com.google.android.exoplayer:exoplayer-ui:'              + project.ext.libVersionExoPlayer          // (238 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-ui?repo=bt-google-exoplayer
+
+    implementation      'com.googlecode.plist:dd-plist:'                          + project.ext.libVersionDdPlist            // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
+    implementation      'org.apache.httpcomponents:httpcore:'                     + project.ext.libVersionHttpCore           // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+    implementation      'org.jmdns:jmdns:'                                        + project.ext.libVersionJmDNS              // (209 KB) https://mvnrepository.com/artifact/org.jmdns/jmdns
+}
+
+apply plugin: 'com.google.android.gms.strict-version-matcher-plugin'

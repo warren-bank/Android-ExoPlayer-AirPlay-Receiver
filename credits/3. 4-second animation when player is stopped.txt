@@ -1,0 +1,9 @@
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/raw/airplay.mp4
+source:   https://dribbble.com/shots/3118753-Airplay-Animation
+          http://cdn.dribbble.com/users/642610/screenshots/3118753/airplay1.gif?vid=1
+license:  unclear.
+          https://dribbble.com/guidelines
+          website guidelines say:
+            "Please link back to Dribbble when posting Dribbble content elsewhere."
+author:   Dimitri Rivault
+            https://dribbble.com/drivault

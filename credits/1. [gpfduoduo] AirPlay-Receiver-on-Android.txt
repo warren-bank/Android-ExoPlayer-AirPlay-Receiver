@@ -1,0 +1,149 @@
+----------------------------------------------------------------------------------------------------
+
+design notes:
+=============
+
+https://github.com/gpfduoduo/AirPlay-Receiver-on-Android
+
+----------------------------------------------------------------------------------------------------
+
+app/src/main/java/com/guo/duoduo/airplayreceiver/ui/MainActivity.java
+    Intent intent = new Intent(getApplicationContext(), RegisterService.class);
+    startService(intent);
+    finish();
+
+----------------------------------------------------------------------------------------------------
+
+app/src/main/java/com/guo/duoduo/airplayreceiver/service/RegisterService.java
+    // httpd
+    // =====
+    // * uses:
+    //     httpcore/*
+    // * does not use:
+    //     http/*
+    //     httpProcess/*
+    thread = new RequestListenerThread();
+    thread.setDaemon(false);
+    thread.start();
+
+    // Bonjour
+    // =======
+    airplayService = ServiceInfo.create(airplayName + airplayType, airplayName, AIRPLAY_PORT, 0, 0, values);
+    jmdnsAirplay = JmDNS.create(localAddress);
+    jmdnsAirplay.registerService(airplayService);
+
+    String raopName = preMac + "@" + airplayName;
+    raopService = ServiceInfo.create(raopName + raopType, raopName, RAOP_PORT, "tp=UDP sm=false sv=false ek=1 et=0,1 cn=0,1 ch=2 ss=16 " + "sr=44100 pw=false vn=3 da=true md=0,1,2 vs=103.14 txtvers=1");
+    jmdnsRaop = JmDNS.create(localAddress);
+    jmdnsRaop.registerService(raopService);
+
+----------------------------------------------------------------------------------------------------
+
+centralized: used to pass messages between Activities (ex: AirPlay commands received at HTTP endpoints)
+
+app/src/main/java/com/guo/duoduo/airplayreceiver/MyApplication.java
+    // static method returns instance of Application
+    private static MyApplication instance;
+    public void onCreate() {instance = this;}
+    public static MyApplication getInstance() {return instance;}
+
+    // static method forwards a message to all handlers. All Activities register a handler when created, and unregister when destroyed.
+    private ConcurrentHashMap<String, Handler> mHandlerMap = new ConcurrentHashMap<String, Handler>();
+    public ConcurrentHashMap<String, Handler> getHandlerMap() {return mHandlerMap;}
+    public static void broadcastMessage(Message msg) {
+        for (Handler handler : getInstance().getHandlerMap().values()) {handler.sendMessage(Message.obtain(msg));}
+    }
+
+app/src/main/java/com/guo/duoduo/airplayreceiver/MyController.java
+    // convenience class used by Activities to encapsulate registering/unregistering a handler with the singleton Application
+    public MyController(String name, Handler handler) {
+        MyApplication.getInstance().getHandlerMap().put(name, handler);
+        this.mName = name;
+    }
+    public void destroy() {
+        MyApplication.getInstance().getHandlerMap().remove(mName);
+    }
+
+----------------------------------------------------------------------------------------------------
+
+HTTPd:
+======
+
+app/src/main/java/com/guo/duoduo/airplayreceiver/httpcore/RequestListenerThread.java
+  - line: 162
+    code: serversocket = new ServerSocket(RegisterService.AIRPLAY_PORT, 2, localAddress);
+  - line: 371
+    code: if (target.equals(Constant.Target.REVERSE))
+    docs: https://tools.ietf.org/html/draft-lentczner-rhttp-00
+    spec: Reverse HTTP connection
+  - line: 476
+    code: if (target.equals(Constant.Target.PLAY))
+
+app/libs/httpcore-4.3.2.jar
+    libs: org.apache.http.*
+    repo: https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.3.2/
+          https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.jar
+          https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.pom
+    repo: https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+          https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore/4.3.2
+          https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore/4.4.13
+
+app/src/main/java/com/guo/duoduo/airplayreceiver/service/RegisterService.java
+  - line: 322
+    code: public void handleMessage(Message msg)
+  - line: 358
+    code: case Constant.Msg.Msg_Video_Play :
+    note: passes data from message to an Intent that starts 'VideoPlayerActivity'
+
+notes:
+======
+* only one standard library is needed:
+    implementation 'org.apache.httpcomponents:httpcore:4.4.13'
+* the httpd server runs in a separate thread
+* it processes all inbound requests and passes messages to registered handlers through the singleton Application
+* the service always has a registered handler
+  - this is how a message can start a new Activity to display the requested content
+  - consideration:
+    * when an Activity is already started:
+      - the service will pass an Intent to the Activity: onNewIntent()
+      - the Activity will have its own registered handler, and receive the message from the singleton Application
+      - need to make sure the message isn't processed twice
+
+----------------------------------------------------------------------------------------------------
+
+unused files to remove:
+=======================
+
+http/*
+httpProcess/*
+rtsp/*
+ui/VideoPlayerActivity_MediaPlayer.java
+utils/Debug.java
+utils/HostInterface.java
+utils/ListenerList.java
+utils/StringUtil.java
+
+features to remove:
+===================
+
+receiver/*
+  - initialization:
+    * AndroidManifest.xml
+    * MyApplication.onCreate()
+  - purpose:
+    * stops RegisterService when:
+      - disconnected from wifi
+      - screen turned off
+    * starts RegisterService when:
+      - reconnected to wifi
+      - screen turned on
+  - notes:
+    * does NOT kill:
+      - Application
+      - open Activities
+    * does NOT pass any message(s) to registered handlers
+
+RegisterService {public java.security.PrivateKey pk}
+  - unused variable
+
+----------------------------------------------------------------------------------------------------
