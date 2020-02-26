@@ -161,9 +161,13 @@ __extended APIs:__
 
 #### Usage (high level):
 
-__to do:__
+* [single-page web application](http://gitcdn.link/cdn/warren-bank/Android-ExoPlayer-AirPlay-Receiver/master/tests/02.%20AirPlay%20sender.html) that can be used to send commands to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
+  - "cast" video URLs to its playlist
+  - control all aspects of playback
 
-* update [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to support "casting" videos from websites to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
+* __to do:__<br>update [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to:
+  - support "casting" videos from websites to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
+  - provide the same visual interface as the SPA (above)
 
 - - - -
 
