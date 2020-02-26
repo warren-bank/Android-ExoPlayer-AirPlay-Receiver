@@ -275,6 +275,29 @@ public class RequestListenerThread extends Thread {
 
       String method = httpRequest.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH);
 
+      // handle CORS pre-flight requests
+      if (method.equals("OPTIONS")) {
+        String origin  = "*";
+        String headers = "*";
+        String methods = "GET,POST"; //"GET,HEAD,PUT,POST,DELETE,PATCH"
+        Header header  = null;
+
+        header = httpRequest.getFirstHeader("origin");
+        if (header != null) origin = header.getValue();
+
+        header = httpRequest.getFirstHeader("access-control-request-headers");
+        if (header != null) headers = header.getValue();
+
+        httpResponse.setStatusCode(HttpStatus.SC_NO_CONTENT); //204 No Content
+        httpResponse.setHeader("Date", new Date().toString());
+        httpResponse.setHeader("Access-Control-Allow-Origin", origin);
+        httpResponse.setHeader("Access-Control-Allow-Headers", headers);
+        httpResponse.setHeader("Access-Control-Allow-Methods", methods);
+        httpResponse.setHeader("Allow", methods);
+        httpResponse.setEntity(new StringEntity(methods, "UTF-8"));
+        return;
+      }
+
       MyHttpServerConnection currentConn = (MyHttpServerConnection) httpContext.getAttribute(ExecutionContext.HTTP_CONNECTION);
 
       String target = httpRequest.getRequestLine().getUri();
@@ -317,8 +340,8 @@ public class RequestListenerThread extends Thread {
          * HTTP/1.1 101 Switching Protocols Date: Fri Jul 06 07:17:13
          * 2012 Upgrade: PTTH/1.0 Connection: Upgrade
          */
-        httpResponse.addHeader("Upgrade", "PTTH/1.0");
-        httpResponse.addHeader("Connection", "Upgrade");
+        httpResponse.setHeader("Upgrade", "PTTH/1.0");
+        httpResponse.setHeader("Connection", "Upgrade");
 
         // Add a HashMap to keep this Socket, <Apple-SessionID> ---- <Socket>
         currentConn.setSocketTimeout(0);
@@ -335,12 +358,12 @@ public class RequestListenerThread extends Thread {
       else if (target.equals(Constant.Target.SERVER_INFO)) {
         String responseStr = Constant.getServerInfoResponse(localMac);
         httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.addHeader("Date", new Date().toString());
+        httpResponse.setHeader("Date", new Date().toString());
         httpResponse.setEntity(new StringEntity(responseStr));
       }
       else if (target.equals(Constant.Target.STOP)) { //Stop message
         httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.addHeader("Date", new Date().toString());
+        httpResponse.setHeader("Date", new Date().toString());
 
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Stop;
@@ -390,7 +413,7 @@ public class RequestListenerThread extends Thread {
           }
         }
       }
-      else if (target.equals(Constant.Target.PLAY)) { //Pushed videos
+      else if (target.equals(Constant.Target.PLAY) && (entityContent != null)) { //Pushed videos
         String playUrl  = "";
         Double startPos = 0.0;
 
@@ -410,18 +433,27 @@ public class RequestListenerThread extends Thread {
           String v = StringUtils.getRequestBodyValue(requestBody, "Start-Position:");
           startPos = (v.isEmpty()) ? 0.0 : Double.valueOf(v);
         }
-        Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos);
 
-        Message msg = Message.obtain();
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put(Constant.PlayURL, playUrl);
-        map.put(Constant.Start_Pos, Double.toString(startPos));
-        msg.what = Constant.Msg.Msg_Video_Play;
-        msg.obj = map;
-        MainApp.broadcastMessage(msg);
+        if (playUrl.isEmpty()) {
+          Log.d(tag, "airplay video URL missing");
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+          httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+          httpResponse.setHeader("Date", new Date().toString());
+        }
+        else {
+          Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos);
+
+          Message msg = Message.obtain();
+          HashMap<String, String> map = new HashMap<String, String>();
+          map.put(Constant.PlayURL, playUrl);
+          map.put(Constant.Start_Pos, Double.toString(startPos));
+          msg.what = Constant.Msg.Msg_Video_Play;
+          msg.obj = map;
+          MainApp.broadcastMessage(msg);
+
+          httpResponse.setStatusCode(HttpStatus.SC_OK);
+          httpResponse.setHeader("Date", new Date().toString());
+        }
       }
       else if (target.startsWith(Constant.Target.SCRUB)) { //POST is the seek operation. GET returns the position and duration of the play.
         StringEntity returnBody = new StringEntity("");
@@ -520,19 +552,19 @@ public class RequestListenerThread extends Thread {
         }
 
         httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.addHeader("Date", new Date().toString());
-        httpResponse.addHeader("Content-Type", "text/x-apple-plist+xml");
+        httpResponse.setHeader("Date", new Date().toString());
+        httpResponse.setHeader("Content-Type", "text/x-apple-plist+xml");
         httpResponse.setEntity(new StringEntity(playback_info));
       }
       else if (target.equals("/fp-setup")) {
         Log.d(tag, "airplay setup content = " + new String(entityContent, "UTF-8"));
         httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.addHeader("Date", new Date().toString());
+        httpResponse.setHeader("Date", new Date().toString());
       }
       // =======================================================================
       // non-standard extended API methods:
       // =======================================================================
-      else if (target.equals(Constant.Target.QUEUE)) { //Add video to end of queue
+      else if (target.equals(Constant.Target.QUEUE) && (entityContent != null)) { //Add video to end of queue
         String playUrl  = "";
         String referUrl = "";
         Double startPos = 0.0;
@@ -555,19 +587,28 @@ public class RequestListenerThread extends Thread {
           String v = StringUtils.getRequestBodyValue(requestBody, "Start-Position:");
           startPos = (v.isEmpty()) ? 0.0 : Double.valueOf(v);
         }
-        Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; referer = " + referUrl);
 
-        Message msg = Message.obtain();
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put(Constant.PlayURL,    playUrl);
-        map.put(Constant.RefererURL, referUrl);
-        map.put(Constant.Start_Pos,  Double.toString(startPos));
-        msg.what = Constant.Msg.Msg_Video_Queue;
-        msg.obj = map;
-        MainApp.broadcastMessage(msg);
+        if (playUrl.isEmpty()) {
+          Log.d(tag, "airplay video URL missing");
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+          httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+          httpResponse.setHeader("Date", new Date().toString());
+        }
+        else {
+          Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; referer = " + referUrl);
+
+          Message msg = Message.obtain();
+          HashMap<String, String> map = new HashMap<String, String>();
+          map.put(Constant.PlayURL,    playUrl);
+          map.put(Constant.RefererURL, referUrl);
+          map.put(Constant.Start_Pos,  Double.toString(startPos));
+          msg.what = Constant.Msg.Msg_Video_Queue;
+          msg.obj = map;
+          MainApp.broadcastMessage(msg);
+
+          httpResponse.setStatusCode(HttpStatus.SC_OK);
+          httpResponse.setHeader("Date", new Date().toString());
+        }
       }
       else if (target.equals(Constant.Target.NEXT)) { //skip forward to next video in queue
         Message msg = Message.obtain();
@@ -575,7 +616,7 @@ public class RequestListenerThread extends Thread {
         MainApp.broadcastMessage(msg);
 
         httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.addHeader("Date", new Date().toString());
+        httpResponse.setHeader("Date", new Date().toString());
       }
       else if (target.equals(Constant.Target.PREVIOUS)) { //skip backward to previous video in queue
         Message msg = Message.obtain();
@@ -583,7 +624,7 @@ public class RequestListenerThread extends Thread {
         MainApp.broadcastMessage(msg);
 
         httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.addHeader("Date", new Date().toString());
+        httpResponse.setHeader("Date", new Date().toString());
       }
       else if (target.startsWith(Constant.Target.VOLUME)) { //set audio volume (special case: 0 is mute)
         String value = StringUtils.getQueryStringValue(target, "?value=");
@@ -603,6 +644,9 @@ public class RequestListenerThread extends Thread {
       // =======================================================================
       else {
         Log.d(tag, "airplay default not process");
+
+        httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+        httpResponse.setHeader("Date", new Date().toString());
       }
     }
   }
