@@ -395,6 +395,7 @@ public class RequestListenerThread extends Thread {
         Double startPos = 0.0;
 
         requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
         Log.d(tag, " airplay play action request content = " + requestBody);
         //a video from iPhone
         if (contentType.equalsIgnoreCase("application/x-apple-binary-plist")) {
@@ -537,6 +538,7 @@ public class RequestListenerThread extends Thread {
         Double startPos = 0.0;
 
         requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
         Log.d(tag, " airplay play action request content = " + requestBody);
         //a video from iPhone
         if (contentType.equalsIgnoreCase("application/x-apple-binary-plist")) {

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>AirPlay sender</title>
+  <link rel="icon" href="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v1.0.0/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/launcher.png" type="image/x-icon" />
+  <style>
+
+body {
+  margin: 0;
+  padding: 15px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  color: #333;
+  text-align: center;
+}
+
+body .contents {
+  margin 0 auto;
+  display: inline-block;
+}
+
+body .contents > div {
+  display: inline-block;
+}
+
+body .contents div {
+  margin-bottom: 1em;
+}
+body .contents div:last-child {
+  margin-bottom: 0;
+}
+
+body .contents div.oneline {
+  height: 2em;
+  line-height: 2em;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+body .contents div.left {
+  text-align: left;
+}
+
+body .contents div.right {
+  text-align: right;
+}
+
+input, button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: inline-block;
+  margin: 0;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="url"] {
+  padding: 0 0.5em;
+  font-family: monospace;
+}
+
+  </style>
+  <script>
+
+window.onload  = function() {
+
+  // ===============================================================================================
+  // form fields
+
+  const $airplay_host  = document.querySelector('input#airplay_host')
+  const $airplay_port  = document.querySelector('input#airplay_port')
+  const $video_url     = document.querySelector('input#video_url')
+  const $referer_url   = document.querySelector('input#referer_url')
+  const $play          = document.querySelector('button#play')
+  const $queue         = document.querySelector('button#queue')
+  const $pause         = document.querySelector('button#pause')
+  const $resume        = document.querySelector('button#resume')
+  const $stop          = document.querySelector('button#stop')
+  const $seek_hours    = document.querySelector('input#seek_hours')
+  const $seek_minutes  = document.querySelector('input#seek_minutes')
+  const $seek_seconds  = document.querySelector('input#seek_seconds')
+  const $seek          = document.querySelector('button#seek')
+  const $rate_factor   = document.querySelector('input#rate_factor')
+  const $rate          = document.querySelector('button#rate')
+  const $volume_factor = document.querySelector('input#volume_factor')
+  const $volume        = document.querySelector('button#volume')
+  const $previous      = document.querySelector('button#previous')
+  const $next          = document.querySelector('button#next')
+  const $sample_videos = document.querySelector('select#sample_videos')
+
+  // ===============================================================================================
+  // extract data from URL #hash
+
+  const encoded_urls = {
+    video:   null,
+    referer: null
+  }
+
+  var get_encoded_video_url = function() {
+    var b64, hash_regex_pattern, matches
+
+    b64 = '[A-Za-z0-9+/=%]'
+    hash_regex_pattern = `^#/watch/(${b64}+?)(?:/referer/(${b64}+))?$`
+    hash_regex_pattern = new RegExp(hash_regex_pattern)
+
+    matches = hash_regex_pattern.exec(window.location.hash)
+    if (matches && matches.length && matches[1]) {
+        encoded_urls.video = matches[1]
+        if (matches.length > 2 && matches[2]) {
+            encoded_urls.referer = matches[2]
+        }
+    }
+  }
+
+  get_encoded_video_url()
+
+  // ===============================================================================================
+  // cookie management
+
+  var get_cookie_value = function(key) {
+    var pattern = new RegExp('(?:^|;)\\s*' + key + '\\s*=\\s*([^;]+)(?:;|$)')
+    var cookies = document.cookie
+    var matches = pattern.exec(cookies)
+    return (matches && matches.length) ? matches[1] : ''
+  }
+
+  var set_cookie_value = function(key, val) {
+    document.cookie = `${key}=${val};domain=${window.location.hostname};path=${window.location.pathname};max-age=${60*60*24*365}`
+  }
+
+  var persist_form_fields = function (airplay_host, airplay_port) {
+    set_cookie_value('airplay_host', airplay_host)
+    set_cookie_value('airplay_port', airplay_port)
+  }
+
+  // ===============================================================================================
+  // pre-populate some form fields with data extracted from either URL #hash or cookies
+
+  var decode_URL = function(str) {
+    var tail, done
+
+    if (str) {
+      while (! done) {
+        tail = str
+        str  = decodeURIComponent(tail)
+        done = (tail === str)
+      }
+      str = window.atob(str)
+    }
+    return str
+  }
+
+  var prepopulate_form_fields = function() {
+    var airplay_host, airplay_port
+
+    airplay_host = get_cookie_value('airplay_host')
+    airplay_port = get_cookie_value('airplay_port')
+
+    if (airplay_host) $airplay_host.value = airplay_host
+    if (airplay_port) $airplay_port.value = airplay_port
+
+    if (encoded_urls.video)
+      $video_url.value = decode_URL(encoded_urls.video)
+
+    if (encoded_urls.referer)
+      $referer_url.value = decode_URL(encoded_urls.referer)
+  }
+
+  prepopulate_form_fields()
+
+  // ===============================================================================================
+  // XHR helper
+
+  var POST_message = function(path, data) {
+    var host = $airplay_host.value
+    var port = $airplay_port.value || '8192'
+    var url = `http://${host}:${port}${path}`
+
+    if (!host) {
+      alert('AirPlay "host" is required')
+      return
+    }
+    if (!path) {
+      alert('AirPlay "path" is required')
+      return
+    }
+
+    var xhr = new XMLHttpRequest()
+    xhr.open("POST", url, true, null, null)
+
+    if (data) {
+      xhr.setRequestHeader("Content-Type", "text/parameters")
+      xhr.send(data)
+    }
+    else {
+      xhr.send(null)
+    }
+
+    // save network address of AirPlay receiver in cookie
+    persist_form_fields(host, port)
+  }
+
+  // ===============================================================================================
+  // form field validation helper
+
+  var get_value = function(field, default_value) {
+    var val = field.value
+
+    if (!val) {
+      val = default_value
+    }
+    else if (field.getAttribute('x-type') === 'range') {
+      var min  = field.getAttribute('x-min')
+      var max  = field.getAttribute('x-max')
+      var step = field.getAttribute('x-step')
+
+      var isFloat = (step.indexOf('.') >= 0)
+
+      if (isFloat) {
+        val  = parseFloat(val)
+        min  = parseFloat(min)
+        max  = parseFloat(max)
+        step = parseFloat(step)
+      }
+      else {
+        val  = parseInt(val,  10)
+        min  = parseInt(min,  10)
+        max  = parseInt(max,  10)
+        step = parseInt(step, 10)
+      }
+
+      if (isNaN(val)) {
+        alert(`'${field.id}' could not be parsed as ${isFloat ? 'a Float' : 'an Integer'}`)
+        return
+      }
+      if (val < min) {
+        alert(`'${field.id}' value ("${val}") is smaller than the minimum value allowed ("${min}")`)
+        return
+      }
+      if (val > max) {
+        alert(`'${field.id}' value ("${val}") is larger than the maximum value allowed ("${max}")`)
+        return
+      }
+      var steps = (val / step)
+      if (steps !== parseInt(steps)) {
+        alert(`'${field.id}' value ("${val}") is not a multiple of the step increment ("${step}")`)
+        return
+      }
+    }
+
+    // Number
+    return val
+  }
+
+  // ===============================================================================================
+  // add event listeners to form fields
+
+  $play.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var url = $video_url.value
+
+    if (!url) {
+      alert('Video URL is required')
+      return
+    }
+
+    var path = '/play'
+    var data = `Content-Location: ${url}\nStart-Position: 0`
+
+    POST_message(path, data)
+  }
+
+  $queue.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var url = $video_url.value
+    var ref = $referer_url.value
+
+    if (!url) {
+      alert('Video URL is required')
+      return
+    }
+
+    var path = '/queue'
+    var data = `Content-Location: ${url}\nStart-Position: 0`
+
+    if (ref) {
+      data += `\nReferer: ${ref}`
+    }
+
+    POST_message(path, data)
+  }
+
+  $pause.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/rate?value=0.0', null)
+  }
+
+  $resume.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/rate?value=1.0', null)
+  }
+
+  $stop.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/stop', null)
+  }
+
+  $seek.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var hrs = get_value($seek_hours,   0)    // var hrs = parseInt($seek_hours.value,   10) || 0
+    var min = get_value($seek_minutes, 0)    // var min = parseInt($seek_minutes.value, 10) || 0
+    var sec = get_value($seek_seconds, 0)    // var sec = parseInt($seek_seconds.value, 10) || 0
+
+    var offset = (sec) + (min * 60) + (hrs * 60 * 60)
+
+    var path = `/scrub?position=${offset}`
+    var data = null
+
+    POST_message(path, data)
+  }
+
+  $rate.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var rate = get_value($rate_factor, 0.0)  // var rate = parseFloat($rate_factor.value) || 0.0
+    var path = `/rate?value=${rate}`
+    var data = null
+
+    POST_message(path, data)
+  }
+
+  $volume.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var vol = get_value($volume_factor, 0.0) // var vol  = parseFloat($volume_factor.value) || 0.0
+    var path = `/volume?value=${vol}`
+    var data = null
+
+    POST_message(path, data)
+  }
+
+  $previous.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/previous', null)
+  }
+
+  $next.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/next', null)
+  }
+
+  $sample_videos.onchange = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var item = $sample_videos.selectedOptions[0]
+    var url  = item.getAttribute('x-video-url')
+    var ref  = item.getAttribute('x-referer-url')
+
+    if (url) {
+      $video_url.value   = url
+      $referer_url.value = (ref) ? ref : ''
+
+      $play.click()
+    }
+  }
+
+}
+
+  </script>
+</head>
+<body>
+  <div class="contents">
+    <h3>Network Address of AirPlay Receiver:</h3>
+    <div>
+      <div class="left oneline">
+        <label for="airplay_host">Host:</label>
+        <input id="airplay_host" type="text" size="15" placeholder="192.168.0.100" />
+      </div>
+      <div class="left oneline">
+        <label for="airplay_port">Port:</label>
+        <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" size="6" placeholder="8192" />
+      </div>
+    </div>
+    <hr />
+    <h3>Network Location of Video Media:</h3>
+    <div class="right">
+      <div class="oneline">
+        <label for="video_url">Video URL:</label>
+        <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
+      </div>
+      <div class="oneline">
+        <label for="referer_url">Referer URL:</label>
+        <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
+      </div>
+    </div>
+    <hr />
+    <h3>Remote Control of Video Playback:</h3>
+    <div>
+      <div class="oneline">
+        <button id="play">Play</button>
+        <button id="queue">Add to Queue</button>
+      </div>
+      <div class="oneline">
+        <button id="pause">Pause</button>
+        <button id="resume">Resume</button>
+        <button id="stop">Stop</button>
+      </div>
+      <div class="oneline">
+        <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+        <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+        <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+        <button id="seek">Seek to Position</button>
+      </div>
+      <div class="oneline">
+        <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" size="3" placeholder="1.0" />
+        <button id="rate">Change Speed</button>
+      </div>
+      <div class="oneline">
+        <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="1" x-step="0.001" size="3" placeholder="1.0" />
+        <button id="volume">Change Volume</button>
+      </div>
+    </div>
+    <hr />
+    <div>
+      <div class="oneline">
+        <button id="previous">Previous</button>
+        <button id="next">Next</button>
+      </div>
+    </div>
+    <hr />
+    <h3>Samples:</h3>
+    <div>
+      <select id="sample_videos">
+        <option value="0">-- video --</option>
+        <option value="1" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">Big Buck Bunny</option>
+        <option value="2" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/hdworld/hdworld_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">HD World</option>
+        <option value="3" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/cctv/cctv_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">CCTV</option>
+        <option value="4" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">Sintel</option>
+      </select>
+    </div>
+
+  </div>
+</body>
+</html>

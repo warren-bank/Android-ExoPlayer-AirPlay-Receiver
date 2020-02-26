@@ -27,15 +27,18 @@ public class StringUtils {
     return value;
   }
 
-  public static String getRequestBodyValue(String requestBody, String prefix) {
-    // note: LFs in requestBody are escaped (not sure why)
-    String suffix = "\\n";
-    return StringUtils.getValue(requestBody, prefix, suffix);
-  }
-
   public static String getQueryStringValue(String url, String prefix) {
     String suffix = "&";
     return StringUtils.getValue(url, prefix, suffix);
+  }
+
+  public static String getRequestBodyValue(String requestBody, String prefix) {
+    String suffix = "\n";
+    return StringUtils.getValue(requestBody, prefix, suffix);
+  }
+
+  public static String convertEscapedLinefeeds(String requestBody) {
+    return requestBody.replaceAll("\\\\n", "\n");
   }
 
 }
