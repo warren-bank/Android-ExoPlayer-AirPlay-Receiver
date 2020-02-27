@@ -161,13 +161,19 @@ __extended APIs:__
 
 #### Usage (high level):
 
-* [single-page web application](http://gitcdn.link/cdn/warren-bank/Android-ExoPlayer-AirPlay-Receiver/master/tests/02.%20AirPlay%20sender.html) that can be used to send commands to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
-  - "cast" video URLs to its playlist
-  - control all aspects of playback
+* [single-page application (SPA)](http://webcast-reloaded.surge.sh/airplay_sender.html) that can be used to:
+  - send commands to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
+    * "cast" video URLs to its playlist
+    * control all aspects of playback
 
-* __to do:__<br>update [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to:
-  - support "casting" videos from websites to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
-  - provide the same visual interface as the SPA (above)
+* [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) that can be used to:
+  - intercept the URL of (nearly) all videos on any website
+  - display these video URLs as a list of links
+    * clicking on any link will transfer the URL of the video (as well as the URL of the referer webpage) to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
+      - more precisely, the link to the SPA is displayed as a small [AirPlay icon](https://github.com/warren-bank/crx-webcast-reloaded/raw/v0.6.0/chrome_extension/data/airplay.png)
+      - the other links transfer the video URL to other tools
+        * webpage to watch the video in an HTML5 player with the ability to "cast" the video to a Chromecast
+        * a running instance of [HLS-Proxy](https://github.com/warren-bank/HLS-Proxy)
 
 - - - -
 
