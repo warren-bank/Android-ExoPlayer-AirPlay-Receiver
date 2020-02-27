@@ -36,6 +36,8 @@ body .contents div.oneline {
   height: 2em;
   line-height: 2em;
   white-space: nowrap;
+}
+body .contents div.oneline > * {
   vertical-align: middle;
 }
 
@@ -72,6 +74,7 @@ window.onload  = function() {
 
   const $airplay_host  = document.querySelector('input#airplay_host')
   const $airplay_port  = document.querySelector('input#airplay_port')
+  const $airplay_tls   = document.querySelector('input#airplay_tls')
   const $video_url     = document.querySelector('input#video_url')
   const $referer_url   = document.querySelector('input#referer_url')
   const $play          = document.querySelector('button#play')
@@ -131,9 +134,10 @@ window.onload  = function() {
     document.cookie = `${key}=${val};domain=${window.location.hostname};path=${window.location.pathname};max-age=${60*60*24*365}`
   }
 
-  var persist_form_fields = function (airplay_host, airplay_port) {
+  var persist_form_fields = function (airplay_host, airplay_port, airplay_tls) {
     set_cookie_value('airplay_host', airplay_host)
     set_cookie_value('airplay_port', airplay_port)
+    set_cookie_value('airplay_tls',  (airplay_tls ? '1' : '0'))
   }
 
   // ===============================================================================================
@@ -154,13 +158,15 @@ window.onload  = function() {
   }
 
   var prepopulate_form_fields = function() {
-    var airplay_host, airplay_port
+    var airplay_host, airplay_port, airplay_tls
 
     airplay_host = get_cookie_value('airplay_host')
     airplay_port = get_cookie_value('airplay_port')
+    airplay_tls  = get_cookie_value('airplay_tls')
 
     if (airplay_host) $airplay_host.value = airplay_host
     if (airplay_port) $airplay_port.value = airplay_port
+    if (airplay_tls === '1') $airplay_tls.checked = true
 
     if (encoded_urls.video)
       $video_url.value = decode_URL(encoded_urls.video)
@@ -177,7 +183,8 @@ window.onload  = function() {
   var POST_message = function(path, data) {
     var host = $airplay_host.value
     var port = $airplay_port.value || '8192'
-    var url = `http://${host}:${port}${path}`
+    var tls  = $airplay_tls.checked
+    var url = `${ tls ? 'https' : 'http' }://${host}:${port}${path}`
 
     if (!host) {
       alert('AirPlay "host" is required')
@@ -200,7 +207,7 @@ window.onload  = function() {
     }
 
     // save network address of AirPlay receiver in cookie
-    persist_form_fields(host, port)
+    persist_form_fields(host, port, tls)
   }
 
   // ===============================================================================================
@@ -218,6 +225,11 @@ window.onload  = function() {
       var step = field.getAttribute('x-step')
 
       var isFloat = (step.indexOf('.') >= 0)
+
+      if (!isFloat && (val.indexOf('.') >= 0)) {
+        alert(`'${field.id}' requires an Integer value`)
+        return
+      }
 
       if (isFloat) {
         val  = parseFloat(val)
@@ -244,8 +256,9 @@ window.onload  = function() {
         alert(`'${field.id}' value ("${val}") is larger than the maximum value allowed ("${max}")`)
         return
       }
+      var threshold = 1.0e-10
       var steps = (val / step)
-      if (steps !== parseInt(steps)) {
+      if ((steps !== parseInt(steps)) && (Math.abs(Math.round(steps) - steps) > threshold)) {
         alert(`'${field.id}' value ("${val}") is not a multiple of the step increment ("${step}")`)
         return
       }
@@ -399,6 +412,10 @@ window.onload  = function() {
       <div class="left oneline">
         <label for="airplay_port">Port:</label>
         <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" size="6" placeholder="8192" />
+      </div>
+      <div class="left oneline">
+        <label for="airplay_tls">HTTPS:</label>
+        <input id="airplay_tls" type="checkbox" />
       </div>
     </div>
     <hr />
