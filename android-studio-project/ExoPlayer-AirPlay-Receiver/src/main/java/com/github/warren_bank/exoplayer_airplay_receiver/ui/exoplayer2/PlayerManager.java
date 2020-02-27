@@ -4,8 +4,9 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 
 import android.content.Context;
 import android.net.Uri;
-import androidx.annotation.Nullable;
+import android.os.Handler;
 import android.view.KeyEvent;
+import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -37,13 +38,24 @@ import java.util.ArrayList;
 /** Manages players and an internal media queue */
 public final class PlayerManager implements EventListener {
 
+  private final class MyArrayList<E> extends ArrayList<E> {
+    public void retainLast() {
+      int last = this.size() - 1;
+
+      if (last > 0)
+        removeRange(0, last);
+    }
+  }
+
   private PlayerView playerView;
-  private ArrayList<VideoSource> mediaQueue;
+  private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
   private SimpleExoPlayer exoPlayer;
   private DefaultHttpDataSourceFactory httpDataSourceFactory;
   private DefaultDataSourceFactory rawDataSourceFactory;
   private int currentItemIndex;
+  private Handler handler;
+  private Runnable retainLast;
 
   /**
    * @param context A {@link Context}.
@@ -63,7 +75,7 @@ public final class PlayerManager implements EventListener {
       PlayerView playerView
     ) {
     this.playerView = playerView;
-    this.mediaQueue = new ArrayList<>();
+    this.mediaQueue = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
 
     DefaultTrackSelector trackSelector = new DefaultTrackSelector();
@@ -81,6 +93,19 @@ public final class PlayerManager implements EventListener {
     this.rawDataSourceFactory  = new DefaultDataSourceFactory(context, userAgent);
 
     this.currentItemIndex = C.INDEX_UNSET;
+
+    this.handler    = new Handler();
+    this.retainLast = new Runnable() {
+      @Override
+      public void run() {
+        // this is a callback function. executed after a new video has been appended to the queue. only used when the new video should replace all previous items in queue.
+        truncateQueue();
+
+        // probably not necessary..
+        currentItemIndex = C.INDEX_UNSET;
+        selectQueueItem(0);
+      }
+    };
   }
 
   // Query state of player.
@@ -151,8 +176,29 @@ public final class PlayerManager implements EventListener {
     String referer,
     float startPosition
   ) {
+    addItem(uri, mimeType, referer, startPosition, (Handler) null, (Runnable) null);
+  }
+
+  /**
+   * Appends {@link VideoSource} to the media queue.
+   *
+   * @param uri The URL to a video file or stream.
+   * @param mimeType The mime-type of the video file or stream.
+   * @param referer The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
+   * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param handler
+   * @param onCompletionAction
+   */
+  public void addItem(
+    String uri,
+    String mimeType,
+    String referer,
+    float startPosition,
+    Handler handler,
+    Runnable onCompletionAction
+  ) {
     VideoSource sample = VideoSource.createVideoSource(uri, mimeType, referer, startPosition);
-    addItem(sample);
+    addItem(sample, handler, onCompletionAction);
   }
 
   /**
@@ -161,10 +207,33 @@ public final class PlayerManager implements EventListener {
    * @param sample The {@link VideoSource} to append.
    */
   public void addItem(VideoSource sample) {
-    if ((sample.uri == null) || sample.uri.isEmpty()) return;
+    addItem(sample, (Handler) null, (Runnable) null);
+  }
+
+  /**
+   * Appends {@code sample} to the media queue.
+   *
+   * @param sample The {@link VideoSource} to append.
+   * @param handler
+   * @param onCompletionAction
+   */
+  public void addItem(
+    VideoSource sample,
+    Handler handler,
+    Runnable onCompletionAction
+  ) {
+    if ((sample.uri == null) || sample.uri.isEmpty()) {
+      if ((handler != null) && (onCompletionAction != null))
+        handler.post(onCompletionAction);
+      return;
+    }
 
     mediaQueue.add(sample);
-    concatenatingMediaSource.addMediaSource(buildMediaSource(sample));
+    concatenatingMediaSource.addMediaSource(
+      buildMediaSource(sample),
+      handler,
+      onCompletionAction
+    );
   }
 
   /**
@@ -238,12 +307,7 @@ public final class PlayerManager implements EventListener {
    * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    */
   public void AirPlay_play(String uri, float startPosition) {
-    resetQueue();
-
-    addItem(uri, null, null, startPosition);
-
-    selectQueueItem(0);
-    exoPlayer.previous();
+    addItem(uri, (String) null, (String) null, startPosition, handler, retainLast);
   }
 
   /**
@@ -282,15 +346,17 @@ public final class PlayerManager implements EventListener {
   }
 
   /**
-   * Stop video playback and reset the player.
+   * Clears the media queue and plays a short animation.
+   *
+   * The animation serves two purposes.
+   *  (1) it adds to the user experience.
+   *  (2) it solves the problem that when the media queue
+   *      is cleared during playback, a video frame
+   *      is left on the surface as a still image;
+   *      this would detract from the user experience.
    */
   public void AirPlay_stop() {
-    resetQueue();
-
-    addRawVideoItem(R.raw.airplay);
-
-    selectQueueItem(0);
-    exoPlayer.previous();
+    addRawVideoItem(R.raw.airplay, handler, retainLast);
   }
 
   // extra non-standard functionality (exposed by HTTP endpoints)
@@ -307,7 +373,7 @@ public final class PlayerManager implements EventListener {
     String referer,
     float startPosition
   ) {
-    addItem(uri, null, referer, startPosition);
+    addItem(uri, (String) null, referer, startPosition);
   }
 
   /**
@@ -417,10 +483,12 @@ public final class PlayerManager implements EventListener {
     exoPlayer.prepare(concatenatingMediaSource);
   }
 
-  private void resetQueue() {
-    mediaQueue.clear();
-    concatenatingMediaSource.clear();
-    currentItemIndex = C.INDEX_UNSET;
+  private void truncateQueue() {
+    mediaQueue.retainLast();
+
+    int last = concatenatingMediaSource.getSize() - 1;
+    if (last > 0)
+      concatenatingMediaSource.removeMediaSourceRange(0, last);
   }
 
   private void updateCurrentItemIndex() {
@@ -515,10 +583,22 @@ public final class PlayerManager implements EventListener {
   }
 
   private void addRawVideoItem(int rawResourceId) {
-    VideoSource sample = VideoSource.createVideoSource("raw", "raw", null, 0f);
+    addRawVideoItem(rawResourceId, (Handler) null, (Runnable) null);
+  }
+
+  private void addRawVideoItem(
+    int rawResourceId,
+    Handler handler,
+    Runnable onCompletionAction
+  ) {
+    VideoSource sample = VideoSource.createVideoSource("raw", "raw", (String) null, 0f);
 
     mediaQueue.add(sample);
-    concatenatingMediaSource.addMediaSource(buildRawVideoMediaSource(rawResourceId));
+    concatenatingMediaSource.addMediaSource(
+      buildRawVideoMediaSource(rawResourceId),
+      handler,
+      onCompletionAction
+    );
   }
 
 }
