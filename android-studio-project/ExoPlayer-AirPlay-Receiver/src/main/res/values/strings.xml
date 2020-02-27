@@ -5,6 +5,6 @@
 
   <!-- notifications -->
   <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: service running</string>
-  <string name="notification_service_content_line1">ExoAirPlayer</string>
-  <string name="notification_service_content_line2">Click to stop service.</string>
+  <string name="notification_service_content_line1">ExoAirPlayer running at:</string>
+  <string name="notification_service_content_line3">Click to stop service.</string>
 </resources>

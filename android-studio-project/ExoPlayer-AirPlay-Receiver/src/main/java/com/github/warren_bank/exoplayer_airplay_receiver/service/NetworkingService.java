@@ -190,7 +190,9 @@ public class NetworkingService extends Service {
       e.printStackTrace();
     }
 
-    localAddress = NetworkUtils.getLocalIpAddress(); //Get local IP object
+    if (localAddress == null)
+      localAddress = NetworkUtils.getLocalIpAddress(); //Get local IP object
+
     if (localAddress == null) {
       Log.d(tag, "local address = null");
       return false;
@@ -293,7 +295,8 @@ public class NetworkingService extends Service {
     RemoteViews contentView    = new RemoteViews(getPackageName(), R.layout.service_notification);
     contentView.setImageViewResource(R.id.notification_icon, R.drawable.launcher);
     contentView.setTextViewText(R.id.notification_text_line1, getString(R.string.notification_service_content_line1));
-    contentView.setTextViewText(R.id.notification_text_line2, getString(R.string.notification_service_content_line2));
+    contentView.setTextViewText(R.id.notification_text_line2, getNetworkAddress());
+    contentView.setTextViewText(R.id.notification_text_line3, getString(R.string.notification_service_content_line3));
     notification.contentView   = contentView;
 
     return notification;
@@ -304,6 +307,15 @@ public class NetworkingService extends Service {
     intent.setAction(ACTION_STOP);
 
     return PendingIntent.getService(NetworkingService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  private String getNetworkAddress() {
+    if (localAddress == null)
+      localAddress = NetworkUtils.getLocalIpAddress(); //Get local IP object
+
+    return (localAddress == null)
+      ? "[offline]"
+      : localAddress.getHostAddress() + ":" + Constant.AIRPLAY_PORT;
   }
 
   // -------------------------------------------------------------------------
