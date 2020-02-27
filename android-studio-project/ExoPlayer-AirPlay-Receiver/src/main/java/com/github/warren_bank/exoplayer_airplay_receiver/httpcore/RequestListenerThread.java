@@ -290,7 +290,7 @@ public class RequestListenerThread extends Thread {
 
         httpResponse.setStatusCode(HttpStatus.SC_NO_CONTENT); //204 No Content
         httpResponse.setHeader("Date", new Date().toString());
-        httpResponse.setHeader("Access-Control-Allow-Origin", origin);
+        httpResponse.setHeader("Access-Control-Allow-Origin",  origin);
         httpResponse.setHeader("Access-Control-Allow-Headers", headers);
         httpResponse.setHeader("Access-Control-Allow-Methods", methods);
         httpResponse.setHeader("Allow", methods);
@@ -356,14 +356,13 @@ public class RequestListenerThread extends Thread {
         }
       }
       else if (target.equals(Constant.Target.SERVER_INFO)) {
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+
         String responseStr = Constant.getServerInfoResponse(localMac);
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
         httpResponse.setEntity(new StringEntity(responseStr));
       }
       else if (target.equals(Constant.Target.STOP)) { //Stop message
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
 
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Stop;
@@ -375,8 +374,7 @@ public class RequestListenerThread extends Thread {
         photoCacheMaps.clear();
       }
       else if (target.equals(Constant.Target.PHOTO)) { //Pushed image
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
 
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Photo;
@@ -437,8 +435,7 @@ public class RequestListenerThread extends Thread {
         if (playUrl.isEmpty()) {
           Log.d(tag, "airplay video URL missing");
 
-          httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-          httpResponse.setHeader("Date", new Date().toString());
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
         else {
           Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos);
@@ -451,8 +448,7 @@ public class RequestListenerThread extends Thread {
           msg.obj = map;
           MainApp.broadcastMessage(msg);
 
-          httpResponse.setStatusCode(HttpStatus.SC_OK);
-          httpResponse.setHeader("Date", new Date().toString());
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         }
       }
       else if (target.startsWith(Constant.Target.SCRUB)) { //POST is the seek operation. GET returns the position and duration of the play.
@@ -498,8 +494,7 @@ public class RequestListenerThread extends Thread {
           }
         }
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         httpResponse.setEntity(returnBody);
       }
       else if (target.startsWith(Constant.Target.RATE)) { //Set playback rate (special case: 0 is pause)
@@ -514,8 +509,7 @@ public class RequestListenerThread extends Thread {
           MainApp.broadcastMessage(msg);
         }
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       //IOS 8.4.1 Never send this command (Youku does not send, Tencent video sends)
       else if (target.equalsIgnoreCase(Constant.Target.PLAYBACK_INFO)) {
@@ -551,15 +545,14 @@ public class RequestListenerThread extends Thread {
           httpContext.setAttribute(Constant.ReverseMsg, Constant.getVideoEventMsg(sessionId, status));
         }
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         httpResponse.setHeader("Content-Type", "text/x-apple-plist+xml");
         httpResponse.setEntity(new StringEntity(playback_info));
       }
       else if (target.equals("/fp-setup")) {
         Log.d(tag, "airplay setup content = " + new String(entityContent, "UTF-8"));
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       // =======================================================================
       // non-standard extended API methods:
@@ -591,8 +584,7 @@ public class RequestListenerThread extends Thread {
         if (playUrl.isEmpty()) {
           Log.d(tag, "airplay video URL missing");
 
-          httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-          httpResponse.setHeader("Date", new Date().toString());
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
         else {
           Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; referer = " + referUrl);
@@ -606,8 +598,7 @@ public class RequestListenerThread extends Thread {
           msg.obj = map;
           MainApp.broadcastMessage(msg);
 
-          httpResponse.setStatusCode(HttpStatus.SC_OK);
-          httpResponse.setHeader("Date", new Date().toString());
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         }
       }
       else if (target.equals(Constant.Target.NEXT)) { //skip forward to next video in queue
@@ -615,16 +606,14 @@ public class RequestListenerThread extends Thread {
         msg.what = Constant.Msg.Msg_Video_Next;
         MainApp.broadcastMessage(msg);
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       else if (target.equals(Constant.Target.PREVIOUS)) { //skip backward to previous video in queue
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Video_Prev;
         MainApp.broadcastMessage(msg);
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       else if (target.startsWith(Constant.Target.VOLUME)) { //set audio volume (special case: 0 is mute)
         String value = StringUtils.getQueryStringValue(target, "?value=");
@@ -638,16 +627,20 @@ public class RequestListenerThread extends Thread {
           MainApp.broadcastMessage(msg);
         }
 
-        httpResponse.setStatusCode(HttpStatus.SC_OK);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       // =======================================================================
       else {
         Log.d(tag, "airplay default not process");
 
-        httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-        httpResponse.setHeader("Date", new Date().toString());
+        setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
       }
+    }
+
+    private static void setCommonHeaders(HttpResponse httpResponse, int statusCode) {
+      httpResponse.setStatusCode(statusCode);
+      httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+      httpResponse.setHeader("Date", new Date().toString());
     }
   }
 }
