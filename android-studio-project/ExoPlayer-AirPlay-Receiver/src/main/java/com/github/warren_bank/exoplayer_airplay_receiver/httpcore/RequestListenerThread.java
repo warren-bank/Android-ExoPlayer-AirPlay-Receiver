@@ -411,59 +411,25 @@ public class RequestListenerThread extends Thread {
           }
         }
       }
-      else if (target.equals(Constant.Target.PLAY) && (entityContent != null)) { //Pushed videos
-        String playUrl  = "";
-        Double startPos = 0.0;
-
-        requestBody = new String(entityContent);
-        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
-        Log.d(tag, " airplay play action request content = " + requestBody);
-        //a video from iPhone
-        if (contentType.equalsIgnoreCase("application/x-apple-binary-plist")) {
-          //<BINARY PLIST DATA>
-          HashMap map = BplistParser.parse(entityContent);
-          playUrl  = (String) map.get("Content-Location");
-          startPos = (Double) map.get("Start-Position");
-        }
-        else {
-          //iTunes pushed videos or Youku
-          playUrl  = StringUtils.getRequestBodyValue(requestBody, "Content-Location:");
-          String v = StringUtils.getRequestBodyValue(requestBody, "Start-Position:");
-          startPos = (v.isEmpty()) ? 0.0 : Double.valueOf(v);
-        }
-
-        if (playUrl.isEmpty()) {
-          Log.d(tag, "airplay video URL missing");
-
-          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
-        }
-        else {
-          Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos);
-
-          Message msg = Message.obtain();
-          HashMap<String, String> map = new HashMap<String, String>();
-          map.put(Constant.PlayURL, playUrl);
-          map.put(Constant.Start_Pos, Double.toString(startPos));
-          msg.what = Constant.Msg.Msg_Video_Play;
-          msg.obj = map;
-          MainApp.broadcastMessage(msg);
-
-          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
-        }
-      }
       else if (target.startsWith(Constant.Target.SCRUB)) { //POST is the seek operation. GET returns the position and duration of the play.
         StringEntity returnBody = new StringEntity("");
 
         String position = StringUtils.getQueryStringValue(target, "?position=");
         if (!position.isEmpty()) {
           //post method
-          float pos = new Float(position);
-          Log.d(tag, "airplay seek position = " + pos); //unit is seconds
+          try {
+            float pos = Float.parseFloat(position);
+            Log.d(tag, "airplay seek position = " + pos); //unit is seconds
 
-          Message msg = Message.obtain();
-          msg.what = Constant.Msg.Msg_Video_Seek;
-          msg.obj = pos;
-          MainApp.broadcastMessage(msg);
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Video_Seek;
+            msg.obj = pos;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
         }
         else {
           //get method to get the duration and position of the playback
@@ -500,13 +466,19 @@ public class RequestListenerThread extends Thread {
       else if (target.startsWith(Constant.Target.RATE)) { //Set playback rate (special case: 0 is pause)
         String value = StringUtils.getQueryStringValue(target, "?value=");
         if (!value.isEmpty()) {
-          float rate = new Float(value);
-          Log.d(tag, "airplay rate = " + rate);
+          try {
+            float rate = Float.parseFloat(value);
+            Log.d(tag, "airplay rate = " + rate);
 
-          Message msg = Message.obtain();
-          msg.what = Constant.Msg.Msg_Video_Rate;
-          msg.obj = rate;
-          MainApp.broadcastMessage(msg);
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Video_Rate;
+            msg.obj = rate;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
         }
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
@@ -557,8 +529,14 @@ public class RequestListenerThread extends Thread {
       // =======================================================================
       // non-standard extended API methods:
       // =======================================================================
-      else if (target.equals(Constant.Target.QUEUE) && (entityContent != null)) { //Add video to end of queue
+      else if (
+        (entityContent != null) && (
+          target.equals(Constant.Target.PLAY)  ||  //Clear queue and add new video
+          target.equals(Constant.Target.QUEUE)     //Add video to end of queue
+        )
+      ) {
         String playUrl  = "";
+        String textUrl  = "";
         String referUrl = "";
         Double startPos = 0.0;
 
@@ -570,12 +548,14 @@ public class RequestListenerThread extends Thread {
           //<BINARY PLIST DATA>
           HashMap map = BplistParser.parse(entityContent);
           playUrl  = (String) map.get("Content-Location");
+          textUrl  = (String) map.get("Caption-Location");
           referUrl = (String) map.get("Referer");
           startPos = (Double) map.get("Start-Position");
         }
         else {
           //iTunes pushed videos or Youku
           playUrl  = StringUtils.getRequestBodyValue(requestBody, "Content-Location:");
+          textUrl  = StringUtils.getRequestBodyValue(requestBody, "Caption-Location:");
           referUrl = StringUtils.getRequestBodyValue(requestBody, "Referer:");
           String v = StringUtils.getRequestBodyValue(requestBody, "Start-Position:");
           startPos = (v.isEmpty()) ? 0.0 : Double.valueOf(v);
@@ -587,14 +567,17 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
         else {
-          Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; referer = " + referUrl);
+          Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; captions = " + textUrl + "; referer = " + referUrl);
 
           Message msg = Message.obtain();
           HashMap<String, String> map = new HashMap<String, String>();
           map.put(Constant.PlayURL,    playUrl);
+          map.put(Constant.CaptionURL, textUrl);
           map.put(Constant.RefererURL, referUrl);
           map.put(Constant.Start_Pos,  Double.toString(startPos));
-          msg.what = Constant.Msg.Msg_Video_Queue;
+          msg.what = target.equals(Constant.Target.PLAY)
+            ? Constant.Msg.Msg_Video_Play
+            : Constant.Msg.Msg_Video_Queue;
           msg.obj = map;
           MainApp.broadcastMessage(msg);
 
@@ -618,17 +601,42 @@ public class RequestListenerThread extends Thread {
       else if (target.startsWith(Constant.Target.VOLUME)) { //set audio volume (special case: 0 is mute)
         String value = StringUtils.getQueryStringValue(target, "?value=");
         if (!value.isEmpty()) {
-          float audioVolume = new Float(value);
-          Log.d(tag, "airplay volume = " + audioVolume);
+          try {
+            float audioVolume = Float.parseFloat(value);
+            Log.d(tag, "airplay volume = " + audioVolume);
 
-          Message msg = Message.obtain();
-          msg.what = Constant.Msg.Msg_Audio_Volume;
-          msg.obj = audioVolume;
-          MainApp.broadcastMessage(msg);
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Audio_Volume;
+            msg.obj = audioVolume;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
         }
-
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.startsWith(Constant.Target.CAPTIONS)) { //toggle text captions on/off
+        String value = StringUtils.getQueryStringValue(target, "?toggle=");
+        if (!value.isEmpty()) {
+          try {
+            int toggleValue = Integer.parseInt(value, 10);
+            Log.d(tag, "airplay captions = " + toggleValue);
+
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Text_Captions;
+            msg.obj = (toggleValue != 0); //boolean whether to "show"
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+
       // =======================================================================
       else {
         Log.d(tag, "airplay default not process");

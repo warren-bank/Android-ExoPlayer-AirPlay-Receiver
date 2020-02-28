@@ -368,28 +368,18 @@ public class NetworkingService extends Service {
           service.startActivity(intent);
           break;
         }
-        case Constant.Msg.Msg_Video_Play : {
-          HashMap<String, String> map = (HashMap) msg.obj;
-          String playUrl  = map.get(Constant.PlayURL);
-          String startPos = map.get(Constant.Start_Pos);
-
-          Intent intent = new Intent(service, VideoPlayerActivity.class);
-          intent.putExtra("mode", "play");
-          intent.putExtra("uri", playUrl);
-          intent.putExtra("startPosition", Double.valueOf(startPos));
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          service.startActivity(intent);
-          break;
-        }
+        case Constant.Msg.Msg_Video_Play  :
         case Constant.Msg.Msg_Video_Queue : {
           HashMap<String, String> map = (HashMap) msg.obj;
           String playUrl  = map.get(Constant.PlayURL);
+          String textUrl  = map.get(Constant.CaptionURL);
           String referUrl = map.get(Constant.RefererURL);
           String startPos = map.get(Constant.Start_Pos);
 
           Intent intent = new Intent(service, VideoPlayerActivity.class);
-          intent.putExtra("mode", "queue");
+          intent.putExtra("mode", ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue"));
           intent.putExtra("uri", playUrl);
+          intent.putExtra("caption", textUrl);
           intent.putExtra("referer", referUrl);
           intent.putExtra("startPosition", Double.valueOf(startPos));
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

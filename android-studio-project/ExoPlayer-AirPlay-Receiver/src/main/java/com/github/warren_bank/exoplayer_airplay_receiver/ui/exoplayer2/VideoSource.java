@@ -6,7 +6,9 @@ import java.util.regex.Matcher;
 final class VideoSource {
 
   public final String uri;
-  public final String mimeType;
+  public final String caption;
+  public final String uri_mimeType;
+  public final String caption_mimeType;
   public final String referer;
   public final float startPosition;
 
@@ -14,28 +16,26 @@ final class VideoSource {
 
   public static VideoSource createVideoSource(
     String uri,
-    String mimeType,
+    String caption,
     String referer,
     float startPosition
   ) {
-    VideoSource videoSource = new VideoSource(uri, mimeType, referer, startPosition);
+    VideoSource videoSource = new VideoSource(uri, caption, referer, startPosition);
     return videoSource;
   }
 
   private VideoSource(
     String uri,
-    String mimeType,
+    String caption,
     String referer,
     float startPosition
   ) {
-    if ((mimeType == null) || mimeType.isEmpty()) {
-      mimeType = VideoSource.get_mimeType(uri);
-    }
-
-    this.uri           = uri;
-    this.mimeType      = mimeType;
-    this.referer       = referer;
-    this.startPosition = startPosition;
+    this.uri              = uri;
+    this.caption          = caption;
+    this.uri_mimeType     = VideoSource.get_video_mimeType(uri);
+    this.caption_mimeType = VideoSource.get_caption_mimeType(caption);
+    this.referer          = referer;
+    this.startPosition    = startPosition;
   }
 
   // Public methods.
@@ -47,9 +47,12 @@ final class VideoSource {
 
   // Static helpers.
 
+  // ===========================================================================
+  // video mime-type
+
   public static Pattern video_regex = Pattern.compile("\\.(mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism(?:[vc]|/manifest)?)(?:[\\?#]|$)");
 
-  public static String get_mimeType(String uri) {
+  public static String get_video_mimeType(String uri) {
     if (uri == null) return null;
 
     Matcher matcher = VideoSource.video_regex.matcher(uri.toLowerCase());
@@ -114,4 +117,40 @@ final class VideoSource {
     return mimeType;
   }
 
+  // ===========================================================================
+  // captions mime-type
+
+  public static Pattern caption_regex = Pattern.compile("\\.(srt|ttml|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
+
+  public static String get_caption_mimeType(String caption) {
+    if (caption == null) return null;
+
+    Matcher matcher = VideoSource.caption_regex.matcher(caption.toLowerCase());
+    String file_ext = "";
+    String mimeType = null;
+
+    if (matcher.find()) {
+      file_ext = matcher.group(1);
+
+      switch (file_ext) {
+        case "srt":
+          mimeType = "application/x-subrip";
+          break;
+        case "ttml":
+          mimeType = "application/ttml+xml";
+          break;
+        case "vtt":
+        case "webvtt":
+          mimeType = "text/vtt";
+          break;
+        case "ssa":
+        case "ass":
+          mimeType = "text/x-ssa";
+          break;
+      }
+    }
+    return mimeType;
+  }
+
+  // ===========================================================================
 }

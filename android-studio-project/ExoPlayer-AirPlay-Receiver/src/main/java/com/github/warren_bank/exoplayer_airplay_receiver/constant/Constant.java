@@ -7,6 +7,7 @@ public class Constant {
     public static final String Need_sendReverse = "SendReverse";
     public static final String ReverseMsg       = "ReverseMsg";
     public static final String PlayURL          = "playUrl";
+    public static final String CaptionURL       = "textUrl";
     public static final String RefererURL       = "referUrl";
     public static final String Start_Pos        = "startPos";
 
@@ -160,39 +161,41 @@ public class Constant {
     }
 
     public interface Msg {
-        public static final int Msg_Photo        = 1;
-        public static final int Msg_Stop         = 2;
-        public static final int Msg_Video_Play   = 3;
-        public static final int Msg_Video_Seek   = 4;
-        public static final int Msg_Video_Rate   = 5;
+        public static final int Msg_Photo         =  1;
+        public static final int Msg_Stop          =  2;
+        public static final int Msg_Video_Play    =  3;
+        public static final int Msg_Video_Seek    =  4;
+        public static final int Msg_Video_Rate    =  5;
 
-        public static final int Msg_Video_Queue  = 6;
-        public static final int Msg_Video_Next   = 7;
-        public static final int Msg_Video_Prev   = 8;
-        public static final int Msg_Audio_Volume = 9;
+        public static final int Msg_Video_Queue   =  6;
+        public static final int Msg_Video_Next    =  7;
+        public static final int Msg_Video_Prev    =  8;
+        public static final int Msg_Audio_Volume  =  9;
+        public static final int Msg_Text_Captions = 10;
     }
 
     public interface Target {
-        public static final String REVERSE       = "/reverse";
-        public static final String PHOTO         = "/photo";
-        public static final String SERVER_INFO   = "/server-info";
-        public static final String STOP          = "/stop";
-        public static final String PLAY          = "/play";
-        public static final String SCRUB         = "/scrub";
-        public static final String RATE          = "/rate";
-        public static final String PLAYBACK_INFO = "/playback-info";
+        public static final String REVERSE        = "/reverse";
+        public static final String PHOTO          = "/photo";
+        public static final String SERVER_INFO    = "/server-info";
+        public static final String STOP           = "/stop";
+        public static final String PLAY           = "/play";
+        public static final String SCRUB          = "/scrub";
+        public static final String RATE           = "/rate";
+        public static final String PLAYBACK_INFO  = "/playback-info";
 
-        public static final String QUEUE         = "/queue";
-        public static final String NEXT          = "/next";
-        public static final String PREVIOUS      = "/previous";
-        public static final String VOLUME        = "/volume";
+        public static final String QUEUE          = "/queue";
+        public static final String NEXT           = "/next";
+        public static final String PREVIOUS       = "/previous";
+        public static final String VOLUME         = "/volume";
+        public static final String CAPTIONS       = "/captions";
     }
 
     public interface Status {
-        public static final String Status_play = "playing";
-        public static final String Status_stop = "stopped";
-        public static final String Status_pause = "paused";
-        public static final String Status_load = "loading";
+        public static final String Status_play    = "playing";
+        public static final String Status_stop    = "stopped";
+        public static final String Status_pause   = "paused";
+        public static final String Status_load    = "loading";
     }
 
 }

@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.DiscontinuityReason;
@@ -23,10 +24,13 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
+import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -57,6 +61,8 @@ public final class PlayerManager implements EventListener {
   private Handler handler;
   private Runnable retainLast;
 
+  public DefaultTrackSelector trackSelector;
+
   /**
    * @param context A {@link Context}.
    * @param playerView The {@link PlayerView} for local playback.
@@ -77,8 +83,7 @@ public final class PlayerManager implements EventListener {
     this.playerView = playerView;
     this.mediaQueue = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
-
-    DefaultTrackSelector trackSelector = new DefaultTrackSelector();
+    this.trackSelector = new DefaultTrackSelector(context);
     RenderersFactory renderersFactory = new DefaultRenderersFactory(context);
     this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector);
     this.exoPlayer.addListener(this);
@@ -166,24 +171,24 @@ public final class PlayerManager implements EventListener {
    * Appends {@link VideoSource} to the media queue.
    *
    * @param uri The URL to a video file or stream.
-   * @param mimeType The mime-type of the video file or stream.
+   * @param caption The URL to a file containing text captions (srt or vtt).
    * @param referer The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
    * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    */
   public void addItem(
     String uri,
-    String mimeType,
+    String caption,
     String referer,
     float startPosition
   ) {
-    addItem(uri, mimeType, referer, startPosition, (Handler) null, (Runnable) null);
+    addItem(uri, caption, referer, startPosition, (Handler) null, (Runnable) null);
   }
 
   /**
    * Appends {@link VideoSource} to the media queue.
    *
    * @param uri The URL to a video file or stream.
-   * @param mimeType The mime-type of the video file or stream.
+   * @param caption The URL to a file containing text captions (srt or vtt).
    * @param referer The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
    * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param handler
@@ -191,13 +196,13 @@ public final class PlayerManager implements EventListener {
    */
   public void addItem(
     String uri,
-    String mimeType,
+    String caption,
     String referer,
     float startPosition,
     Handler handler,
     Runnable onCompletionAction
   ) {
-    VideoSource sample = VideoSource.createVideoSource(uri, mimeType, referer, startPosition);
+    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, startPosition);
     addItem(sample, handler, onCompletionAction);
   }
 
@@ -222,7 +227,8 @@ public final class PlayerManager implements EventListener {
     Handler handler,
     Runnable onCompletionAction
   ) {
-    if ((sample.uri == null) || sample.uri.isEmpty()) {
+    // this can't happen: Intents without a uri are ignored
+    if (sample.uri == null) {
       if ((handler != null) && (onCompletionAction != null))
         handler.post(onCompletionAction);
       return;
@@ -306,8 +312,13 @@ public final class PlayerManager implements EventListener {
    * @param uri The URL to a video file or stream.
    * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    */
-  public void AirPlay_play(String uri, float startPosition) {
-    addItem(uri, (String) null, (String) null, startPosition, handler, retainLast);
+  public void AirPlay_play(
+    String uri,
+    String caption,
+    String referer,
+    float startPosition
+  ) {
+    addItem(uri, caption, referer, startPosition, handler, retainLast);
   }
 
   /**
@@ -370,10 +381,11 @@ public final class PlayerManager implements EventListener {
    */
   public void AirPlay_queue(
     String uri,
+    String caption,
     String referer,
     float startPosition
   ) {
-    addItem(uri, (String) null, referer, startPosition);
+    addItem(uri, caption, referer, startPosition);
   }
 
   /**
@@ -401,6 +413,33 @@ public final class PlayerManager implements EventListener {
    */
   public void AirPlay_volume(float audioVolume) {
     exoPlayer.setVolume(audioVolume); // range of values: 0.0 (mute) - 1.0 (unity gain)
+  }
+
+  /**
+   * Change visibility of text captions.
+   *
+   * @param showCaptions
+   */
+  public void AirPlay_captions(boolean showCaptions) {
+    boolean isDisabled = !showCaptions;
+
+    DefaultTrackSelector.ParametersBuilder builder = trackSelector.getParameters().buildUpon();
+
+    MappingTrackSelector.MappedTrackInfo info = trackSelector.getCurrentMappedTrackInfo();
+    if (info == null) return;
+
+    int renderer_count = info.getRendererCount();
+    int modified_count = 0;
+    for (int i = 0; i < renderer_count; i++) {
+      if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_TEXT) {
+        builder.clearSelectionOverrides(/* rendererIndex= */ i);
+        builder.setRendererDisabled(/* rendererIndex= */ i, isDisabled);
+        modified_count++;
+      }
+    }
+
+    if (modified_count > 0)
+      trackSelector.setParameters(builder.build());
   }
 
   // Miscellaneous methods.
@@ -548,7 +587,7 @@ public final class PlayerManager implements EventListener {
     VideoSource sample = getItem(currentItemIndex);
     if (sample == null) return;
 
-    if ((sample.referer != null) && !sample.referer.isEmpty()) {
+    if (sample.referer != null) {
       Uri referer   = Uri.parse(sample.referer);
       String origin = referer.getScheme() + "://" + referer.getAuthority();
 
@@ -562,9 +601,18 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildMediaSource(VideoSource sample) {
+    MediaSource video   = buildUriMediaSource(sample);
+    MediaSource caption = buildCaptionMediaSource(sample);
+
+    return (caption == null)
+      ? video
+      : new MergingMediaSource(video, caption);
+  }
+
+  private MediaSource buildUriMediaSource(VideoSource sample) {
     Uri uri = Uri.parse(sample.uri);
 
-    switch (sample.mimeType) {
+    switch (sample.uri_mimeType) {
       case MimeTypes.APPLICATION_M3U8:
         return new HlsMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri);
       case MimeTypes.APPLICATION_MPD:
@@ -574,6 +622,16 @@ public final class PlayerManager implements EventListener {
       default:
         return new ExtractorMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri);
     }
+  }
+
+  private MediaSource buildCaptionMediaSource(VideoSource sample) {
+    if ((sample.caption == null) || (sample.caption_mimeType == null))
+      return null;
+
+    Uri uri       = Uri.parse(sample.caption);
+    Format format = Format.createTextSampleFormat(/* id= */ null, sample.caption_mimeType, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ "en");
+
+    return new SingleSampleMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri, format, C.TIME_UNSET);
   }
 
   private MediaSource buildRawVideoMediaSource(int rawResourceId) {
@@ -591,7 +649,7 @@ public final class PlayerManager implements EventListener {
     Handler handler,
     Runnable onCompletionAction
   ) {
-    VideoSource sample = VideoSource.createVideoSource("raw", "raw", (String) null, 0f);
+    VideoSource sample = VideoSource.createVideoSource("raw", /* caption= */ (String) null, /* referer= */ (String) null, /* startPosition= */ 0f);
 
     mediaQueue.add(sample);
     concatenatingMediaSource.addMediaSource(

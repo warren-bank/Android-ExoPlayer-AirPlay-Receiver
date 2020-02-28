@@ -1,10 +1,14 @@
 <resources>
   <string name="app_name">ExoAirPlayer</string>
 
+  <!-- HTTP request header -->
   <string name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</string>
 
-  <!-- notifications -->
+  <!-- foreground service notification -->
   <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: service running</string>
   <string name="notification_service_content_line1">ExoAirPlayer running at:</string>
   <string name="notification_service_content_line3">Click to stop service.</string>
+
+  <!-- track selection dialog -->
+  <string name="track_selection_title">Select tracks</string>
 </resources>

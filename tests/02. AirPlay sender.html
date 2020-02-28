@@ -84,11 +84,14 @@ window.onload  = function() {
   const $airplay_port  = document.querySelector('input#airplay_port')
   const $airplay_tls   = document.querySelector('input#airplay_tls')
   const $video_url     = document.querySelector('input#video_url')
+  const $caption_url   = document.querySelector('input#caption_url')
   const $referer_url   = document.querySelector('input#referer_url')
   const $play          = document.querySelector('button#play')
   const $queue         = document.querySelector('button#queue')
   const $pause         = document.querySelector('button#pause')
   const $resume        = document.querySelector('button#resume')
+  const $captions_on   = document.querySelector('button#captions_on')
+  const $captions_off  = document.querySelector('button#captions_off')
   const $stop          = document.querySelector('button#stop')
   const $seek_hours    = document.querySelector('input#seek_hours')
   const $seek_minutes  = document.querySelector('input#seek_minutes')
@@ -107,6 +110,7 @@ window.onload  = function() {
 
   const encoded_urls = {
     video:   null,
+    caption: null,
     referer: null
   }
 
@@ -114,15 +118,18 @@ window.onload  = function() {
     var b64, hash_regex_pattern, matches
 
     b64 = '[A-Za-z0-9+/=%]'
-    hash_regex_pattern = `^#/watch/(${b64}+?)(?:/referer/(${b64}+))?$`
+    hash_regex_pattern = `^#/watch/(${b64}+?)(?:/subtitle/(${b64}+?))?(?:/referer/(${b64}+?))?$`
     hash_regex_pattern = new RegExp(hash_regex_pattern)
 
     matches = hash_regex_pattern.exec(window.location.hash)
     if (matches && matches.length && matches[1]) {
-        encoded_urls.video = matches[1]
-        if (matches.length > 2 && matches[2]) {
-            encoded_urls.referer = matches[2]
-        }
+      encoded_urls.video = matches[1]
+
+      if (matches[2])
+        encoded_urls.caption = matches[2]
+
+      if (matches[3])
+        encoded_urls.referer = matches[3]
     }
   }
 
@@ -178,6 +185,9 @@ window.onload  = function() {
 
     if (encoded_urls.video)
       $video_url.value = decode_URL(encoded_urls.video)
+
+    if (encoded_urls.caption)
+      $caption_url.value = decode_URL(encoded_urls.caption)
 
     if (encoded_urls.referer)
       $referer_url.value = decode_URL(encoded_urls.referer)
@@ -277,21 +287,37 @@ window.onload  = function() {
   }
 
   // ===============================================================================================
-  // add event listeners to form fields
+  // form field data collection helper
 
-  $play.onclick = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-
+  var get_video_POST_data = function() {
     var url = $video_url.value
+    var txt = $caption_url.value
+    var ref = $referer_url.value
 
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    var path = '/play'
     var data = `Content-Location: ${url}\nStart-Position: 0`
+    if (txt) {
+      data += `\nCaption-Location: ${txt}`
+    }
+    if (ref) {
+      data += `\nReferer: ${ref}`
+    }
+    return data
+  }
+
+  // ===============================================================================================
+  // add event listeners to form fields
+
+  $play.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/play'
+    var data = get_video_POST_data()
 
     POST_message(path, data)
   }
@@ -300,20 +326,8 @@ window.onload  = function() {
     event.preventDefault()
     event.stopPropagation()
 
-    var url = $video_url.value
-    var ref = $referer_url.value
-
-    if (!url) {
-      alert('Video URL is required')
-      return
-    }
-
     var path = '/queue'
-    var data = `Content-Location: ${url}\nStart-Position: 0`
-
-    if (ref) {
-      data += `\nReferer: ${ref}`
-    }
+    var data = get_video_POST_data()
 
     POST_message(path, data)
   }
@@ -330,6 +344,20 @@ window.onload  = function() {
     event.stopPropagation()
 
     POST_message('/rate?value=1.0', null)
+  }
+
+  $captions_on.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/captions?toggle=1', null)
+  }
+
+  $captions_off.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    POST_message('/captions?toggle=0', null)
   }
 
   $stop.onclick = function(event) {
@@ -397,10 +425,12 @@ window.onload  = function() {
 
     var item = $sample_videos.selectedOptions[0]
     var url  = item.getAttribute('x-video-url')
+    var txt  = item.getAttribute('x-caption-url')
     var ref  = item.getAttribute('x-referer-url')
 
     if (url) {
       $video_url.value   = url
+      $caption_url.value = (txt) ? txt : ''
       $referer_url.value = (ref) ? ref : ''
     }
   }
@@ -434,6 +464,10 @@ window.onload  = function() {
         <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
       </div>
       <div class="oneline right">
+        <label for="caption_url">Caption URL:</label>
+        <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
+      </div>
+      <div class="oneline right">
         <label for="referer_url">Referer URL:</label>
         <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
       </div>
@@ -448,6 +482,10 @@ window.onload  = function() {
       <div class="oneline">
         <button id="pause">Pause</button>
         <button id="resume">Resume</button>
+      </div>
+      <div class="oneline">
+        <button id="captions_on">CC On</button>
+        <button id="captions_off">CC Off</button>
       </div>
       <div class="oneline">
         <button id="previous">Previous</button>
@@ -476,10 +514,11 @@ window.onload  = function() {
     <div>
       <select id="sample_videos">
         <option value="0">-- video --</option>
-        <option value="1" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">Big Buck Bunny</option>
-        <option value="2" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/hdworld/hdworld_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">HD World</option>
-        <option value="3" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/cctv/cctv_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">CCTV</option>
-        <option value="4" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-referer-url="https://players.akamai.com/hls/">Sintel</option>
+        <option value="1" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8" x-caption-url="" x-referer-url="https://players.akamai.com/hls/">Big Buck Bunny (vid:hls, subs:none)</option>
+        <option value="2" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt" x-referer-url="https://players.akamai.com/hls/">Sintel (vid:hls, subs:srt)</option>
+        <option value="3" x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest" x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt" x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html">Tears Of Steel (vid:dash, subs:vtt)</option>
+        <option value="4" x-video-url="https://html5demos.com/assets/dizzy.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598">Dizzy (vid:mp4, subs:ttml)</option>
+        <option value="5" x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605">Sample (vid:mp4, subs:ssa)</option>
       </select>
     </div>
 

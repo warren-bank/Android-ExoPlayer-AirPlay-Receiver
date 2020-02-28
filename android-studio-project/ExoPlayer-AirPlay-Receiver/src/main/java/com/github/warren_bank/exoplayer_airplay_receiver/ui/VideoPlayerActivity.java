@@ -123,6 +123,10 @@ public class VideoPlayerActivity extends VideoActivity {
           float audioVolume = (float) msg.obj;
           activity.playerManager.AirPlay_volume(audioVolume);
           break;
+        case Constant.Msg.Msg_Text_Captions :
+          boolean showCaptions = (boolean) msg.obj;
+          activity.playerManager.AirPlay_captions(showCaptions);
+          break;
       }
 
     }
