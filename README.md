@@ -158,6 +158,20 @@ __extended APIs:__
     --data-binary "" \
     "http://${airplay_ip}/volume?value=1.0"
   ```
+* turn text captions off:
+  ```bash
+    # note: POST body is required, even when it contains no data
+    curl -X POST \
+    --data-binary "" \
+    "http://${airplay_ip}/captions?toggle=0"
+  ```
+* turn text captions on:
+  ```bash
+    # note: POST body is required, even when it contains no data
+    curl -X POST \
+    --data-binary "" \
+    "http://${airplay_ip}/captions?toggle=1"
+  ```
 
 #### Usage (high level):
 

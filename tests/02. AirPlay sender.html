@@ -75,7 +75,7 @@ input[type="url"] {
   </style>
   <script>
 
-window.onload  = function() {
+window.onload  = () => {
 
   // ===============================================================================================
   // form fields
@@ -114,8 +114,8 @@ window.onload  = function() {
     referer: null
   }
 
-  var get_encoded_video_url = function() {
-    var b64, hash_regex_pattern, matches
+  const get_encoded_video_url = () => {
+    let b64, hash_regex_pattern, matches
 
     b64 = '[A-Za-z0-9+/=%]'
     hash_regex_pattern = `^#/watch/(${b64}+?)(?:/subtitle/(${b64}+?))?(?:/referer/(${b64}+?))?$`
@@ -138,18 +138,18 @@ window.onload  = function() {
   // ===============================================================================================
   // cookie management
 
-  var get_cookie_value = function(key) {
-    var pattern = new RegExp('(?:^|;)\\s*' + key + '\\s*=\\s*([^;]+)(?:;|$)')
-    var cookies = document.cookie
-    var matches = pattern.exec(cookies)
+  const get_cookie_value = (key) => {
+    const pattern = new RegExp('(?:^|;)\\s*' + key + '\\s*=\\s*([^;]+)(?:;|$)')
+    const cookies = document.cookie
+    const matches = pattern.exec(cookies)
     return (matches && matches.length) ? matches[1] : ''
   }
 
-  var set_cookie_value = function(key, val) {
+  const set_cookie_value = (key, val) => {
     document.cookie = `${key}=${val};domain=${window.location.hostname};path=${window.location.pathname};max-age=${60*60*24*365}`
   }
 
-  var persist_form_fields = function (airplay_host, airplay_port, airplay_tls) {
+  const persist_form_fields = (airplay_host, airplay_port, airplay_tls) => {
     set_cookie_value('airplay_host', airplay_host)
     set_cookie_value('airplay_port', airplay_port)
     set_cookie_value('airplay_tls',  (airplay_tls ? '1' : '0'))
@@ -158,8 +158,8 @@ window.onload  = function() {
   // ===============================================================================================
   // pre-populate some form fields with data extracted from either URL #hash or cookies
 
-  var decode_URL = function(str) {
-    var tail, done
+  const decode_URL = (str) => {
+    let tail, done
 
     if (str) {
       while (! done) {
@@ -172,8 +172,8 @@ window.onload  = function() {
     return str
   }
 
-  var prepopulate_form_fields = function() {
-    var airplay_host, airplay_port, airplay_tls
+  const prepopulate_form_fields = () => {
+    let airplay_host, airplay_port, airplay_tls
 
     airplay_host = get_cookie_value('airplay_host')
     airplay_port = get_cookie_value('airplay_port')
@@ -198,11 +198,11 @@ window.onload  = function() {
   // ===============================================================================================
   // XHR helper
 
-  var POST_message = function(path, data) {
-    var host = $airplay_host.value
-    var port = $airplay_port.value || '8192'
-    var tls  = $airplay_tls.checked
-    var url = `${ tls ? 'https' : 'http' }://${host}:${port}${path}`
+  const POST_message = (path, data) => {
+    const host = $airplay_host.value
+    const port = $airplay_port.value || '8192'
+    const tls  = $airplay_tls.checked
+    const url = `${ tls ? 'https' : 'http' }://${host}:${port}${path}`
 
     if (!host) {
       alert('AirPlay "host" is required')
@@ -213,7 +213,7 @@ window.onload  = function() {
       return
     }
 
-    var xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
     xhr.open("POST", url, true, null, null)
 
     if (data) {
@@ -231,18 +231,18 @@ window.onload  = function() {
   // ===============================================================================================
   // form field validation helper
 
-  var get_value = function(field, default_value) {
-    var val = field.value
+  const get_value = (field, default_value) => {
+    let val = field.value
 
     if (!val) {
       val = default_value
     }
     else if (field.getAttribute('x-type') === 'range') {
-      var min  = field.getAttribute('x-min')
-      var max  = field.getAttribute('x-max')
-      var step = field.getAttribute('x-step')
+      let min  = field.getAttribute('x-min')
+      let max  = field.getAttribute('x-max')
+      let step = field.getAttribute('x-step')
 
-      var isFloat = (step.indexOf('.') >= 0)
+      const isFloat = (step.indexOf('.') >= 0)
 
       if (!isFloat && (val.indexOf('.') >= 0)) {
         alert(`'${field.id}' requires an Integer value`)
@@ -274,8 +274,8 @@ window.onload  = function() {
         alert(`'${field.id}' value ("${val}") is larger than the maximum value allowed ("${max}")`)
         return
       }
-      var threshold = 1.0e-10
-      var steps = (val / step)
+      const threshold = 1.0e-10
+      const steps = (val / step)
       if ((steps !== parseInt(steps)) && (Math.abs(Math.round(steps) - steps) > threshold)) {
         alert(`'${field.id}' value ("${val}") is not a multiple of the step increment ("${step}")`)
         return
@@ -289,17 +289,79 @@ window.onload  = function() {
   // ===============================================================================================
   // form field data collection helper
 
-  var get_video_POST_data = function() {
-    var url = $video_url.value
-    var txt = $caption_url.value
-    var ref = $referer_url.value
+  const playlist_regex = /\.(?:m3u)(?:[\?#]|$)/i
+
+  const expand_playlist = async () => {
+    let url, text
+
+    url = $video_url.value
+    if (!url)
+      return null
+    if (!playlist_regex.test(url))
+      return null
+    if (false === window.confirm("Is this URL an audio playlist?\n\nIf yes, this page will download and individually queue each file."))
+      return null
+
+    try {
+      text = await fetch(url)
+      if (text.status !== 200) throw 'bad response'
+    }
+    catch(error) {
+      // -----------------------------------------
+      // CORS is probably not allowed; attempt a workaround..
+      // -----------------------------------------
+      // options:
+      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
+      // winner:
+      //   * https://ovsoinc.github.io/yacdn.org/
+      // -----------------------------------------
+      const proxied_url = `https://yacdn.org/proxy/${url}`
+
+      try {
+        text = await fetch(proxied_url)
+        if (text.status !== 200) throw 'bad response'
+      }
+      catch(error) {
+        window.alert("Error: Unable to download playlist. Aborting operation.")
+        return false
+      }
+    }
+
+    text = await text.text()
+    text = text.split(/[\r\n]+/g)
+
+    if (!Array.isArray(text) || !text.length)
+      return null
+
+    // remove whitespace
+    text = text.map(line => line.trim())
+
+    // not sure if this is a good idea.. convert Windows path separators
+    text = text.map(line => line.replace(/[\\]/g, '/'))
+
+    // remove empty lines and comments
+    text = text.filter(line => (line.length && (line[0] !== '#')))
+    if (!text.length)
+      return null
+
+    // resolve relative URL paths
+    text = text.map(path => (new URL(path, url)).href)
+
+    return text
+  }
+
+  const get_video_POST_data = (url) => {
+    if (!url)
+          url = $video_url.value
+    const txt = $caption_url.value
+    const ref = $referer_url.value
 
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    var data = `Content-Location: ${url}\nStart-Position: 0`
+    let data = `Content-Location: ${url}\nStart-Position: 0`
     if (txt) {
       data += `\nCaption-Location: ${txt}`
     }
@@ -310,123 +372,153 @@ window.onload  = function() {
   }
 
   // ===============================================================================================
+  // form field submission helper
+
+  const request_delay = (delay_ms) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, delay_ms)
+    })
+  }
+
+  const send_video_POST_data = async (initial_path) => {
+    const urls = await expand_playlist()
+
+    // special return value to indicate that operation is aborted.
+    if (urls === false) return
+
+    let path, data
+    if (Array.isArray(urls) && urls.length) {
+      for (let i = 0; i < urls.length; i++) {
+        path = (i === 0) ? initial_path : '/queue'
+        data = get_video_POST_data(/* url= */ urls[i])
+
+        POST_message(path, data)
+
+        await request_delay(2500)  // 2.5 seconds between each request is high, but there's no rush since the URLs are being added to a queue and won't be used immediately; better to allow the receiver time to process each request, so they are queued in the correct order.
+      }
+    }
+    else {
+      path = initial_path
+      data = get_video_POST_data()
+
+      POST_message(path, data)
+    }
+  }
+
+  // ===============================================================================================
   // add event listeners to form fields
 
-  $play.onclick = function(event) {
+  $play.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    var path = '/play'
-    var data = get_video_POST_data()
-
-    POST_message(path, data)
+    const path = '/play'
+    send_video_POST_data(path)
   }
 
-  $queue.onclick = function(event) {
+  $queue.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    var path = '/queue'
-    var data = get_video_POST_data()
-
-    POST_message(path, data)
+    const path = '/queue'
+    send_video_POST_data(path)
   }
 
-  $pause.onclick = function(event) {
+  $pause.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/rate?value=0.0', null)
   }
 
-  $resume.onclick = function(event) {
+  $resume.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/rate?value=1.0', null)
   }
 
-  $captions_on.onclick = function(event) {
+  $captions_on.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/captions?toggle=1', null)
   }
 
-  $captions_off.onclick = function(event) {
+  $captions_off.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/captions?toggle=0', null)
   }
 
-  $stop.onclick = function(event) {
+  $stop.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/stop', null)
   }
 
-  $seek.onclick = function(event) {
+  $seek.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    var hrs = get_value($seek_hours,   0)    // var hrs = parseInt($seek_hours.value,   10) || 0
-    var min = get_value($seek_minutes, 0)    // var min = parseInt($seek_minutes.value, 10) || 0
-    var sec = get_value($seek_seconds, 0)    // var sec = parseInt($seek_seconds.value, 10) || 0
+    const hrs = get_value($seek_hours,   0)    // const hrs = parseInt($seek_hours.value,   10) || 0
+    const min = get_value($seek_minutes, 0)    // const min = parseInt($seek_minutes.value, 10) || 0
+    const sec = get_value($seek_seconds, 0)    // const sec = parseInt($seek_seconds.value, 10) || 0
 
-    var offset = (sec) + (min * 60) + (hrs * 60 * 60)
+    const offset = (sec) + (min * 60) + (hrs * 60 * 60)
 
-    var path = `/scrub?position=${offset}`
-    var data = null
+    const path = `/scrub?position=${offset}`
+    const data = null
 
     POST_message(path, data)
   }
 
-  $rate.onclick = function(event) {
+  $rate.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    var rate = get_value($rate_factor, 0.0)  // var rate = parseFloat($rate_factor.value) || 0.0
-    var path = `/rate?value=${rate}`
-    var data = null
+    const rate = get_value($rate_factor, 0.0)  // const rate = parseFloat($rate_factor.value) || 0.0
+    const path = `/rate?value=${rate}`
+    const data = null
 
     POST_message(path, data)
   }
 
-  $volume.onclick = function(event) {
+  $volume.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    var vol = get_value($volume_factor, 0.0) // var vol  = parseFloat($volume_factor.value) || 0.0
-    var path = `/volume?value=${vol}`
-    var data = null
+    const vol = get_value($volume_factor, 0.0) // const vol  = parseFloat($volume_factor.value) || 0.0
+    const path = `/volume?value=${vol}`
+    const data = null
 
     POST_message(path, data)
   }
 
-  $previous.onclick = function(event) {
+  $previous.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/previous', null)
   }
 
-  $next.onclick = function(event) {
+  $next.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     POST_message('/next', null)
   }
 
-  $sample_videos.onchange = function(event) {
+  $sample_videos.onchange = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    var item = $sample_videos.selectedOptions[0]
-    var url  = item.getAttribute('x-video-url')
-    var txt  = item.getAttribute('x-caption-url')
-    var ref  = item.getAttribute('x-referer-url')
+    const item = $sample_videos.selectedOptions[0]
+    const url  = item.getAttribute('x-video-url')
+    const txt  = item.getAttribute('x-caption-url')
+    const ref  = item.getAttribute('x-referer-url')
 
     if (url) {
       $video_url.value   = url
@@ -519,6 +611,7 @@ window.onload  = function() {
         <option value="3" x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest" x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt" x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html">Tears Of Steel (vid:dash, subs:vtt)</option>
         <option value="4" x-video-url="https://html5demos.com/assets/dizzy.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598">Dizzy (vid:mp4, subs:ttml)</option>
         <option value="5" x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605">Sample (vid:mp4, subs:ssa)</option>
+        <option value="6" x-video-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/!play.m3u" x-caption-url="" x-referer-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/">Audio Playlist (list:m3u, files:mp3)</option>
       </select>
     </div>
 
