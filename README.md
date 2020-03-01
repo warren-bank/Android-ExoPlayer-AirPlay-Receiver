@@ -55,132 +55,134 @@ __AirPlay APIs:__
   # network address for running instance of 'ExoPlayer AirPlay Receiver'
   airplay_ip='192.168.1.100:8192'
 
+  # file path for test image:
+  image_path='/path/to/image.jpg'
+
+  # URL for test image:
+  image_page='https://commons.wikimedia.org/wiki/File:Android_robot.svg'
+  image_url='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/654px-Android_robot.svg.png'
+
   # URLs for test videos:
   videos_page='https://players.akamai.com/hls/'
   video_url_1='https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8'
   video_url_2='https://multiplatform-f.akamaihd.net/i/multi/april11/hdworld/hdworld_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8'
   video_url_3='https://multiplatform-f.akamaihd.net/i/multi/april11/cctv/cctv_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8'
+
+  # URLs for test video text captions:
+  captions_page='https://demos.flowplayer.com/basics/subtitle.html'
+  caption_url_1='https://d12zt1n3pd4xhr.cloudfront.net/fp/subtitles-demo.vtt'
+  caption_url_2='https://d12zt1n3pd4xhr.cloudfront.net/fp/subtitles-demo.vtt'
+  caption_url_3='https://d12zt1n3pd4xhr.cloudfront.net/fp/subtitles-demo.vtt'
 ```
 
-* play video #1:
+* display image from local file system:
   ```bash
-    curl -X POST \
-    -H "Content-Type: text/parameters" \
-    --data-binary "Content-Location: ${video_url_1}\nStart-Position: 0" \
-    "http://${airplay_ip}/play"
+    curl --silent -X POST \
+      --data-binary "@${image_path}" \
+      "http://${airplay_ip}/photo"
+  ```
+* display image from remote URL:
+  ```bash
+    curl --silent "$image_url" | \
+    curl --silent -X POST \
+      --data-binary @- \
+      "http://${airplay_ip}/photo"
+  ```
+* play video #1 (add text captions, set 'Referer' request header, seek to beginning):
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_url_1}\nCaption-Location: ${caption_url_1}\nReferer: ${videos_page}\nStart-Position: 0" \
+      "http://${airplay_ip}/play"
   ```
 * seek to `30 seconds` within currently playing video:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/scrub?position=30.0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/scrub?position=30.0"
   ```
 * pause the currently playing video:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/rate?value=0.0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/rate?value=0.0"
   ```
 * resume playback of the currently paused video:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/rate?value=1.0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/rate?value=1.0"
   ```
 * increase speed of playback to 10x:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/rate?value=10.0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/rate?value=10.0"
   ```
 * stop playback:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/stop"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/stop"
   ```
 
 __extended APIs:__
 
-* add video #2 to end of queue (set 'Referer' request header, seek to 50%):
+* add video #2 to end of queue (add text captions, set 'Referer' request header, seek to 50%):
   ```bash
     # note: position < 1 is a percent of the total video length
-    curl -X POST \
-    -H "Content-Type: text/parameters" \
-    --data-binary "Content-Location: ${video_url_2}\nReferer: ${videos_page}\nStart-Position: 0.5" \
-    "http://${airplay_ip}/queue"
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_url_2}\nCaption-Location: ${caption_url_2}\nReferer: ${videos_page}\nStart-Position: 0.5" \
+      "http://${airplay_ip}/queue"
   ```
-* add video #3 to end of queue (set 'Referer' request header, seek to 30 seconds):
+* add video #3 to end of queue (add text captions, set 'Referer' request header, seek to 30 seconds):
   ```bash
     # note: position >= 1 is a fixed offset (in seconds)
-    curl -X POST \
-    -H "Content-Type: text/parameters" \
-    --data-binary "Content-Location: ${video_url_3}\nReferer: ${videos_page}\nStart-Position: 30" \
-    "http://${airplay_ip}/queue"
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_url_3}\nCaption-Location: ${caption_url_3}\nReferer: ${videos_page}\nStart-Position: 30" \
+      "http://${airplay_ip}/queue"
   ```
 * skip forward to next video in queue:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/next"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/next"
   ```
 * skip backward to previous video in queue:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/previous"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/previous"
   ```
 * mute audio:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/volume?value=0.0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/volume?value=0.0"
   ```
 * set audio volume to 50%:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/volume?value=0.5"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/volume?value=0.5"
   ```
 * set audio volume to 100%:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/volume?value=1.0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/volume?value=1.0"
   ```
 * turn text captions off:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/captions?toggle=0"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/captions?toggle=0"
   ```
 * turn text captions on:
   ```bash
-    # note: POST body is required, even when it contains no data
-    curl -X POST \
-    --data-binary "" \
-    "http://${airplay_ip}/captions?toggle=1"
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/captions?toggle=1"
   ```
 
 #### Usage (high level):
 
-* [single-page application (SPA)](http://webcast-reloaded.surge.sh/airplay_sender.html) that can be used to:
+* [single-page application (SPA)](http://webcast-reloaded.surge.sh/airplay_sender.html) that can run in any web browser, and be used to:
   - send commands to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
     * "cast" video URLs to its playlist
     * control all aspects of playback
 
-* [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) that can be used to:
+* [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) that can run in any Chromium-based desktop web browser, and be used to:
   - intercept the URL of (nearly) all videos on any website
   - display these video URLs as a list of links
     * clicking on any link will transfer the URL of the video (as well as the URL of the referer webpage) to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
@@ -188,6 +190,15 @@ __extended APIs:__
       - the other links transfer the video URL to other tools
         * webpage to watch the video in an HTML5 player with the ability to "cast" the video to a Chromecast
         * a running instance of [HLS-Proxy](https://github.com/warren-bank/HLS-Proxy)
+
+* [Android app](https://github.com/tutikka/DroidPlay) that is open-source, and can be used to:
+  - discover AirPlay receivers on the same LAN
+  - display images from the local file system
+    * sends the entire file in POST data to the receiver
+  - stream videos from the local file system
+    * runs a local web server
+    * casts the URL of the video to the receiver
+    * serves the video file when requested by the receiver
 
 - - - -
 

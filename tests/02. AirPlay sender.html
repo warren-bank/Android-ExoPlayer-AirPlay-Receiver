@@ -22,11 +22,11 @@ body .contents {
 }
 
 body .contents > h3 {
-  margin-block-start: 0.75em;
-  margin-block-end:   0.75em;
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
 }
 body .contents > h3:first-child {
-  margin-block-start: 0;
+  margin-top: 0;
 }
 
 body .contents > div {
@@ -57,6 +57,16 @@ body .contents div.right {
   text-align: right;
 }
 
+body .contents div.flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+body .contents div.flex > div {
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
 input, button {
   font-family: inherit;
   font-size: inherit;
@@ -70,6 +80,18 @@ input[type="number"],
 input[type="url"] {
   padding: 0 0.5em;
   font-family: monospace;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+select {
+  text-align: center;
+  text-align-last: center;
+}
+select > option {
+  text-align: left;
 }
 
   </style>
@@ -104,6 +126,7 @@ window.onload  = () => {
   const $previous      = document.querySelector('button#previous')
   const $next          = document.querySelector('button#next')
   const $sample_videos = document.querySelector('select#sample_videos')
+  const $image_file    = document.querySelector('input#image_file')
 
   // ===============================================================================================
   // extract data from URL #hash
@@ -527,6 +550,21 @@ window.onload  = () => {
     }
   }
 
+  $image_file.onchange = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (!$image_file.files || !$image_file.files.length)
+      return
+
+    const path = '/photo'
+    const data = $image_file.files[0]
+
+    POST_message(path, data)
+
+    $image_file.value = null
+  }
+
 }
 
   </script>
@@ -602,17 +640,24 @@ window.onload  = () => {
       </div>
     </div>
     <hr />
-    <h3>Sample Videos:</h3>
-    <div>
-      <select id="sample_videos">
-        <option value="0">-- video --</option>
-        <option value="1" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8" x-caption-url="" x-referer-url="https://players.akamai.com/hls/">Big Buck Bunny (vid:hls, subs:none)</option>
-        <option value="2" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt" x-referer-url="https://players.akamai.com/hls/">Sintel (vid:hls, subs:srt)</option>
-        <option value="3" x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest" x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt" x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html">Tears Of Steel (vid:dash, subs:vtt)</option>
-        <option value="4" x-video-url="https://html5demos.com/assets/dizzy.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598">Dizzy (vid:mp4, subs:ttml)</option>
-        <option value="5" x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605">Sample (vid:mp4, subs:ssa)</option>
-        <option value="6" x-video-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/!play.m3u" x-caption-url="" x-referer-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/">Audio Playlist (list:m3u, files:mp3)</option>
-      </select>
+    <div class="flex">
+      <div>
+        <h3>Sample Videos:</h3>
+        <select id="sample_videos">
+          <option value="0">-- video --</option>
+          <option value="1" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8" x-caption-url="" x-referer-url="https://players.akamai.com/hls/">Big Buck Bunny (vid:hls, subs:none)</option>
+          <option value="2" x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8" x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt" x-referer-url="https://players.akamai.com/hls/">Sintel (vid:hls, subs:srt)</option>
+          <option value="3" x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest" x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt" x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html">Tears Of Steel (vid:dash, subs:vtt)</option>
+          <option value="4" x-video-url="https://html5demos.com/assets/dizzy.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598">Dizzy (vid:mp4, subs:ttml)</option>
+          <option value="5" x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605">Sample (vid:mp4, subs:ssa)</option>
+          <option value="6" x-video-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/!play.m3u" x-caption-url="" x-referer-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/">Audio Playlist (list:m3u, files:mp3)</option>
+        </select>
+      </div>
+      <div>
+        <h3>Display Image:</h3>
+        <button><label for="image_file">Choose File</label></button>
+        <input id="image_file" type="file" accept="image/png, image/jpeg" />
+      </div>
     </div>
 
   </div>
