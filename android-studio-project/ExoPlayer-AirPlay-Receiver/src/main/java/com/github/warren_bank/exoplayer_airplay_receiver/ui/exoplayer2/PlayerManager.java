@@ -536,6 +536,7 @@ public final class PlayerManager implements EventListener {
           if (isPlayerReady()) {
             // toggle pause
             exoPlayer.setPlayWhenReady( !exoPlayer.getPlayWhenReady() );
+            isHandled = true;
           }
           break;
       }
