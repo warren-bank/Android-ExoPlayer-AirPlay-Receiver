@@ -39,7 +39,7 @@ import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 
 import java.util.ArrayList;
 
-/** Manages players and an internal media queue */
+/** Manages ExoPlayer and an internal media queue */
 public final class PlayerManager implements EventListener {
 
   private final class MyArrayList<E> extends ArrayList<E> {
@@ -113,7 +113,7 @@ public final class PlayerManager implements EventListener {
     };
   }
 
-  // Query state of player.
+  // Query state of ExoPlayer.
 
   /**
    * @return Is the instance of ExoPlayer able to immediately play from its current position.
@@ -124,6 +124,15 @@ public final class PlayerManager implements EventListener {
 
     int state = exoPlayer.getPlaybackState();
     return (state == Player.STATE_READY);
+  }
+
+  /**
+   * @return Is the instance of ExoPlayer paused, but ready to resume playback.
+   */
+  public boolean isPlayerPaused() {
+    return isPlayerReady()
+      ? !exoPlayer.getPlayWhenReady()
+      : false;
   }
 
   /**
@@ -149,10 +158,32 @@ public final class PlayerManager implements EventListener {
     return positionMs;
   }
 
+  public String getCurrentVideoMimeType() {
+    if (exoPlayer == null)
+      return null;
+
+    Format format = exoPlayer.getVideoFormat();
+    if (format == null)
+      return null;
+
+    return format.sampleMimeType;
+  }
+
+  public String getCurrentAudioMimeType() {
+    if (exoPlayer == null)
+      return null;
+
+    Format format = exoPlayer.getAudioFormat();
+    if (format == null)
+      return null;
+
+    return format.sampleMimeType;
+  }
+
   // Queue manipulation methods.
 
   /**
-   * Plays a specified queue item in the current player.
+   * Plays a specified queue item in ExoPlayer.
    *
    * @param itemIndex The index of the item to play.
    */
@@ -181,7 +212,7 @@ public final class PlayerManager implements EventListener {
     String referer,
     float startPosition
   ) {
-    addItem(uri, caption, referer, startPosition, (Handler) null, (Runnable) null);
+    addItem(uri, caption, referer, startPosition, handler, (Runnable) null);
   }
 
   /**
@@ -212,7 +243,7 @@ public final class PlayerManager implements EventListener {
    * @param sample The {@link VideoSource} to append.
    */
   public void addItem(VideoSource sample) {
-    addItem(sample, (Handler) null, (Runnable) null);
+    addItem(sample, handler, (Runnable) null);
   }
 
   /**
@@ -227,18 +258,40 @@ public final class PlayerManager implements EventListener {
     Handler handler,
     Runnable onCompletionAction
   ) {
-    // this can't happen: Intents without a uri are ignored
+    // this shouldn't happen: VideoActivity.handleIntent() has code to detect when playerManager has been released
+    if ((mediaQueue == null) || (concatenatingMediaSource == null))
+      return;
+
+    // this shouldn't happen: Intents without a uri are ignored
     if (sample.uri == null) {
       if ((handler != null) && (onCompletionAction != null))
         handler.post(onCompletionAction);
       return;
     }
 
+    boolean isEnded = (exoPlayer != null) && !exoPlayer.isPlaying() && exoPlayer.getPlayWhenReady();
+
+    if (isEnded) {
+      exoPlayer.setPlayWhenReady(false);
+      exoPlayer.retry();
+    }
+
+    Runnable runCompletionAction = new Runnable() {
+      @Override
+      public void run() {
+        if (isEnded)
+          exoPlayer.setPlayWhenReady(true);
+
+        if ((handler != null) && (onCompletionAction != null))
+          handler.post(onCompletionAction);
+      }
+    };
+
     mediaQueue.add(sample);
     concatenatingMediaSource.addMediaSource(
       buildMediaSource(sample),
       handler,
-      onCompletionAction
+      runCompletionAction
     );
   }
 
@@ -246,6 +299,9 @@ public final class PlayerManager implements EventListener {
    * @return The size of the media queue.
    */
   public int getMediaQueueSize() {
+    if (mediaQueue == null)
+      return 0;
+
     return mediaQueue.size();
   }
 
@@ -268,6 +324,9 @@ public final class PlayerManager implements EventListener {
    * @return Whether the removal was successful.
    */
   public boolean removeItem(int itemIndex) {
+    if ((mediaQueue == null) || (concatenatingMediaSource == null))
+      return false;
+
     concatenatingMediaSource.removeMediaSource(itemIndex);
     mediaQueue.remove(itemIndex);
     if ((itemIndex == currentItemIndex) && (itemIndex == mediaQueue.size())) {
@@ -286,6 +345,9 @@ public final class PlayerManager implements EventListener {
    * @return Whether the item move was successful.
    */
   public boolean moveItem(int fromIndex, int toIndex) {
+    if ((mediaQueue == null) || (concatenatingMediaSource == null))
+      return false;
+
     // Player update.
     concatenatingMediaSource.moveMediaSource(fromIndex, toIndex);
 
@@ -327,6 +389,8 @@ public final class PlayerManager implements EventListener {
    * @param positionSec The position as a fixed offset in seconds.
    */
   public void AirPlay_scrub(float positionSec) {
+    if (exoPlayer == null) return;
+
     if (exoPlayer.isCurrentWindowSeekable()) {
       long positionMs = ((long) positionSec) * 1000;
       exoPlayer.seekTo(currentItemIndex, positionMs);
@@ -339,9 +403,11 @@ public final class PlayerManager implements EventListener {
    * @param rate New rate of speed for video playback. The value 0.0 is equivalent to 'pause'.
    */
   public void AirPlay_rate(float rate) {
+    if (exoPlayer == null) return;
+
     if (rate == 0f) {
       // pause playback
-      if (exoPlayer.isPlaying())
+      if (exoPlayer.getPlayWhenReady())
         exoPlayer.setPlayWhenReady(false);
     }
     else {
@@ -351,7 +417,7 @@ public final class PlayerManager implements EventListener {
       );
 
       // resume playback if paused
-      if (!exoPlayer.isPlaying())
+      if (!exoPlayer.getPlayWhenReady())
         exoPlayer.setPlayWhenReady(true);
     }
   }
@@ -392,6 +458,8 @@ public final class PlayerManager implements EventListener {
    * Skip forward to the next {@link VideoSource} in the media queue.
    */
   public void AirPlay_next() {
+    if (exoPlayer == null) return;
+
     if (exoPlayer.hasNext()) {
       exoPlayer.next();
     }
@@ -401,6 +469,8 @@ public final class PlayerManager implements EventListener {
    * Skip backward to the previous {@link VideoSource} in the media queue.
    */
   public void AirPlay_previous() {
+    if (exoPlayer == null) return;
+
     if (exoPlayer.hasPrevious()) {
       exoPlayer.previous();
     }
@@ -412,6 +482,8 @@ public final class PlayerManager implements EventListener {
    * @param audioVolume New rate audio volume level. The range of acceptable values is 0.0 to 1.0. The value 0.0 is equivalent to 'mute'. The value 1.0 is unity gain.
    */
   public void AirPlay_volume(float audioVolume) {
+    if (exoPlayer == null) return;
+
     exoPlayer.setVolume(audioVolume); // range of values: 0.0 (mute) - 1.0 (unity gain)
   }
 
@@ -421,6 +493,8 @@ public final class PlayerManager implements EventListener {
    * @param showCaptions
    */
   public void AirPlay_captions(boolean showCaptions) {
+    if (exoPlayer == null) return;
+
     boolean isDisabled = !showCaptions;
 
     DefaultTrackSelector.ParametersBuilder builder = trackSelector.getParameters().buildUpon();
@@ -445,13 +519,29 @@ public final class PlayerManager implements EventListener {
   // Miscellaneous methods.
 
   /**
-   * Dispatches a given {@link KeyEvent} to the corresponding view of the current player.
+   * Dispatches a given {@link KeyEvent} to the ExoPlayer PlayerView.
    *
    * @param event The {@link KeyEvent}.
    * @return Whether the event was handled by the target view.
    */
   public boolean dispatchKeyEvent(KeyEvent event) {
-    return playerView.dispatchKeyEvent(event);
+    boolean isHandled = (playerView != null) && playerView.dispatchKeyEvent(event);
+
+    if (!isHandled && (exoPlayer != null) && (event.getRepeatCount() == 0) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
+      // apply custom handler(s)
+
+      switch(event.getKeyCode()) {
+        case KeyEvent.KEYCODE_SPACE :
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE :
+          if (isPlayerReady()) {
+            // toggle pause
+            exoPlayer.setPlayWhenReady( !exoPlayer.getPlayWhenReady() );
+          }
+          break;
+      }
+    }
+
+    return isHandled;
   }
 
   /**
@@ -477,16 +567,27 @@ public final class PlayerManager implements EventListener {
    * Releases the instance of ExoPlayer.
    */
   private void release_exoPlayer() {
-    try {
-      playerView.setPlayer(null);
-      exoPlayer.removeListener(this);
-      exoPlayer.stop(true);
-      exoPlayer.release();
-
-      playerView = null;
-      exoPlayer = null;
+    if (playerView != null) {
+      try {
+        playerView.setPlayer(null);
+      }
+      catch (Exception e) {}
+      finally {
+        playerView = null;
+      }
     }
-    catch (Exception e){}
+
+    if (exoPlayer != null) {
+      try {
+        exoPlayer.stop(true);
+        exoPlayer.removeListener(this);
+        exoPlayer.release();
+      }
+      catch (Exception e) {}
+      finally {
+        exoPlayer = null;
+      }
+    }
   }
 
   // Player.EventListener implementation.
@@ -510,6 +611,8 @@ public final class PlayerManager implements EventListener {
 
   @Override
   public void onPlayerError(ExoPlaybackException error) {
+    if (exoPlayer == null) return;
+
     if (error.type == ExoPlaybackException.TYPE_SOURCE) {
       exoPlayer.next();
     }
@@ -518,11 +621,16 @@ public final class PlayerManager implements EventListener {
   // Internal methods.
 
   private void init() {
+    if (exoPlayer == null) return;
+
     // Media queue management.
     exoPlayer.prepare(concatenatingMediaSource);
   }
 
   private void truncateQueue() {
+    if ((mediaQueue == null) || (concatenatingMediaSource == null))
+      return;
+
     mediaQueue.retainLast();
 
     int last = concatenatingMediaSource.getSize() - 1;
@@ -531,6 +639,8 @@ public final class PlayerManager implements EventListener {
   }
 
   private void updateCurrentItemIndex() {
+    if (exoPlayer == null) return;
+
     int playbackState = exoPlayer.getPlaybackState();
 
     int currentItemIndex = ((playbackState != Player.STATE_IDLE) && (playbackState != Player.STATE_ENDED))
@@ -544,9 +654,11 @@ public final class PlayerManager implements EventListener {
    * Starts playback of the item at the given position.
    *
    * @param itemIndex The index of the item to play.
-   * @param playWhenReady Whether the player should proceed when ready to do so.
+   * @param playWhenReady Whether ExoPlayer should begin playback when item is ready.
    */
   private void setCurrentItem(int itemIndex, boolean playWhenReady) {
+    if (exoPlayer == null) return;
+
     maybeSetCurrentItemAndNotify(itemIndex);
     exoPlayer.setPlayWhenReady(playWhenReady);
   }
@@ -563,6 +675,8 @@ public final class PlayerManager implements EventListener {
   }
 
   private void seekToStartPosition(int currentItemIndex) {
+    if (exoPlayer == null) return;
+
     VideoSource sample = getItem(currentItemIndex);
     if (sample == null) return;
 
@@ -581,6 +695,9 @@ public final class PlayerManager implements EventListener {
       long positionMs = ((long) position) * 1000;
       exoPlayer.seekTo(currentItemIndex, positionMs);
     }
+    else {
+      exoPlayer.seekToDefaultPosition(currentItemIndex);
+    }
   }
 
   private void setHttpRequestHeaders(int currentItemIndex) {
@@ -597,6 +714,8 @@ public final class PlayerManager implements EventListener {
   }
 
   private void setHttpRequestHeader(String name, String value) {
+    if (httpDataSourceFactory == null) return;
+
     httpDataSourceFactory.getDefaultRequestProperties().set(name, value);
   }
 
@@ -610,6 +729,9 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
+    if (httpDataSourceFactory == null)
+      return null;
+
     Uri uri = Uri.parse(sample.uri);
 
     switch (sample.uri_mimeType) {
@@ -625,6 +747,9 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildCaptionMediaSource(VideoSource sample) {
+    if (httpDataSourceFactory == null)
+      return null;
+
     if ((sample.caption == null) || (sample.caption_mimeType == null))
       return null;
 
@@ -635,13 +760,16 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildRawVideoMediaSource(int rawResourceId) {
+    if (rawDataSourceFactory == null)
+      return null;
+
     Uri uri = RawResourceDataSource.buildRawResourceUri(rawResourceId);
 
     return new ExtractorMediaSource.Factory(rawDataSourceFactory).createMediaSource(uri);
   }
 
   private void addRawVideoItem(int rawResourceId) {
-    addRawVideoItem(rawResourceId, (Handler) null, (Runnable) null);
+    addRawVideoItem(rawResourceId, handler, (Runnable) null);
   }
 
   private void addRawVideoItem(
@@ -649,13 +777,34 @@ public final class PlayerManager implements EventListener {
     Handler handler,
     Runnable onCompletionAction
   ) {
+    if ((mediaQueue == null) || (concatenatingMediaSource == null))
+      return;
+
     VideoSource sample = VideoSource.createVideoSource("raw", /* caption= */ (String) null, /* referer= */ (String) null, /* startPosition= */ 0f);
+
+    boolean isEnded = (exoPlayer != null) && !exoPlayer.isPlaying() && exoPlayer.getPlayWhenReady();
+
+    if (isEnded) {
+      exoPlayer.setPlayWhenReady(false);
+      exoPlayer.retry();
+    }
+
+    Runnable runCompletionAction = new Runnable() {
+      @Override
+      public void run() {
+        if (isEnded)
+          exoPlayer.setPlayWhenReady(true);
+
+        if ((handler != null) && (onCompletionAction != null))
+          handler.post(onCompletionAction);
+      }
+    };
 
     mediaQueue.add(sample);
     concatenatingMediaSource.addMediaSource(
       buildRawVideoMediaSource(rawResourceId),
       handler,
-      onCompletionAction
+      runCompletionAction
     );
   }
 

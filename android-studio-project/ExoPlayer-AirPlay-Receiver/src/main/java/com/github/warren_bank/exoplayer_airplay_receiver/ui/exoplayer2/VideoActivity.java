@@ -1,6 +1,8 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +25,9 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   private PlayerView    playerView;
   private Button        selectTracksButton;
   private boolean       isShowingTrackSelectionDialog;
+  private boolean       isPlayingAudioWithScreenOff;
+  private boolean       didPauseVideo;
+  private boolean       didWakeLock;
 
   public  PlayerManager playerManager;
 
@@ -43,6 +48,9 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     selectTracksButton = (Button) findViewById(R.id.select_tracks_button);
     selectTracksButton.setOnClickListener(this);
     isShowingTrackSelectionDialog = false;
+    isPlayingAudioWithScreenOff   = false;
+    didPauseVideo = false;
+    didWakeLock   = false;
 
     playerManager = PlayerManager.createPlayerManager(/* context= */ this, playerView);
 
@@ -57,11 +65,67 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   @Override
   protected void onStop() {
     super.onStop();
-    if (playerManager != null) {
-      playerManager.release();
-      playerManager = null;
+
+    if (isPlayingAudioWithScreenOff)
+      return;
+
+    boolean isScreenOn, shouldFinish, shouldPause, shouldWakeLock;
+
+    isScreenOn     = SystemUtils.isScreenOn(/* context= */ this);
+    shouldFinish   = isScreenOn
+                       || (playerManager == null)
+                       || !playerManager.isPlayerReady();
+    shouldPause    = !shouldFinish
+                       && !playerManager.isPlayerPaused()
+                       && !TextUtils.isEmpty(playerManager.getCurrentVideoMimeType());
+    shouldWakeLock = !shouldFinish
+                       && !shouldPause;
+
+    if (shouldFinish) {
+      if (playerManager != null) {
+        playerManager.release();
+        playerManager = null;
+      }
+      finish();
     }
-    finish();
+    else if (shouldPause) {
+      // screen is turned off, player is ready and not paused, source contains a video track.
+      playerManager.AirPlay_rate(0f);
+    }
+    else if (shouldWakeLock) {
+      // screen is turned off, player is ready and not paused, source only contains an audio track.
+      // allow it to continue with the screen turned off.
+
+      // this wakelock is to keep the Activity responsive to HTTP commands.
+      // ExoPlayer would continue playing music in the queue without it.
+      WakeLockMgr.acquire(/* context= */ this);
+    }
+
+    didPauseVideo = shouldPause;
+    didWakeLock   = shouldWakeLock;
+  }
+
+  @Override
+  protected void onRestart () {
+    super.onRestart();
+
+    if (isPlayingAudioWithScreenOff) {
+      boolean isScreenOn = SystemUtils.isScreenOn(/* context= */ this);
+
+      if (isScreenOn)
+        isPlayingAudioWithScreenOff = false;
+      else
+        return;
+    }
+
+    if (didPauseVideo && (playerManager != null))
+      playerManager.AirPlay_rate(1f);
+
+    if (didWakeLock)
+      WakeLockMgr.release();
+
+    didPauseVideo = false;
+    didWakeLock   = false;
   }
 
   // Activity input.
@@ -109,14 +173,11 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     if (intent == null)
       return;
 
-    if (isFinishing()) {
+    if (isFinishing() || (playerManager == null)) {
       setIntent(intent);
       recreate();
       return;
     }
-
-    if (playerManager == null)
-      return;
 
     String mode         = intent.getStringExtra("mode");
     String uri          = intent.getStringExtra("uri");
@@ -143,6 +204,50 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     else /* if ((mode != null) && mode.equals("play")) */ {
       playerManager.AirPlay_play(uri, caption, referer, startPosition);
       Log.d(tag, "play video: url = "  + uri + "; position = " + startPosition + "; captions = " + caption + "; referer = " + referer);
+
+      if (!isPlayingAudioWithScreenOff) {
+        boolean isScreenOn = SystemUtils.isScreenOn(/* context= */ this);
+
+        if (!isScreenOn) {
+          // user has initiated media playback while the screen is turned off
+          //
+          // lifecycle with screen off:
+          // - onCreate()    => handleIntent() => onStop()
+          // - onNewIntent() => handleIntent() => onRestart() => onStop()
+          //
+          // onStop() runs immediately
+          // - need to be careful that the HTTP command to begin playback
+          //   doesn't construct an instance of ExoPlayer..
+          //   only to immediately send it to garbage collection
+          //
+          // - under normal conditions:
+          //   * media playback is started with the screen on
+          //   * the Activity opens in the foreground
+          //   * ExoPlayer has time to load metadata for items in the playlist
+          //   * when the screen is subsequently turned off,
+          //     onStop() has the ability to query whether the current playlist item is audio-only
+          //
+          // - in this situation:
+          //   * onStop() can't query metadata about the current playlist item,
+          //     because ExoPlayer hasn't been given time to gather this info
+          //
+          // only audio media should be allowed to begin playback when the screen is off.
+          // since the URL for the media is currently known, a viable workaround is to:
+          // - use a regex to test whether the URL matches a known audio file extension
+          // - set a variable to serves as a flag that indicates when this feature is active
+          // - clear the flag when the screen is turned back on
+
+          isPlayingAudioWithScreenOff = VideoSource.isAudioFileUrl(uri);
+
+          if (isPlayingAudioWithScreenOff) {
+            // this wakelock is to keep the Activity responsive to HTTP commands.
+            // ExoPlayer would continue playing music in the queue without it.
+
+            WakeLockMgr.acquire(/* context= */ this);
+            didWakeLock = true;
+          }
+        }
+      }
     }
   }
 

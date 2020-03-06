@@ -153,4 +153,24 @@ final class VideoSource {
   }
 
   // ===========================================================================
+  // audio file-extension
+
+  public static Pattern audio_regex = Pattern.compile("\\.(mp3|m4a|ogg|wav|flac)(?:[\\?#]|$)");
+
+  public static String get_audio_fileExtension(String uri) {
+    if (uri == null) return null;
+
+    Matcher matcher = VideoSource.audio_regex.matcher(uri.toLowerCase());
+    String file_ext = matcher.find()
+      ? matcher.group(1)
+      : null;
+
+    return file_ext;
+  }
+
+  public static boolean isAudioFileUrl(String uri) {
+    return (get_audio_fileExtension(uri) != null);
+  }
+
+  // ===========================================================================
 }
