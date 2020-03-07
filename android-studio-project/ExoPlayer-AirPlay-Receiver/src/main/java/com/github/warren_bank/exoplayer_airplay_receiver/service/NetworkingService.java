@@ -73,7 +73,7 @@ public class NetworkingService extends Service {
     toast.show();
     showNotification();
 
-    airplayName = android.os.Build.MODEL + "@" + airplayName;
+    airplayName = Build.MODEL + "@" + airplayName;
 
     new Thread() {
       public void run() {

@@ -16,7 +16,7 @@ public class SystemUtils {
      * source: https://stackoverflow.com/a/28747907
      */
     public static boolean isScreenOn(Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
             boolean screenOn = false;
             for (Display display : dm.getDisplays()) {
