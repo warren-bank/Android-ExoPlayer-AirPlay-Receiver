@@ -1,14 +1,17 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -33,6 +36,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.MimeTypes;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
@@ -41,6 +45,8 @@ import java.util.ArrayList;
 
 /** Manages ExoPlayer and an internal media queue */
 public final class PlayerManager implements EventListener {
+
+  private static final String TAG = "PlayerManager";
 
   private final class MyArrayList<E> extends ArrayList<E> {
     public void retainLast() {
@@ -85,7 +91,8 @@ public final class PlayerManager implements EventListener {
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
     this.trackSelector = new DefaultTrackSelector(context);
     RenderersFactory renderersFactory = new DefaultRenderersFactory(context);
-    this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector);
+    DefaultLoadControl loadControl = getLoadControl(context);
+    this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
     this.exoPlayer.addListener(this);
     this.playerView.setKeepContentOnPlayerReset(false);
     this.playerView.setPlayer(this.exoPlayer);
@@ -111,6 +118,26 @@ public final class PlayerManager implements EventListener {
         selectQueueItem(0);
       }
     };
+  }
+
+  private DefaultLoadControl getLoadControl(Context context) {
+    long thresholdMemorySizeInBytes = 1610612736l; // 1.5 GiB
+    long memorySizeInBytes          = SystemUtils.getMemorySizeInBytes(context);
+    float factor                    = (memorySizeInBytes <= thresholdMemorySizeInBytes) ? 1.0f : 1.5f;
+
+    Log.d(TAG, "memory=" + (float)(((int)((memorySizeInBytes*100)/(1024*1024*1024)))/100f) + "GB, buffer factor=" + (int)(factor*100) + "%");
+
+    DefaultLoadControl loadControl  = new DefaultLoadControl(
+      /* DefaultAllocator allocator=                          */ (new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE)),
+      /* int minBufferMs= minBufferAudioMs= minBufferVideoMs= */ (int) (factor * DefaultLoadControl.DEFAULT_MIN_BUFFER_MS),
+      /* int maxBufferMs=                                     */ (int) (factor * DefaultLoadControl.DEFAULT_MAX_BUFFER_MS),
+      /* int bufferForPlaybackMs=                             */ (int) (factor * DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS),
+      /* int bufferForPlaybackAfterRebufferMs=                */ (int) (factor * DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS),
+      /* int targetBufferBytes=                               */ (int) (factor * DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES),
+      /* boolean prioritizeTimeOverSizeThresholds=            */                 DefaultLoadControl.DEFAULT_PRIORITIZE_TIME_OVER_SIZE_THRESHOLDS
+    );
+
+    return loadControl;
   }
 
   // Query state of ExoPlayer.

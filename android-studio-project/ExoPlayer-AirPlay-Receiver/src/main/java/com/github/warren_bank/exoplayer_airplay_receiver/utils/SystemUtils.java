@@ -2,9 +2,12 @@ package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
 import android.content.Context;
 import android.os.Build;
+
 import android.os.PowerManager;
 import android.hardware.display.DisplayManager;
 import android.view.Display;
+
+import android.app.ActivityManager;
 
 public class SystemUtils {
 
@@ -25,9 +28,27 @@ public class SystemUtils {
                 }
             }
             return screenOn;
-        } else {
+        }
+        else {
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             return pm.isScreenOn();
+        }
+    }
+
+    /**
+    * Returns the total amount of RAM in the current Android device in Bytes (ex: 1610612736 == 1.5 GiB)
+    * @return {Long}
+    */
+    public static long getMemorySizeInBytes(Context context) {
+        if (Build.VERSION.SDK_INT >= 16) {
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+            activityManager.getMemoryInfo(memoryInfo);
+            long totalMemory = memoryInfo.totalMem;
+            return totalMemory;
+        }
+        else {
+            return -1l;
         }
     }
 
