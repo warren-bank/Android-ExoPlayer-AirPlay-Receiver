@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>music playlists</title>
+  <style>
+
+body {
+  margin: 0;
+  padding: 15px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  color: #333;
+  text-align: center;
+}
+
+select {
+  font-size: 20px;
+  text-align: center;
+  text-align-last: center;
+}
+select > option {
+  text-align: left;
+}
+
+#notes {
+  display: inline-block;
+  text-align: left;
+
+  margin-top: 3em;
+  border-top: 2px solid #333;
+  padding-top: 1em;
+}
+
+#notes .fieldname {
+  font-style: italic;
+  font-weight: bold;
+}
+
+  </style>
+  <script src="https://warren-bank.github.io/js-get-local-area-network-ip-address/get-local-area-network-ip-address.js"></script>
+  <script>
+
+window.onload  = () => {
+
+  // ===============================================================================================
+  // form fields
+
+  const $airplay_host  = document.querySelector('input#airplay_host')
+  const $airplay_port  = document.querySelector('input#airplay_port')
+  const $airplay_tls   = document.querySelector('input#airplay_tls')
+  const $video_url     = document.querySelector('input#video_url')
+  const $caption_url   = document.querySelector('input#caption_url')
+  const $referer_url   = document.querySelector('input#referer_url')
+  const $play          = document.querySelector('button#play')
+
+  const $sample_videos = document.querySelector('select#sample_videos')
+
+  // ===============================================================================================
+  // XHR helper
+
+  const POST_message = (path, data) => {
+    const host = $airplay_host.value
+    const port = $airplay_port.value || '8192'
+    const tls  = $airplay_tls.checked
+    const url = `${ tls ? 'https' : 'http' }://${host}:${port}${path}`
+
+    if (!host) {
+      alert('AirPlay "host" is required')
+      return
+    }
+    if (!path) {
+      alert('AirPlay "path" is required')
+      return
+    }
+
+    const xhr = new XMLHttpRequest()
+    xhr.open("POST", url, true, null, null)
+
+    if (data) {
+      xhr.setRequestHeader("Content-Type", "text/parameters")
+      xhr.send(data)
+    }
+    else {
+      xhr.send(null)
+    }
+  }
+
+  // ===============================================================================================
+  // form field data collection helper
+
+  const playlist_regex = /\.(?:m3u)(?:[\?#]|$)/i
+
+  const expand_playlist = async () => {
+    let url, text
+
+    url = $video_url.value
+    if (!url)
+      return null
+    if (!playlist_regex.test(url))
+      return null
+
+    try {
+      text = await fetch(url)
+      if (text.status !== 200) throw 'bad response'
+    }
+    catch(error) {
+      // -----------------------------------------
+      // CORS is probably not allowed; attempt a workaround..
+      // -----------------------------------------
+      // options:
+      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
+      // winner:
+      //   * https://ovsoinc.github.io/yacdn.org/
+      // -----------------------------------------
+      const proxied_url = `https://yacdn.org/proxy/${url}`
+
+      try {
+        text = await fetch(proxied_url)
+        if (text.status !== 200) throw 'bad response'
+      }
+      catch(error) {
+        window.alert("Error: Unable to download playlist. Aborting operation.")
+        return false
+      }
+    }
+
+    text = await text.text()
+    text = text.split(/[\r\n]+/g)
+
+    if (!Array.isArray(text) || !text.length)
+      return null
+
+    // remove whitespace
+    text = text.map(line => line.trim())
+
+    // not sure if this is a good idea.. convert Windows path separators
+    text = text.map(line => line.replace(/[\\]/g, '/'))
+
+    // remove empty lines and comments
+    text = text.filter(line => (line.length && (line[0] !== '#')))
+    if (!text.length)
+      return null
+
+    // resolve relative URL paths
+    text = text.map(path => (new URL(path, url)).href)
+
+    return text
+  }
+
+  const get_video_POST_data = (url) => {
+    if (!url)
+          url = $video_url.value
+    const txt = $caption_url.value
+    const ref = $referer_url.value
+
+    if (!url) {
+      alert('Video URL is required')
+      return
+    }
+
+    let data = `Content-Location: ${url}\nStart-Position: 0`
+    if (txt) {
+      data += `\nCaption-Location: ${txt}`
+    }
+    if (ref) {
+      data += `\nReferer: ${ref}`
+    }
+    return data
+  }
+
+  // ===============================================================================================
+  // form field submission helper
+
+  const request_delay = (delay_ms) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, delay_ms)
+    })
+  }
+
+  const send_video_POST_data = async (initial_path) => {
+    const urls = await expand_playlist()
+
+    // special return value to indicate that operation is aborted.
+    if (urls === false) return
+
+    let path, data
+    if (Array.isArray(urls) && urls.length) {
+      for (let i = 0; i < urls.length; i++) {
+        path = (i === 0) ? initial_path : '/queue'
+        data = get_video_POST_data(/* url= */ urls[i])
+
+        POST_message(path, data)
+
+        await request_delay(2500)  // 2.5 seconds between each request is high, but there's no rush since the URLs are being added to a queue and won't be used immediately; better to allow the receiver time to process each request, so they are queued in the correct order.
+      }
+    }
+    else {
+      path = initial_path
+      data = get_video_POST_data()
+
+      POST_message(path, data)
+    }
+  }
+
+  // ===============================================================================================
+  // add event listeners to form fields
+
+  $play.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/play'
+    send_video_POST_data(path)
+  }
+
+  $sample_videos.onchange = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const item = $sample_videos.selectedOptions[0]
+    const url  = item.getAttribute('x-video-url')
+    const txt  = item.getAttribute('x-caption-url')
+    const ref  = item.getAttribute('x-referer-url')
+
+    if (url) {
+      $video_url.value   = url
+      $caption_url.value = (txt) ? txt : ''
+      $referer_url.value = (ref) ? ref : ''
+
+      $play.click()
+    }
+  }
+
+  // ===============================================================================================
+  // prepopulate host
+
+  window.getLocalAreaNetworkIpAddress(1000)
+  .then(ip => {
+    $airplay_host.value = ip
+  })
+  .catch(error => {
+    alert(`Error: ${error.message}`)
+  })
+
+}
+
+  </script>
+</head>
+<body>
+  <div class="contents">
+    <div style="display:none;">
+      <div class="left oneline">
+        <label for="airplay_host">Host:</label>
+        <input id="airplay_host" type="text" size="15" />
+      </div>
+      <div class="left oneline">
+        <label for="airplay_port">Port:</label>
+        <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" size="6" value="8192" />
+      </div>
+      <div class="left oneline">
+        <label for="airplay_tls">HTTPS:</label>
+        <input id="airplay_tls" type="checkbox" />
+      </div>
+    </div>
+    <div style="display:none;">
+      <div class="oneline right">
+        <label for="video_url">Video URL:</label>
+        <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
+      </div>
+      <div class="oneline right">
+        <label for="caption_url">Caption URL:</label>
+        <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
+      </div>
+      <div class="oneline right">
+        <label for="referer_url">Referer URL:</label>
+        <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
+      </div>
+      <div class="oneline">
+        <button id="play">Play</button>
+      </div>
+    </div>
+    <div>
+      <select id="sample_videos">
+        <option value="0">-- music playlists --</option>
+        <option value="1" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%201%20Wednesday%20Morning,%203A.M.(1966)/Wednesday%20Morning,%203A.M.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 1 Wednesday Morning, 3A.M.(1966)</option>
+        <option value="2" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%202%20Sounds%20Of%20Silence%20(1966)/Sounds%20Of%20Silence.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 2 Sounds Of Silence (1966)</option>
+        <option value="3" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%203%20Parsley,%20sage,%20Rosmary%20And%20Thyme%20(1967)/Parsley,%20sage,%20Rosmary%20And%20Thyme.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 3 Parsley, sage, Rosmary And Thyme (1967)</option>
+        <option value="4" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%204%20Bookends%20(1968)/Bookends.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 4 Bookends (1968)</option>
+        <option value="5" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%205%20Bridge%20Over%20Troubled%20Water%20(1970)/Bridge%20Over%20Troubled%20Water.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 5 Bridge Over Troubled Water (1970)</option>
+        <option value="6" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%206%20Live%20At%20Central%20Park%20(1981)/Live%20At%20Central%20Park.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 6 Live At Central Park (1981)</option>
+        <option value="7" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/Simon%20&%20Garfunkel%20-%20Greatest%20Hits/00%20Simon%20&%20Garfunkel%20-%20Greatest%20Hits.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - Greatest Hits</option>
+        <option value="8" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/Simon%20&%20Garfunkel%20-%20Live%20From%20New%20York%20City%201967/Simon%20&%20Garfunkel%20-%20Live%20From%20New%20York%20City%201967.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - Live From New York City 1967</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="notes">
+    <h3>Notes:</h3>
+    <ul>
+      <li><a target="_blank" href="https://gitcdn.link/cdn/warren-bank/Android-ExoPlayer-AirPlay-Receiver/master/tests/03.%20AirPlay%20sender%20-%20to%20receiver%20on%20same%20device.html">This page</a> is based on: <a target="_blank" href="https://gitcdn.link/cdn/warren-bank/Android-ExoPlayer-AirPlay-Receiver/master/tests/02.%20AirPlay%20sender.html">02. AirPlay sender.html</a></li>
+      <li>Customizations include:
+        <ul>
+          <li><span class="fieldname">HOST</span> is prepopulated using a javascript trick that worked in Chrome prior to version 75
+            <ul>
+              <li>You can test whether a browser supports this feature of WebRTC by visiting <a target="_blank" href="https://warren-bank.github.io/js-get-local-area-network-ip-address/">this page</a></li>
+            </ul>
+          </li>
+          <li><span class="fieldname">PORT</span> is hard coded to "8192", which is the port used by "ExoAirPlayer"</li>
+          <li>all other form fields are removed</li>
+          <li>the list of sample videos is replaced by a list of music playlists (Simon &amp; Garfunkel)</li>
+        </ul>
+      </li>
+      <li>This page demonstrates the following use-case:
+        <ul>
+          <li>"ExoAirPlayer" service is started</li>
+          <li>Chrome opens this page on the same Android device
+            <ul>
+              <li><span class="fieldname">HOST</span> network address is silently obtained</li>
+            </ul>
+          </li>
+          <li>When the user selects a playlist from the list:
+            <ul>
+              <li>the <span class="fieldname">m3u</span> playlist URL is downloaded with fetch</li>
+              <li>the <span class="fieldname">mp3</span> file URLs in the playlist are determined</li>
+              <li>they are sequentially "cast" to the locally running instance of "ExoAirPlayer" service</li>
+              <li>ExoPlayer opens and displays cover art for the selected playlist</li>
+              <li>ExoPlayer begins playing the first song in the selected playlist</li>
+              <li>the screen on the Android device can be turned off
+                <ul>
+                  <li>playback of the playlist will continue until complete</li>
+                  <li>at any time, the screen can be turned back on to interact with ExoPlayer's controls
+                    <ul>
+                      <li>pause/resume, skip backward to previous song, skip forward to next song, etc</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Tips:</h3>
+    <ul>
+      <li>If experiencing difficulty loading the static <span class="fieldname">html</span> file from the <span class="fieldname">sdcard</span> into Chrome:
+        <ul>
+          <li>Chrome's <a target="_blank" href="https://chromium.googlesource.com/chromium/src/+/b71e98cdf14f18cb967a73857826f6e8c568cea0/chrome/android/java/AndroidManifest.xml#206">AndroidManifest.xml</a> includes a helpful <span class="fieldname">intent-filter</span>
+            <ul>
+              <li>action = <span class="fieldname">android.intent.action.VIEW</span></li>
+              <li>data = <span class="fieldname">file:///sdcard/path/to/this/file.html</span></li>
+              <li>type = <span class="fieldname">multipart/related</span></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
