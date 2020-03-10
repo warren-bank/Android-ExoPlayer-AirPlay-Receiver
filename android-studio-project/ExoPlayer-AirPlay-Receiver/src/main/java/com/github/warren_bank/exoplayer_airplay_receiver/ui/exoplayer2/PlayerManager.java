@@ -1,6 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
@@ -12,7 +13,6 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
@@ -60,6 +60,7 @@ public final class PlayerManager implements EventListener {
   private PlayerView playerView;
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
+  private RenderersFactory renderersFactory;
   private SimpleExoPlayer exoPlayer;
   private DefaultHttpDataSourceFactory httpDataSourceFactory;
   private DefaultDataSourceFactory rawDataSourceFactory;
@@ -90,7 +91,7 @@ public final class PlayerManager implements EventListener {
     this.mediaQueue = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
     this.trackSelector = new DefaultTrackSelector(context);
-    RenderersFactory renderersFactory = new DefaultRenderersFactory(context);
+    this.renderersFactory = new MyRenderersFactory(context);
     DefaultLoadControl loadControl = getLoadControl(context);
     this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
     this.exoPlayer.addListener(this);
@@ -519,7 +520,7 @@ public final class PlayerManager implements EventListener {
    *
    * @param showCaptions
    */
-  public void AirPlay_captions(boolean showCaptions) {
+  public void AirPlay_show_captions(boolean showCaptions) {
     if (exoPlayer == null) return;
 
     boolean isDisabled = !showCaptions;
@@ -541,6 +542,24 @@ public final class PlayerManager implements EventListener {
 
     if (modified_count > 0)
       trackSelector.setParameters(builder.build());
+  }
+
+  /**
+   * Set the time offset for text captions.
+   *
+   * @param offset Measured in microseconds
+   */
+  public void AirPlay_set_captions_offset(long offset) {
+    ((MyRenderersFactory)renderersFactory).setTextOffset(offset);
+  }
+
+  /**
+   * Add to the current time offset for text captions.
+   *
+   * @param offset Measured in microseconds
+   */
+  public void AirPlay_add_captions_offset(long offset) {
+    ((MyRenderersFactory)renderersFactory).addTextOffset(offset);
   }
 
   // Miscellaneous methods.

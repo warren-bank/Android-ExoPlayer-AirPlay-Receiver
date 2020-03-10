@@ -167,12 +167,27 @@ __extended APIs:__
 * turn text captions off:
   ```bash
     curl --silent -X POST -d "" \
-      "http://${airplay_ip}/captions?toggle=0"
+      "http://${airplay_ip}/show-captions?toggle=0"
   ```
 * turn text captions on:
   ```bash
     curl --silent -X POST -d "" \
-      "http://${airplay_ip}/captions?toggle=1"
+      "http://${airplay_ip}/show-captions?toggle=1"
+  ```
+* set time offset for text captions (1 second = 1e6 microseconds):
+  ```bash
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/set-captions-offset?value=1000000"
+  ```
+* add to current time offset for text captions (60 second = 60*1e6 microseconds):
+  ```bash
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/add-captions-offset?value=60000000"
+  ```
+* remove time offset for text captions:
+  ```bash
+    curl --silent -X POST -d "" \
+      "http://${airplay_ip}/set-captions-offset?value=0"
   ```
 
 #### Usage (high level):

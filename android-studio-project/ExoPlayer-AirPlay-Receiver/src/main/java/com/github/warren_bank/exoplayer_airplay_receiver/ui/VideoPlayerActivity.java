@@ -123,9 +123,17 @@ public class VideoPlayerActivity extends VideoActivity {
           float audioVolume = (float) msg.obj;
           activity.playerManager.AirPlay_volume(audioVolume);
           break;
-        case Constant.Msg.Msg_Text_Captions :
+        case Constant.Msg.Msg_Text_Show :
           boolean showCaptions = (boolean) msg.obj;
-          activity.playerManager.AirPlay_captions(showCaptions);
+          activity.playerManager.AirPlay_show_captions(showCaptions);
+          break;
+        case Constant.Msg.Msg_Text_Set_Time :
+          long set_offset = (long) msg.obj;
+          activity.playerManager.AirPlay_set_captions_offset(set_offset);
+          break;
+        case Constant.Msg.Msg_Text_Add_Time :
+          long add_offset = (long) msg.obj;
+          activity.playerManager.AirPlay_add_captions_offset(add_offset);
           break;
       }
 

@@ -617,7 +617,7 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
-      else if (target.startsWith(Constant.Target.CAPTIONS)) { //toggle text captions on/off
+      else if (target.startsWith(Constant.Target.TXT_SHOW)) { //toggle text captions on/off
         String value = StringUtils.getQueryStringValue(target, "?toggle=");
         if (!value.isEmpty()) {
           try {
@@ -625,8 +625,30 @@ public class RequestListenerThread extends Thread {
             Log.d(tag, "airplay captions = " + toggleValue);
 
             Message msg = Message.obtain();
-            msg.what = Constant.Msg.Msg_Text_Captions;
+            msg.what = Constant.Msg.Msg_Text_Show;
             msg.obj = (toggleValue != 0); //boolean whether to "show"
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (
+        target.startsWith(Constant.Target.TXT_SET_OFFSET) ||
+        target.startsWith(Constant.Target.TXT_ADD_OFFSET)
+      ) { //update time offset for text captions
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!value.isEmpty()) {
+          try {
+            long offset = Long.parseLong(value, 10);
+            Log.d(tag, "airplay text offset = " + offset);
+
+            Message msg = Message.obtain();
+            msg.what = target.startsWith(Constant.Target.TXT_SET_OFFSET) ? Constant.Msg.Msg_Text_Set_Time : Constant.Msg.Msg_Text_Add_Time;
+            msg.obj = offset;
             MainApp.broadcastMessage(msg);
           }
           catch (NumberFormatException e) {

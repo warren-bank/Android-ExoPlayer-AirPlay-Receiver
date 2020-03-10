@@ -171,7 +171,9 @@ public class Constant {
         public static final int Msg_Video_Next    =  7;
         public static final int Msg_Video_Prev    =  8;
         public static final int Msg_Audio_Volume  =  9;
-        public static final int Msg_Text_Captions = 10;
+        public static final int Msg_Text_Show     = 10;
+        public static final int Msg_Text_Set_Time = 11;
+        public static final int Msg_Text_Add_Time = 12;
     }
 
     public interface Target {
@@ -188,7 +190,9 @@ public class Constant {
         public static final String NEXT           = "/next";
         public static final String PREVIOUS       = "/previous";
         public static final String VOLUME         = "/volume";
-        public static final String CAPTIONS       = "/captions";
+        public static final String TXT_SHOW       = "/show-captions";
+        public static final String TXT_SET_OFFSET = "/set-captions-offset";
+        public static final String TXT_ADD_OFFSET = "/add-captions-offset";
     }
 
     public interface Status {

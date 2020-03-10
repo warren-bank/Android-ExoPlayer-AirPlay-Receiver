@@ -102,31 +102,39 @@ window.onload  = () => {
   // ===============================================================================================
   // form fields
 
-  const $airplay_host  = document.querySelector('input#airplay_host')
-  const $airplay_port  = document.querySelector('input#airplay_port')
-  const $airplay_tls   = document.querySelector('input#airplay_tls')
-  const $video_url     = document.querySelector('input#video_url')
-  const $caption_url   = document.querySelector('input#caption_url')
-  const $referer_url   = document.querySelector('input#referer_url')
-  const $play          = document.querySelector('button#play')
-  const $queue         = document.querySelector('button#queue')
-  const $pause         = document.querySelector('button#pause')
-  const $resume        = document.querySelector('button#resume')
-  const $captions_on   = document.querySelector('button#captions_on')
-  const $captions_off  = document.querySelector('button#captions_off')
-  const $stop          = document.querySelector('button#stop')
-  const $seek_hours    = document.querySelector('input#seek_hours')
-  const $seek_minutes  = document.querySelector('input#seek_minutes')
-  const $seek_seconds  = document.querySelector('input#seek_seconds')
-  const $seek          = document.querySelector('button#seek')
-  const $rate_factor   = document.querySelector('input#rate_factor')
-  const $rate          = document.querySelector('button#rate')
-  const $volume_factor = document.querySelector('input#volume_factor')
-  const $volume        = document.querySelector('button#volume')
-  const $previous      = document.querySelector('button#previous')
-  const $next          = document.querySelector('button#next')
-  const $sample_videos = document.querySelector('select#sample_videos')
-  const $image_file    = document.querySelector('input#image_file')
+  const $airplay_host            = document.querySelector('input#airplay_host')
+  const $airplay_port            = document.querySelector('input#airplay_port')
+  const $airplay_tls             = document.querySelector('input#airplay_tls')
+  const $video_url               = document.querySelector('input#video_url')
+  const $caption_url             = document.querySelector('input#caption_url')
+  const $referer_url             = document.querySelector('input#referer_url')
+  const $play                    = document.querySelector('button#play')
+  const $queue                   = document.querySelector('button#queue')
+  const $pause                   = document.querySelector('button#pause')
+  const $resume                  = document.querySelector('button#resume')
+  const $captions_on             = document.querySelector('button#captions_on')
+  const $captions_off            = document.querySelector('button#captions_off')
+  const $stop                    = document.querySelector('button#stop')
+  const $seek_hours              = document.querySelector('input#seek_hours')
+  const $seek_minutes            = document.querySelector('input#seek_minutes')
+  const $seek_seconds            = document.querySelector('input#seek_seconds')
+  const $seek                    = document.querySelector('button#seek')
+  const $set_txt_offset_minutes  = document.querySelector('input#set_txt_offset_minutes')
+  const $set_txt_offset_seconds  = document.querySelector('input#set_txt_offset_seconds')
+  const $set_txt_offset_ms       = document.querySelector('input#set_txt_offset_ms')
+  const $set_txt_offset          = document.querySelector('button#set_txt_offset')
+  const $add_txt_offset_minutes  = document.querySelector('input#add_txt_offset_minutes')
+  const $add_txt_offset_seconds  = document.querySelector('input#add_txt_offset_seconds')
+  const $add_txt_offset_ms       = document.querySelector('input#add_txt_offset_ms')
+  const $add_txt_offset          = document.querySelector('button#add_txt_offset')
+  const $rate_factor             = document.querySelector('input#rate_factor')
+  const $rate                    = document.querySelector('button#rate')
+  const $volume_factor           = document.querySelector('input#volume_factor')
+  const $volume                  = document.querySelector('button#volume')
+  const $previous                = document.querySelector('button#previous')
+  const $next                    = document.querySelector('button#next')
+  const $sample_videos           = document.querySelector('select#sample_videos')
+  const $image_file              = document.querySelector('input#image_file')
 
   // ===============================================================================================
   // extract data from URL #hash
@@ -465,14 +473,14 @@ window.onload  = () => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/captions?toggle=1', null)
+    POST_message('/show-captions?toggle=1', null)
   }
 
   $captions_off.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/captions?toggle=0', null)
+    POST_message('/show-captions?toggle=0', null)
   }
 
   $stop.onclick = (event) => {
@@ -493,6 +501,38 @@ window.onload  = () => {
     const offset = (sec) + (min * 60) + (hrs * 60 * 60)
 
     const path = `/scrub?position=${offset}`
+    const data = null
+
+    POST_message(path, data)
+  }
+
+  $set_txt_offset.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const min = get_value($set_txt_offset_minutes, 0)    // const min = parseInt($set_txt_offset_minutes.value, 10) || 0
+    const sec = get_value($set_txt_offset_seconds, 0)    // const sec = parseInt($set_txt_offset_seconds.value, 10) || 0
+    const ms  = get_value($set_txt_offset_ms,      0)    // const ms  = parseInt($set_txt_offset_ms.value,      10) || 0
+
+    const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+
+    const path = `/set-captions-offset?value=${offset}`
+    const data = null
+
+    POST_message(path, data)
+  }
+
+  $add_txt_offset.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const min = get_value($add_txt_offset_minutes, 0)    // const min = parseInt($add_txt_offset_minutes.value, 10) || 0
+    const sec = get_value($add_txt_offset_seconds, 0)    // const sec = parseInt($add_txt_offset_seconds.value, 10) || 0
+    const ms  = get_value($add_txt_offset_ms,      0)    // const ms  = parseInt($add_txt_offset_ms.value,      10) || 0
+
+    const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+
+    const path = `/add-captions-offset?value=${offset}`
     const data = null
 
     POST_message(path, data)
@@ -629,6 +669,18 @@ window.onload  = () => {
         <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
         <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
         <button id="seek">Seek to Position</button>
+      </div>
+      <div class="oneline">
+        <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+        <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+        <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+        <button id="set_txt_offset">Set CC Offset</button>
+      </div>
+      <div class="oneline">
+        <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+        <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+        <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+        <button id="add_txt_offset">Add CC Offset</button>
       </div>
       <div class="oneline">
         <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" size="3" placeholder="1.0" />

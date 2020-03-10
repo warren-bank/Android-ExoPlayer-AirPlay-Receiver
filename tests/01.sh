@@ -117,13 +117,31 @@ sleep 10
 
 # turn text captions off
 curl --silent -X POST -d "" \
-  "http://${airplay_ip}/captions?toggle=0"
+  "http://${airplay_ip}/show-captions?toggle=0"
 
 sleep 10
 
 # turn text captions on
 curl --silent -X POST -d "" \
-  "http://${airplay_ip}/captions?toggle=1"
+  "http://${airplay_ip}/show-captions?toggle=1"
+
+sleep 10
+
+# set time offset for text captions (-30 sec = -30*1e6)
+curl --silent -X POST -d "" \
+  "http://${airplay_ip}/set-captions-offset?value=-30000000"
+
+sleep 10
+
+# add to current time offset for text captions (-10 sec = -10*1e6)
+curl --silent -X POST -d "" \
+  "http://${airplay_ip}/add-captions-offset?value=-10000000"
+
+sleep 10
+
+# remove time offset for text captions
+curl --silent -X POST -d "" \
+  "http://${airplay_ip}/set-captions-offset?value=0"
 
 sleep 10
 
