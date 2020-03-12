@@ -320,22 +320,60 @@ window.onload  = () => {
   // ===============================================================================================
   // form field data collection helper
 
+  const get_fetch_response = async (url) => {
+    let response, proxied_url
+
+    try {
+      response = await fetch(url)
+      if (response.status !== 200) throw 'bad response'
+    }
+    catch(error) {
+      // -----------------------------------------
+      // CORS is probably not allowed; attempt a workaround..
+      // -----------------------------------------
+      // options:
+      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
+      // winner:
+      //   * https://ovsoinc.github.io/yacdn.org/
+      // runner up:
+      //   * https://codetabs.com/cors-proxy/cors-proxy.html
+      // -----------------------------------------
+      proxied_url = `https://yacdn.org/proxy/${url}`
+
+      try {
+        response = await fetch(proxied_url)
+        if (response.status !== 200) throw 'bad response'
+      }
+      catch(error) {
+        proxied_url = `https://api.codetabs.com/v1/proxy?quest=${url}`
+
+        try {
+          response = await fetch(proxied_url)
+          if (response.status !== 200) throw 'bad response'
+        }
+        catch(error) {
+          window.alert("Error: Unable to download playlist. Aborting operation.")
+          return false
+        }
+      }
+    }
+    return response
+  }
+
   const get_text_from_fetch_response = async (response) => {
-    let buffer  = await response.arrayBuffer()
+    const buffer   = await response.arrayBuffer()
+    const mimetype = response.headers.get("content-type") || ''
 
-    let mimetype = response.headers.get("content-type") || ''
     let encoding = 'ascii'
-
-    let encoding_regex = /^.*;\s*charset=(\S+)/i
+    const encoding_regex = /^.*;\s*charset=(\S+)/i
     if (encoding_regex.test(mimetype))
       encoding = mimetype.replace(encoding_regex, '$1').toLowerCase()
 
     //console.log('MIME:', mimetype)
     //console.log('ENCODING:', encoding)
 
-    let decoder = new TextDecoder(encoding)
-    text = decoder.decode(buffer)
-
+    const decoder = new TextDecoder(encoding)
+    const text    = decoder.decode(buffer)
     return text
   }
 
@@ -352,30 +390,9 @@ window.onload  = () => {
     if (false === window.confirm("Is this URL an audio playlist?\n\nIf yes, this page will download and individually queue each file."))
       return null
 
-    try {
-      text = await fetch(url)
-      if (text.status !== 200) throw 'bad response'
-    }
-    catch(error) {
-      // -----------------------------------------
-      // CORS is probably not allowed; attempt a workaround..
-      // -----------------------------------------
-      // options:
-      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
-      // winner:
-      //   * https://ovsoinc.github.io/yacdn.org/
-      // -----------------------------------------
-      const proxied_url = `https://yacdn.org/proxy/${url}`
-
-      try {
-        text = await fetch(proxied_url)
-        if (text.status !== 200) throw 'bad response'
-      }
-      catch(error) {
-        window.alert("Error: Unable to download playlist. Aborting operation.")
-        return false
-      }
-    }
+    text = await get_fetch_response(url)
+    if (false === text)
+      return false
 
     text = await get_text_from_fetch_response(text)
     text = text.split(/[\r\n]+/g)
@@ -415,30 +432,9 @@ window.onload  = () => {
     if (false === window.confirm("Is this URL an html page that contains links to audio files?\n\nIf yes, this page will download and individually queue each file."))
       return null
 
-    try {
-      text = await fetch(url)
-      if (text.status !== 200) throw 'bad response'
-    }
-    catch(error) {
-      // -----------------------------------------
-      // CORS is probably not allowed; attempt a workaround..
-      // -----------------------------------------
-      // options:
-      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
-      // winner:
-      //   * https://ovsoinc.github.io/yacdn.org/
-      // -----------------------------------------
-      const proxied_url = `https://yacdn.org/proxy/${url}`
-
-      try {
-        text = await fetch(proxied_url)
-        if (text.status !== 200) throw 'bad response'
-      }
-      catch(error) {
-        window.alert("Error: Unable to download html page. Aborting operation.")
-        return false
-      }
-    }
+    text = await get_fetch_response(url)
+    if (false === text)
+      return false
 
     text = await get_text_from_fetch_response(text)
     text = text.replace(/[\r\n]+/g, ' ')
