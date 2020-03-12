@@ -320,6 +320,25 @@ window.onload  = () => {
   // ===============================================================================================
   // form field data collection helper
 
+  const get_text_from_fetch_response = async (response) => {
+    let buffer  = await response.arrayBuffer()
+
+    let mimetype = response.headers.get("content-type") || ''
+    let encoding = 'ascii'
+
+    let encoding_regex = /^.*;\s*charset=(\S+)/i
+    if (encoding_regex.test(mimetype))
+      encoding = mimetype.replace(encoding_regex, '$1').toLowerCase()
+
+    //console.log('MIME:', mimetype)
+    //console.log('ENCODING:', encoding)
+
+    let decoder = new TextDecoder(encoding)
+    text = decoder.decode(buffer)
+
+    return text
+  }
+
   const playlist_regex = /\.(?:m3u)(?:[\?#]|$)/i
 
   const expand_playlist = async () => {
@@ -358,7 +377,7 @@ window.onload  = () => {
       }
     }
 
-    text = await text.text()
+    text = await get_text_from_fetch_response(text)
     text = text.split(/[\r\n]+/g)
 
     if (!Array.isArray(text) || !text.length)
@@ -379,6 +398,88 @@ window.onload  = () => {
     text = text.map(path => (new URL(path, url)).href)
 
     return text
+  }
+
+  const htmlpage_regex = /(?:\/|\.s?html?)(?:[\?#]|$)/i
+  const linkhref_regex  = /href="([^"]+\.)(mp3|m4a|ogg|wav|flac)"/ig
+  const format_priority = ['mp3','m4a','ogg','wav','flac']
+
+  const expand_htmlpage = async () => {
+    let url, text, url_chunks, matches, urls
+
+    url = $video_url.value
+    if (!url)
+      return null
+    if (!htmlpage_regex.test(url))
+      return null
+    if (false === window.confirm("Is this URL an html page that contains links to audio files?\n\nIf yes, this page will download and individually queue each file."))
+      return null
+
+    try {
+      text = await fetch(url)
+      if (text.status !== 200) throw 'bad response'
+    }
+    catch(error) {
+      // -----------------------------------------
+      // CORS is probably not allowed; attempt a workaround..
+      // -----------------------------------------
+      // options:
+      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
+      // winner:
+      //   * https://ovsoinc.github.io/yacdn.org/
+      // -----------------------------------------
+      const proxied_url = `https://yacdn.org/proxy/${url}`
+
+      try {
+        text = await fetch(proxied_url)
+        if (text.status !== 200) throw 'bad response'
+      }
+      catch(error) {
+        window.alert("Error: Unable to download html page. Aborting operation.")
+        return false
+      }
+    }
+
+    text = await get_text_from_fetch_response(text)
+    text = text.replace(/[\r\n]+/g, ' ')
+
+    url_chunks = {}
+    while ((matches = linkhref_regex.exec(text)) != null) {
+      let m1 = matches[1]
+      let m2 = matches[2]
+
+      let lm1 = m1.toLowerCase()
+      let lm2 = m2.toLowerCase()
+
+      if (url_chunks[lm1]) {
+        let old = url_chunks[lm1] // lm1 => [m1, m2]
+        let lo2 = old[1].toLowerCase()
+
+        let po = format_priority.indexOf(lo2)
+        let pm = format_priority.indexOf(lm2)
+
+        if ((pm >=0) && (pm < po))
+          url_chunks[lm1] = [m1, m2]
+      }
+      else {
+        url_chunks[lm1] = [m1, m2]
+      }
+    }
+
+    urls = []
+    for (let key in url_chunks) {
+      let old = url_chunks[key]
+      let url = old[0] + old[1]
+      urls.push(url)
+    }
+
+    if (!Array.isArray(urls) || !urls.length)
+      return null
+
+    // resolve relative URL paths
+    urls = urls.map(path => (new URL(path, url)).href)
+
+    return urls
   }
 
   const get_video_POST_data = (url) => {
@@ -412,7 +513,12 @@ window.onload  = () => {
   }
 
   const send_video_POST_data = async (initial_path) => {
-    const urls = await expand_playlist()
+    let urls = null
+
+    if (urls == null)
+      urls = await expand_playlist()
+    if (urls == null)
+      urls = await expand_htmlpage()
 
     // special return value to indicate that operation is aborted.
     if (urls === false) return
@@ -702,7 +808,8 @@ window.onload  = () => {
           <option value="3" x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest" x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt" x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html">Tears Of Steel (vid:dash, subs:vtt)</option>
           <option value="4" x-video-url="https://html5demos.com/assets/dizzy.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598">Dizzy (vid:mp4, subs:ttml)</option>
           <option value="5" x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4" x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass" x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605">Sample (vid:mp4, subs:ssa)</option>
-          <option value="6" x-video-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/!play.m3u" x-caption-url="" x-referer-url="https://www.baker.ink/music/The%20Byrds/1965%20Turn!%20Turn!%20Turn!%20(20-bit%20remastered)%20(320)/">Audio Playlist (list:m3u, files:mp3)</option>
+          <option value="6" x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u" x-caption-url="" x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore">Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
+          <option value="7" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/" x-caption-url="" x-referer-url="https://archive.org/details/tntvillage_455310">Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1967) Live From New York City</option>
         </select>
       </div>
       <div>

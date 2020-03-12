@@ -24,6 +24,22 @@ select > option {
   text-align: left;
 }
 
+select#sample_videos.android > option[disabled][value="-2"] {
+  display: none;
+}
+
+select#sample_videos:not(.android) > option[disabled][value="0"] {
+  background-color: #eee;
+}
+select#sample_videos:not(.android) > option[disabled][value="-1"] {
+  font-size: 2px;
+  background-color: #000000;
+}
+select#sample_videos:not(.android) > option[disabled][value="-2"] {
+  font-size: 4px;
+  background-color: transparent;
+}
+
 #notes {
   display: inline-block;
   text-align: left;
@@ -43,6 +59,18 @@ select > option {
   <script>
 
 window.onload  = () => {
+
+  // ===============================================================================================
+  // css tweaks with browser detection
+
+  if ((navigator instanceof Object) && (typeof navigator.userAgent === 'string')) {
+    let nua = navigator.userAgent
+    let is_android = (nua.indexOf('Android ') > -1)
+
+    if (is_android) {
+      [...document.querySelectorAll('select')].forEach(el => el.classList.add('android'))
+    }
+  }
 
   // ===============================================================================================
   // form fields
@@ -90,6 +118,25 @@ window.onload  = () => {
   // ===============================================================================================
   // form field data collection helper
 
+  const get_text_from_fetch_response = async (response) => {
+    let buffer  = await response.arrayBuffer()
+
+    let mimetype = response.headers.get("content-type") || ''
+    let encoding = 'ascii'
+
+    let encoding_regex = /^.*;\s*charset=(\S+)/i
+    if (encoding_regex.test(mimetype))
+      encoding = mimetype.replace(encoding_regex, '$1').toLowerCase()
+
+    //console.log('MIME:', mimetype)
+    //console.log('ENCODING:', encoding)
+
+    let decoder = new TextDecoder(encoding)
+    text = decoder.decode(buffer)
+
+    return text
+  }
+
   const playlist_regex = /\.(?:m3u)(?:[\?#]|$)/i
 
   const expand_playlist = async () => {
@@ -126,7 +173,7 @@ window.onload  = () => {
       }
     }
 
-    text = await text.text()
+    text = await get_text_from_fetch_response(text)
     text = text.split(/[\r\n]+/g)
 
     if (!Array.isArray(text) || !text.length)
@@ -147,6 +194,86 @@ window.onload  = () => {
     text = text.map(path => (new URL(path, url)).href)
 
     return text
+  }
+
+  const htmlpage_regex = /(?:\/|\.s?html?)(?:[\?#]|$)/i
+  const linkhref_regex  = /href="([^"]+\.)(mp3|m4a|ogg|wav|flac)"/ig
+  const format_priority = ['mp3','m4a','ogg','wav','flac']
+
+  const expand_htmlpage = async () => {
+    let url, text, url_chunks, matches, urls
+
+    url = $video_url.value
+    if (!url)
+      return null
+    if (!htmlpage_regex.test(url))
+      return null
+
+    try {
+      text = await fetch(url)
+      if (text.status !== 200) throw 'bad response'
+    }
+    catch(error) {
+      // -----------------------------------------
+      // CORS is probably not allowed; attempt a workaround..
+      // -----------------------------------------
+      // options:
+      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
+      // winner:
+      //   * https://ovsoinc.github.io/yacdn.org/
+      // -----------------------------------------
+      const proxied_url = `https://yacdn.org/proxy/${url}`
+
+      try {
+        text = await fetch(proxied_url)
+        if (text.status !== 200) throw 'bad response'
+      }
+      catch(error) {
+        window.alert("Error: Unable to download html page. Aborting operation.")
+        return false
+      }
+    }
+
+    text = await get_text_from_fetch_response(text)
+    text = text.replace(/[\r\n]+/g, ' ')
+
+    url_chunks = {}
+    while ((matches = linkhref_regex.exec(text)) != null) {
+      let m1 = matches[1]
+      let m2 = matches[2]
+
+      let lm1 = m1.toLowerCase()
+      let lm2 = m2.toLowerCase()
+
+      if (url_chunks[lm1]) {
+        let old = url_chunks[lm1] // lm1 => [m1, m2]
+        let lo2 = old[1].toLowerCase()
+
+        let po = format_priority.indexOf(lo2)
+        let pm = format_priority.indexOf(lm2)
+
+        if ((pm >=0) && (pm < po))
+          url_chunks[lm1] = [m1, m2]
+      }
+      else {
+        url_chunks[lm1] = [m1, m2]
+      }
+    }
+
+    urls = []
+    for (let key in url_chunks) {
+      let old = url_chunks[key]
+      let url = old[0] + old[1]
+      urls.push(url)
+    }
+
+    if (!Array.isArray(urls) || !urls.length)
+      return null
+
+    // resolve relative URL paths
+    urls = urls.map(path => (new URL(path, url)).href)
+
+    return urls
   }
 
   const get_video_POST_data = (url) => {
@@ -180,7 +307,12 @@ window.onload  = () => {
   }
 
   const send_video_POST_data = async (initial_path) => {
-    const urls = await expand_playlist()
+    let urls = null
+
+    if (urls == null)
+      urls = await expand_playlist()
+    if (urls == null)
+      urls = await expand_htmlpage()
 
     // special return value to indicate that operation is aborted.
     if (urls === false) return
@@ -283,15 +415,57 @@ window.onload  = () => {
     </div>
     <div>
       <select id="sample_videos">
-        <option value="0">-- music playlists --</option>
-        <option value="1" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%201%20Wednesday%20Morning,%203A.M.(1966)/Wednesday%20Morning,%203A.M.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 1 Wednesday Morning, 3A.M.(1966)</option>
-        <option value="2" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%202%20Sounds%20Of%20Silence%20(1966)/Sounds%20Of%20Silence.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 2 Sounds Of Silence (1966)</option>
-        <option value="3" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%203%20Parsley,%20sage,%20Rosmary%20And%20Thyme%20(1967)/Parsley,%20sage,%20Rosmary%20And%20Thyme.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 3 Parsley, sage, Rosmary And Thyme (1967)</option>
-        <option value="4" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%204%20Bookends%20(1968)/Bookends.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 4 Bookends (1968)</option>
-        <option value="5" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%205%20Bridge%20Over%20Troubled%20Water%20(1970)/Bridge%20Over%20Troubled%20Water.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 5 Bridge Over Troubled Water (1970)</option>
-        <option value="6" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/CD%206%20Live%20At%20Central%20Park%20(1981)/Live%20At%20Central%20Park.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - CD 6 Live At Central Park (1981)</option>
-        <option value="7" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/Simon%20&%20Garfunkel%20-%20Greatest%20Hits/00%20Simon%20&%20Garfunkel%20-%20Greatest%20Hits.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - Greatest Hits</option>
-        <option value="8" x-video-url="https://www.baker.ink/music/Simon%20And%20Garfunkel%20Discography/Simon%20&%20Garfunkel%20-%20Live%20From%20New%20York%20City%201967/Simon%20&%20Garfunkel%20-%20Live%20From%20New%20York%20City%201967.m3u" x-caption-url="" x-referer-url="">Simon &amp; Garfunkel - Live From New York City 1967</option>
+        <option value="0"  disabled selected>-- music playlists --</option>
+        <option value="1"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Tom%20And%20Jerry/Disk%201/">Simon &amp; Garfunkel - Tom And Jerry - disc 1</option>
+        <option value="2"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Tom%20And%20Jerry/Disk%202/">Simon &amp; Garfunkel - Tom And Jerry - disc 2</option>
+        <option value="3"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1964%20-%20Home%20Recordings%28Chez%20and%20More%29%20%40320/">Simon &amp; Garfunkel - 1964 - Home Recordings</option>
+        <option value="4"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1964%20-%20Wednesday%20Morning%2C3%20A.M.%40320kbs/">Simon &amp; Garfunkel - 1964 - Wednesday Morning, 3 A.M.</option>
+        <option value="5"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1966%20%20-%20Parsley%2C%20Sage%2C%20Rosemary%20And%20Thyme.%40320/">Simon &amp; Garfunkel - 1966 - Parsley, Sage, Rosemary And Thyme</option>
+        <option value="6"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1966%20-%20Sounds%20Of%20Silence%20%40%20320/">Simon &amp; Garfunkel - 1966 - Sounds Of Silence</option>
+        <option value="7"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1968%20-%20Bookends%20%40%20320/">Simon &amp; Garfunkel - 1968 - Bookends</option>
+        <option value="8"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1968-The%20Graduate%20%40320/">Simon &amp; Garfunkel - 1968 - The Graduate</option>
+        <option value="9"  x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1970%20-%20Bridge%20Over%20Troubled%20Water%20%40320kbs/">Simon &amp; Garfunkel - 1970 - Bridge Over Troubled Water</option>
+        <option value="10" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1997%20-%20Old%20Friends%20%40320/CD1/">Simon &amp; Garfunkel - 1997 - Old Friends - disc 1</option>
+        <option value="11" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1997%20-%20Old%20Friends%20%40320/CD2/">Simon &amp; Garfunkel - 1997 - Old Friends - disc 2</option>
+        <option value="12" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/1997%20-%20Old%20Friends%20%40320/CD3/">Simon &amp; Garfunkel - 1997 - Old Friends - disc 3</option>
+        <option value="13" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/2003-The%20Essential%20Simon%20%26%20Garfunkel%20%40320/CD1/">Simon &amp; Garfunkel - 2003 - The Essential - disc 1</option>
+        <option value="14" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Main%20Releases/2003-The%20Essential%20Simon%20%26%20Garfunkel%20%40320/CD2/">Simon &amp; Garfunkel - 2003 - The Essential - disc 2</option>
+        <option value="15" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/">Simon &amp; Garfunkel - 1967 - Live From New York City</option>
+        <option value="16" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1968-Live%20At%20The%20Hollywood%20Ball%20%40320/">Simon &amp; Garfunkel - 1968 - Live At The Hollywood Ball</option>
+        <option value="17" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1969-Miami%20University%20%40320/">Simon &amp; Garfunkel - 1969 - Live At Miami University</option>
+        <option value="18" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1970%20-%20%20Amsterdam%20%40320/">Simon &amp; Garfunkel - 1970 - Live From Amsterdam</option>
+        <option value="19" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1981%20-%20The%20Concert%20In%20Central%20Park%20%40320/">Simon &amp; Garfunkel - 1981 - The Concert In Central Park</option>
+        <option value="20" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1993-03-01%20Dorothy%20Chandler%20Pavilion%20%40320/CD1/">Simon &amp; Garfunkel - 1993.03.01 Dorothy Chandler Pavilion - disc 1</option>
+        <option value="21" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1993-03-01%20Dorothy%20Chandler%20Pavilion%20%40320/CD2/">Simon &amp; Garfunkel - 1993.03.01 Dorothy Chandler Pavilion - disc 2</option>
+        <option value="22" x-referer-url="https://archive.org/details/tntvillage_455310" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/2004%20-%20Old%20Friends%20Live%20on%20Stage%20%40320/">Simon &amp; Garfunkel - 2004 - Old Friends Live on Stage</option>
+
+        <option value="-2" disabled>&nbsp;</option>
+        <option value="-1" disabled>&nbsp;</option>
+        <option value="-2" disabled>&nbsp;</option>
+
+        <option value="23" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1970%20Black%20Sabbath/1970%20Black%20Sabbath%20%5B1986%20France%20NELCD%206002%20Castle%5D/Black%20Sabbath%20-%20Black%20Sabbath%20%281986%2C%20Castle%20Communications%2C%20NELCD%206002%29.mp3">Black Sabbath - 1970 - Black Sabbath</option>
+        <option value="24" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1970%20Paranoid/1970%20Paranoid%20%5B1986%20France%20NELCD%206003%20Castle%5D/Black%20Sabbath%20-%20Paranoid%20%281986%2C%20Castle%20Communication%2C%20NELCD%206003%29.mp3">Black Sabbath - 1970 - Paranoid</option>
+        <option value="25" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1971%20Master%20Of%20Reality/1971%20Master%20Of%20Reality%20%5B1986%20France%20NELCD%206004%20Castle%5D/Black%20Sabbath%20-%20Master%20Of%20Reality%20%281986%2C%20Castle%20Communication%2C%20NELCD%206004%29.mp3">Black Sabbath - 1971 - Master Of Reality</option>
+        <option value="26" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1972%20Volume%204/1972%20Volume%204%20%5B1986%20France%20NELCD%206005%20Castle%5D/Black%20Sabbath%20-%20Vol.%204%20%281986%2C%20Castle%20Communication%2C%20NELCD%206005%29.mp3">Black Sabbath - 1972 - Volume 4</option>
+        <option value="27" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1973%20Sabbath%20Bloody%20Sabbath/1973%20Sabbath%20Bloody%20Sabbath%20%5B1986%20France%20%20NELCD%206017%20Castle%5D/Black%20Sabbath%20-%20Sabbath%20Bloody%20Sabbath%20%281986%2C%20Castle%20Communications%2C%20NELCD%206017%29.mp3">Black Sabbath - 1973 - Sabbath Bloody Sabbath</option>
+        <option value="28" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1975%20Sabotage/1975%20Sabotage%20%5B1986%20France%20NELCD%206018%20Castle%5D/Black%20Sabbath%20-%20Sabotage%20%281986%2C%20Castle%20Communications%2C%20NELCD%206018%29.mp3">Black Sabbath - 1975 - Sabotage</option>
+        <option value="29" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1976%20Technical%20Ecstasy/1976%20Technical%20Ecstasy%20%5B1987%20Germany%20838%20224-2%20Vertigo%5D/Black%20Sabbath%20-%20Technical%20Ecstasy%20%28838%20224-2%29.mp3">Black Sabbath - 1976 - Technical Ecstasy</option>
+        <option value="30" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1978%20Never%20Say%20Die%21/1978%20Never%20Say%20Die%21%20%5B1987%20Germany%20830%20789-2%20Vertigo%5D/Black%20Sabbath%20-%20Never%20Say%20Die%21%20%28830%20789-2%29.mp3">Black Sabbath - 1978 - Never Say Die!</option>
+        <option value="31" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1980%20Heaven%20And%20Hell/1980%20Heaven%20And%20Hell%20%5B1987%20Germany%20830%20171-2%20Vertigo%5D/Black%20Sabbath%20-%20Heaven%20And%20Hell%20%28Vertigo%20830%20171-2%29.mp3">Black Sabbath - 1980 - Heaven And Hell</option>
+        <option value="32" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1981%20Mob%20Rules/1981%20Mob%20Rules%20%5B1987%20Germany%20830%20777-2%20Vertigo%5D/Black%20Sabbath%20-%20Mob%20Rules%20%28Vertigo%20830%20777-2%29.mp3">Black Sabbath - 1981 - Mob Rules</option>
+        <option value="33" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1983%20Born%20Again/1983%20Born%20Again%20%5B1987%20Germany%20814%20271-2%20Vertigo%5D/Black%20Sabbath%20-%20Born%20Again%20%28Vertigo%20814%20271-2%29.mp3">Black Sabbath - 1983 - Born Again</option>
+        <option value="34" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1986%20Seventh%20Star/1986%20Seventh%20Star%20%5B1986%20Germany%20826%20704-2%20Vertigo%5D/Black%20Sabbath%20-%20Seventh%20Star%20%28Vertigo%20826%20704-2%29.mp3">Black Sabbath - 1986 - Seventh Star</option>
+        <option value="35" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1987%20The%20Eternal%20Idol/1987%20The%20Eternal%20Idol%20%5B1987%20Germany%20832%20708-2%20Vertigo%5D/Black%20Sabbath%20-%20The%20Eternal%20Idol%20%28Vertigo%20832%20708-2%29.mp3">Black Sabbath - 1987 - The Eternal Idol</option>
+        <option value="36" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1989%20Headless%20Cross/1989%20Headless%20Cross%20%5B1989%20Japan%20VDP-1449%20Victor%5D/Black%20Sabbath%20-%20Headless%20Cross.mp3">Black Sabbath - 1989 - Headless Cross</option>
+        <option value="37" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1990%20Tyr/1990%20Tyr%20%5B1990%20Japan%20VICP-67%20Victor%5D/Black%20Sabbath%20-%20Tyr.mp3">Black Sabbath - 1990 - Tyr</option>
+        <option value="38" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1992%20Dehumanizer/1992%20Dehumanizer%20%5B1992%20Japan%20TOCP-7255%20I.R.S.%5D/Black%20Sabbath%20-%20Dehumanizer.mp3">Black Sabbath - 1992 - Dehumanizer</option>
+        <option value="39" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1994%20Cross%20Purposes/1994%20%20Cross%20Purposes%20%5B1994%20Japan%20TOCP-8128%20I.R.S.%5D/Black%20Sabbath%20-%20Cross%20Purposes.mp3">Black Sabbath - 1994 - Cross Purposes</option>
+        <option value="40" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1995%20Forbidden/1995%20Forbidden%20%5B1995%20Japan%20TOCP-8586%20I.R.S.%5D/Black%20Sabbath%20-%20Forbidden.mp3">Black Sabbath - 1995 - Forbidden</option>
+        <option value="41" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/2013%2013/2013%2013%20%5B2013%20USA%20B0018545-72%20%20Universal%5D/CD%201/Black%20Sabbath%20-%2013%20%28B0018545-72%29.mp3">Black Sabbath - 2013 - 13 - disc 1</option>
+        <option value="42" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/2013%2013/2013%2013%20%5B2013%20USA%20B0018545-72%20%20Universal%5D/CD%202/Black%20Sabbath%20-%2013%20%28B0018545-72%29%20Bonus%20Disc.mp3">Black Sabbath - 2013 - 13 - disc 2</option>
+        <option value="43" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Compilations/1975%20We%20Sold%20Our%20Soul%20For%20Rock%27n%27Roll/1975%20We%20Sold%20Our%20Soul%20For%20Rock%27N%27Roll%20%5B1986%20France%20CCSCD%20249%20Castle%5D/Black%20Sabbath%20-%20We%20Sold%20Our%20Soul%20For%20Rock%27N%27Roll%20%28France%20CCSCD%20249%29.mp3">Black Sabbath - 1975 - We Sold Our Soul For Rock N' Roll</option>
+        <option value="44" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Live%20Albums/1998%20Reunion/1998%20Reunion%20%5B1998%20USA%20E2K%2069115%20Epic%20%20Sony%5D/CD1/Black%20Sabbath%20-%20Reunion%20%28CD1%29.mp3">Black Sabbath - 1998 - Reunion - disc 1</option>
+        <option value="45" x-referer-url="https://archive.org/details/tntvillage_457399" x-caption-url="" x-video-url="https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Live%20Albums/1998%20Reunion/1998%20Reunion%20%5B1998%20USA%20E2K%2069115%20Epic%20%20Sony%5D/CD2/Black%20Sabbath%20-%20Reunion%20%28CD2%29.mp3">Black Sabbath - 1998 - Reunion - disc 2</option>
       </select>
     </div>
   </div>
@@ -322,11 +496,10 @@ window.onload  = () => {
           </li>
           <li>When the user selects a playlist from the list:
             <ul>
-              <li>the <span class="fieldname">m3u</span> playlist URL is downloaded with fetch</li>
+              <li>the playlist URL is downloaded with fetch</li>
               <li>the <span class="fieldname">mp3</span> file URLs in the playlist are determined</li>
               <li>they are sequentially "cast" to the locally running instance of "ExoAirPlayer" service</li>
-              <li>ExoPlayer opens and displays cover art for the selected playlist</li>
-              <li>ExoPlayer begins playing the first song in the selected playlist</li>
+              <li>ExoPlayer opens and begins playing the first song in the selected playlist</li>
               <li>the screen on the Android device can be turned off
                 <ul>
                   <li>playback of the playlist will continue until complete</li>
@@ -345,7 +518,9 @@ window.onload  = () => {
 
     <h3>Tips:</h3>
     <ul>
-      <li>If experiencing difficulty loading the static <span class="fieldname">html</span> file from the <span class="fieldname">sdcard</span> into Chrome:
+      <li>Use this file as a template for creating your own personalized playlists</li>
+      <li>Each playlist is a static <span class="fieldname">html</span> file that can be hosted without a server directly on the Android device's local <span class="fieldname">file:</span> system</li>
+      <li>If you have difficulty opening a playlist in Chrome directly from the local <span class="fieldname">file:</span> system:
         <ul>
           <li>Chrome's <a target="_blank" href="https://chromium.googlesource.com/chromium/src/+/b71e98cdf14f18cb967a73857826f6e8c568cea0/chrome/android/java/AndroidManifest.xml#206">AndroidManifest.xml</a> includes a helpful <span class="fieldname">intent-filter</span>
             <ul>
