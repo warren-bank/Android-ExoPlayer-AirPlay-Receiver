@@ -19,6 +19,10 @@ public class MyTextRenderer extends NonFinalTextRenderer {
     this.offsetPositionUs = 0l;
   }
 
+  public long getOffsetPositionUs() {
+    return offsetPositionUs;
+  }
+
   public void setOffsetPositionUs(long value) {
     offsetPositionUs = value;
   }

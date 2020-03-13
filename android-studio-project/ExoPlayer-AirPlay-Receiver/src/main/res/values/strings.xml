@@ -10,5 +10,10 @@
   <string name="notification_service_content_line3">Click to stop service.</string>
 
   <!-- track selection dialog -->
-  <string name="track_selection_title">Select tracks</string>
+  <string name="track_selection_button">Select tracks</string>
+  <string name="track_selection_title">@string/track_selection_button</string>
+
+  <!-- text captions offset selection dialog -->
+  <string name="text_offset_selection_button">Sync captions</string>
+  <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
 </resources>

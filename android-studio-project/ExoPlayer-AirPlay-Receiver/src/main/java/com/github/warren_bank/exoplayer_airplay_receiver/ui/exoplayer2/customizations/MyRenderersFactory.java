@@ -26,6 +26,12 @@ public class MyRenderersFactory extends DefaultRenderersFactory {
     out.add(textRenderer);
   }
 
+  public long getOffsetPositionUs() {
+    return (textRenderer != null)
+      ? textRenderer.getOffsetPositionUs()
+      : 0l;
+  }
+
   public void setTextOffset(long value) {
     if (textRenderer != null)
       textRenderer.setOffsetPositionUs(value);

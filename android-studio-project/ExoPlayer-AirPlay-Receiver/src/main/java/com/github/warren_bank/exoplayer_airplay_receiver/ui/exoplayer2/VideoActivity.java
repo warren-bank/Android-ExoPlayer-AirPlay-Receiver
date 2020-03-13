@@ -1,6 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
@@ -24,7 +25,9 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
 
   private PlayerView    playerView;
   private Button        selectTracksButton;
+  private Button        selectTextOffsetButton;
   private boolean       isShowingTrackSelectionDialog;
+  private boolean       isShowingTextOffsetSelectionDialog;
   private boolean       isPlayingAudioWithScreenOff;
   private boolean       didPauseVideo;
   private boolean       didWakeLock;
@@ -47,8 +50,11 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
 
     selectTracksButton = (Button) findViewById(R.id.select_tracks_button);
     selectTracksButton.setOnClickListener(this);
-    isShowingTrackSelectionDialog = false;
-    isPlayingAudioWithScreenOff   = false;
+    selectTextOffsetButton = (Button) findViewById(R.id.select_text_offset_button);
+    selectTextOffsetButton.setOnClickListener(this);
+    isShowingTrackSelectionDialog      = false;
+    isShowingTextOffsetSelectionDialog = false;
+    isPlayingAudioWithScreenOff        = false;
     didPauseVideo = false;
     didWakeLock   = false;
 
@@ -142,6 +148,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   @Override
   public void onVisibilityChange(int visibility) {
     selectTracksButton.setVisibility(visibility);
+    selectTextOffsetButton.setVisibility(visibility);
 
     if (visibility == View.VISIBLE) {
       selectTracksButton.setEnabled(
@@ -164,6 +171,18 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
         /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false
       );
       trackSelectionDialog.show(getSupportFragmentManager(), /* tag= */ null);
+    }
+
+    if (
+         view == selectTextOffsetButton
+      && !isShowingTextOffsetSelectionDialog
+    ) {
+      isShowingTextOffsetSelectionDialog = true;
+      MultiFieldTimePickerDialogContainer.show(
+        /* context= */ this,
+        (MyRenderersFactory) playerManager.renderersFactory,
+        /* onDismissListener= */ dismissedDialog -> isShowingTextOffsetSelectionDialog = false
+      );
     }
   }
 

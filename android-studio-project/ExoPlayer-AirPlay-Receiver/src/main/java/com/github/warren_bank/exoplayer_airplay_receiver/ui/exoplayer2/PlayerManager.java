@@ -60,7 +60,6 @@ public final class PlayerManager implements EventListener {
   private PlayerView playerView;
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
-  private RenderersFactory renderersFactory;
   private SimpleExoPlayer exoPlayer;
   private DefaultHttpDataSourceFactory httpDataSourceFactory;
   private DefaultDataSourceFactory rawDataSourceFactory;
@@ -69,6 +68,7 @@ public final class PlayerManager implements EventListener {
   private Runnable retainLast;
 
   public DefaultTrackSelector trackSelector;
+  public RenderersFactory renderersFactory;
 
   /**
    * @param context A {@link Context}.
