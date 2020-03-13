@@ -3,6 +3,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.service;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -17,7 +18,9 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +31,8 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HtmlPlaylistExtractor;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.M3uPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.ImageActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
@@ -65,7 +70,11 @@ public class NetworkingService extends Service {
     lock.setReferenceCounted(true);
     lock.acquire();
 
-    handler = new ServiceHandler(NetworkingService.this);
+    // run ServiceHandler in a separate Thread to avoid NetworkOnMainThreadException
+    HandlerThread handlerThread = new HandlerThread("ServiceHandlerThread");
+    handlerThread.start();
+
+    handler = new ServiceHandler(handlerThread.getLooper(), NetworkingService.this);
     MainApp.registerHandler(NetworkingService.class.getName(), handler);
 
     Toast toast = android.widget.Toast.makeText(getApplicationContext(), "Registering Airplay service...", android.widget.Toast.LENGTH_SHORT);
@@ -333,10 +342,43 @@ public class NetworkingService extends Service {
   // message handler
 
   private static class ServiceHandler extends Handler {
+
+    private class DelayedVideoPlayerIntentRunnable implements Runnable {
+      private NetworkingService service;
+      private String uri;
+      private String referer;
+
+      public DelayedVideoPlayerIntentRunnable(NetworkingService service, String uri, String referer) {
+        this.service = service;
+        this.uri     = uri;
+        this.referer = referer;
+      }
+
+      @Override
+      public void run() {
+        sendVideoPlayerIntent(
+          service,
+          /* mode=          */ "queue",
+          /* uri=           */ uri,
+          /* caption=       */ "",
+          /* referer=       */ referer,
+          /* startPosition= */ 0d
+        );
+      }
+    }
+
     private WeakReference<NetworkingService> weakReference;
 
-    public ServiceHandler(NetworkingService service) {
+    private M3uPlaylistExtractor  m3uExtractor;
+    private HtmlPlaylistExtractor htmlExtractor;
+
+    public ServiceHandler(Looper looper, NetworkingService service) {
+      super(looper);
+
       weakReference = new WeakReference<NetworkingService>(service);
+
+      m3uExtractor  = new M3uPlaylistExtractor();
+      htmlExtractor = new HtmlPlaylistExtractor();
     }
 
     @Override
@@ -361,11 +403,10 @@ public class NetworkingService extends Service {
           break;
         }
         case Constant.Msg.Msg_Photo : {
-          byte[] pic = (byte[]) msg.obj;
-          Intent intent = new Intent(service, ImageActivity.class);
-          intent.putExtra("picture", pic);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          service.startActivity(intent);
+          sendImageViewerIntent(
+            service,
+            /* pic= */ (byte[]) msg.obj
+          );
           break;
         }
         case Constant.Msg.Msg_Video_Play  :
@@ -376,18 +417,71 @@ public class NetworkingService extends Service {
           String referUrl = map.get(Constant.RefererURL);
           String startPos = map.get(Constant.Start_Pos);
 
-          Intent intent = new Intent(service, VideoPlayerActivity.class);
-          intent.putExtra("mode", ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue"));
-          intent.putExtra("uri", playUrl);
-          intent.putExtra("caption", textUrl);
-          intent.putExtra("referer", referUrl);
-          intent.putExtra("startPosition", Double.valueOf(startPos));
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          service.startActivity(intent);
+          ArrayList<String> matches = null;
+
+          if (matches == null)
+            matches = m3uExtractor.expandPlaylist(playUrl); //8-bit ascii
+
+          if (matches == null)
+            matches = htmlExtractor.expandPlaylist(playUrl, (String) null); //utf8
+
+          if (matches != null) {
+            for (int counter = 0; counter < matches.size(); counter++) {
+              if (counter == 0) {
+                sendVideoPlayerIntent(
+                  service,
+                  /* mode=          */ ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue"),
+                  /* uri=           */ matches.get(counter),
+                  /* caption=       */ textUrl,
+                  /* referer=       */ referUrl,
+                  /* startPosition= */ Double.valueOf(startPos)
+                );
+              }
+              else {
+                ServiceHandler.this.postDelayed(
+                  new DelayedVideoPlayerIntentRunnable(
+                    service,
+                    /* uri=     */ matches.get(counter),
+                    /* referer= */ referUrl
+                  ),
+                  (1000l * counter)
+                );
+              }
+            }
+            break;
+          }
+
+          sendVideoPlayerIntent(
+            service,
+            /* mode=          */ ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue"),
+            /* uri=           */ playUrl,
+            /* caption=       */ textUrl,
+            /* referer=       */ referUrl,
+            /* startPosition= */ Double.valueOf(startPos)
+          );
           break;
         }
 
       }
     }
+
+    private void sendVideoPlayerIntent(NetworkingService service, String mode, String uri, String caption, String referer, double startPosition) {
+      Intent intent = new Intent(service, VideoPlayerActivity.class);
+      intent.putExtra("mode",          mode);
+      intent.putExtra("uri",           uri);
+      intent.putExtra("caption",       caption);
+      intent.putExtra("referer",       referer);
+      intent.putExtra("startPosition", startPosition);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      service.startActivity(intent);
+    }
+
+    private void sendImageViewerIntent(NetworkingService service, byte[] pic) {
+      Intent intent = new Intent(service, ImageActivity.class);
+      intent.putExtra("picture", pic);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      service.startActivity(intent);
+    }
+
   }
 }

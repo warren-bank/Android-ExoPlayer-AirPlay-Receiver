@@ -320,6 +320,13 @@ window.onload  = () => {
   // ===============================================================================================
   // form field data collection helper
 
+/* =================================================================================================
+ * the following functionality has been entirely re-implemented directly in the ExoAirPlay receiver.
+ * no special tooling is needed for the sender to "cast" audio playlists in the formats:
+ *  - .m3u  (audio/x-mpegurl)
+ *  - .html (text/html)
+ * =================================================================================================
+
   const get_fetch_response = async (url) => {
     let response, proxied_url
 
@@ -478,6 +485,9 @@ window.onload  = () => {
     return urls
   }
 
+ * =================================================================================================
+ */
+
   const get_video_POST_data = (url) => {
     if (!url)
           url = $video_url.value
@@ -502,6 +512,13 @@ window.onload  = () => {
   // ===============================================================================================
   // form field submission helper
 
+/* =================================================================================================
+ * the following functionality has been entirely re-implemented directly in the ExoAirPlay receiver.
+ * no special tooling is needed for the sender to "cast" audio playlists in the formats:
+ *  - .m3u  (audio/x-mpegurl)
+ *  - .html (text/html)
+ * =================================================================================================
+
   const request_delay = (delay_ms) => {
     return new Promise((resolve) => {
       setTimeout(resolve, delay_ms)
@@ -523,7 +540,7 @@ window.onload  = () => {
     if (Array.isArray(urls) && urls.length) {
       for (let i = 0; i < urls.length; i++) {
         path = (i === 0) ? initial_path : '/queue'
-        data = get_video_POST_data(/* url= */ urls[i])
+        data = get_video_POST_data(urls[i])
 
         POST_message(path, data)
 
@@ -536,6 +553,16 @@ window.onload  = () => {
 
       POST_message(path, data)
     }
+  }
+
+ * =================================================================================================
+ */
+
+  const send_video_POST_data = async (initial_path) => {
+    path = initial_path
+    data = get_video_POST_data()
+
+    POST_message(path, data)
   }
 
   // ===============================================================================================
