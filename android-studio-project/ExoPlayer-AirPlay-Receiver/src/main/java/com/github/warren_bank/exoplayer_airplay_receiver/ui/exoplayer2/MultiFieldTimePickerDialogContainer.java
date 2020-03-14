@@ -1,7 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
-import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.MyRenderersFactory;
+import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.TextSynchronizer;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,11 +17,11 @@ public class MultiFieldTimePickerDialogContainer {
         return mDialog != null && mDialog.isShowing();
     }
 
-    private static class MyRenderersFactoryListener implements MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener {
-        private final MyRenderersFactory renderersFactory;
+    private static class TextSynchronizerListener implements MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener {
+        private final TextSynchronizer textSynchronizer;
 
-        MyRenderersFactoryListener(MyRenderersFactory renderersFactory) {
-            this.renderersFactory = renderersFactory;
+        TextSynchronizerListener(TextSynchronizer textSynchronizer) {
+            this.textSynchronizer = textSynchronizer;
         }
 
         @Override
@@ -29,11 +29,11 @@ public class MultiFieldTimePickerDialogContainer {
             long textOffsetMs = (milli) + (second * 1000) + (minute * 60 * 1000) + (hourOfDay * 60 * 60 * 1000);
             long textOffsetUs = (textOffsetMs * 1000);
 
-            renderersFactory.setTextOffset(textOffsetUs);
+            textSynchronizer.setTextOffset(textOffsetUs);
         }
 
         public void onTimeSet(long textOffsetUs) {
-            renderersFactory.setTextOffset(textOffsetUs);
+            textSynchronizer.setTextOffset(textOffsetUs);
         }
     }
 
@@ -66,7 +66,7 @@ public class MultiFieldTimePickerDialogContainer {
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ((MyRenderersFactoryListener) mListener).onTimeSet(0l);
+                    ((TextSynchronizerListener) mListener).onTimeSet(0l);
                 }
             }
         );
@@ -89,12 +89,12 @@ public class MultiFieldTimePickerDialogContainer {
 
     public static void show(
         Context mContext,
-        MyRenderersFactory renderersFactory,
+        TextSynchronizer textSynchronizer,
         DialogInterface.OnDismissListener onDismissListener
     ) {
-        MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener mListener = new MyRenderersFactoryListener(renderersFactory);
+        MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener mListener = new TextSynchronizerListener(textSynchronizer);
 
-        long offsetPositionUs = renderersFactory.getOffsetPositionUs();
+        long offsetPositionUs = textSynchronizer.getTextOffset();
 
         int hourOfDay = (int)  TimeUnit.MICROSECONDS.toHours(offsetPositionUs);
         int minute    = (int) (TimeUnit.MICROSECONDS.toMinutes(offsetPositionUs) % 60);

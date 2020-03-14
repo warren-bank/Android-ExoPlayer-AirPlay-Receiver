@@ -7,7 +7,7 @@ import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.text.TextOutput;
 import java.util.ArrayList;
 
-public class MyRenderersFactory extends DefaultRenderersFactory {
+public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer {
   private MyTextRenderer textRenderer;
 
   public MyRenderersFactory(Context context) {
@@ -26,19 +26,22 @@ public class MyRenderersFactory extends DefaultRenderersFactory {
     out.add(textRenderer);
   }
 
-  public long getOffsetPositionUs() {
+  @Override
+  public long getTextOffset() {
     return (textRenderer != null)
-      ? textRenderer.getOffsetPositionUs()
+      ? textRenderer.getTextOffset()
       : 0l;
   }
 
+  @Override
   public void setTextOffset(long value) {
     if (textRenderer != null)
-      textRenderer.setOffsetPositionUs(value);
+      textRenderer.setTextOffset(value);
   }
 
+  @Override
   public void addTextOffset(long value) {
     if (textRenderer != null)
-      textRenderer.addOffsetPositionUs(value);
+      textRenderer.addTextOffset(value);
   }
 }

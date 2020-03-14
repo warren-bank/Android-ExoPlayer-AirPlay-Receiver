@@ -6,7 +6,7 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.text.SubtitleDecoderFactory;
 import com.google.android.exoplayer2.text.TextOutput;
 
-public class MyTextRenderer extends NonFinalTextRenderer {
+public class MyTextRenderer extends NonFinalTextRenderer implements TextSynchronizer {
   private long offsetPositionUs;
 
   public MyTextRenderer(TextOutput output, @Nullable Looper outputLooper) {
@@ -19,15 +19,18 @@ public class MyTextRenderer extends NonFinalTextRenderer {
     this.offsetPositionUs = 0l;
   }
 
-  public long getOffsetPositionUs() {
+  @Override
+  public long getTextOffset() {
     return offsetPositionUs;
   }
 
-  public void setOffsetPositionUs(long value) {
+  @Override
+  public void setTextOffset(long value) {
     offsetPositionUs = value;
   }
 
-  public void addOffsetPositionUs(long value) {
+  @Override
+  public void addTextOffset(long value) {
     offsetPositionUs += value;
   }
 

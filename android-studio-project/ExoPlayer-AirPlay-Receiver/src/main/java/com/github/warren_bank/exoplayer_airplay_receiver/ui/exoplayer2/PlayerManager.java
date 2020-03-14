@@ -2,6 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.MyRenderersFactory;
+import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
@@ -68,7 +69,7 @@ public final class PlayerManager implements EventListener {
   private Runnable retainLast;
 
   public DefaultTrackSelector trackSelector;
-  public RenderersFactory renderersFactory;
+  public TextSynchronizer textSynchronizer;
 
   /**
    * @param context A {@link Context}.
@@ -91,9 +92,10 @@ public final class PlayerManager implements EventListener {
     this.mediaQueue = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
     this.trackSelector = new DefaultTrackSelector(context);
-    this.renderersFactory = new MyRenderersFactory(context);
+    MyRenderersFactory renderersFactory = new MyRenderersFactory(context);
+    this.textSynchronizer = (TextSynchronizer) renderersFactory;
     DefaultLoadControl loadControl = getLoadControl(context);
-    this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
+    this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, (RenderersFactory) renderersFactory, trackSelector, loadControl);
     this.exoPlayer.addListener(this);
     this.playerView.setKeepContentOnPlayerReset(false);
     this.playerView.setPlayer(this.exoPlayer);
@@ -550,7 +552,7 @@ public final class PlayerManager implements EventListener {
    * @param offset Measured in microseconds
    */
   public void AirPlay_set_captions_offset(long offset) {
-    ((MyRenderersFactory)renderersFactory).setTextOffset(offset);
+    textSynchronizer.setTextOffset(offset);
   }
 
   /**
@@ -559,7 +561,7 @@ public final class PlayerManager implements EventListener {
    * @param offset Measured in microseconds
    */
   public void AirPlay_add_captions_offset(long offset) {
-    ((MyRenderersFactory)renderersFactory).addTextOffset(offset);
+    textSynchronizer.addTextOffset(offset);
   }
 
   // Miscellaneous methods.

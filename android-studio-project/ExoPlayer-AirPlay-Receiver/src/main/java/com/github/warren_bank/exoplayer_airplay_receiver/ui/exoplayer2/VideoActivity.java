@@ -1,7 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
-import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
@@ -180,7 +179,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
       isShowingTextOffsetSelectionDialog = true;
       MultiFieldTimePickerDialogContainer.show(
         /* context= */ this,
-        (MyRenderersFactory) playerManager.renderersFactory,
+        playerManager.textSynchronizer,
         /* onDismissListener= */ dismissedDialog -> isShowingTextOffsetSelectionDialog = false
       );
     }
