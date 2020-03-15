@@ -25,9 +25,12 @@ public class MultiFieldTimePickerDialogContainer {
         }
 
         @Override
-        public void onTimeSet(int hourOfDay, int minute, int second, int milli) {
+        public void onTimeSet(boolean isNegative, int hourOfDay, int minute, int second, int milli) {
             long textOffsetMs = (milli) + (second * 1000) + (minute * 60 * 1000) + (hourOfDay * 60 * 60 * 1000);
             long textOffsetUs = (textOffsetMs * 1000);
+
+            if (isNegative)
+                textOffsetUs *= -1;
 
             textSynchronizer.setTextOffset(textOffsetUs);
         }
@@ -39,8 +42,9 @@ public class MultiFieldTimePickerDialogContainer {
 
     private static void showPickerDialog(
         Context mContext,
+        boolean isNegative,
         int hourOfDay, int minute, int second, int millis,
-        int min, int max, int step, boolean is24hourFormat,
+        int min, int max, int step, boolean is24hourFormat, boolean isSigned,
         MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener mListener,
         DialogInterface.OnDismissListener onDismissListener
     ) {
@@ -49,8 +53,9 @@ public class MultiFieldTimePickerDialogContainer {
         mDialog = new MultiFieldTimePickerDialog(
             mContext,
             /* theme= */ 0,
+            isNegative,
             hourOfDay, minute, second, millis,
-            min, max, step, is24hourFormat,
+            min, max, step, is24hourFormat, isSigned,
             mListener
         );
 
@@ -96,6 +101,11 @@ public class MultiFieldTimePickerDialogContainer {
 
         long offsetPositionUs = textSynchronizer.getTextOffset();
 
+        boolean isNegative = (offsetPositionUs < 0);
+
+        if (isNegative)
+          offsetPositionUs *= -1;
+
         int hourOfDay = (int)  TimeUnit.MICROSECONDS.toHours(offsetPositionUs);
         int minute    = (int) (TimeUnit.MICROSECONDS.toMinutes(offsetPositionUs) % 60);
         int second    = (int) (TimeUnit.MICROSECONDS.toSeconds(offsetPositionUs) % 60);
@@ -106,11 +116,13 @@ public class MultiFieldTimePickerDialogContainer {
         int step      = 100; // 100 ms
 
         boolean is24hourFormat = true;
+        boolean isSigned = true;
 
         showPickerDialog(
             mContext,
+            isNegative,
             hourOfDay, minute, second, millis,
-            min, max, step, is24hourFormat,
+            min, max, step, is24hourFormat, isSigned,
             mListener,
             onDismissListener
         );

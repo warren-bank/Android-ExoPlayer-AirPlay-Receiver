@@ -5,13 +5,15 @@
   <string name="time_picker_dialog_am">"a.m."</string>
   <string name="time_picker_dialog_pm">"p.m."</string>
 
+  <string name="accessibility_time_picker_sign">"Positive/Negative Sign"</string>
   <string name="accessibility_time_picker_hour">"Hour"</string>
   <string name="accessibility_time_picker_minute">"Minute"</string>
   <string name="accessibility_time_picker_second">"Second"</string>
   <string name="accessibility_time_picker_milli">"Millisecond"</string>
   <string name="accessibility_time_picker_ampm">"AM/PM"</string>
 
-  <string name="time_picker_dialog_hour_minute_separator">":"</string>
-  <string name="time_picker_dialog_minute_second_separator">":"</string>
-  <string name="time_picker_dialog_second_subsecond_separator">"."</string>
+  <string name="time_picker_dialog_hour_minute_separator">"hr :"</string>
+  <string name="time_picker_dialog_minute_second_separator">"min :"</string>
+  <string name="time_picker_dialog_second_milli_separator">"sec ."</string>
+  <string name="time_picker_dialog_milli_ampm_separator">"ms"</string>
 </resources>

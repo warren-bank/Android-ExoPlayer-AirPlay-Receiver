@@ -29,6 +29,7 @@ import java.util.Locale;
 public class MultiFieldTimePickerDialog
         extends AlertDialog implements OnClickListener {
 
+    private final NumberPicker mSignSpinner;
     private final NumberPicker mHourSpinner;
     private final NumberPicker mMinuteSpinner;
     private final NumberPicker mSecSpinner;
@@ -38,12 +39,13 @@ public class MultiFieldTimePickerDialog
     private final int mStep;
     private final int mBaseMilli;
     private final boolean mIs24hourFormat;
+    private final boolean mIsSigned;
 
     /**
      * Adds an onTimeSet() method.
      */
     public interface OnMultiFieldTimeSetListener {
-        void onTimeSet(int hourOfDay, int minute, int second, int milli);
+        void onTimeSet(boolean isNegative, int hourOfDay, int minute, int second, int milli);
     }
 
     private static final int SECOND_IN_MILLIS = 1000;
@@ -53,13 +55,15 @@ public class MultiFieldTimePickerDialog
     public MultiFieldTimePickerDialog(
             Context context,
             int theme,
+            boolean isNegative,
             int hour, int minute, int second, int milli,
-            int min, int max, int step, boolean is24hourFormat,
+            int min, int max, int step, boolean is24hourFormat, boolean isSigned,
             OnMultiFieldTimeSetListener listener) {
         super(context, theme);
         mListener = listener;
         mStep = step;
         mIs24hourFormat = is24hourFormat;
+        mIsSigned = isSigned;
 
         if (min >= max) {
             min = 0;
@@ -75,6 +79,7 @@ public class MultiFieldTimePickerDialog
         View view = inflater.inflate(R.layout.multi_field_time_picker_dialog, null);
         setView(view);
 
+        mSignSpinner = (NumberPicker) view.findViewById(R.id.sign);
         mHourSpinner = (NumberPicker) view.findViewById(R.id.hour);
         mMinuteSpinner = (NumberPicker) view.findViewById(R.id.minute);
         mSecSpinner = (NumberPicker) view.findViewById(R.id.second);
@@ -89,6 +94,18 @@ public class MultiFieldTimePickerDialog
         if (minHour == maxHour) {
             mHourSpinner.setEnabled(false);
             hour = minHour;
+        }
+
+        if (!isSigned) {
+            mSignSpinner.setVisibility(View.GONE);
+        } else {
+            int minSign = 0; // + positive
+            int maxSign = 1; // - negative
+            int iniSign = isNegative ? maxSign : minSign;
+            mSignSpinner.setMinValue(minSign);
+            mSignSpinner.setMaxValue(maxSign);
+            mSignSpinner.setDisplayedValues(new String[] { "+", "-" });
+            mSignSpinner.setValue(iniSign);
         }
 
         if (is24hourFormat) {
@@ -171,7 +188,7 @@ public class MultiFieldTimePickerDialog
 
         if (step >= MINUTE_IN_MILLIS) {
             // Remove the ':' in front of the second spinner as well.
-            view.findViewById(R.id.second_colon).setVisibility(View.GONE);
+            view.findViewById(R.id.second_sep).setVisibility(View.GONE);
             mSecSpinner.setVisibility(View.GONE);
         }
 
@@ -200,7 +217,7 @@ public class MultiFieldTimePickerDialog
 
         if (step >= SECOND_IN_MILLIS) {
             // Remove the '.' in front of the milli spinner as well.
-            view.findViewById(R.id.second_dot).setVisibility(View.GONE);
+            view.findViewById(R.id.milli_sep).setVisibility(View.GONE);
             mMilliSpinner.setVisibility(View.GONE);
         }
 
@@ -262,7 +279,13 @@ public class MultiFieldTimePickerDialog
             }
             hour += ampm * 12;
         }
-        mListener.onTimeSet(hour, minute, sec, milli);
+        boolean isNegative = false;
+        if (mIsSigned) {
+          int sign = getPickerValue(mSignSpinner);
+          if (sign == 1)
+            isNegative = true;
+        }
+        mListener.onTimeSet(isNegative, hour, minute, sec, milli);
     }
 
     /**
