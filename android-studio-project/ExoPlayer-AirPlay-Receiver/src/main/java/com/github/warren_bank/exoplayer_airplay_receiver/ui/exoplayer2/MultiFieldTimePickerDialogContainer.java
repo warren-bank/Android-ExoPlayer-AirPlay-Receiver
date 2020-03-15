@@ -44,7 +44,7 @@ public class MultiFieldTimePickerDialogContainer {
         Context mContext,
         boolean isNegative,
         int hourOfDay, int minute, int second, int millis,
-        int min, int max, int step, boolean is24hourFormat, boolean isSigned,
+        int min, int max, int step, boolean is24hourFormat, boolean isSigned, boolean isValueChangeListener,
         MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener mListener,
         DialogInterface.OnDismissListener onDismissListener
     ) {
@@ -55,7 +55,7 @@ public class MultiFieldTimePickerDialogContainer {
             /* theme= */ 0,
             isNegative,
             hourOfDay, minute, second, millis,
-            min, max, step, is24hourFormat, isSigned,
+            min, max, step, is24hourFormat, isSigned, isValueChangeListener,
             mListener
         );
 
@@ -117,12 +117,13 @@ public class MultiFieldTimePickerDialogContainer {
 
         boolean is24hourFormat = true;
         boolean isSigned = true;
+        boolean isValueChangeListener = true;
 
         showPickerDialog(
             mContext,
             isNegative,
             hourOfDay, minute, second, millis,
-            min, max, step, is24hourFormat, isSigned,
+            min, max, step, is24hourFormat, isSigned, isValueChangeListener,
             mListener,
             onDismissListener
         );

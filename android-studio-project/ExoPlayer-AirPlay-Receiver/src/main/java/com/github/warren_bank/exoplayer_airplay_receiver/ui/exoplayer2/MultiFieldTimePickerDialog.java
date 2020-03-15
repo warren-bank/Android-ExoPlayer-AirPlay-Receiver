@@ -9,7 +9,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -27,7 +26,7 @@ import java.util.Locale;
  * The second picker is not displayed if step >= MINUTE_IN_MILLIS.
  */
 public class MultiFieldTimePickerDialog
-        extends AlertDialog implements OnClickListener {
+        extends AlertDialog implements DialogInterface.OnClickListener, NumberPicker.OnValueChangeListener {
 
     private final NumberPicker mSignSpinner;
     private final NumberPicker mHourSpinner;
@@ -40,6 +39,7 @@ public class MultiFieldTimePickerDialog
     private final int mBaseMilli;
     private final boolean mIs24hourFormat;
     private final boolean mIsSigned;
+    private final boolean mIsValueChangeListener;
 
     /**
      * Adds an onTimeSet() method.
@@ -57,13 +57,14 @@ public class MultiFieldTimePickerDialog
             int theme,
             boolean isNegative,
             int hour, int minute, int second, int milli,
-            int min, int max, int step, boolean is24hourFormat, boolean isSigned,
+            int min, int max, int step, boolean is24hourFormat, boolean isSigned, boolean isValueChangeListener,
             OnMultiFieldTimeSetListener listener) {
         super(context, theme);
         mListener = listener;
         mStep = step;
         mIs24hourFormat = is24hourFormat;
         mIsSigned = isSigned;
+        mIsValueChangeListener = isValueChangeListener;
 
         if (min >= max) {
             min = 0;
@@ -85,6 +86,15 @@ public class MultiFieldTimePickerDialog
         mSecSpinner = (NumberPicker) view.findViewById(R.id.second);
         mMilliSpinner = (NumberPicker) view.findViewById(R.id.milli);
         mAmPmSpinner = (NumberPicker) view.findViewById(R.id.ampm);
+
+        if (isValueChangeListener) {
+            mSignSpinner.setOnValueChangedListener(this);
+            mHourSpinner.setOnValueChangedListener(this);
+            mMinuteSpinner.setOnValueChangedListener(this);
+            mSecSpinner.setOnValueChangedListener(this);
+            mMilliSpinner.setOnValueChangedListener(this);
+            mAmPmSpinner.setOnValueChangedListener(this);
+        }
 
         int minHour = min / HOUR_IN_MILLIS;
         int maxHour = max / HOUR_IN_MILLIS;
@@ -269,6 +279,12 @@ public class MultiFieldTimePickerDialog
     @Override
     public void onClick(DialogInterface dialog, int which) {
         notifyDateSet();
+    }
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        if (mIsValueChangeListener)
+            notifyDateSet();
     }
 
     private void notifyDateSet() {
