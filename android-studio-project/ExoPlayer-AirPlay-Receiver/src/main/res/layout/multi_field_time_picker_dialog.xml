@@ -51,6 +51,13 @@
         android:focusableInTouchMode="true"
         android:contentDescription="@string/accessibility_time_picker_sign"
         />
+    <TextView
+        android:id="@+id/sign_hour_sep"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        android:text="@string/time_picker_dialog_sign_hour_separator"
+        />
     <NumberPicker
         android:id="@+id/hour"
         android:layout_width="0dp"
@@ -64,6 +71,16 @@
         android:contentDescription="@string/accessibility_time_picker_hour"
         />
     <TextView
+        android:id="@+id/hour_label"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/time_picker_dialog_hour_label_units"
+        />
+    <TextView
+        android:id="@+id/hour_minute_sep"
         android:layout_width="wrap_content"
         android:textSize="12sp"
         android:layout_height="wrap_content"
@@ -82,7 +99,16 @@
         android:contentDescription="@string/accessibility_time_picker_minute"
         />
     <TextView
-        android:id="@+id/second_sep"
+        android:id="@+id/minute_label"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/time_picker_dialog_minute_label_units"
+        />
+    <TextView
+        android:id="@+id/minute_second_sep"
         android:layout_width="wrap_content"
         android:textSize="12sp"
         android:layout_height="wrap_content"
@@ -101,7 +127,16 @@
         android:contentDescription="@string/accessibility_time_picker_second"
         />
     <TextView
-        android:id="@+id/milli_sep"
+        android:id="@+id/second_label"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/time_picker_dialog_second_label_units"
+        />
+    <TextView
+        android:id="@+id/second_milli_sep"
         android:layout_width="wrap_content"
         android:textSize="12sp"
         android:layout_height="wrap_content"
@@ -120,7 +155,16 @@
         android:contentDescription="@string/accessibility_time_picker_milli"
         />
     <TextView
-        android:id="@+id/ampm_sep"
+        android:id="@+id/milli_label"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/time_picker_dialog_milli_label_units"
+        />
+    <TextView
+        android:id="@+id/milli_ampm_sep"
         android:layout_width="wrap_content"
         android:textSize="12sp"
         android:layout_height="wrap_content"

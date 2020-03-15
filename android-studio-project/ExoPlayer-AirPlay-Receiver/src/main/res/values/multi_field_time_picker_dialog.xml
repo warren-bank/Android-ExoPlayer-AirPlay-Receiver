@@ -12,8 +12,14 @@
   <string name="accessibility_time_picker_milli">"Millisecond"</string>
   <string name="accessibility_time_picker_ampm">"AM/PM"</string>
 
-  <string name="time_picker_dialog_hour_minute_separator">"hr :"</string>
-  <string name="time_picker_dialog_minute_second_separator">"min :"</string>
-  <string name="time_picker_dialog_second_milli_separator">"sec ."</string>
-  <string name="time_picker_dialog_milli_ampm_separator">"ms"</string>
+  <string name="time_picker_dialog_hour_label_units">"hr"</string>
+  <string name="time_picker_dialog_minute_label_units">"min"</string>
+  <string name="time_picker_dialog_second_label_units">"sec"</string>
+  <string name="time_picker_dialog_milli_label_units">"ms"</string>
+
+  <string name="time_picker_dialog_sign_hour_separator">""</string>
+  <string name="time_picker_dialog_hour_minute_separator">":"</string>
+  <string name="time_picker_dialog_minute_second_separator">":"</string>
+  <string name="time_picker_dialog_second_milli_separator">"."</string>
+  <string name="time_picker_dialog_milli_ampm_separator">""</string>
 </resources>

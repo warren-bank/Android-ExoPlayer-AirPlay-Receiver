@@ -98,6 +98,7 @@ public class MultiFieldTimePickerDialog
 
         if (!isSigned) {
             mSignSpinner.setVisibility(View.GONE);
+            view.findViewById(R.id.sign_hour_sep).setVisibility(View.GONE);
         } else {
             int minSign = 0; // + positive
             int maxSign = 1; // - negative
@@ -109,6 +110,7 @@ public class MultiFieldTimePickerDialog
         }
 
         if (is24hourFormat) {
+            view.findViewById(R.id.milli_ampm_sep).setVisibility(View.GONE);
             mAmPmSpinner.setVisibility(View.GONE);
         } else {
             int minAmPm = minHour / 12;
@@ -188,8 +190,9 @@ public class MultiFieldTimePickerDialog
 
         if (step >= MINUTE_IN_MILLIS) {
             // Remove the ':' in front of the second spinner as well.
-            view.findViewById(R.id.second_sep).setVisibility(View.GONE);
+            view.findViewById(R.id.minute_second_sep).setVisibility(View.GONE);
             mSecSpinner.setVisibility(View.GONE);
+            view.findViewById(R.id.second_label).setVisibility(View.GONE);
         }
 
         int minSecond = min / SECOND_IN_MILLIS;
@@ -217,8 +220,9 @@ public class MultiFieldTimePickerDialog
 
         if (step >= SECOND_IN_MILLIS) {
             // Remove the '.' in front of the milli spinner as well.
-            view.findViewById(R.id.milli_sep).setVisibility(View.GONE);
+            view.findViewById(R.id.second_milli_sep).setVisibility(View.GONE);
             mMilliSpinner.setVisibility(View.GONE);
+            view.findViewById(R.id.milli_label).setVisibility(View.GONE);
         }
 
         // Round to the nearest step.
