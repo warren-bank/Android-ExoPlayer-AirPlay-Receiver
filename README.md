@@ -88,6 +88,7 @@ __AirPlay APIs:__
   video_path='/storage/external_SD/video/file.mp4'
   subtt_path='/storage/external_SD/video/file.srt'
   audio_path='/storage/external_SD/audio/file.mp3'
+  plist_path='/storage/external_SD/all audio and video files.m3u'
 ```
 
 * display image from local file system (on sender):
@@ -243,6 +244,14 @@ __extended APIs:__
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${audio_path}\nStart-Position: 0.5" \
       "http://${airplay_ip}/queue"
+  ```
+* play combination of audio and video files in order specified by .m3u playlist from file system on receiver:
+  ```bash
+    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${plist_path}" \
+      "http://${airplay_ip}/play"
   ```
 
 #### Usage (high level):

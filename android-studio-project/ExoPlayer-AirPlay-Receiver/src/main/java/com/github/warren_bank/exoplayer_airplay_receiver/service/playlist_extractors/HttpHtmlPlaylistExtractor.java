@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class HtmlPlaylistExtractor extends BasePlaylistExtractor {
+public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
 
   private static Pattern playlist_regex = Pattern.compile("(?:\\/|\\.s?html?)(?:[\\?#]|$)");
   private static Pattern linkhref_regex = Pattern.compile("href=\"([^\"]+\\.)(mp3|m4a|ogg|wav|flac)\"", Pattern.CASE_INSENSITIVE);
   private static String format_priority = "|mp3|m4a|ogg|wav|flac|";
 
   private static int getFormatPriority(String format) {
-    return HtmlPlaylistExtractor.format_priority.indexOf(format);
+    return HttpHtmlPlaylistExtractor.format_priority.indexOf(format);
   }
 
   private HashMap<String, String[]> url_chunks;
@@ -52,7 +52,7 @@ public class HtmlPlaylistExtractor extends BasePlaylistExtractor {
   protected boolean isParserForUrl(String strUrl) {
     if (strUrl == null) return false;
 
-    Matcher matcher = HtmlPlaylistExtractor.playlist_regex.matcher(strUrl.toLowerCase());
+    Matcher matcher = HttpHtmlPlaylistExtractor.playlist_regex.matcher(strUrl.toLowerCase());
     return matcher.find();
   }
 
@@ -63,7 +63,7 @@ public class HtmlPlaylistExtractor extends BasePlaylistExtractor {
     // remove empty lines
     if (line.isEmpty()) return;
 
-    Matcher matcher = HtmlPlaylistExtractor.linkhref_regex.matcher(line);
+    Matcher matcher = HttpHtmlPlaylistExtractor.linkhref_regex.matcher(line);
     String m1, m2, lm1, lm2, lo2;
     int po, pm;
     String[] old;
@@ -83,8 +83,8 @@ public class HtmlPlaylistExtractor extends BasePlaylistExtractor {
         old = url_chunks.get(lm1);
         lo2 = old[1].toLowerCase();
 
-        po = HtmlPlaylistExtractor.getFormatPriority(lo2);
-        pm = HtmlPlaylistExtractor.getFormatPriority(lm2);
+        po = HttpHtmlPlaylistExtractor.getFormatPriority(lo2);
+        pm = HttpHtmlPlaylistExtractor.getFormatPriority(lm2);
 
         if ((pm >=0) && (pm < po))
           url_chunks.put(lm1, new String[] {m1,m2});

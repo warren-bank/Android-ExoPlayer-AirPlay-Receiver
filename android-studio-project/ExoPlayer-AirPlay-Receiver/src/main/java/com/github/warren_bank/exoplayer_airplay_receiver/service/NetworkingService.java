@@ -31,8 +31,9 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
-import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HtmlPlaylistExtractor;
-import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.M3uPlaylistExtractor;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.FileM3uPlaylistExtractor;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HttpHtmlPlaylistExtractor;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HttpM3uPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.ImageActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
@@ -369,16 +370,18 @@ public class NetworkingService extends Service {
 
     private WeakReference<NetworkingService> weakReference;
 
-    private M3uPlaylistExtractor  m3uExtractor;
-    private HtmlPlaylistExtractor htmlExtractor;
+    private HttpM3uPlaylistExtractor  httpM3uExtractor;
+    private HttpHtmlPlaylistExtractor httpHtmlExtractor;
+    private FileM3uPlaylistExtractor  fileM3uExtractor;
 
     public ServiceHandler(Looper looper, NetworkingService service) {
       super(looper);
 
       weakReference = new WeakReference<NetworkingService>(service);
 
-      m3uExtractor  = new M3uPlaylistExtractor();
-      htmlExtractor = new HtmlPlaylistExtractor();
+      httpM3uExtractor  = new HttpM3uPlaylistExtractor();
+      httpHtmlExtractor = new HttpHtmlPlaylistExtractor();
+      fileM3uExtractor  = new FileM3uPlaylistExtractor();
     }
 
     @Override
@@ -420,10 +423,13 @@ public class NetworkingService extends Service {
           ArrayList<String> matches = null;
 
           if (matches == null)
-            matches = m3uExtractor.expandPlaylist(playUrl); //8-bit ascii
+            matches = httpM3uExtractor.expandPlaylist(playUrl); //8-bit ascii
 
           if (matches == null)
-            matches = htmlExtractor.expandPlaylist(playUrl, (String) null); //utf8
+            matches = httpHtmlExtractor.expandPlaylist(playUrl, (String) null); //utf8
+
+          if (matches == null)
+            matches = fileM3uExtractor.expandPlaylist(playUrl); //utf8
 
           if (matches != null) {
             for (int counter = 0; counter < matches.size(); counter++) {

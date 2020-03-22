@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import java.io.File;
+import java.net.URI;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -28,6 +29,29 @@ public class ExternalStorageUtils {
       uri = (new File(uri)).toURI().toString();
 
     return uri;
+  }
+
+  public static File getFile(String uri) {
+    uri = normalizeFileUri(uri);
+    if (uri == null) return null;
+
+    try {
+      URI  u = new URI(uri);
+      File f = new File(u);
+      return f;
+    }
+    catch(Exception e) {
+      return null;
+    }
+  }
+
+  public static String joinFilePaths(File context, String path) {
+    String basedir = context.getParent();
+
+    if ((basedir == null) || (basedir.equals("/")))
+      basedir = "";
+
+    return basedir + "/" + path;
   }
 
   public static boolean has_permission(Activity activity) {

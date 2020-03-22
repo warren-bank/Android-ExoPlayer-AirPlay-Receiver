@@ -8,7 +8,13 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-public abstract class BasePlaylistExtractor {
+public abstract class HttpBasePlaylistExtractor {
+
+  private static boolean isHttpUrl(String strUrl) {
+    return (strUrl == null)
+      ? false
+      : (strUrl.toLowerCase().indexOf("http") == 0);
+  }
 
   protected abstract boolean isParserForUrl(String strUrl);
 
@@ -44,6 +50,9 @@ public abstract class BasePlaylistExtractor {
   }
 
   protected ArrayList<String> expandPlaylist(String strUrl, Charset cs) {
+    if (!isHttpUrl(strUrl))
+      return null;
+
     if (!isParserForUrl(strUrl))
       return null;
 
@@ -57,7 +66,7 @@ public abstract class BasePlaylistExtractor {
       // ascii encoded
       url = new URL(strUrl);
 
-      // Read all the text returned by the server
+      // read all the text returned by the server
       in = new BufferedReader(new InputStreamReader(url.openStream(), cs));
 
       // remove ascii encoding
