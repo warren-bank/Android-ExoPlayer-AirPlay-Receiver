@@ -85,10 +85,14 @@ __AirPlay APIs:__
   audio_mp3s_htm='https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/'
 
   # file paths for test media (on receiver):
-  video_path='/storage/external_SD/video/file.mp4'
-  subtt_path='/storage/external_SD/video/file.srt'
-  audio_path='/storage/external_SD/audio/file.mp3'
-  plist_path='/storage/external_SD/all audio and video files.m3u'
+  video_path='/storage/external_SD/test-media/video/file.mp4'
+  subtt_path='/storage/external_SD/test-media/video/file.srt'
+  audio_path='/storage/external_SD/test-media/audio/file.mp3'
+  plist_path='/storage/external_SD/test-media/all audio and video files.m3u'
+
+  # directory paths for test media (on receiver):
+  video_dir_path='/storage/external_SD/test-media/video/'
+  audio_dir_path='/storage/external_SD/test-media/audio/'
 ```
 
 * display image from local file system (on sender):
@@ -252,6 +256,24 @@ __extended APIs:__
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${plist_path}" \
       "http://${airplay_ip}/play"
+  ```
+* play all audio and video files in specified directory from file system on receiver:
+  ```bash
+    # note: does not recursively search for media files in subdirectories
+    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_dir_path}" \
+      "http://${airplay_ip}/play"
+  ```
+* queue all audio and video files in specified directory from file system on receiver:
+  ```bash
+    # note: does not recursively search for media files in subdirectories
+    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${audio_dir_path}" \
+      "http://${airplay_ip}/queue"
   ```
 
 #### Usage (high level):
