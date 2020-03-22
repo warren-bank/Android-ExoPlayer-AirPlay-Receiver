@@ -1,11 +1,13 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,8 +21,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 
+import java.util.ArrayList;
+
 public class VideoActivity extends AppCompatActivity implements PlayerControlView.VisibilityListener, View.OnClickListener {
   private static final String tag = "VideoActivity";
+
+  private final ArrayList<Intent> externalStorageIntents = new ArrayList<Intent>();
 
   private PlayerView    playerView;
   private Button        selectTracksButton;
@@ -65,6 +71,15 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   @Override
   public void onNewIntent(Intent intent) {
     handleIntent(intent);
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (ExternalStorageUtils.is_permission_granted(requestCode, grantResults)) {
+      handleExternalStorageIntents();
+    }
   }
 
   @Override
@@ -187,6 +202,21 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
 
   // Internal methods.
 
+  private void handleExternalStorageIntents() {
+    final Handler handler   = new Handler();
+    final Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        if (!externalStorageIntents.isEmpty()) {
+          handleIntent(externalStorageIntents.remove(0));
+          handler.postDelayed(this, 1000l);
+        }
+      }
+    };
+
+    handler.post(runnable);
+  }
+
   private void handleIntent(Intent intent) {
     if (intent == null)
       return;
@@ -214,6 +244,21 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     // ignore bad requests
     if (uri == null)
       return;
+
+    boolean requiresExternalStoragePermission = false;
+    if (ExternalStorageUtils.isFileUri(uri)) {
+      uri = ExternalStorageUtils.normalizeFileUri(uri);
+      requiresExternalStoragePermission = true;
+    }
+    if (ExternalStorageUtils.isFileUri(caption)) {
+      uri = ExternalStorageUtils.normalizeFileUri(caption);
+      requiresExternalStoragePermission = true;
+    }
+    if (requiresExternalStoragePermission && !ExternalStorageUtils.has_permission(this)) {
+      externalStorageIntents.add(intent);
+      ExternalStorageUtils.request_permission(this);
+      return;
+    }
 
     if ((mode != null) && mode.equals("queue")) {
       playerManager.AirPlay_queue(uri, caption, referer, startPosition);

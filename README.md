@@ -57,7 +57,7 @@ __AirPlay APIs:__
   # network address for running instance of 'ExoPlayer AirPlay Receiver'
   airplay_ip='192.168.1.100:8192'
 
-  # file path for test image:
+  # file path for test image (on sender):
   image_path='/path/to/image.jpg'
 
   # URL for test image:
@@ -83,9 +83,14 @@ __AirPlay APIs:__
   audio_mp3s_m3u='https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u'
   audio_htm_page='https://archive.org/details/tntvillage_455310'
   audio_mp3s_htm='https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/'
+
+  # file paths for test media (on receiver):
+  video_path='/storage/external_SD/video/file.mp4'
+  subtt_path='/storage/external_SD/video/file.srt'
+  audio_path='/storage/external_SD/audio/file.mp3'
 ```
 
-* display image from local file system:
+* display image from local file system (on sender):
   ```bash
     curl --silent -X POST \
       --data-binary "@${image_path}" \
@@ -222,6 +227,21 @@ __extended APIs:__
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${audio_mp3s_htm}\nReferer: ${audio_htm_page}\nStart-Position: 0" \
+      "http://${airplay_ip}/queue"
+  ```
+* play video from file system on receiver (add text captions, seek to beginning):
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_path}\nCaption-Location: ${subtt_path}\nStart-Position: 0" \
+      "http://${airplay_ip}/play"
+  ```
+* add audio from file system on receiver to end of queue (seek to 50%):
+  ```bash
+    # note: position < 1 is a percent of the total track length
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${audio_path}\nStart-Position: 0.5" \
       "http://${airplay_ip}/queue"
   ```
 

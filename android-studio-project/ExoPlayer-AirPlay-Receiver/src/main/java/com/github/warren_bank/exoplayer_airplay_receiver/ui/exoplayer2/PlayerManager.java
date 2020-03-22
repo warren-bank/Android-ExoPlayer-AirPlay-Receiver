@@ -3,6 +3,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations.TextSynchronizer;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
@@ -37,6 +38,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.MimeTypes;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
@@ -796,25 +798,33 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
-    if (httpDataSourceFactory == null)
+    DataSource.Factory factory = ExternalStorageUtils.isFileUri(sample.uri)
+      ? rawDataSourceFactory
+      : httpDataSourceFactory;
+
+    if (factory == null)
       return null;
 
     Uri uri = Uri.parse(sample.uri);
 
     switch (sample.uri_mimeType) {
       case MimeTypes.APPLICATION_M3U8:
-        return new HlsMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri);
+        return new HlsMediaSource.Factory(factory).createMediaSource(uri);
       case MimeTypes.APPLICATION_MPD:
-        return new DashMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri);
+        return new DashMediaSource.Factory(factory).createMediaSource(uri);
       case MimeTypes.APPLICATION_SS:
-        return new SsMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri);
+        return new SsMediaSource.Factory(factory).createMediaSource(uri);
       default:
-        return new ExtractorMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri);
+        return new ExtractorMediaSource.Factory(factory).createMediaSource(uri);
     }
   }
 
   private MediaSource buildCaptionMediaSource(VideoSource sample) {
-    if (httpDataSourceFactory == null)
+    DataSource.Factory factory = ExternalStorageUtils.isFileUri(sample.caption)
+      ? rawDataSourceFactory
+      : httpDataSourceFactory;
+
+    if (factory == null)
       return null;
 
     if ((sample.caption == null) || (sample.caption_mimeType == null))
@@ -823,7 +833,7 @@ public final class PlayerManager implements EventListener {
     Uri uri       = Uri.parse(sample.caption);
     Format format = Format.createTextSampleFormat(/* id= */ null, sample.caption_mimeType, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ "en");
 
-    return new SingleSampleMediaSource.Factory(httpDataSourceFactory).createMediaSource(uri, format, C.TIME_UNSET);
+    return new SingleSampleMediaSource.Factory(factory).createMediaSource(uri, format, C.TIME_UNSET);
   }
 
   private MediaSource buildRawVideoMediaSource(int rawResourceId) {
