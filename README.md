@@ -71,10 +71,10 @@ __AirPlay APIs:__
   video_url_3='https://multiplatform-f.akamaihd.net/i/multi/april11/cctv/cctv_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8'
 
   # URLs for test video text captions:
-  captions_page='https://demos.flowplayer.com/basics/subtitle.html'
-  caption_url_1='https://d12zt1n3pd4xhr.cloudfront.net/fp/subtitles-demo.vtt'
-  caption_url_2='https://d12zt1n3pd4xhr.cloudfront.net/fp/subtitles-demo.vtt'
-  caption_url_3='https://d12zt1n3pd4xhr.cloudfront.net/fp/subtitles-demo.vtt'
+  captions_page='https://github.com/gpac/gpac/tree/master/tests/media/webvtt'
+  caption_url_1='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/counter.srt'
+  caption_url_2='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/counter.vtt'
+  caption_url_3='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/comments.vtt'
 
   # URLs for test audio:
   audio_flac_nfo='https://archive.org/details/tntvillage_457399'
