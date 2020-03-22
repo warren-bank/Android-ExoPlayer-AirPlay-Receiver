@@ -72,8 +72,8 @@ __AirPlay APIs:__
 
   # URLs for test video text captions:
   captions_page='https://github.com/gpac/gpac/tree/master/tests/media/webvtt'
-  caption_url_1='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/counter.srt'
-  caption_url_2='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/counter.vtt'
+  caption_url_1='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/master/tests/.captions/counter.workaround-exoplayer-issue-7122.srt'
+  caption_url_2='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/master/tests/.captions/counter.vtt'
   caption_url_3='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/comments.vtt'
 
   # URLs for test audio:
