@@ -29,12 +29,13 @@
             android:textSize="14sp"
             android:lines="1" />
         <TextView android:id="@+id/notification_text_line2"
-            android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent.Title"
+            android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent"
             android:layout_width="match_parent"
             android:layout_height="22dp"
             android:layout_margin="0dp"
             android:padding="0dp"
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:lines="1" />
         <TextView android:id="@+id/notification_text_line3"
             android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent"
