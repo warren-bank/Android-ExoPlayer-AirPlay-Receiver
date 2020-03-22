@@ -4,16 +4,31 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUt
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class DirectoryIndexBasePlaylistExtractor {
 
   protected abstract boolean isParserForDirectory(File directory);
+
+  protected abstract void parseDirectory(File subdirectory, File directory, ArrayList<File> files);
 
   protected abstract void parseFile(File file, File directory, ArrayList<String> matches);
 
   protected void preParse(File directory) {}
 
   protected void postParse(File directory, ArrayList<String> matches) {}
+
+  protected void appendFilesInDirectory(File directory, ArrayList<File> files) {
+    if (!directory.isDirectory()) return;
+
+    File[] filesArray = directory.listFiles();
+    if (filesArray == null) return;
+    if (filesArray.length == 0) return;
+
+    files.addAll(
+      Arrays.asList(filesArray)
+    );
+  }
 
   public ArrayList<String> expandPlaylist(String strUrl) {
     if (!ExternalStorageUtils.isFileUri(strUrl))
@@ -36,18 +51,24 @@ public abstract class DirectoryIndexBasePlaylistExtractor {
     if (!isParserForDirectory(directory))
       return null;
 
+    ArrayList<File>   files   = new ArrayList<File>();
     ArrayList<String> matches = new ArrayList<String>();
 
     try {
+      File file;
+
       // read list of all files in the directory
-      File[] files = directory.listFiles();
+      appendFilesInDirectory(directory, files);
 
       preParse(directory);
-      if (files != null) {
-        for (File file : files) {
-          if (file.isFile())
-            parseFile(file, directory, matches);
-        }
+      while(files.size() > 0) {
+        file = files.remove(0);
+
+        if (file.isDirectory())
+          parseDirectory(file, directory, files);
+
+        if (file.isFile())
+          parseFile(file, directory, matches);
       }
       postParse(directory, matches);
     }

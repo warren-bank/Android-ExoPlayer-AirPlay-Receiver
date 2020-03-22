@@ -93,6 +93,7 @@ __AirPlay APIs:__
   # directory paths for test media (on receiver):
   video_dir_path='/storage/external_SD/test-media/video/'
   audio_dir_path='/storage/external_SD/test-media/audio/'
+  recursive_path='/storage/external_SD/test-media/'
 ```
 
 * display image from local file system (on sender):
@@ -259,7 +260,8 @@ __extended APIs:__
   ```
 * play all audio and video files in specified directory from file system on receiver:
   ```bash
-    # note: does not recursively search for media files in subdirectories
+    # note: IF the specified directory contains one or more media files, THEN does not recursively search for media files in subdirectories
+    #       IF the specified directory does not contain any media files, THEN does recursively search for media files in all subdirectories
     # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
@@ -268,12 +270,23 @@ __extended APIs:__
   ```
 * queue all audio and video files in specified directory from file system on receiver:
   ```bash
-    # note: does not recursively search for media files in subdirectories
+    # note: IF the specified directory contains one or more media files, THEN does not recursively search for media files in subdirectories
+    #       IF the specified directory does not contain any media files, THEN does recursively search for media files in all subdirectories
     # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${audio_dir_path}" \
       "http://${airplay_ip}/queue"
+  ```
+* play all audio and video files by recursively searching within specified directory from file system on receiver:
+  ```bash
+    # note: IF the specified directory contains one or more media files, THEN does not recursively search for media files in subdirectories
+    #       IF the specified directory does not contain any media files, THEN does recursively search for media files in all subdirectories
+    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${recursive_path}" \
+      "http://${airplay_ip}/play"
   ```
 
 #### Usage (high level):

@@ -13,6 +13,9 @@ public class DirectoryIndexMediaPlaylistExtractor extends DirectoryIndexBasePlay
     return true;
   }
 
+  protected void parseDirectory(File subdirectory, File directory, ArrayList<File> files) {
+  }
+
   protected void parseFile(File file, File directory, ArrayList<String> matches) {
     Matcher matcher = DirectoryIndexMediaPlaylistExtractor.playlist_media_regex.matcher(file.getAbsolutePath().toLowerCase());
 

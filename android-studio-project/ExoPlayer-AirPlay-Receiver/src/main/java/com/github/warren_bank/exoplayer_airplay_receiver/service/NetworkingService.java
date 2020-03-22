@@ -32,6 +32,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.DirectoryIndexMediaPlaylistExtractor;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.DirectoryIndexRecursiveMediaPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.FileM3uPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HttpHtmlPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HttpM3uPlaylistExtractor;
@@ -371,20 +372,22 @@ public class NetworkingService extends Service {
 
     private WeakReference<NetworkingService> weakReference;
 
-    private HttpM3uPlaylistExtractor             httpM3uExtractor;
-    private HttpHtmlPlaylistExtractor            httpHtmlExtractor;
-    private FileM3uPlaylistExtractor             fileM3uExtractor;
-    private DirectoryIndexMediaPlaylistExtractor directoryExtractor;
+    private HttpM3uPlaylistExtractor                      httpM3uExtractor;
+    private HttpHtmlPlaylistExtractor                     httpHtmlExtractor;
+    private FileM3uPlaylistExtractor                      fileM3uExtractor;
+    private DirectoryIndexMediaPlaylistExtractor          directoryExtractor;
+    private DirectoryIndexRecursiveMediaPlaylistExtractor recursiveDirectoryExtractor;
 
     public ServiceHandler(Looper looper, NetworkingService service) {
       super(looper);
 
       weakReference = new WeakReference<NetworkingService>(service);
 
-      httpM3uExtractor   = new HttpM3uPlaylistExtractor();
-      httpHtmlExtractor  = new HttpHtmlPlaylistExtractor();
-      fileM3uExtractor   = new FileM3uPlaylistExtractor();
-      directoryExtractor = new DirectoryIndexMediaPlaylistExtractor();
+      httpM3uExtractor            = new HttpM3uPlaylistExtractor();
+      httpHtmlExtractor           = new HttpHtmlPlaylistExtractor();
+      fileM3uExtractor            = new FileM3uPlaylistExtractor();
+      directoryExtractor          = new DirectoryIndexMediaPlaylistExtractor();
+      recursiveDirectoryExtractor = new DirectoryIndexRecursiveMediaPlaylistExtractor();
     }
 
     @Override
@@ -436,6 +439,9 @@ public class NetworkingService extends Service {
 
           if (matches == null)
             matches = directoryExtractor.expandPlaylist(playUrl);
+
+          if (matches == null)
+            matches = recursiveDirectoryExtractor.expandPlaylist(playUrl);
 
           if (matches != null) {
             for (int counter = 0; counter < matches.size(); counter++) {
