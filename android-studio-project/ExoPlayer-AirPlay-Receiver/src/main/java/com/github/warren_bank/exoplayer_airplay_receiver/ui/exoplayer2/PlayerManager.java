@@ -288,6 +288,24 @@ public final class PlayerManager implements EventListener {
     Handler handler,
     Runnable onCompletionAction
   ) {
+    MediaSource mediaSource = buildMediaSource(sample);
+    addItem(sample, mediaSource, handler, onCompletionAction);
+  }
+
+  /**
+   * Appends {@code sample} to the media queue.
+   *
+   * @param sample The {@link VideoSource} to append.
+   * @param mediaSource The {@link MediaSource} to append.
+   * @param handler
+   * @param onCompletionAction
+   */
+  public void addItem(
+    VideoSource sample,
+    MediaSource mediaSource,
+    Handler handler,
+    Runnable onCompletionAction
+  ) {
     // this shouldn't happen: VideoActivity.handleIntent() has code to detect when playerManager has been released
     if ((mediaQueue == null) || (concatenatingMediaSource == null))
       return;
@@ -319,7 +337,7 @@ public final class PlayerManager implements EventListener {
 
     mediaQueue.add(sample);
     concatenatingMediaSource.addMediaSource(
-      buildMediaSource(sample),
+      mediaSource,
       handler,
       runCompletionAction
     );
@@ -826,35 +844,9 @@ public final class PlayerManager implements EventListener {
     Handler handler,
     Runnable onCompletionAction
   ) {
-    if ((mediaQueue == null) || (concatenatingMediaSource == null))
-      return;
-
-    VideoSource sample = VideoSource.createVideoSource("raw", /* caption= */ (String) null, /* referer= */ (String) null, /* startPosition= */ 0f);
-
-    boolean isEnded = (exoPlayer != null) && !exoPlayer.isPlaying() && exoPlayer.getPlayWhenReady();
-
-    if (isEnded) {
-      exoPlayer.setPlayWhenReady(false);
-      exoPlayer.retry();
-    }
-
-    Runnable runCompletionAction = new Runnable() {
-      @Override
-      public void run() {
-        if (isEnded)
-          exoPlayer.setPlayWhenReady(true);
-
-        if ((handler != null) && (onCompletionAction != null))
-          handler.post(onCompletionAction);
-      }
-    };
-
-    mediaQueue.add(sample);
-    concatenatingMediaSource.addMediaSource(
-      buildRawVideoMediaSource(rawResourceId),
-      handler,
-      runCompletionAction
-    );
+    VideoSource sample      = VideoSource.createVideoSource("raw", /* caption= */ (String) null, /* referer= */ (String) null, /* startPosition= */ 0f);
+    MediaSource mediaSource = buildRawVideoMediaSource(rawResourceId);
+    addItem(sample, mediaSource, handler, onCompletionAction);
   }
 
 }
