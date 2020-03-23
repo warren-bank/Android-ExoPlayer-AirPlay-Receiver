@@ -25,6 +25,8 @@ public abstract class DirectoryIndexBasePlaylistExtractor {
     if (filesArray == null) return;
     if (filesArray.length == 0) return;
 
+    Arrays.sort(filesArray);
+
     files.addAll(
       Arrays.asList(filesArray)
     );
