@@ -2,6 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
@@ -26,7 +27,17 @@ public class StartNetworkingServiceActivity extends Activity {
 
   private void startListenService() {
     Intent intent = new Intent(getApplicationContext(), NetworkingService.class);
+    forwardMedia(intent);
     MainApp.getInstance().startService(intent);
     finish();
+  }
+
+  private void forwardMedia(Intent intent) {
+    Uri data = getIntent().getData();
+
+    if (data != null) {
+      intent.setAction(NetworkingService.ACTION_PLAY);
+      intent.setData(data);
+    }
   }
 }

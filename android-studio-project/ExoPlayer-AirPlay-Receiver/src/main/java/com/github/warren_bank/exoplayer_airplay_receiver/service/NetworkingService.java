@@ -43,6 +43,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 public class NetworkingService extends Service {
   private static final int NOTIFICATION_ID = 1;
   private static final String ACTION_STOP  = "STOP";
+  public  static final String ACTION_PLAY  = "PLAY";
 
   private static final String tag = NetworkingService.class.getSimpleName();
   private static final String airplayType = "._airplay._tcp.local";
@@ -337,8 +338,31 @@ public class NetworkingService extends Service {
     if (intent == null) return;
 
     String action = intent.getAction();
-    if (action == ACTION_STOP)
-      shutdown(true);
+    if (action == null) return;
+
+    switch (action) {
+      case ACTION_STOP : {
+        shutdown(true);
+        break;
+      }
+      case ACTION_PLAY : {
+        String playUrl = intent.getDataString();
+
+        if (playUrl != null) {
+          Message msg = Message.obtain();
+          HashMap<String, String> map = new HashMap<String, String>();
+          map.put(Constant.PlayURL,    playUrl);
+          map.put(Constant.CaptionURL, "");
+          map.put(Constant.RefererURL, "");
+          map.put(Constant.Start_Pos,  "0");
+          msg.what = Constant.Msg.Msg_Video_Play;
+          msg.obj = map;
+
+          handler.handleMessage(msg);
+        }
+        break;
+      }
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -401,8 +425,8 @@ public class NetworkingService extends Service {
           Toast toast = Toast.makeText(service.getApplicationContext(), "Airplay registration success", android.widget.Toast.LENGTH_SHORT);
           toast.setGravity(Gravity.CENTER, 0, 0);
           toast.show();
-        }
           break;
+        }
         case Constant.Register.FAIL : {
           Toast toast = Toast.makeText(service.getApplicationContext(), "Airplay registration failed", android.widget.Toast.LENGTH_SHORT);
           toast.setGravity(Gravity.CENTER, 0, 0);
