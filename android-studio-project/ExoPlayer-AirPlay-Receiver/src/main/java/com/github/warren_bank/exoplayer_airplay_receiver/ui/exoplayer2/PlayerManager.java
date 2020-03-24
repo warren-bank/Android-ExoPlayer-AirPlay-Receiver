@@ -789,12 +789,25 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildMediaSource(VideoSource sample) {
-    MediaSource video   = buildUriMediaSource(sample);
-    MediaSource caption = buildCaptionMediaSource(sample);
+    MediaSource            video    = buildUriMediaSource(sample);
+    ArrayList<MediaSource> captions = buildCaptionMediaSources(sample);
+    MediaSource[] mediaSources;
 
-    return (caption == null)
-      ? video
-      : new MergingMediaSource(video, caption);
+    if ((captions == null) || captions.isEmpty()) {
+      mediaSources = new MediaSource[1];
+      mediaSources[0] = video;
+    }
+    else {
+      // prepend
+      captions.add(0, video);
+
+      mediaSources = new MediaSource[captions.size()];
+      mediaSources = captions.toArray(mediaSources);
+    }
+
+    return (mediaSources.length == 1)
+      ? mediaSources[0]
+      : new MergingMediaSource(mediaSources);
   }
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
@@ -819,21 +832,59 @@ public final class PlayerManager implements EventListener {
     }
   }
 
-  private MediaSource buildCaptionMediaSource(VideoSource sample) {
-    DataSource.Factory factory = ExternalStorageUtils.isFileUri(sample.caption)
-      ? rawDataSourceFactory
-      : httpDataSourceFactory;
+  private ArrayList<MediaSource> buildCaptionMediaSources(VideoSource sample) {
+    ArrayList<MediaSource> captions = new ArrayList<MediaSource>();
+    DataSource.Factory factory;
+    Uri uri;
+    Format format;
 
-    if (factory == null)
-      return null;
+    if ((sample.caption != null) && (sample.caption_mimeType != null)) {
+      factory = ExternalStorageUtils.isFileUri(sample.caption)
+        ? rawDataSourceFactory
+        : httpDataSourceFactory;
 
-    if ((sample.caption == null) || (sample.caption_mimeType == null))
-      return null;
+      if (factory == null)
+        return null;
 
-    Uri uri       = Uri.parse(sample.caption);
-    Format format = Format.createTextSampleFormat(/* id= */ null, sample.caption_mimeType, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ "en");
+      uri    = Uri.parse(sample.caption);
+      format = Format.createTextSampleFormat(/* id= */ null, sample.caption_mimeType, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ "en");
 
-    return new SingleSampleMediaSource.Factory(factory).createMediaSource(uri, format, C.TIME_UNSET);
+      captions.add(
+        new SingleSampleMediaSource.Factory(factory).createMediaSource(uri, format, C.TIME_UNSET)
+      );
+    }
+    else if (ExternalStorageUtils.isFileUri(sample.uri)) {
+      // loading media from external storage without any captions file explicitly specified.
+      // search within same directory as media file for external captions in a supported format.
+      // file naming convention: "${video_filename}.*.${supported_caption_extension}"
+
+      factory = rawDataSourceFactory;
+
+      if (factory == null)
+        return null;
+
+      ArrayList<String> uriCaptions = ExternalStorageUtils.findMatchingSubtitles(sample.uri);
+
+      if (uriCaptions == null)
+        return null;
+      if (uriCaptions.isEmpty())
+        return null;
+
+      for (String caption : uriCaptions) {
+        uri    = Uri.parse(caption);
+        format = Format.createTextSampleFormat(/* id= */ null, VideoSource.get_caption_mimeType(caption), /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ null);
+
+        captions.add(
+          new SingleSampleMediaSource.Factory(factory).createMediaSource(uri, format, C.TIME_UNSET)
+        );
+      }
+    }
+
+    // normalize that non-null return value must include matches
+    if (captions.isEmpty())
+      captions = null;
+
+    return captions;
   }
 
   private MediaSource buildRawVideoMediaSource(int rawResourceId) {

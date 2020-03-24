@@ -6,11 +6,39 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ExternalStorageUtils {
+
+  private static class CaptionsFileFilter implements FileFilter {
+    private String  video_filename;
+    private Pattern caption_regex;
+
+    public CaptionsFileFilter(String video_filename) {
+      int pos = video_filename.lastIndexOf('.');
+
+      this.video_filename = (pos >= 0)
+        ? video_filename.substring(0, pos + 1)
+        : video_filename + ".";
+
+      this.caption_regex = Pattern.compile("\\.(?:srt|ttml|vtt|webvtt|ssa|ass)$");
+    }
+
+    @Override
+    public boolean accept(File file) {
+      String caption_filename = file.getName();
+
+      if (caption_filename.indexOf(video_filename) != 0)
+        return false;
+
+      Matcher matcher = caption_regex.matcher(caption_filename.toLowerCase());
+      return matcher.find();
+    }
+  }
 
   private static Pattern file_uri_regex = Pattern.compile("^(?:/|file:/)");
 
@@ -52,6 +80,44 @@ public class ExternalStorageUtils {
       basedir = "";
 
     return basedir + "/" + path;
+  }
+
+  public static ArrayList<String> findMatchingSubtitles(String uriVideo) {
+    File file = getFile(uriVideo);
+    if (file == null)
+      return null;
+    if (!file.isFile())
+      return null;
+
+    String video_filename = file.getName();
+
+    file = file.getParentFile();
+    if (file == null)
+      return null;
+    if (!file.isDirectory())
+      return null;
+
+    try {
+      FileFilter filter = new CaptionsFileFilter(video_filename);
+      File[]   captions = file.listFiles(filter);
+
+      if (captions == null)
+        return null;
+      if (captions.length == 0)
+        return null;
+
+      ArrayList<String> uriCaptions = new ArrayList<String>();
+      String uri;
+
+      for (File caption : captions) {
+        uri = caption.toURI().toString();
+        uriCaptions.add(uri);
+      }
+      return uriCaptions;
+    }
+    catch(Exception e) {
+      return null;
+    }
   }
 
   public static boolean has_permission(Activity activity) {
