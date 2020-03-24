@@ -185,6 +185,19 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
+                <!-- DIRECTORY INDEX playlist -->
+
+                <data android:scheme=""/>
+                <data android:scheme="file"/>
+                <data android:mimeType="application/octet-stream"/> <!-- Total Commander: "Open with.." -->
+                <data android:mimeType="resource/folder"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data android:scheme=""/>
                 <data android:scheme="file"/>
                 <data android:host="*"/>
@@ -192,6 +205,16 @@
                 <!-- DIRECTORY INDEX playlist -->
 
                 <data android:pathPattern=".*/"/>
+            </intent-filter>
+            <intent-filter android:label="Play with ExoAirPlayer">
+                <action android:name="android.intent.action.SEND"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <!-- DIRECTORY INDEX playlist -->
+
+                <data android:mimeType="application/octet-stream"/> <!-- Total Commander: "Send to.." -->
+                <data android:mimeType="resource/folder"/>
             </intent-filter>
         </activity>
 
