@@ -16,12 +16,15 @@ public class NetworkUtils {
 
   public synchronized static Inet4Address getLocalIpAddress() {
     try {
-      for (Enumeration<NetworkInterface> en = NetworkInterface
-          .getNetworkInterfaces(); en.hasMoreElements();) {
+      for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
         NetworkInterface intf = en.nextElement();
-        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
-            .hasMoreElements();) {
+
+        if (!intf.supportsMulticast())
+          continue;
+
+        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
           InetAddress inetAddress = enumIpAddr.nextElement();
+
           if (!inetAddress.isLoopbackAddress()) {
             if (inetAddress instanceof Inet4Address) {
               return ((Inet4Address) inetAddress);
