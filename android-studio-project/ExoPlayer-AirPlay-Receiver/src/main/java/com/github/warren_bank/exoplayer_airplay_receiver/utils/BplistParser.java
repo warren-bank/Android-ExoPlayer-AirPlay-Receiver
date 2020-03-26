@@ -57,7 +57,7 @@ public class BplistParser {
       }
     }
     catch (Exception e) {
-      e.printStackTrace();
+      Log.e(tag, "problem in airplay parser", e);
       return null;
     }
 

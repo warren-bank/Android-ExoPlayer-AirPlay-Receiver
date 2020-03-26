@@ -72,10 +72,10 @@ public class RequestListenerThread extends Thread {
       initHttpServer();
     }
     catch (IOException e) {
-      e.printStackTrace();
+      Log.e(tag, "problem initializing HTTP server", e);
     }
     catch (InterruptedException e) {
-      e.printStackTrace();
+      Log.e(tag, "problem initializing HTTP server", e);
     }
     ExecutorService exec = Executors.newCachedThreadPool();
 
@@ -95,7 +95,7 @@ public class RequestListenerThread extends Thread {
         exec.execute(thread);
       }
       catch (IOException e) {
-        e.printStackTrace();
+        Log.e(tag, "problem accepting inbound HTTP connection", e);
         break;
       }
     }
@@ -112,7 +112,7 @@ public class RequestListenerThread extends Thread {
       this.serversocket = null;
     }
     catch (Exception e) {
-      e.printStackTrace();
+      Log.e(tag, "problem shutting down HTTP server", e);
     }
   }
 
@@ -134,7 +134,7 @@ public class RequestListenerThread extends Thread {
       Log.d(tag, "airplay local mac = " + localMac);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      Log.e(tag, "problem determining MAC address of network interface", e);
     }
 
     serversocket = new ServerSocket(Constant.AIRPLAY_PORT, 2, localAddress);
@@ -224,10 +224,10 @@ public class RequestListenerThread extends Thread {
         }
       }
       catch (IOException e) {
-        e.printStackTrace();
+        Log.e(tag, "problem handling HTTP request", e);
       }
       catch (HttpException e) {
-        e.printStackTrace();
+        Log.e(tag, "problem handling HTTP request", e);
       }
       finally {
         try {
@@ -235,7 +235,7 @@ public class RequestListenerThread extends Thread {
           this.conn.shutdown();
         }
         catch (IOException e) {
-          e.printStackTrace();
+          Log.e(tag, "problem closing HTTP connection", e);
         }
       }
     }
@@ -251,7 +251,7 @@ public class RequestListenerThread extends Thread {
           osw.flush();
         }
         catch (IOException e) {
-          e.printStackTrace();
+          Log.e(tag, "problem sending message over reverse HTTP connection", e);
         }
       }
     }

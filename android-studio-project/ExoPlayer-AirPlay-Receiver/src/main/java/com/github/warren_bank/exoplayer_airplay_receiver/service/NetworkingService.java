@@ -98,7 +98,8 @@ public class NetworkingService extends Service {
           registerAirplay();
         }
         catch (IOException e) {
-          e.printStackTrace();
+          Log.e(tag, "problem initializing HTTP server and Bonjour services", e);
+
           Message msg = Message.obtain();
           msg.what = Constant.Register.FAIL;
           MainApp.broadcastMessage(msg);
@@ -147,7 +148,7 @@ public class NetworkingService extends Service {
           unregisterAirplay();
         }
         catch (Exception e) {
-          e.printStackTrace();
+          Log.e(tag, "problem shutting down HTTP server and Bonjour services", e);
         }
         finally {
           if (useForce) stopSelf();
@@ -200,7 +201,7 @@ public class NetworkingService extends Service {
       Thread.sleep(2 * 1000);
     }
     catch (InterruptedException e) {
-      e.printStackTrace();
+      Log.e(tag, "problem putting thread to sleep to allow HTTP server time to initialize prior to registering Bonjour services", e);
     }
 
     if (localAddress == null)
@@ -219,7 +220,7 @@ public class NetworkingService extends Service {
       preMac = str_Array[1].toUpperCase(Locale.ENGLISH);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      Log.e(tag, "problem determining MAC address of network interface", e);
       return false;
     }
     Log.d(tag, "airplay registered. Airplay Mac address：" + strMac + "; preMac = " + preMac);
@@ -241,7 +242,7 @@ public class NetworkingService extends Service {
         jmdnsAirplay.close();
       }
       catch (IOException e) {
-        e.printStackTrace();
+        Log.e(tag, "problem shutting down Bonjour service (AirPlay)", e);
       }
       finally {
         jmdnsAirplay = null;
@@ -254,7 +255,7 @@ public class NetworkingService extends Service {
         jmdnsRaop.close();
       }
       catch (IOException e) {
-        e.printStackTrace();
+        Log.e(tag, "problem shutting down Bonjour service (RAOP)", e);
       }
       finally {
         jmdnsRaop = null;
