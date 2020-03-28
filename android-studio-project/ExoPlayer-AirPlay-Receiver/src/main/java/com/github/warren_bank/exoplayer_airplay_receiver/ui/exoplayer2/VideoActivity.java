@@ -251,7 +251,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
       requiresExternalStoragePermission = true;
     }
     if (ExternalStorageUtils.isFileUri(caption)) {
-      uri = ExternalStorageUtils.normalizeFileUri(caption);
+      caption = ExternalStorageUtils.normalizeFileUri(caption);
       requiresExternalStoragePermission = true;
     }
     if (requiresExternalStoragePermission && !ExternalStorageUtils.has_permission(this)) {
