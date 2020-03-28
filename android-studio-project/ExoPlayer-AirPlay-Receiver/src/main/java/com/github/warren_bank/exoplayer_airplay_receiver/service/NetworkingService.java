@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
@@ -71,11 +70,10 @@ public class NetworkingService extends Service {
 
     WakeLockMgr.acquire(/* context= */ NetworkingService.this);
 
-    // run MyMessageHandler in a separate Thread to avoid NetworkOnMainThreadException
-    HandlerThread handlerThread = new HandlerThread("MyMessageHandlerThread");
-    handlerThread.start();
-
-    handler = new MyMessageHandler(handlerThread.getLooper(), NetworkingService.this);
+    // Handler runs in UI Thread.
+    // SimpleExoPlayer requires that all interaction occurs in the same Thread it was initialized.
+    //   note: all network requests will need to occur in a separate Thread.
+    handler = new MyMessageHandler(getMainLooper(), NetworkingService.this);
     MainApp.registerHandler(NetworkingService.class.getName(), handler);
 
     Toast toast = Toast.makeText(getApplicationContext(), getText(R.string.toast_registration_started), Toast.LENGTH_SHORT);

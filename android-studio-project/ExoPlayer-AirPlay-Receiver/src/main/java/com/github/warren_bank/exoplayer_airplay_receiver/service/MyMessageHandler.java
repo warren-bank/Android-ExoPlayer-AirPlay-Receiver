@@ -16,6 +16,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
@@ -31,8 +32,12 @@ import java.util.HashMap;
 final class MyMessageHandler extends Handler {
   private static final String tag = NetworkingService.class.getSimpleName();
 
-  private WeakReference<NetworkingService> weakReference;
+  private Looper                                        mainLooper;
+  private WeakReference<NetworkingService>              weakReference;
 
+  private ArrayList<Message>                            externalStorageMessages;
+
+  private HandlerThread                                 networkingHandlerThread;
   private HttpM3uPlaylistExtractor                      httpM3uExtractor;
   private HttpHtmlPlaylistExtractor                     httpHtmlExtractor;
   private FileM3uPlaylistExtractor                      fileM3uExtractor;
@@ -42,7 +47,13 @@ final class MyMessageHandler extends Handler {
   public MyMessageHandler(Looper looper, NetworkingService service) {
     super(looper);
 
+    mainLooper    = looper;
     weakReference = new WeakReference<NetworkingService>(service);
+
+    externalStorageMessages = new ArrayList<Message>();
+
+    networkingHandlerThread = new HandlerThread("MyNetworkingThread");
+    networkingHandlerThread.start();
 
     httpM3uExtractor            = new HttpM3uPlaylistExtractor();
     httpHtmlExtractor           = new HttpHtmlPlaylistExtractor();
@@ -137,53 +148,16 @@ final class MyMessageHandler extends Handler {
         if (ExternalStorageUtils.isFileUri(textUrl))
           textUrl = ExternalStorageUtils.normalizeFileUri(textUrl);
 
-        ArrayList<String> matches = null;
-
-        if (matches == null)
-          matches = httpM3uExtractor.expandPlaylist(playUrl); //8-bit ascii
-
-        if (matches == null)
-          matches = httpHtmlExtractor.expandPlaylist(playUrl, (String) null); //utf8
-
-        if (matches == null)
-          matches = fileM3uExtractor.expandPlaylist(playUrl); //utf8
-
-        if (matches == null)
-          matches = directoryExtractor.expandPlaylist(playUrl);
-
-        if (matches == null)
-          matches = recursiveDirectoryExtractor.expandPlaylist(playUrl);
-
-        if (matches == null) {
-          playerManager.addItem(
-            /* uri=           */          playUrl,
-            /* caption=       */          textUrl,
-            /* referer=       */          referUrl,
-            /* startPosition= */          Float.valueOf(startPos),
-            /* remove_previous_items= */  (msg.what == Constant.Msg.Msg_Video_Play)
-          );
-        }
-        else {
-          Log.d(tag, "count of URLs in playlist: " + matches.size());
-
-          String[] uris;
-          uris = new String[matches.size()];
-          uris = matches.toArray(uris);
-
-          playerManager.addItems(
-            uris,
-            /* caption=       */          textUrl,
-            /* referer=       */          referUrl,
-            /* startPosition= */          Float.valueOf(startPos),
-            /* remove_previous_items= */  (msg.what == Constant.Msg.Msg_Video_Play)
-          );
-
-          playUrl = uris[0];
-        }
-
-        if ((msg.what == Constant.Msg.Msg_Video_Play) && MediaTypeUtils.isVideoFileUrl(playUrl)) {
-          startVideoPlayerActivity(service);
-        }
+        // offload to a worker Thread
+        extractPlaylists(
+          playerManager,
+          service,
+          /* uri=           */          playUrl,
+          /* caption=       */          textUrl,
+          /* referer=       */          referUrl,
+          /* startPosition= */          Float.valueOf(startPos),
+          /* remove_previous_items= */  (msg.what == Constant.Msg.Msg_Video_Play)
+        );
         break;
       }
 
@@ -282,10 +256,91 @@ final class MyMessageHandler extends Handler {
   }
 
   // ===========================================================================
-  // External Storage Permissions
+  // Network Requests (in separate Thread to avoid NetworkOnMainThreadException)
   // ===========================================================================
 
-  private final ArrayList<Message> externalStorageMessages = new ArrayList<Message>();
+  private void extractPlaylists(
+    PlayerManager playerManager,
+    NetworkingService service,
+    String uri,
+    String caption,
+    String referer,
+    float startPosition,
+    boolean remove_previous_items
+  ) {
+    final Handler  handler  = new Handler(networkingHandlerThread.getLooper());
+    final Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        ArrayList<String> matches = null;
+
+        if (matches == null)
+          matches = httpM3uExtractor.expandPlaylist(uri); //8-bit ascii
+
+        if (matches == null)
+          matches = httpHtmlExtractor.expandPlaylist(uri, (String) null); //utf8
+
+        if (matches == null)
+          matches = fileM3uExtractor.expandPlaylist(uri); //utf8
+
+        if (matches == null)
+          matches = directoryExtractor.expandPlaylist(uri);
+
+        if (matches == null)
+          matches = recursiveDirectoryExtractor.expandPlaylist(uri);
+
+        addItems(playerManager, service, matches, uri, caption, referer, startPosition, remove_previous_items);
+      }
+    };
+
+    handler.post(runnable);
+  }
+
+  private void addItems(
+    PlayerManager playerManager,
+    NetworkingService service,
+    ArrayList<String> matches,
+    String uri,
+    String caption,
+    String referer,
+    float startPosition,
+    boolean remove_previous_items
+  ) {
+    final Handler  handler  = new Handler(mainLooper);
+    final Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        String playUrl;
+
+        if (matches == null) {
+          playerManager.addItem(uri, caption, referer, startPosition, remove_previous_items);
+
+          playUrl = uri;
+        }
+        else {
+          Log.d(tag, "count of URLs in playlist: " + matches.size());
+
+          String[] uris;
+          uris = new String[matches.size()];
+          uris = matches.toArray(uris);
+
+          playerManager.addItems(uris, caption, referer, startPosition, remove_previous_items);
+
+          playUrl = uris[0];
+        }
+
+        if (remove_previous_items && MediaTypeUtils.isVideoFileUrl(playUrl)) {
+          startVideoPlayerActivity(service);
+        }
+      }
+    };
+
+    handler.post(runnable);
+  }
+
+  // ===========================================================================
+  // External Storage Permissions
+  // ===========================================================================
 
   private boolean requiresExternalStoragePermission(NetworkingService service, Message msg, String playUrl, String textUrl) {
     boolean requiresPermission = ExternalStorageUtils.isFileUri(playUrl) || ExternalStorageUtils.isFileUri(textUrl);
@@ -303,7 +358,7 @@ final class MyMessageHandler extends Handler {
   private void handleExternalStorageMessages() {
     Log.d(tag, "READ_EXTERNAL_STORAGE permission granted. Count of Messages to process: " + externalStorageMessages.size());
 
-    final Handler handler   = new Handler();
+    final Handler  handler  = new Handler(mainLooper);
     final Runnable runnable = new Runnable() {
       @Override
       public void run() {
