@@ -102,11 +102,7 @@ public class NetworkingService extends Service {
       }
     }.start();
 
-    new Thread() {
-      public void run() {
-        playbackStatusMonitor.start();
-      }
-    }.start();
+    playbackStatusMonitor.start();
   }
 
   @Override

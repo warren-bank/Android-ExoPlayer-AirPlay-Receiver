@@ -4,7 +4,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManage
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.PlaybackStatusMonitor;
 
 import android.os.Handler;
-import android.os.Looper;
 
 public final class MyPlaybackStatusMonitor extends PlaybackStatusMonitor {
   private static final int intervalMs = 10 * 1000; // update static data fields every 10 seconds
@@ -22,15 +21,11 @@ public final class MyPlaybackStatusMonitor extends PlaybackStatusMonitor {
   public void start() {
     isStopped = false;
 
-    Looper.prepare();
-
     timerTask = new Runnable() {
       @Override
       public void run() {
-        if (isStopped) {
-          Looper.myLooper().quit();
+        if (isStopped)
           return;
-        }
 
         playerManager    = NetworkingService.getPlayerManager();
         playbackFinished = ((playerManager == null) || (playerManager.isPlayerReady() == false));
@@ -51,8 +46,6 @@ public final class MyPlaybackStatusMonitor extends PlaybackStatusMonitor {
 
     timer = new Handler();
     timer.postDelayed(timerTask, intervalMs);
-
-    Looper.loop();
   }
 
   @Override
