@@ -7,7 +7,10 @@ import org.apache.http.impl.DefaultHttpRequestFactory;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.message.BasicHttpRequest;
 
+import android.util.Log;
+
 public class MyHttpRequestFactory extends DefaultHttpRequestFactory {
+  private static final String tag                          = MyHttpRequestFactory.class.getSimpleName();
   private static final String[] RFC2616_COMMON_METHODS     = {"GET"};
   private static final String[] RFC2616_ENTITY_ENC_METHODS = {"POST", "PUT"};
   private static final String[] RFC2616_SPECIAL_METHODS    = {"HEAD", "OPTIONS", "DELETE", "TRACE", "CONNECT"};
@@ -31,21 +34,21 @@ public class MyHttpRequestFactory extends DefaultHttpRequestFactory {
       throw new IllegalArgumentException("Request line may not be null");
     }
     String method = requestline.getMethod();
-    System.out.println("in MyHTTPRequestFactory requestMethod=" + method);
+    Log.d(tag, "requestMethod = " + method);
     if (isOneOf(RFC2616_COMMON_METHODS, method)) {
-      //System.out.println("RFC2616_COMMON_METHODS,in MyHTTPRequestFactory create new BasicHttpRequest(requestline)");
+      Log.d(tag, "RFC2616_COMMON_METHODS: create new BasicHttpRequest(requestline)");
       return new BasicHttpRequest(requestline);
     }
     else if (isOneOf(RFC2616_ENTITY_ENC_METHODS, method)) {
-      //System.out.println("RFC2616_ENTITY_ENC_METHODS,in MyHTTPRequestFactory create new BasicHttpEntityEnclosingRequest(requestline)");
+      Log.d(tag, "RFC2616_ENTITY_ENC_METHODS: create new BasicHttpEntityEnclosingRequest(requestline)");
       return new BasicHttpEntityEnclosingRequest(requestline);
     }
     else if (isOneOf(RFC2616_SPECIAL_METHODS, method)) {
-      //System.out.println("RFC2616_SPECIAL_METHODS,in MyHTTPRequestFactory create new BasicHttpRequest(requestline)");
+      Log.d(tag, "RFC2616_SPECIAL_METHODS: create new BasicHttpRequest(requestline)");
       return new BasicHttpRequest(requestline);
     }
     else if ("200".equalsIgnoreCase(method)) {
-      //System.out.println("200 Revese HTTP, MyHTTPRequestFactory create new BasicHttpEntityEnclosingRequest(requestline)");
+      Log.d(tag, "200 Reverse HTTP: create new BasicHttpEntityEnclosingRequest(requestline)");
       return new BasicHttpRequest(requestline);
     }
     else {
