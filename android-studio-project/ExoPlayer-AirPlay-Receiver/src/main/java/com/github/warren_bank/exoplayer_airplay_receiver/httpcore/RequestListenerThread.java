@@ -1,18 +1,10 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.BplistParser;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -44,12 +36,19 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
-import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
-import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.BplistParser;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RequestListenerThread extends Thread {
   private static final String tag = RequestListenerThread.class.getSimpleName();
@@ -436,9 +435,9 @@ public class RequestListenerThread extends Thread {
           long duration = 0;
           long curPos = 0;
 
-          if (!VideoPlayerActivity.isVideoActivityFinished()) {
-            duration = VideoPlayerActivity.getDuration();
-            curPos = VideoPlayerActivity.getCurrentPosition();
+          if (!PlaybackStatusMonitor.isPlaybackFinished()) {
+            duration = PlaybackStatusMonitor.getDuration();
+            curPos = PlaybackStatusMonitor.getCurrentPosition();
             duration = duration < 0 ? 0 : duration;
             curPos = curPos < 0 ? 0 : curPos;
             Log.d(tag, "airplay get method scrub: duration = " + duration + "; position = " + curPos);
@@ -493,7 +492,7 @@ public class RequestListenerThread extends Thread {
 
         String status = Constant.Status.Status_stop;
 
-        if (VideoPlayerActivity.isVideoActivityFinished()) {
+        if (PlaybackStatusMonitor.isPlaybackFinished()) {
           Log.d(tag, " airplay video activity is finished");
           status = Constant.Status.Status_stop;
 
@@ -501,8 +500,8 @@ public class RequestListenerThread extends Thread {
           httpContext.setAttribute(Constant.ReverseMsg, Constant.getStopEventMsg(1, sessionId, status));
         }
         else {
-          curPos = VideoPlayerActivity.getCurrentPosition();
-          duration = VideoPlayerActivity.getDuration();
+          curPos = PlaybackStatusMonitor.getCurrentPosition();
+          duration = PlaybackStatusMonitor.getDuration();
           cacheDuration = curPos;
           if (curPos == -1 || duration == -1 || cacheDuration == -1) {
             status = Constant.Status.Status_load;
@@ -562,9 +561,20 @@ public class RequestListenerThread extends Thread {
         }
 
         if (playUrl.isEmpty()) {
-          Log.d(tag, "airplay video URL missing");
+          if (target.equals(Constant.Target.PLAY)) {
+            // treat an empty PLAY request as equivalent to Constant.Target.PLAYER_SHOW
 
-          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Show_Player;
+            MainApp.broadcastMessage(msg);
+
+            setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+          }
+          else {
+            Log.d(tag, "airplay video URL missing");
+
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          }
         }
         else {
           Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; captions = " + textUrl + "; referer = " + referUrl);
@@ -656,6 +666,13 @@ public class RequestListenerThread extends Thread {
             return;
           }
         }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (target.equals(Constant.Target.PLAYER_SHOW)) {
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Show_Player;
+        MainApp.broadcastMessage(msg);
+
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
 

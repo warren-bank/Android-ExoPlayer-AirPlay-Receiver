@@ -27,7 +27,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.ImageActivity"
+            android:name=".ui.ImageViewerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTask" />
@@ -37,6 +37,12 @@
             android:theme="@style/VideoPlayerTheme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTask" />
+
+        <activity
+            android:name=".ui.RuntimePermissionsRequestActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:launchMode="singleTop" />
 
         <activity
             android:name=".ui.StartNetworkingServiceActivity"

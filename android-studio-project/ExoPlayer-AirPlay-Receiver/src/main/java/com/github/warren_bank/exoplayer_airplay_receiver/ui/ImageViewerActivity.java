@@ -19,8 +19,8 @@ import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
 
-public class ImageActivity extends Activity {
-  private static final String tag = ImageActivity.class.getSimpleName();
+public class ImageViewerActivity extends Activity {
+  private static final String tag = ImageViewerActivity.class.getSimpleName();
   private ImageView iv;
   private ImageHandler handler;
 
@@ -32,8 +32,8 @@ public class ImageActivity extends Activity {
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.activity_image);
 
-    handler = new ImageHandler(ImageActivity.this);
-    MainApp.registerHandler(ImageActivity.class.getName(), handler);
+    handler = new ImageHandler(ImageViewerActivity.this);
+    MainApp.registerHandler(ImageViewerActivity.class.getName(), handler);
 
     initView();
   }
@@ -76,27 +76,29 @@ public class ImageActivity extends Activity {
     }
   }
 
+  @Override
   public void onBackPressed() {
     super.onBackPressed();
   }
 
+  @Override
   public void onDestroy() {
     super.onDestroy();
-    Log.d(tag, "airplay ImageActivity onDestroy");
+    Log.d(tag, "airplay ImageViewerActivity onDestroy");
     RequestListenerThread.photoCacheMaps.clear();
-    MainApp.unregisterHandler(ImageActivity.class.getName());
+    MainApp.unregisterHandler(ImageViewerActivity.class.getName());
   }
 
   private static class ImageHandler extends Handler {
-    private WeakReference<ImageActivity> imageActivityWeakReference;
+    private WeakReference<ImageViewerActivity> imageViewerActivityWeakReference;
 
-    public ImageHandler(ImageActivity activity) {
-      imageActivityWeakReference = new WeakReference<ImageActivity>(activity);
+    public ImageHandler(ImageViewerActivity activity) {
+      imageViewerActivityWeakReference = new WeakReference<ImageViewerActivity>(activity);
     }
 
     @Override
     public void handleMessage(Message msg) {
-      final ImageActivity activity = this.imageActivityWeakReference.get();
+      final ImageViewerActivity activity = this.imageViewerActivityWeakReference.get();
 
       if (activity == null)
         return;

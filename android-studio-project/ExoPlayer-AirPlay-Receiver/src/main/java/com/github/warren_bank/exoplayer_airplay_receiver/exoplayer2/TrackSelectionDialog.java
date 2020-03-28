@@ -1,4 +1,4 @@
-package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
+package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 

@@ -1,9 +1,9 @@
-package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
+package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-final class VideoSource {
+public final class VideoSource {
 
   public final String uri;
   public final String caption;
@@ -32,8 +32,8 @@ final class VideoSource {
   ) {
     this.uri              = uri;
     this.caption          = caption;
-    this.uri_mimeType     = VideoSource.get_video_mimeType(uri);
-    this.caption_mimeType = VideoSource.get_caption_mimeType(caption);
+    this.uri_mimeType     = get_video_mimeType(uri);
+    this.caption_mimeType = get_caption_mimeType(caption);
     this.referer          = referer;
     this.startPosition    = startPosition;
   }
@@ -48,20 +48,38 @@ final class VideoSource {
   // Static helpers.
 
   // ===========================================================================
+  // generics
+
+  private static String get_fileExtension(String uri, Pattern mediatype_regex) {
+    if (uri == null) return null;
+
+    Matcher matcher = mediatype_regex.matcher(uri.toLowerCase());
+    String file_ext = matcher.find()
+      ? matcher.group(1)
+      : null;
+
+    return file_ext;
+  }
+
+  // ===========================================================================
   // video mime-type
 
   public static Pattern video_regex = Pattern.compile("\\.(mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism(?:[vc]|/manifest)?)(?:[\\?#]|$)");
 
-  public static String get_video_mimeType(String uri) {
-    if (uri == null) return null;
+  public static String get_video_fileExtension(String uri) {
+    return get_fileExtension(uri, video_regex);
+  }
 
-    Matcher matcher = VideoSource.video_regex.matcher(uri.toLowerCase());
-    String file_ext = "";
+  public static boolean isVideoFileUrl(String uri) {
+    String file_ext = get_video_fileExtension(uri);
+    return (file_ext != null);
+  }
+
+  public static String get_video_mimeType(String uri) {
+    String file_ext = get_video_fileExtension(uri);
     String mimeType = "";
 
-    if (matcher.find()) {
-      file_ext = matcher.group(1);
-
+    if (file_ext != null) {
       switch (file_ext) {
         case "mp4":
         case "mp4v":
@@ -122,16 +140,20 @@ final class VideoSource {
 
   public static Pattern caption_regex = Pattern.compile("\\.(srt|ttml|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
 
-  public static String get_caption_mimeType(String caption) {
-    if (caption == null) return null;
+  public static String get_caption_fileExtension(String uri) {
+    return get_fileExtension(uri, caption_regex);
+  }
 
-    Matcher matcher = VideoSource.caption_regex.matcher(caption.toLowerCase());
-    String file_ext = "";
-    String mimeType = null;
+  public static boolean isCaptionFileUrl(String uri) {
+    String file_ext = get_caption_fileExtension(uri);
+    return (file_ext != null);
+  }
 
-    if (matcher.find()) {
-      file_ext = matcher.group(1);
+  public static String get_caption_mimeType(String uri) {
+    String file_ext = get_caption_fileExtension(uri);
+    String mimeType = "";
 
+    if (file_ext != null) {
       switch (file_ext) {
         case "srt":
           mimeType = "application/x-subrip";
@@ -158,18 +180,12 @@ final class VideoSource {
   public static Pattern audio_regex = Pattern.compile("\\.(mp3|m4a|ogg|wav|flac)(?:[\\?#]|$)");
 
   public static String get_audio_fileExtension(String uri) {
-    if (uri == null) return null;
-
-    Matcher matcher = VideoSource.audio_regex.matcher(uri.toLowerCase());
-    String file_ext = matcher.find()
-      ? matcher.group(1)
-      : null;
-
-    return file_ext;
+    return get_fileExtension(uri, audio_regex);
   }
 
   public static boolean isAudioFileUrl(String uri) {
-    return (get_audio_fileExtension(uri) != null);
+    String file_ext = get_audio_fileExtension(uri);
+    return (file_ext != null);
   }
 
   // ===========================================================================

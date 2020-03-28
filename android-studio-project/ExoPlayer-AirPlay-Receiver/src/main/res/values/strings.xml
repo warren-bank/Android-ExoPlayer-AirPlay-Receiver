@@ -1,6 +1,11 @@
 <resources>
   <string name="app_name">ExoAirPlayer</string>
 
+  <!-- Toast messages -->
+  <string name="toast_registration_started">Registering AirPlay service...</string>
+  <string name="toast_registration_success">AirPlay registration success</string>
+  <string name="toast_registration_failure">AirPlay registration failed</string>
+
   <!-- HTTP request header -->
   <string name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</string>
 

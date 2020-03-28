@@ -1,0 +1,3 @@
+<resources>
+  <integer name="PERMISSION_REQUEST_CODE_READ_EXTERNAL_STORAGE">1</integer>
+</resources>

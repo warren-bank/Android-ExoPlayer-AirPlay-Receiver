@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2.customizations;
+package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
 
 import android.os.Handler;
 import android.os.Handler.Callback;

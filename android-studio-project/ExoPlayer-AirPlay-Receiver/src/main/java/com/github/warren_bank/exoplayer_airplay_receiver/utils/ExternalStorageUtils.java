@@ -1,7 +1,10 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
+import com.github.warren_bank.exoplayer_airplay_receiver.R;
+
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
@@ -45,7 +48,7 @@ public class ExternalStorageUtils {
   public static boolean isFileUri(String uri) {
     if (uri == null) return false;
 
-    Matcher matcher = ExternalStorageUtils.file_uri_regex.matcher(uri.toLowerCase());
+    Matcher matcher = file_uri_regex.matcher(uri.toLowerCase());
     return matcher.find();
   }
 
@@ -120,27 +123,29 @@ public class ExternalStorageUtils {
     }
   }
 
-  public static boolean has_permission(Activity activity) {
+  public static boolean has_permission(Context context) {
     if (Build.VERSION.SDK_INT < 23) {
       return true;
     } else {
       String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
-      return (activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+      return (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
     }
   }
 
-  private static final int PERMISSIONS_REQUEST_CODE = 0;
+  private static int get_request_code(Context context) {
+    return context.getResources().getInteger(R.integer.PERMISSION_REQUEST_CODE_READ_EXTERNAL_STORAGE);
+  }
 
   public static void request_permission(Activity activity) {
     String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
-    activity.requestPermissions(new String[]{permission}, ExternalStorageUtils.PERMISSIONS_REQUEST_CODE);
+    activity.requestPermissions(new String[]{permission}, get_request_code(activity));
   }
 
-  public static boolean is_permission_granted(int requestCode, int[] grantResults) {
+  public static boolean is_permission_granted(Activity activity, int requestCode, int[] grantResults) {
     return (
-         (requestCode == ExternalStorageUtils.PERMISSIONS_REQUEST_CODE)
+         (requestCode == get_request_code(activity))
       && (grantResults.length == 1)
       && (grantResults[0] == PackageManager.PERMISSION_GRANTED)
     );

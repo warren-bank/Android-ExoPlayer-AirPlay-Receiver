@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package com.github.warren_bank.exoplayer_airplay_receiver.ui.exoplayer2;
+package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 
