@@ -92,6 +92,7 @@ public final class PlayerManager implements EventListener {
     DefaultLoadControl loadControl = getLoadControl(context);
     this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, (RenderersFactory) renderersFactory, trackSelector, loadControl);
     this.exoPlayer.addListener(this);
+    this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 
     ExoPlayerEventLogger exoLogger = new ExoPlayerEventLogger(trackSelector);
     this.exoPlayer.addListener(exoLogger);
