@@ -107,9 +107,9 @@ public class MyPlayerNotificationManager implements SetPlayer {
     mediaSessionConnector.setPlayer(player);
   }
 
-  // ==========
+  // ===========================================================================
   // public API
-  // ==========
+  // ===========================================================================
 
   public PlayerNotificationManager getPlayerNotificationManager() {
     return playerNotificationManager;
@@ -120,9 +120,9 @@ public class MyPlayerNotificationManager implements SetPlayer {
     mediaSession.release();
   }
 
-  // ========
+  // ===========================================================================
   // internal
-  // ========
+  // ===========================================================================
 
   private URI getMediaItemUri(int currentItemIndex) {
     VideoSource sample = playerManager.getItem(currentItemIndex);
@@ -137,12 +137,10 @@ public class MyPlayerNotificationManager implements SetPlayer {
     }
   }
 
-  private String getMediaItemTitle(URI uri, boolean isAudio) {
-    if (uri == null) return null;
+  // ===========================================================================
 
-    return isAudio
-      ? "audio/" + VideoSource.get_audio_fileExtension(uri.toString())
-      : VideoSource.get_video_mimeType(uri.toString());
+  private String getMediaItemTitle(int currentItemIndex) {
+    return getMediaItemTitle(getMediaItemUri(currentItemIndex));
   }
 
   private String getMediaItemTitle(URI uri) {
@@ -152,18 +150,101 @@ public class MyPlayerNotificationManager implements SetPlayer {
     return getMediaItemTitle(uri, isAudio);
   }
 
-  private String getMediaItemTitle(int currentItemIndex) {
-    return getMediaItemTitle(getMediaItemUri(currentItemIndex));
+  private String getMediaItemTitle(URI uri, boolean isAudio) {
+    if (uri == null) return null;
+
+    return isAudio
+      ? "audio/" + VideoSource.get_audio_fileExtension(uri.toString())
+      : VideoSource.get_video_mimeType(uri.toString());
   }
 
-  private String getMediaItemDescription(URI uri) {
-    return (uri == null)
-      ? null
-      : uri.getHost();
-  }
+  // ===========================================================================
 
   private String getMediaItemDescription(int currentItemIndex) {
     return getMediaItemDescription(getMediaItemUri(currentItemIndex));
+  }
+
+  private String getMediaItemDescription(URI uri) {
+    if (uri == null) return null;
+
+    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
+    return getMediaItemDescription(uri, isAudio);
+  }
+
+  private String getMediaItemDescription(URI uri, boolean isAudio) {
+    if (uri == null) return null;
+
+    boolean isStream;
+    String video_mimeType;
+
+    if (isAudio) {
+      isStream = false;
+    }
+    else {
+      video_mimeType = VideoSource.get_video_mimeType(uri.toString());
+
+      switch (video_mimeType) {
+        case "application/x-mpegURL" :
+        case "application/dash+xml" :
+        case "application/vnd.ms-sstr+xml" :
+          isStream = true;
+          break;
+        default:
+          isStream = false;
+          break;
+      }
+    }
+
+    return isStream
+      ? uri.getHost()
+      : getMediaItemFilename(uri);
+  }
+
+  private String getMediaItemFilename(URI uri) {
+    return (uri == null)
+      ? null
+      : getMediaItemFilename(uri.getPath());
+  }
+
+  // ===================================
+  // examples:
+  // ===================================
+  // * in  = /path/to/directory/file
+  //   out = /directory/file
+  // * in  = /directory/file
+  //   out = /directory/file
+  // * in  = /file
+  //   out = /file
+  // * in  = file
+  //   out = file
+  // ===================================
+  private String getMediaItemFilename(String path) {
+    if (path == null) return null;
+
+    int index_filename, index_dirname;
+
+    index_filename = path.lastIndexOf('/');
+    if (index_filename == -1)
+      return path;
+
+    index_dirname = path.lastIndexOf('/', (index_filename - 1));
+    if (index_dirname == -1)
+      return path;
+
+    return path.substring(index_dirname);
+  }
+
+  // ===========================================================================
+
+  private Bitmap getMediaItemBitmap(int currentItemIndex) {
+    return getMediaItemBitmap(getMediaItemUri(currentItemIndex));
+  }
+
+  private Bitmap getMediaItemBitmap(URI uri) {
+    if (uri == null) return null;
+
+    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
+    return getMediaItemBitmap(uri, isAudio);
   }
 
   private Bitmap getMediaItemBitmap(URI uri, boolean isAudio) {
@@ -176,16 +257,7 @@ public class MyPlayerNotificationManager implements SetPlayer {
     return ResourceUtils.getBitmap(context, id);
   }
 
-  private Bitmap getMediaItemBitmap(URI uri) {
-    if (uri == null) return null;
-
-    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
-    return getMediaItemBitmap(uri, isAudio);
-  }
-
-  private Bitmap getMediaItemBitmap(int currentItemIndex) {
-    return getMediaItemBitmap(getMediaItemUri(currentItemIndex));
-  }
+  // ===========================================================================
 
   private MediaDescriptionCompat getMediaDesc(int currentItemIndex) {
     URI uri = getMediaItemUri(currentItemIndex);
@@ -195,7 +267,7 @@ public class MyPlayerNotificationManager implements SetPlayer {
 
     String mediaId     = uri.toString();                   // URL
     String title       = getMediaItemTitle(uri, isAudio);  // mime-type
-    String description = getMediaItemDescription(uri);     // hostname
+    String description = getMediaItemDescription(uri);     // hostname (stream) or dirname/filename (non-stream)
     Bitmap bitmap      = getMediaItemBitmap(uri, isAudio); // material icon to indicate audio or video
 
     Bundle extras = new Bundle();
