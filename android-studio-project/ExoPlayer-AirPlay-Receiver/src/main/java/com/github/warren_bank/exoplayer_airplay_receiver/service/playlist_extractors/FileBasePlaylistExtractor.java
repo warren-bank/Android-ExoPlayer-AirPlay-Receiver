@@ -50,6 +50,17 @@ public abstract class FileBasePlaylistExtractor {
       preParse(file);
       while ((line = in.readLine()) != null) {
         // `line` is one line of text; readLine() strips the newline character(s)
+        if (line == null) continue;
+
+        // remove utf-8 BOM
+        line = line.replace("\uFEFF", "");
+
+        // trim surrounding whitespace
+        line = line.trim();
+
+        // ignore empty lines
+        if (line.isEmpty()) continue;
+
         parseLine(line, file, matches);
       }
       postParse(file, matches);

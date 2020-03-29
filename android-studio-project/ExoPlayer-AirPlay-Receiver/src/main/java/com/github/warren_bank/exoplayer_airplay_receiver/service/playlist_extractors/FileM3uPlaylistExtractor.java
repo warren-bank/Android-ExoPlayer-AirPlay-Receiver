@@ -20,12 +20,6 @@ public class FileM3uPlaylistExtractor extends FileBasePlaylistExtractor {
   }
 
   protected void parseLine(String line, File context, ArrayList<String> matches) {
-    if (line == null) return;
-    line = line.trim();
-
-    // remove empty lines
-    if (line.isEmpty()) return;
-
     // remove comments
     if (line.charAt(0) == '#') return;
 

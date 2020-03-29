@@ -36,7 +36,8 @@
             android:name=".ui.VideoPlayerActivity"
             android:theme="@style/VideoPlayerTheme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:exported="true" />
 
         <activity
             android:name=".ui.RuntimePermissionsRequestActivity"

@@ -322,7 +322,16 @@ final class MyMessageHandler extends Handler {
 
           String[] uris;
           uris = new String[matches.size()];
-          uris = matches.toArray(uris);
+
+          for (int i=0; i < matches.size(); i++) {
+            playUrl = matches.get(i);
+
+            // normalize references to external storage by converting absolute filesystem paths to file: URIs
+            if (ExternalStorageUtils.isFileUri(playUrl))
+              playUrl = ExternalStorageUtils.normalizeFileUri(playUrl);
+
+            uris[i] = playUrl;
+          }
 
           playerManager.addItems(uris, caption, referer, startPosition, remove_previous_items);
 
