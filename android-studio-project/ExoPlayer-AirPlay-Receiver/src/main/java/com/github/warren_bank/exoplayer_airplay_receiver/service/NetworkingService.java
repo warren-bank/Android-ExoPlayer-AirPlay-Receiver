@@ -6,6 +6,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
 import javax.jmdns.JmDNS;
@@ -15,9 +16,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
@@ -32,7 +31,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class NetworkingService extends Service {
-  private static final int NOTIFICATION_ID = 1;
   private static final String ACTION_STOP  = "STOP";
   public  static final String ACTION_PLAY  = "PLAY";
   private static final String airplayType  = "._airplay._tcp.local";
@@ -41,9 +39,9 @@ public class NetworkingService extends Service {
 
   private static PlayerManager playerManager = null;
 
+  private MyPlayerNotificationManager playerNotificationManager;
   private MyPlaybackStatusMonitor playbackStatusMonitor;
   private String airplayName;
-  private WifiManager.MulticastLock lock;
   private MyMessageHandler handler;
   private RequestListenerThread thread;
   private InetAddress localAddress;
@@ -59,14 +57,10 @@ public class NetworkingService extends Service {
     super.onCreate();
     Log.d(tag, "onCreate");
 
-    playerManager         = PlayerManager.createPlayerManager(/* context= */ NetworkingService.this);
-    playbackStatusMonitor = new MyPlaybackStatusMonitor();
-    airplayName           = Build.MODEL + "@" + getText(R.string.app_name);
-
-    WifiManager wifi      = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-    lock = wifi.createMulticastLock("MyWifiManagerMulticastLock");
-    lock.setReferenceCounted(true);
-    lock.acquire();
+    playerManager             = PlayerManager.createPlayerManager(/* context= */ NetworkingService.this);
+    playerNotificationManager = new MyPlayerNotificationManager(  /* context= */ NetworkingService.this, playerManager);
+    playbackStatusMonitor     = new MyPlaybackStatusMonitor();
+    airplayName               = Build.MODEL + "@" + getString(R.string.app_name);
 
     WakeLockMgr.acquire(/* context= */ NetworkingService.this);
 
@@ -76,7 +70,7 @@ public class NetworkingService extends Service {
     handler = new MyMessageHandler(getMainLooper(), NetworkingService.this);
     MainApp.registerHandler(NetworkingService.class.getName(), handler);
 
-    Toast toast = Toast.makeText(getApplicationContext(), getText(R.string.toast_registration_started), Toast.LENGTH_SHORT);
+    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_registration_started), Toast.LENGTH_SHORT);
     toast.setGravity(Gravity.CENTER, 0, 0);
     toast.show();
     showNotification();
@@ -128,13 +122,10 @@ public class NetworkingService extends Service {
       return;
     }
 
+    playbackStatusMonitor.stop();
+    playerNotificationManager.release();
     playerManager.release();
     playerManager = null;
-
-    playbackStatusMonitor.stop();
-
-    if (lock.isHeld())
-      lock.release();
 
     WakeLockMgr.release();
 
@@ -274,8 +265,13 @@ public class NetworkingService extends Service {
   // -------------------------------------------------------------------------
   // foregrounding..
 
+  private int getNotificationId() {
+    return ResourceUtils.getInteger(NetworkingService.this, R.integer.NOTIFICATION_ID_NETWORKING_SERVICE);
+  }
+
   private void showNotification() {
     Notification notification = getNotification();
+    int NOTIFICATION_ID = getNotificationId();
 
     if (Build.VERSION.SDK_INT >= 5) {
       startForeground(NOTIFICATION_ID, notification);
@@ -292,6 +288,7 @@ public class NetworkingService extends Service {
     }
     else {
       NotificationManager NM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+      int NOTIFICATION_ID    = getNotificationId();
       NM.cancel(NOTIFICATION_ID);
     }
   }

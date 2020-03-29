@@ -134,7 +134,7 @@ public class ExternalStorageUtils {
   }
 
   private static int get_request_code(Context context) {
-    return context.getResources().getInteger(R.integer.PERMISSION_REQUEST_CODE_READ_EXTERNAL_STORAGE);
+    return ResourceUtils.getInteger(context, R.integer.PERMISSION_REQUEST_CODE_READ_EXTERNAL_STORAGE);
   }
 
   public static void request_permission(Activity activity) {

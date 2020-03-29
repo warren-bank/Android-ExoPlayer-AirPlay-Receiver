@@ -42,6 +42,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
 
     playerView = (PlayerView) findViewById(R.id.player_view);
     playerView.setControllerVisibilityListener(this);
+    playerView.setKeepContentOnPlayerReset(false);
     playerView.setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER);
     playerView.setRepeatToggleModes(RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE | RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE | RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL);
     playerView.requestFocus();

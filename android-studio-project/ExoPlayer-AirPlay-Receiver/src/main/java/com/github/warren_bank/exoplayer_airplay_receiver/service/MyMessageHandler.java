@@ -81,14 +81,14 @@ final class MyMessageHandler extends Handler {
       // =======================================================================
 
       case Constant.Register.OK : {
-        Toast toast = Toast.makeText(service.getApplicationContext(), service.getText(R.string.toast_registration_success), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(service.getApplicationContext(), service.getString(R.string.toast_registration_success), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
         break;
       }
 
       case Constant.Register.FAIL : {
-        Toast toast = Toast.makeText(service.getApplicationContext(), service.getText(R.string.toast_registration_failure), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(service.getApplicationContext(), service.getString(R.string.toast_registration_failure), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 

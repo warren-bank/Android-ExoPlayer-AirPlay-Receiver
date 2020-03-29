@@ -61,13 +61,13 @@ public class MultiFieldTimePickerDialogContainer {
 
         mDialog.setButton(
             DialogInterface.BUTTON_POSITIVE,
-            mContext.getText(android.R.string.ok),
+            mContext.getString(android.R.string.ok),
             (DialogInterface.OnClickListener) mDialog
         );
 
         mDialog.setButton(
             DialogInterface.BUTTON_NEGATIVE,
-            mContext.getText(R.string.time_picker_dialog_reset),
+            mContext.getString(R.string.time_picker_dialog_reset),
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

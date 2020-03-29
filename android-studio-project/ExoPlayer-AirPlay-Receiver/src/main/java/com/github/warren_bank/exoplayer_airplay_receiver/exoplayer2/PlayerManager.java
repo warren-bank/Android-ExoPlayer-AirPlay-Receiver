@@ -128,7 +128,7 @@ public final class PlayerManager implements EventListener {
   /**
    * @param newPlayerView A {@link PlayerView}.
    *
-   * Attach or detach a video surface.
+   * Attach or detach Player to a video surface.
    */
   public void setPlayerView(@Nullable PlayerView newPlayerView) {
     if (playerView != null) {
@@ -138,9 +138,17 @@ public final class PlayerManager implements EventListener {
     playerView = newPlayerView;
 
     if (playerView != null) {
-      playerView.setKeepContentOnPlayerReset(false);
       playerView.setPlayer(exoPlayer);
     }
+  }
+
+  /**
+   * @param holder Instance of any class that implements the {@link SetPlayer} Interface.
+   *
+   * Attach or detach Player to the specified class.
+   */
+  public void setPlayer(SetPlayer holder) {
+    holder.setPlayer(exoPlayer);
   }
 
   // Query state of ExoPlayer.

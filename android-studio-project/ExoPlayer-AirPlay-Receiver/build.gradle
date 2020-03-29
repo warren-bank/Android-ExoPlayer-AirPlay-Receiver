@@ -45,6 +45,8 @@ dependencies {
     annotationProcessor 'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidX
 
     implementation      'androidx.appcompat:appcompat:'                           + project.ext.libVersionAndroidX           // (1.0 MB) https://mvnrepository.com/artifact/androidx.appcompat/appcompat
+    implementation      'androidx.core:core:'                                     + project.ext.libVersionAndroidX           // (665 KB) https://mvnrepository.com/artifact/androidx.core/core
+    implementation      'androidx.media:media:'                                   + project.ext.libVersionAndroidX           // (307 KB) https://mvnrepository.com/artifact/androidx.media/media
 
     implementation      'com.google.android.material:material:'                   + project.ext.libVersionMaterial           // (567 KB) https://mvnrepository.com/artifact/com.google.android.material/material
 
@@ -53,6 +55,7 @@ dependencies {
     implementation      'com.google.android.exoplayer:exoplayer-hls:'             + project.ext.libVersionExoPlayer          // ( 98 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-hls?repo=bt-google-exoplayer
     implementation      'com.google.android.exoplayer:exoplayer-smoothstreaming:' + project.ext.libVersionExoPlayer          // ( 44 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-smoothstreaming?repo=bt-google-exoplayer
     implementation      'com.google.android.exoplayer:exoplayer-ui:'              + project.ext.libVersionExoPlayer          // (238 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-ui?repo=bt-google-exoplayer
+    implementation      'com.google.android.exoplayer:extension-mediasession:'    + project.ext.libVersionExoPlayer          // ( 80 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/extension-mediasession?repo=bt-google-exoplayer
 
     implementation      'com.googlecode.plist:dd-plist:'                          + project.ext.libVersionDdPlist            // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
     implementation      'org.apache.httpcomponents:httpcore:'                     + project.ext.libVersionHttpCore           // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore

@@ -5,8 +5,9 @@ import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 
 public final class WakeLockMgr {
-  private static PowerManager.WakeLock wakeLock;
-  private static WifiManager.WifiLock  wifiLock;
+  private static PowerManager.WakeLock     wakeLock;
+  private static WifiManager.WifiLock      wifiLock;
+  private static WifiManager.MulticastLock mdnsLock;
 
   public static void acquire(Context context) {
     release();
@@ -21,9 +22,14 @@ public final class WakeLockMgr {
     wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "WifiLock");
     wifiLock.setReferenceCounted(false);
     wifiLock.acquire();
+
+    mdnsLock = wm.createMulticastLock("WifiMulticastLock");
+    mdnsLock.setReferenceCounted(false);
+    mdnsLock.acquire();
   }
 
   public static void release() {
+
     if (wakeLock != null) {
       if (wakeLock.isHeld())
         wakeLock.release();
@@ -35,5 +41,12 @@ public final class WakeLockMgr {
         wifiLock.release();
       wifiLock = null;
     }
+
+    if (mdnsLock != null) {
+      if (mdnsLock.isHeld())
+        mdnsLock.release();
+      mdnsLock = null;
+    }
+
   }
 }
