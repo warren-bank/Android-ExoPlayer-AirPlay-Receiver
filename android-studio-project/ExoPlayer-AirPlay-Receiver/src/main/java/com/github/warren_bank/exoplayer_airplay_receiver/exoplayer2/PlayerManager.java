@@ -531,7 +531,7 @@ public final class PlayerManager implements EventListener {
   }
 
   public void AirPlay_stop() {
-    AirPlay_stop(/* play_animation= */ true);
+    AirPlay_stop(/* play_animation= */ VideoActivity.isVisible);
   }
 
   /**

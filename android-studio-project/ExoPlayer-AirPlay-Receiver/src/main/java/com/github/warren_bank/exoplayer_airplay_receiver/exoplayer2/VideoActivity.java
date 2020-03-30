@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class VideoActivity extends AppCompatActivity implements PlayerControlView.VisibilityListener, View.OnClickListener {
+  public static boolean isVisible = false;
+
   private PlayerManager playerManager;
   private PlayerView    playerView;
   private Button        selectTracksButton;
@@ -59,12 +61,14 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   protected void onStart() {
     super.onStart();
     playerManager.setPlayerView(playerView);
+    isVisible = true;
   }
 
   @Override
   protected void onStop() {
     super.onStop();
     playerManager.setPlayerView(null);
+    isVisible = false;
   }
 
   @Override
