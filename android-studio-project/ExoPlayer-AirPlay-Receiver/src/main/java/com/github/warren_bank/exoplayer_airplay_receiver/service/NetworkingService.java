@@ -39,7 +39,7 @@ public class NetworkingService extends Service {
 
   private static PlayerManager playerManager = null;
 
-  private MyPlayerNotificationManager playerNotificationManager;
+  private MyPlayerNotificationManagerContainer playerNotificationManager;
   private MyPlaybackStatusMonitor playbackStatusMonitor;
   private String airplayName;
   private MyMessageHandler handler;
@@ -57,8 +57,8 @@ public class NetworkingService extends Service {
     super.onCreate();
     Log.d(tag, "onCreate");
 
-    playerManager             = PlayerManager.createPlayerManager(/* context= */ NetworkingService.this);
-    playerNotificationManager = new MyPlayerNotificationManager(  /* context= */ NetworkingService.this, playerManager);
+    playerManager             = PlayerManager.createPlayerManager(       /* context= */ NetworkingService.this);
+    playerNotificationManager = new MyPlayerNotificationManagerContainer(/* context= */ NetworkingService.this, playerManager);
     playbackStatusMonitor     = new MyPlaybackStatusMonitor();
     airplayName               = Build.MODEL + "@" + getString(R.string.app_name);
 
