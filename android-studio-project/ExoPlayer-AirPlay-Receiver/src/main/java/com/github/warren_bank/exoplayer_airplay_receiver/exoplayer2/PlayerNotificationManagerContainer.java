@@ -141,22 +141,32 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
   // ===========================================================================
 
   private String getMediaItemTitle(int currentItemIndex) {
-    return getMediaItemTitle(getMediaItemUri(currentItemIndex));
+    return getMediaItemTitle(currentItemIndex, getMediaItemUri(currentItemIndex));
   }
 
-  private String getMediaItemTitle(URI uri) {
+  private String getMediaItemTitle(int currentItemIndex, URI uri) {
     if (uri == null) return null;
 
     boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
-    return getMediaItemTitle(uri, isAudio);
+    return getMediaItemTitle(currentItemIndex, uri, isAudio);
   }
 
-  private String getMediaItemTitle(URI uri, boolean isAudio) {
+  private String getMediaItemTitle(int currentItemIndex, URI uri, boolean isAudio) {
     if (uri == null) return null;
 
-    return isAudio
+    int position_current, position_last;
+    String queuePosition, mimeType, title;
+
+    position_current = currentItemIndex + 1;
+    position_last    = playerManager.getMediaQueueSize();
+    queuePosition    = String.format("[%d/%d]", position_current, position_last);
+
+    mimeType = isAudio
       ? "audio/" + VideoSource.get_audio_fileExtension(uri.toString())
       : VideoSource.get_video_mimeType(uri.toString());
+
+    title = queuePosition + " " + mimeType;
+    return title;
   }
 
   // ===========================================================================
@@ -266,10 +276,10 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
 
     boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
 
-    String mediaId     = uri.toString();                        // URL
-    String title       = getMediaItemTitle(uri, isAudio);       // mime-type
-    String description = getMediaItemDescription(uri, isAudio); // hostname (stream) or dirname/filename (non-stream)
-    Bitmap bitmap      = getMediaItemBitmap(uri, isAudio);      // material icon to indicate audio or video
+    String mediaId     = uri.toString();                                    // URL
+    String title       = getMediaItemTitle(currentItemIndex, uri, isAudio); // [index/total] mime-type
+    String description = getMediaItemDescription(uri, isAudio);             // hostname (stream) or dirname/filename (non-stream)
+    Bitmap bitmap      = getMediaItemBitmap(uri, isAudio);                  // material icon to indicate audio or video
 
     Bundle extras = new Bundle();
     extras.putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,    bitmap);
