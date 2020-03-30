@@ -420,7 +420,7 @@ public final class PlayerManager implements EventListener {
    * @return The item at the given index in the media queue.
    */
   public VideoSource getItem(int position) {
-    return (getMediaQueueSize() > position)
+    return ((position >= 0) && (getMediaQueueSize() > position))
       ? mediaQueue.get(position)
       : null;
   }
