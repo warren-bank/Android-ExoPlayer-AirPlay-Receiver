@@ -265,10 +265,10 @@ public class MyPlayerNotificationManager implements SetPlayer {
 
     boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
 
-    String mediaId     = uri.toString();                   // URL
-    String title       = getMediaItemTitle(uri, isAudio);  // mime-type
-    String description = getMediaItemDescription(uri);     // hostname (stream) or dirname/filename (non-stream)
-    Bitmap bitmap      = getMediaItemBitmap(uri, isAudio); // material icon to indicate audio or video
+    String mediaId     = uri.toString();                        // URL
+    String title       = getMediaItemTitle(uri, isAudio);       // mime-type
+    String description = getMediaItemDescription(uri, isAudio); // hostname (stream) or dirname/filename (non-stream)
+    Bitmap bitmap      = getMediaItemBitmap(uri, isAudio);      // material icon to indicate audio or video
 
     Bundle extras = new Bundle();
     extras.putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,    bitmap);
