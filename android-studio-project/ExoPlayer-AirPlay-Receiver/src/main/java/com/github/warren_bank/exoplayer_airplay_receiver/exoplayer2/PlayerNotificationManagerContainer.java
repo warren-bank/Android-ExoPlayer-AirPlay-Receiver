@@ -1,10 +1,7 @@
-package com.github.warren_bank.exoplayer_airplay_receiver.service;
+package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
-import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
-import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoSource;
-import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.SetPlayer;
-import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyPlayerNotificationManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
 import com.google.android.exoplayer2.Player;
@@ -30,17 +27,19 @@ import android.os.Bundle;
 
 import java.net.URI;
 
-public class MyPlayerNotificationManagerContainer implements SetPlayer {
+public class PlayerNotificationManagerContainer implements SetPlayer {
   private Context context;
   private PlayerManager playerManager;
+  private Class<?> pendingIntentActivityClass;
 
   private MyPlayerNotificationManager playerNotificationManager;
   private MediaSessionCompat mediaSession;
   private MediaSessionConnector mediaSessionConnector;
 
-  public MyPlayerNotificationManagerContainer(Context context, PlayerManager playerManager) {
-    this.context       = context;
-    this.playerManager = playerManager;
+  public PlayerNotificationManagerContainer(Context context, PlayerManager playerManager, @Nullable Class<?> pendingIntentActivityClass) {
+    this.context                    = context;
+    this.playerManager              = playerManager;
+    this.pendingIntentActivityClass = pendingIntentActivityClass;
 
     playerNotificationManager = MyPlayerNotificationManager.createWithNotificationChannel(
       playerManager,
@@ -54,7 +53,9 @@ public class MyPlayerNotificationManagerContainer implements SetPlayer {
         @Nullable
         @Override
         public PendingIntent createCurrentContentIntent(Player player){
-          Intent intent = new Intent(context, VideoPlayerActivity.class);
+          if (pendingIntentActivityClass == null) return null;
+
+          Intent intent = new Intent(context, pendingIntentActivityClass);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
           PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);

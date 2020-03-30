@@ -3,8 +3,10 @@ package com.github.warren_bank.exoplayer_airplay_receiver.service;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerNotificationManagerContainer;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
+import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
@@ -39,7 +41,7 @@ public class NetworkingService extends Service {
 
   private static PlayerManager playerManager = null;
 
-  private MyPlayerNotificationManagerContainer playerNotificationManager;
+  private PlayerNotificationManagerContainer playerNotificationManager;
   private MyPlaybackStatusMonitor playbackStatusMonitor;
   private String airplayName;
   private MyMessageHandler handler;
@@ -57,8 +59,8 @@ public class NetworkingService extends Service {
     super.onCreate();
     Log.d(tag, "onCreate");
 
-    playerManager             = PlayerManager.createPlayerManager(       /* context= */ NetworkingService.this);
-    playerNotificationManager = new MyPlayerNotificationManagerContainer(/* context= */ NetworkingService.this, playerManager);
+    playerManager             = PlayerManager.createPlayerManager(     /* context= */ NetworkingService.this);
+    playerNotificationManager = new PlayerNotificationManagerContainer(/* context= */ NetworkingService.this, playerManager, /* pendingIntentActivityClass= */ VideoPlayerActivity.class);
     playbackStatusMonitor     = new MyPlaybackStatusMonitor();
     airplayName               = Build.MODEL + "@" + getString(R.string.app_name);
 
