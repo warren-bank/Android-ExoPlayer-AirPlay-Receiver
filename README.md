@@ -221,7 +221,6 @@ __extended APIs:__
 * play audio .m3u playlist (6 songs, set 'Referer' request header for all songs, seek to 30 seconds in first song):
   ```bash
     # note: position >= 1 is a fixed offset (in seconds)
-    # note: after the first song, each additional song is added following a 1 second delay; adding 6 songs will take 5 seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${audio_mp3s_m3u}\nReferer: ${audio_m3u_page}\nStart-Position: 30" \
@@ -229,7 +228,6 @@ __extended APIs:__
   ```
 * add audio .html directory index playlist to end of queue (20 songs, set 'Referer' request header for all songs, seek to beginning of first song):
   ```bash
-    # note: after the first song, each additional song is added following a 1 second delay; adding 20 songs will take 19 seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${audio_mp3s_htm}\nReferer: ${audio_htm_page}\nStart-Position: 0" \
@@ -252,7 +250,6 @@ __extended APIs:__
   ```
 * play combination of audio and video files in order specified by .m3u playlist from file system on receiver:
   ```bash
-    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${plist_path}" \
@@ -262,7 +259,6 @@ __extended APIs:__
   ```bash
     # note: IF the specified directory contains one or more media files, THEN does not recursively search for media files in subdirectories
     #       IF the specified directory does not contain any media files, THEN does recursively search for media files in all subdirectories
-    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${video_dir_path}" \
@@ -272,7 +268,6 @@ __extended APIs:__
   ```bash
     # note: IF the specified directory contains one or more media files, THEN does not recursively search for media files in subdirectories
     #       IF the specified directory does not contain any media files, THEN does recursively search for media files in all subdirectories
-    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${audio_dir_path}" \
@@ -282,7 +277,6 @@ __extended APIs:__
   ```bash
     # note: IF the specified directory contains one or more media files, THEN does not recursively search for media files in subdirectories
     #       IF the specified directory does not contain any media files, THEN does recursively search for media files in all subdirectories
-    # note: after the first media file, each additional media file is added following a 1 second delay; adding (N) media files will take (N-1) seconds to complete.
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${recursive_path}" \
@@ -304,6 +298,27 @@ __extended APIs:__
       - the other links transfer the video URL to other tools
         * webpage to watch the video in an HTML5 player with the ability to "cast" the video to a Chromecast
         * a running instance of [HLS-Proxy](https://github.com/warren-bank/HLS-Proxy)
+
+* Greasemonkey userscripts
+  - that can run in any web browser with support:
+    * [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) for Chrome/Chromium
+    * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) for Firefox
+    * etc&hellip;
+  - and be used to:
+    * apply site-specific knowledge to obtain the URL of a video on the requested page as it loads
+    * automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
+  - list of available scripts for supported websites:
+    * [script](https://github.com/warren-bank/crx-CBS-News/raw/greasemonkey-userscript/greasemonkey-userscript/CBS-News.user.js) for [CBS News](https://www.cbsnews.com/live/)
+    * [script](https://github.com/warren-bank/crx-pbs-passport/raw/greasemonkey-userscript/greasemonkey-userscript/PBS-Passport.user.js) for [PBS](https://www.pbs.org/shows/)
+    * [script](https://github.com/warren-bank/crx-Tubi-TV/raw/greasemonkey-userscript/greasemonkey-userscript/Tubi-TV.user.js) for [Tubi TV](https://tubitv.com/)
+    * [script](https://github.com/warren-bank/crx-Youtube/raw/greasemonkey-userscript/greasemonkey-userscript/Youtube.user.js) for [Youtube](https://www.youtube.com/)
+    * [script](https://github.com/warren-bank/crx-Crackle/raw/greasemonkey-userscript/greasemonkey-userscript/Crackle.user.js) for [Crackle](https://www.crackle.com/)
+    * [script](https://github.com/warren-bank/crx-US-TV-Go/raw/greasemonkey-userscript/greasemonkey-userscript/US-TV-Go.user.js) for [US TV Go](https://ustvgo.tv/)
+    * [script](https://github.com/warren-bank/crx-StreamLive-To/raw/greasemonkey-userscript/greasemonkey-userscript/StreamLive-To.user.js) for [StreamLive To](https://streamlive.to/channels)
+    * [script](https://github.com/warren-bank/crx-YourSports-Stream/raw/greasemonkey-userscript/greasemonkey-userscript/YourSports-Stream.user.js) for [YourSports Stream](http://yoursports.stream/)
+    * [script](https://github.com/warren-bank/crx-123TV/raw/greasemonkey-userscript/greasemonkey-userscript/123TV.user.js) for [123TV](http://123tvnow.com/category/united-states-usa/)
+    * [script](https://github.com/warren-bank/crx-Arconai-TV/raw/greasemonkey-userscript/greasemonkey-userscript/Arconai-TV.user.js) for [Arconai TV](https://www.arconaitv.us/)
+    * [script](https://github.com/warren-bank/crx-Ok-ru/raw/greasemonkey-userscript/greasemonkey-userscript/Ok-ru.user.js) for [embedded videos hosted by ok.ru](https://ok.ru/)
 
 * [Android app](https://github.com/tutikka/DroidPlay) that is open-source, and can be used to:
   - discover AirPlay receivers on the same LAN
