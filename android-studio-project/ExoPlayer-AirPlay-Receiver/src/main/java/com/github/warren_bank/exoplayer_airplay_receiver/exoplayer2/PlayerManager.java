@@ -1,6 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyLoadErrorHandlingPolicy;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
@@ -67,6 +68,7 @@ public final class PlayerManager implements EventListener {
   private SimpleExoPlayer exoPlayer;
   private DefaultHttpDataSourceFactory httpDataSourceFactory;
   private DefaultDataSourceFactory rawDataSourceFactory;
+  private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
   private Handler handler;
 
@@ -98,8 +100,9 @@ public final class PlayerManager implements EventListener {
     this.exoPlayer.addListener(exoLogger);
 
     String userAgent = context.getResources().getString(R.string.user_agent);
-    this.httpDataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-    this.rawDataSourceFactory  = new DefaultDataSourceFactory(context, userAgent);
+    this.httpDataSourceFactory   = new DefaultHttpDataSourceFactory(userAgent);
+    this.rawDataSourceFactory    = new DefaultDataSourceFactory(context, userAgent);
+    this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
 
     this.currentItemIndex = C.INDEX_UNSET;
     this.handler = new Handler();
@@ -882,13 +885,13 @@ public final class PlayerManager implements EventListener {
 
     switch (sample.uri_mimeType) {
       case MimeTypes.APPLICATION_M3U8:
-        return new HlsMediaSource.Factory(factory).createMediaSource(uri);
+        return new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
       case MimeTypes.APPLICATION_MPD:
-        return new DashMediaSource.Factory(factory).createMediaSource(uri);
+        return new DashMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
       case MimeTypes.APPLICATION_SS:
-        return new SsMediaSource.Factory(factory).createMediaSource(uri);
+        return new SsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
       default:
-        return new ExtractorMediaSource.Factory(factory).createMediaSource(uri);
+        return new ExtractorMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
     }
   }
 
@@ -910,7 +913,7 @@ public final class PlayerManager implements EventListener {
       format = Format.createTextSampleFormat(/* id= */ null, sample.caption_mimeType, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ "en");
 
       captions.add(
-        new SingleSampleMediaSource.Factory(factory).createMediaSource(uri, format, C.TIME_UNSET)
+        new SingleSampleMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri, format, C.TIME_UNSET)
       );
     }
     else if (ExternalStorageUtils.isFileUri(sample.uri)) {
