@@ -11,6 +11,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
@@ -328,7 +329,7 @@ public final class PlayerManager implements EventListener {
 
     for (int i=0; i < uris.length; i++) {
       uri        = uris[i];
-      sample     = VideoSource.createVideoSource(uri, (i == 0) ? caption : "", referer, (i == 0) ? startPosition : 0f);
+      sample     = VideoSource.createVideoSource(uri, (i == 0) ? caption : null, referer, (i == 0) ? startPosition : 0f);
       samples[i] = sample;
     }
 
@@ -695,11 +696,12 @@ public final class PlayerManager implements EventListener {
       mediaQueue.clear();
       concatenatingMediaSource.clear();
 
-      mediaQueue = null;
+      mediaQueue               = null;
       concatenatingMediaSource = null;
-      httpDataSourceFactory = null;
-      rawDataSourceFactory  = null;
-      currentItemIndex = C.INDEX_UNSET;
+      httpDataSourceFactory    = null;
+      rawDataSourceFactory     = null;
+      loadErrorHandlingPolicy  = null;
+      currentItemIndex         = C.INDEX_UNSET;
     }
     catch (Exception e){}
   }
@@ -913,7 +915,7 @@ public final class PlayerManager implements EventListener {
     Uri uri;
     Format format;
 
-    if ((sample.caption != null) && (sample.caption_mimeType != null)) {
+    if (!TextUtils.isEmpty(sample.caption) && !TextUtils.isEmpty(sample.caption_mimeType)) {
       factory = ExternalStorageUtils.isFileUri(sample.caption)
         ? rawDataSourceFactory
         : httpDataSourceFactory;
