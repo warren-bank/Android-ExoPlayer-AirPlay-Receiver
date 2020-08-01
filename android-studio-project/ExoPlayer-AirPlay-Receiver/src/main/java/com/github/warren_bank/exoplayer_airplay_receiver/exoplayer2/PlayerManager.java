@@ -4,6 +4,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyLoadErrorHandlingPolicy;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
@@ -743,11 +744,15 @@ public final class PlayerManager implements EventListener {
 
   @Override
   public void onPlayerError(ExoPlaybackException error) {
-    if (exoPlayer == null) return;
+    if (exoPlayer == null)
+      return;
+    if (error.type != ExoPlaybackException.TYPE_SOURCE)
+      return;
 
-    if (error.type == ExoPlaybackException.TYPE_SOURCE) {
+    if (ExoPlayerUtils.isBehindLiveWindow(error) || ExoPlayerUtils.isHttpDataSource(error))
+      retry();
+    else
       exoPlayer.next();
-    }
   }
 
   // Internal methods.
@@ -757,6 +762,13 @@ public final class PlayerManager implements EventListener {
 
     // Media queue management.
     exoPlayer.prepare(concatenatingMediaSource);
+  }
+
+  private void retry() {
+    if (exoPlayer == null) return;
+
+    exoPlayer.retry();
+    exoPlayer.seekToDefaultPosition();
   }
 
   private void truncateQueue(int count) {
