@@ -15,6 +15,7 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -267,6 +268,22 @@ public class NetworkingService extends Service {
   // -------------------------------------------------------------------------
   // foregrounding..
 
+  private String getNotificationChannelId() {
+    return getPackageName();
+  }
+
+  private void createNotificationChannel() {
+    if (Build.VERSION.SDK_INT >= 26) {
+      String channelId       = getNotificationChannelId();
+      NotificationManager NM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+      NotificationChannel NC = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH);
+
+      NC.setDescription(channelId);
+      NC.setSound(null, null);
+      NM.createNotificationChannel(NC);
+    }
+  }
+
   private int getNotificationId() {
     return ResourceUtils.getInteger(NetworkingService.this, R.integer.NOTIFICATION_ID_NETWORKING_SERVICE);
   }
@@ -276,6 +293,7 @@ public class NetworkingService extends Service {
     int NOTIFICATION_ID = getNotificationId();
 
     if (Build.VERSION.SDK_INT >= 5) {
+      createNotificationChannel();
       startForeground(NOTIFICATION_ID, notification);
     }
     else {
@@ -296,7 +314,11 @@ public class NetworkingService extends Service {
   }
 
   private Notification getNotification() {
-    Notification notification  = new Notification();
+    Notification notification  = (Build.VERSION.SDK_INT >= 26)
+      ? (new Notification.Builder(/* context= */ NetworkingService.this, /* channelId= */ getNotificationChannelId())).build()
+      :  new Notification()
+    ;
+
     notification.when          = System.currentTimeMillis();
     notification.flags         = 0;
     notification.flags        |= Notification.FLAG_ONGOING_EVENT;
@@ -311,6 +333,10 @@ public class NetworkingService extends Service {
     }
     else {
       notification.flags      |= Notification.FLAG_HIGH_PRIORITY;
+    }
+
+    if (Build.VERSION.SDK_INT >= 21) {
+      notification.visibility  = Notification.VISIBILITY_PUBLIC;
     }
 
     RemoteViews contentView    = new RemoteViews(getPackageName(), R.layout.service_notification);
