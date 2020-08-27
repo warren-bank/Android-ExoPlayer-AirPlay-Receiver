@@ -80,6 +80,7 @@
                 <data android:mimeType="application/x-extension-mp4"/>
                 <data android:mimeType="application/x-flac"/>
                 <data android:mimeType="application/x-matroska"/>
+                <data android:mimeType="application/x-mpegurl"/>
                 <data android:mimeType="application/x-mpegURL"/>
                 <data android:mimeType="application/x-ogg"/>
             </intent-filter>
