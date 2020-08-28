@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 
@@ -32,9 +33,10 @@ public class StartNetworkingServiceActivity extends Activity {
     finish();
   }
 
-  private void forwardMedia(Intent intent) {
-    String action = getIntent().getAction();
-    Uri data = null;
+  private void forwardMedia(Intent newIntent) {
+    Intent oldIntent = getIntent();
+    String action    = oldIntent.getAction();
+    Uri data         = null;
     String type;
 
     if (action == null) return;
@@ -42,8 +44,8 @@ public class StartNetworkingServiceActivity extends Activity {
     try {
       switch(action) {
         case Intent.ACTION_VIEW : {
-          data = getIntent().getData();
-          type = getIntent().getType();
+          data = oldIntent.getData();
+          type = oldIntent.getType();
 
           if (type != null) {
             type = type.toLowerCase();
@@ -59,7 +61,7 @@ public class StartNetworkingServiceActivity extends Activity {
           break;
         }
         case Intent.ACTION_SEND : {
-          data = (Uri) getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
+          data = (Uri) oldIntent.getParcelableExtra(Intent.EXTRA_STREAM);
           data = filterDirectory(data);
           break;
         }
@@ -70,8 +72,12 @@ public class StartNetworkingServiceActivity extends Activity {
     }
 
     if (data != null) {
-      intent.setAction(NetworkingService.ACTION_PLAY);
-      intent.setData(data);
+      newIntent.setAction(NetworkingService.ACTION_PLAY);
+
+      newIntent.putExtra(Constant.PlayURL,                                              data.toString()                                    );
+      newIntent.putExtra(Constant.CaptionURL, oldIntent.hasExtra(Constant.CaptionURL) ? oldIntent.getStringExtra(Constant.CaptionURL) : "" );
+      newIntent.putExtra(Constant.RefererURL, oldIntent.hasExtra(Constant.RefererURL) ? oldIntent.getStringExtra(Constant.RefererURL) : "" );
+      newIntent.putExtra(Constant.Start_Pos,  oldIntent.hasExtra(Constant.Start_Pos)  ? oldIntent.getStringExtra(Constant.Start_Pos)  : "0");
     }
   }
 

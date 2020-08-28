@@ -380,17 +380,15 @@ public class NetworkingService extends Service {
         break;
       }
       case ACTION_PLAY : {
-        String playUrl = intent.getDataString();
-
-        if (playUrl != null) {
+        if (intent.hasExtra(Constant.PlayURL)) {
           Message msg = Message.obtain();
           HashMap<String, String> map = new HashMap<String, String>();
-          map.put(Constant.PlayURL,    playUrl);
-          map.put(Constant.CaptionURL, "");
-          map.put(Constant.RefererURL, "");
-          map.put(Constant.Start_Pos,  "0");
+          map.put(Constant.PlayURL,                                           intent.getStringExtra(Constant.PlayURL)         );
+          map.put(Constant.CaptionURL, intent.hasExtra(Constant.CaptionURL) ? intent.getStringExtra(Constant.CaptionURL) : "" );
+          map.put(Constant.RefererURL, intent.hasExtra(Constant.RefererURL) ? intent.getStringExtra(Constant.RefererURL) : "" );
+          map.put(Constant.Start_Pos,  intent.hasExtra(Constant.Start_Pos)  ? intent.getStringExtra(Constant.Start_Pos)  : "0");
           msg.what = Constant.Msg.Msg_Video_Play;
-          msg.obj = map;
+          msg.obj  = map;
 
           handler.handleMessage(msg);
         }
