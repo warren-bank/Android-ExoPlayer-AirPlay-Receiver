@@ -40,13 +40,16 @@ body .contents div:last-child {
   margin-bottom: 0;
 }
 
-body .contents div.oneline {
+body .contents .oneline {
   height: 2em;
   line-height: 2em;
   white-space: nowrap;
 }
-body .contents div.oneline > * {
+body .contents .oneline > * {
   vertical-align: middle;
+}
+body .contents .oneline.fullwidth > * {
+  width: 100%;
 }
 
 body .contents div.left {
@@ -119,6 +122,10 @@ window.onload  = () => {
   const $seek_minutes            = document.querySelector('input#seek_minutes')
   const $seek_seconds            = document.querySelector('input#seek_seconds')
   const $seek                    = document.querySelector('button#seek')
+  const $seek_offset_minutes     = document.querySelector('input#seek_offset_minutes')
+  const $seek_offset_seconds     = document.querySelector('input#seek_offset_seconds')
+  const $seek_offset_ms          = document.querySelector('input#seek_offset_ms')
+  const $seek_offset             = document.querySelector('button#seek_offset')
   const $set_txt_offset_minutes  = document.querySelector('input#set_txt_offset_minutes')
   const $set_txt_offset_seconds  = document.querySelector('input#set_txt_offset_seconds')
   const $set_txt_offset_ms       = document.querySelector('input#set_txt_offset_ms')
@@ -229,7 +236,7 @@ window.onload  = () => {
   // ===============================================================================================
   // XHR helper
 
-  const POST_message = (path, data) => {
+  const send_message = (path, data) => {
     const host = $airplay_host.value
     const port = $airplay_port.value || '8192'
     const tls  = $airplay_tls.checked
@@ -245,14 +252,15 @@ window.onload  = () => {
     }
 
     const xhr = new XMLHttpRequest()
-    xhr.open("POST", url, true, null, null)
 
     if (data) {
+      xhr.open("POST", url, true, null, null)
       xhr.setRequestHeader("Content-Type", "text/parameters")
       xhr.send(data)
     }
     else {
-      xhr.send(null)
+      xhr.open("GET", url, true, null, null)
+      xhr.send()
     }
 
     // save network address of AirPlay receiver in cookie
@@ -542,7 +550,7 @@ window.onload  = () => {
         path = (i === 0) ? initial_path : '/queue'
         data = get_video_POST_data(urls[i])
 
-        POST_message(path, data)
+        send_message(path, data)
 
         await request_delay(2500)  // 2.5 seconds between each request is high, but there's no rush since the URLs are being added to a queue and won't be used immediately; better to allow the receiver time to process each request, so they are queued in the correct order.
       }
@@ -551,7 +559,7 @@ window.onload  = () => {
       path = initial_path
       data = get_video_POST_data()
 
-      POST_message(path, data)
+      send_message(path, data)
     }
   }
 
@@ -562,7 +570,7 @@ window.onload  = () => {
     path = initial_path
     data = get_video_POST_data()
 
-    POST_message(path, data)
+    send_message(path, data)
   }
 
   // ===============================================================================================
@@ -588,35 +596,35 @@ window.onload  = () => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/rate?value=0.0', null)
+    send_message('/rate?value=0.0', null)
   }
 
   $resume.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/rate?value=1.0', null)
+    send_message('/rate?value=1.0', null)
   }
 
   $captions_on.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/show-captions?toggle=1', null)
+    send_message('/show-captions?toggle=1', null)
   }
 
   $captions_off.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/show-captions?toggle=0', null)
+    send_message('/show-captions?toggle=0', null)
   }
 
   $stop.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/stop', null)
+    send_message('/stop', null)
   }
 
   $seek.onclick = (event) => {
@@ -632,7 +640,23 @@ window.onload  = () => {
     const path = `/scrub?position=${offset}`
     const data = null
 
-    POST_message(path, data)
+    send_message(path, data)
+  }
+
+  $seek_offset.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const min = get_value($seek_offset_minutes, 0)    // const min = parseInt($seek_offset_minutes.value, 10) || 0
+    const sec = get_value($seek_offset_seconds, 0)    // const sec = parseInt($seek_offset_seconds.value, 10) || 0
+    const ms  = get_value($seek_offset_ms,      0)    // const ms  = parseInt($seek_offset_ms.value,      10) || 0
+
+    const offset = (ms) + (sec * 1000) + (min * 60 * 1000)
+
+    const path = `/add-scrub-offset?value=${offset}`
+    const data = null
+
+    send_message(path, data)
   }
 
   $set_txt_offset.onclick = (event) => {
@@ -648,7 +672,7 @@ window.onload  = () => {
     const path = `/set-captions-offset?value=${offset}`
     const data = null
 
-    POST_message(path, data)
+    send_message(path, data)
   }
 
   $add_txt_offset.onclick = (event) => {
@@ -664,7 +688,7 @@ window.onload  = () => {
     const path = `/add-captions-offset?value=${offset}`
     const data = null
 
-    POST_message(path, data)
+    send_message(path, data)
   }
 
   $rate.onclick = (event) => {
@@ -675,7 +699,7 @@ window.onload  = () => {
     const path = `/rate?value=${rate}`
     const data = null
 
-    POST_message(path, data)
+    send_message(path, data)
   }
 
   $volume.onclick = (event) => {
@@ -686,21 +710,21 @@ window.onload  = () => {
     const path = `/volume?value=${vol}`
     const data = null
 
-    POST_message(path, data)
+    send_message(path, data)
   }
 
   $previous.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/previous', null)
+    send_message('/previous', null)
   }
 
   $next.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    POST_message('/next', null)
+    send_message('/next', null)
   }
 
   $sample_videos.onchange = (event) => {
@@ -729,7 +753,7 @@ window.onload  = () => {
     const path = '/photo'
     const data = $image_file.files[0]
 
-    POST_message(path, data)
+    send_message(path, data)
 
     $image_file.value = null
   }
@@ -778,47 +802,113 @@ window.onload  = () => {
     <hr />
     <h3>Remote Control of Video Playback:</h3>
     <div>
-      <div class="oneline">
-        <button id="pause">Pause</button>
-        <button id="resume">Resume</button>
-      </div>
-      <div class="oneline">
-        <button id="captions_on">CC On</button>
-        <button id="captions_off">CC Off</button>
-      </div>
-      <div class="oneline">
-        <button id="previous">Previous</button>
-        <button id="next">Next</button>
-      </div>
-      <div class="oneline">
-        <button id="stop">Stop</button>
-      </div>
-      <div class="oneline">
-        <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
-        <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
-        <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
-        <button id="seek">Seek to Position</button>
-      </div>
-      <div class="oneline">
-        <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
-        <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
-        <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
-        <button id="set_txt_offset">Set CC Offset</button>
-      </div>
-      <div class="oneline">
-        <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
-        <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
-        <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
-        <button id="add_txt_offset">Add CC Offset</button>
-      </div>
-      <div class="oneline">
-        <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" size="3" placeholder="1.0" />
-        <button id="rate">Change Speed</button>
-      </div>
-      <div class="oneline">
-        <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="1" x-step="0.001" size="3" placeholder="1.0" />
-        <button id="volume">Change Volume</button>
-      </div>
+      <table align="center">
+        <tr>
+          <td class="oneline fullwidth">
+            <button id="pause">Pause</button>
+          </td>
+          <td class="oneline fullwidth">
+            <button id="resume">Resume</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline fullwidth">
+            <button id="captions_on">CC On</button>
+          </td>
+          <td class="oneline fullwidth">
+            <button id="captions_off">CC Off</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline fullwidth">
+            <button id="previous">Previous</button>
+          </td>
+          <td class="oneline fullwidth">
+            <button id="next">Next</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan=2 align="center" class="oneline">
+            <button id="stop">Stop</button>
+          </td>
+        </tr>
+      </table>
+      <table align="center">
+        <tr>
+          <td class="oneline">
+            <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+          </td>
+          <td class="oneline">
+            <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+          </td>
+          <td class="oneline">
+            <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+          </td>
+          <td class="oneline fullwidth">
+            <button id="seek">Seek to Position</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline">
+            <input id="seek_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+          </td>
+          <td class="oneline">
+            <input id="seek_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+          </td>
+          <td class="oneline">
+            <input id="seek_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+          </td>
+          <td class="oneline fullwidth">
+            <button id="seek_offset">Add to Position</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline">
+            <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+          </td>
+          <td class="oneline">
+            <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+          </td>
+          <td class="oneline">
+            <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+          </td>
+          <td class="oneline fullwidth">
+            <button id="set_txt_offset">Set CC Offset</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline">
+            <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+          </td>
+          <td class="oneline">
+            <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+          </td>
+          <td class="oneline">
+            <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+          </td>
+          <td class="oneline fullwidth">
+            <button id="add_txt_offset">Add CC Offset</button>
+          </td>
+        </tr>
+      </table>
+      <table align="center">
+        <tr>
+          <td class="oneline">
+            <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" size="3" placeholder="1.0" />
+          </td>
+          <td class="oneline fullwidth">
+            <button id="rate">Change Speed</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline">
+            <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="1" x-step="0.001" size="3" placeholder="1.0" />
+          </td>
+          <td class="oneline fullwidth">
+            <button id="volume">Change Volume</button>
+          </td>
+        </tr>
+      </table>
     </div>
     <hr />
     <div class="flex">

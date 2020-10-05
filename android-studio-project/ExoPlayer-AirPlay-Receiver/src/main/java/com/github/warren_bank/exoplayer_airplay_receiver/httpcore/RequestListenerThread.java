@@ -410,12 +410,12 @@ public class RequestListenerThread extends Thread {
           }
         }
       }
-      else if (target.startsWith(Constant.Target.SCRUB)) { //POST is the seek operation. GET returns the position and duration of the play.
+      else if (target.startsWith(Constant.Target.SCRUB)) { //When querystring contains "position", perform seek operation. Otherwise, return the position and duration of the current video.
         StringEntity returnBody = new StringEntity("");
 
         String position = StringUtils.getQueryStringValue(target, "?position=");
         if (!position.isEmpty()) {
-          //post method
+          //perform seek operation
           try {
             float pos = Float.parseFloat(position);
             Log.d(tag, "airplay seek position = " + pos); //unit is seconds
@@ -431,7 +431,7 @@ public class RequestListenerThread extends Thread {
           }
         }
         else {
-          //get method to get the duration and position of the playback
+          //return the duration and position of the current video
           long duration = 0;
           long curPos = 0;
 
@@ -593,6 +593,25 @@ public class RequestListenerThread extends Thread {
 
           setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         }
+      }
+      else if (target.startsWith(Constant.Target.SCRUB_OFFSET)) { //perform seek operation relative to position of current video
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!value.isEmpty()) {
+          try {
+            long offset = Long.parseLong(value, 10);
+            Log.d(tag, "airplay scrub offset = " + offset);
+
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Video_Seek_Offset;
+            msg.obj = offset;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       else if (target.equals(Constant.Target.NEXT)) { //skip forward to next video in queue
         Message msg = Message.obtain();

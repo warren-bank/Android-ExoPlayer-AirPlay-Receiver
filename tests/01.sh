@@ -42,25 +42,25 @@ curl --silent -X POST \
 sleep 30
 
 # seek to `90 seconds` within currently playing video
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/scrub?position=90.0"
 
 sleep 30
 
 # pause the currently playing video
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/rate?value=0.0"
 
 sleep 10
 
 # resume playback of the currently paused video
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/rate?value=1.0"
 
 sleep 10
 
 # increase speed of playback to 10x
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/rate?value=10.0"
 
 # add video #2 to end of queue (add text captions, set 'Referer' request header, seek to 50%)
@@ -80,81 +80,81 @@ curl --silent -X POST \
 sleep 10
 
 # decrease speed of playback to 1x
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/rate?value=1.0"
 
 # skip forward to next video in queue (video #2 @ 50%)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 30
 
 # skip forward to next video in queue (video #3 @ 30 seconds)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 30
 
 # skip backward to previous video in queue (video #2 @ 50%)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/previous"
 
 sleep 30
 
 # mute audio
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/volume?value=0.0"
 
 sleep 10
 
 # set audio volume to 50%
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/volume?value=0.5"
 
 sleep 10
 
 # set audio volume to 100%
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/volume?value=1.0"
 
 # seek to beginning of currently playing video
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/scrub?position=0"
 
 sleep 10
 
 # turn text captions off
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/show-captions?toggle=0"
 
 sleep 10
 
 # turn text captions on
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/show-captions?toggle=1"
 
 sleep 10
 
 # set time offset for text captions (-30 sec = -30*1e6)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/set-captions-offset?value=-30000000"
 
 sleep 10
 
 # add to current time offset for text captions (-10 sec = -10*1e6)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/add-captions-offset?value=-10000000"
 
 sleep 10
 
 # remove time offset for text captions
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/set-captions-offset?value=0"
 
 sleep 10
 
 # stop playback
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/stop"
 
 sleep 5
@@ -188,53 +188,53 @@ curl --silent -X POST \
 sleep 30
 
 # skip forward to next song in queued playlist (.m3u song #2)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 15
 
 # skip forward to next song in queued playlist (.m3u song #3)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 15
 
 # skip forward to next song in queued playlist (.m3u song #4)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 1
 
 # skip forward to next song in queued playlist (.m3u song #5)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 1
 
 # skip forward to next song in queued playlist (.m3u song #6)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 1
 
 # skip forward to next song in queued playlist (.html song #1)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 15
 
 # skip forward to next song in queued playlist (.html song #2)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 15
 
 # skip forward to next song in queued playlist (.html song #3)
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/next"
 
 sleep 15
 
 # stop playback
-curl --silent -X POST -d "" \
+curl --silent -X GET \
   "http://${airplay_ip}/stop"

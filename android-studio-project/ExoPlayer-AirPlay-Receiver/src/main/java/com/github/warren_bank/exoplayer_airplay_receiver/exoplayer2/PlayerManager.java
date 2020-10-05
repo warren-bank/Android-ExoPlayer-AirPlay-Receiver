@@ -511,6 +511,20 @@ public final class PlayerManager implements EventListener {
   }
 
   /**
+   * Seek within the current video by a relative offset.
+   *
+   * @param offsetMs The position as a relative offset in milliseconds.
+   */
+  public void AirPlay_add_scrub_offset(long offsetMs) {
+    if (exoPlayer == null) return;
+
+    if (exoPlayer.isCurrentWindowSeekable()) {
+      long positionMs = exoPlayer.getCurrentPosition();
+      exoPlayer.seekTo(currentItemIndex, positionMs + offsetMs);
+    }
+  }
+
+  /**
    * Change rate of speed for video playback.
    *
    * @param rate New rate of speed for video playback. The value 0.0 is equivalent to 'pause'.

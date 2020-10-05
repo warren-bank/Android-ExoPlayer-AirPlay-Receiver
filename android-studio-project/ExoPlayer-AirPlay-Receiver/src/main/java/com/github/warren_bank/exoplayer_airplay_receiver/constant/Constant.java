@@ -156,56 +156,58 @@ public class Constant {
     }
 
     public interface Register {
-        public static final int FAIL = -1;
-        public static final int OK   =  0;
+        public static final int FAIL                            = -1;
+        public static final int OK                              =  0;
     }
 
     public interface Msg {
-        public static final int Msg_Photo         =  1;
-        public static final int Msg_Stop          =  2;
-        public static final int Msg_Video_Play    =  3;
-        public static final int Msg_Video_Seek    =  4;
-        public static final int Msg_Video_Rate    =  5;
+        public static final int Msg_Photo                       =  1;
+        public static final int Msg_Stop                        =  2;
+        public static final int Msg_Video_Play                  =  3;
+        public static final int Msg_Video_Seek                  =  4;
+        public static final int Msg_Video_Rate                  =  5;
 
-        public static final int Msg_Video_Queue   =  6;
-        public static final int Msg_Video_Next    =  7;
-        public static final int Msg_Video_Prev    =  8;
-        public static final int Msg_Audio_Volume  =  9;
-        public static final int Msg_Text_Show     = 10;
-        public static final int Msg_Text_Set_Time = 11;
-        public static final int Msg_Text_Add_Time = 12;
+        public static final int Msg_Video_Seek_Offset           =  6;
+        public static final int Msg_Video_Queue                 =  7;
+        public static final int Msg_Video_Next                  =  8;
+        public static final int Msg_Video_Prev                  =  9;
+        public static final int Msg_Audio_Volume                = 10;
+        public static final int Msg_Text_Show                   = 11;
+        public static final int Msg_Text_Set_Time               = 12;
+        public static final int Msg_Text_Add_Time               = 13;
 
-        public static final int Msg_Show_Player   = 13;
+        public static final int Msg_Show_Player                 = 14;
 
-        public static final int Msg_Runtime_Permissions_Granted = 14;
+        public static final int Msg_Runtime_Permissions_Granted = 15;
     }
 
     public interface Target {
-        public static final String REVERSE        = "/reverse";
-        public static final String PHOTO          = "/photo";
-        public static final String SERVER_INFO    = "/server-info";
-        public static final String STOP           = "/stop";
-        public static final String PLAY           = "/play";
-        public static final String SCRUB          = "/scrub";
-        public static final String RATE           = "/rate";
-        public static final String PLAYBACK_INFO  = "/playback-info";
+        public static final String REVERSE                      = "/reverse";
+        public static final String PHOTO                        = "/photo";
+        public static final String SERVER_INFO                  = "/server-info";
+        public static final String STOP                         = "/stop";
+        public static final String PLAY                         = "/play";
+        public static final String SCRUB                        = "/scrub";
+        public static final String RATE                         = "/rate";
+        public static final String PLAYBACK_INFO                = "/playback-info";
 
-        public static final String QUEUE          = "/queue";
-        public static final String NEXT           = "/next";
-        public static final String PREVIOUS       = "/previous";
-        public static final String VOLUME         = "/volume";
-        public static final String TXT_SHOW       = "/show-captions";
-        public static final String TXT_SET_OFFSET = "/set-captions-offset";
-        public static final String TXT_ADD_OFFSET = "/add-captions-offset";
+        public static final String SCRUB_OFFSET                 = "/add-scrub-offset";
+        public static final String QUEUE                        = "/queue";
+        public static final String NEXT                         = "/next";
+        public static final String PREVIOUS                     = "/previous";
+        public static final String VOLUME                       = "/volume";
+        public static final String TXT_SHOW                     = "/show-captions";
+        public static final String TXT_SET_OFFSET               = "/set-captions-offset";
+        public static final String TXT_ADD_OFFSET               = "/add-captions-offset";
 
-        public static final String PLAYER_SHOW    = "/show-player";
+        public static final String PLAYER_SHOW                  = "/show-player";
     }
 
     public interface Status {
-        public static final String Status_play    = "playing";
-        public static final String Status_stop    = "stopped";
-        public static final String Status_pause   = "paused";
-        public static final String Status_load    = "loading";
+        public static final String Status_play                  = "playing";
+        public static final String Status_stop                  = "stopped";
+        public static final String Status_pause                 = "paused";
+        public static final String Status_load                  = "loading";
     }
 
 }

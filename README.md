@@ -118,32 +118,42 @@ __AirPlay APIs:__
   ```
 * seek to `30 seconds` within currently playing video:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/scrub?position=30.0"
   ```
 * pause the currently playing video:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/rate?value=0.0"
   ```
 * resume playback of the currently paused video:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/rate?value=1.0"
   ```
 * increase speed of playback to 10x:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/rate?value=10.0"
   ```
 * stop playback:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/stop"
   ```
 
 __extended APIs:__
 
+* seek `30 seconds` forward relative to current position within currently playing video (30 second = 30*1e3 milliseconds):
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/add-scrub-offset?value=30000"
+  ```
+* seek `30 seconds` backward relative to current position within currently playing video (30 second = 30*1e3 milliseconds):
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/add-scrub-offset?value=-30000"
+  ```
 * add video #2 to end of queue (add text captions, set 'Referer' request header, seek to 50%):
   ```bash
     # note: position < 1 is a percent of the total track length
@@ -162,52 +172,52 @@ __extended APIs:__
   ```
 * skip forward to next video in queue:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/next"
   ```
 * skip backward to previous video in queue:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/previous"
   ```
 * mute audio:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/volume?value=0.0"
   ```
 * set audio volume to 50%:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/volume?value=0.5"
   ```
 * set audio volume to 100%:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/volume?value=1.0"
   ```
 * turn text captions off:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/show-captions?toggle=0"
   ```
 * turn text captions on:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/show-captions?toggle=1"
   ```
 * set time offset for text captions (1 second = 1e6 microseconds):
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/set-captions-offset?value=1000000"
   ```
 * add to current time offset for text captions (60 second = 60*1e6 microseconds):
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/add-captions-offset?value=60000000"
   ```
 * remove time offset for text captions:
   ```bash
-    curl --silent -X POST -d "" \
+    curl --silent -X GET \
       "http://${airplay_ip}/set-captions-offset?value=0"
   ```
 * play audio .flac file (set 'Referer' request header, seek to 50%):
