@@ -100,63 +100,63 @@ select > option {
   </style>
   <script>
 
-window.onload  = () => {
+window.onload  = function() {
 
   // ===============================================================================================
   // form fields
 
-  const $airplay_host            = document.querySelector('input#airplay_host')
-  const $airplay_port            = document.querySelector('input#airplay_port')
-  const $airplay_tls             = document.querySelector('input#airplay_tls')
-  const $video_url               = document.querySelector('input#video_url')
-  const $caption_url             = document.querySelector('input#caption_url')
-  const $referer_url             = document.querySelector('input#referer_url')
-  const $play                    = document.querySelector('button#play')
-  const $queue                   = document.querySelector('button#queue')
-  const $pause                   = document.querySelector('button#pause')
-  const $resume                  = document.querySelector('button#resume')
-  const $captions_on             = document.querySelector('button#captions_on')
-  const $captions_off            = document.querySelector('button#captions_off')
-  const $stop                    = document.querySelector('button#stop')
-  const $seek_hours              = document.querySelector('input#seek_hours')
-  const $seek_minutes            = document.querySelector('input#seek_minutes')
-  const $seek_seconds            = document.querySelector('input#seek_seconds')
-  const $seek                    = document.querySelector('button#seek')
-  const $seek_offset_minutes     = document.querySelector('input#seek_offset_minutes')
-  const $seek_offset_seconds     = document.querySelector('input#seek_offset_seconds')
-  const $seek_offset_ms          = document.querySelector('input#seek_offset_ms')
-  const $seek_offset             = document.querySelector('button#seek_offset')
-  const $set_txt_offset_minutes  = document.querySelector('input#set_txt_offset_minutes')
-  const $set_txt_offset_seconds  = document.querySelector('input#set_txt_offset_seconds')
-  const $set_txt_offset_ms       = document.querySelector('input#set_txt_offset_ms')
-  const $set_txt_offset          = document.querySelector('button#set_txt_offset')
-  const $add_txt_offset_minutes  = document.querySelector('input#add_txt_offset_minutes')
-  const $add_txt_offset_seconds  = document.querySelector('input#add_txt_offset_seconds')
-  const $add_txt_offset_ms       = document.querySelector('input#add_txt_offset_ms')
-  const $add_txt_offset          = document.querySelector('button#add_txt_offset')
-  const $rate_factor             = document.querySelector('input#rate_factor')
-  const $rate                    = document.querySelector('button#rate')
-  const $volume_factor           = document.querySelector('input#volume_factor')
-  const $volume                  = document.querySelector('button#volume')
-  const $previous                = document.querySelector('button#previous')
-  const $next                    = document.querySelector('button#next')
-  const $sample_videos           = document.querySelector('select#sample_videos')
-  const $image_file              = document.querySelector('input#image_file')
+  var $airplay_host            = document.querySelector('input#airplay_host')
+  var $airplay_port            = document.querySelector('input#airplay_port')
+  var $airplay_tls             = document.querySelector('input#airplay_tls')
+  var $video_url               = document.querySelector('input#video_url')
+  var $caption_url             = document.querySelector('input#caption_url')
+  var $referer_url             = document.querySelector('input#referer_url')
+  var $play                    = document.querySelector('button#play')
+  var $queue                   = document.querySelector('button#queue')
+  var $pause                   = document.querySelector('button#pause')
+  var $resume                  = document.querySelector('button#resume')
+  var $captions_on             = document.querySelector('button#captions_on')
+  var $captions_off            = document.querySelector('button#captions_off')
+  var $stop                    = document.querySelector('button#stop')
+  var $seek_hours              = document.querySelector('input#seek_hours')
+  var $seek_minutes            = document.querySelector('input#seek_minutes')
+  var $seek_seconds            = document.querySelector('input#seek_seconds')
+  var $seek                    = document.querySelector('button#seek')
+  var $seek_offset_minutes     = document.querySelector('input#seek_offset_minutes')
+  var $seek_offset_seconds     = document.querySelector('input#seek_offset_seconds')
+  var $seek_offset_ms          = document.querySelector('input#seek_offset_ms')
+  var $seek_offset             = document.querySelector('button#seek_offset')
+  var $set_txt_offset_minutes  = document.querySelector('input#set_txt_offset_minutes')
+  var $set_txt_offset_seconds  = document.querySelector('input#set_txt_offset_seconds')
+  var $set_txt_offset_ms       = document.querySelector('input#set_txt_offset_ms')
+  var $set_txt_offset          = document.querySelector('button#set_txt_offset')
+  var $add_txt_offset_minutes  = document.querySelector('input#add_txt_offset_minutes')
+  var $add_txt_offset_seconds  = document.querySelector('input#add_txt_offset_seconds')
+  var $add_txt_offset_ms       = document.querySelector('input#add_txt_offset_ms')
+  var $add_txt_offset          = document.querySelector('button#add_txt_offset')
+  var $rate_factor             = document.querySelector('input#rate_factor')
+  var $rate                    = document.querySelector('button#rate')
+  var $volume_factor           = document.querySelector('input#volume_factor')
+  var $volume                  = document.querySelector('button#volume')
+  var $previous                = document.querySelector('button#previous')
+  var $next                    = document.querySelector('button#next')
+  var $sample_videos           = document.querySelector('select#sample_videos')
+  var $image_file              = document.querySelector('input#image_file')
 
   // ===============================================================================================
   // extract data from URL #hash
 
-  const encoded_urls = {
+  var encoded_urls = {
     video:   null,
     caption: null,
     referer: null
   }
 
-  const get_encoded_video_url = () => {
-    let b64, hash_regex_pattern, matches
+  var get_encoded_video_url = function() {
+    var b64, hash_regex_pattern, matches
 
     b64 = '[A-Za-z0-9+/=%]'
-    hash_regex_pattern = `^#/watch/(${b64}+?)(?:/subtitle/(${b64}+?))?(?:/referer/(${b64}+?))?$`
+    hash_regex_pattern = '^#/watch/(' + b64 + '+?)(?:/subtitle/(' + b64 + '+?))?(?:/referer/(' + b64 + '+?))?$'
     hash_regex_pattern = new RegExp(hash_regex_pattern)
 
     matches = hash_regex_pattern.exec(window.location.hash)
@@ -176,18 +176,18 @@ window.onload  = () => {
   // ===============================================================================================
   // cookie management
 
-  const get_cookie_value = (key) => {
-    const pattern = new RegExp('(?:^|;)\\s*' + key + '\\s*=\\s*([^;]+)(?:;|$)')
-    const cookies = document.cookie
-    const matches = pattern.exec(cookies)
+  var get_cookie_value = function(key) {
+    var pattern = new RegExp('(?:^|;)\\s*' + key + '\\s*=\\s*([^;]+)(?:;|$)')
+    var cookies = document.cookie
+    var matches = pattern.exec(cookies)
     return (matches && matches.length) ? matches[1] : ''
   }
 
-  const set_cookie_value = (key, val) => {
-    document.cookie = `${key}=${val};domain=${window.location.hostname};path=${window.location.pathname};max-age=${60*60*24*365}`
+  var set_cookie_value = function(key, val) {
+    document.cookie = key + '=' + val + ';domain=' + window.location.hostname + ';path=' + window.location.pathname + ';max-age=' + (60*60*24*365)
   }
 
-  const persist_form_fields = (airplay_host, airplay_port, airplay_tls) => {
+  var persist_form_fields = function(airplay_host, airplay_port, airplay_tls) {
     set_cookie_value('airplay_host', airplay_host)
     set_cookie_value('airplay_port', airplay_port)
     set_cookie_value('airplay_tls',  (airplay_tls ? '1' : '0'))
@@ -196,8 +196,8 @@ window.onload  = () => {
   // ===============================================================================================
   // pre-populate some form fields with data extracted from either URL #hash or cookies
 
-  const decode_URL = (str) => {
-    let tail, done
+  var decode_URL = function(str) {
+    var tail, done
 
     if (str) {
       while (! done) {
@@ -210,8 +210,8 @@ window.onload  = () => {
     return str
   }
 
-  const prepopulate_form_fields = () => {
-    let airplay_host, airplay_port, airplay_tls
+  var prepopulate_form_fields = function() {
+    var airplay_host, airplay_port, airplay_tls
 
     airplay_host = get_cookie_value('airplay_host')
     airplay_port = get_cookie_value('airplay_port')
@@ -236,11 +236,11 @@ window.onload  = () => {
   // ===============================================================================================
   // XHR helper
 
-  const send_message = (path, data) => {
-    const host = $airplay_host.value
-    const port = $airplay_port.value || '8192'
-    const tls  = $airplay_tls.checked
-    const url = `${ tls ? 'https' : 'http' }://${host}:${port}${path}`
+  var send_message = function(path, data) {
+    var host = $airplay_host.value
+    var port = $airplay_port.value || '8192'
+    var tls  = $airplay_tls.checked
+    var url = (tls ? 'https' : 'http') + '://' + host + ':' + port + path
 
     if (!host) {
       alert('AirPlay "host" is required')
@@ -251,7 +251,7 @@ window.onload  = () => {
       return
     }
 
-    const xhr = new XMLHttpRequest()
+    var xhr = new XMLHttpRequest()
 
     if (data) {
       xhr.open("POST", url, true, null, null)
@@ -270,21 +270,21 @@ window.onload  = () => {
   // ===============================================================================================
   // form field validation helper
 
-  const get_value = (field, default_value) => {
-    let val = field.value
+  var get_value = function(field, default_value) {
+    var val = field.value
 
     if (!val) {
       val = default_value
     }
     else if (field.getAttribute('x-type') === 'range') {
-      let min  = field.getAttribute('x-min')
-      let max  = field.getAttribute('x-max')
-      let step = field.getAttribute('x-step')
+      var min  = field.getAttribute('x-min')
+      var max  = field.getAttribute('x-max')
+      var step = field.getAttribute('x-step')
 
-      const isFloat = (step.indexOf('.') >= 0)
+      var isFloat = (step.indexOf('.') >= 0)
 
       if (!isFloat && (val.indexOf('.') >= 0)) {
-        alert(`'${field.id}' requires an Integer value`)
+        alert("'" + field.id + "'" + ' requires an Integer value')
         return
       }
 
@@ -302,21 +302,21 @@ window.onload  = () => {
       }
 
       if (isNaN(val)) {
-        alert(`'${field.id}' could not be parsed as ${isFloat ? 'a Float' : 'an Integer'}`)
+        alert("'" + field.id + "'" + ' could not be parsed as ' + (isFloat ? 'a Float' : 'an Integer'))
         return
       }
       if (val < min) {
-        alert(`'${field.id}' value ("${val}") is smaller than the minimum value allowed ("${min}")`)
+        alert("'" + field.id + "'" + ' value ("' + val + '") is smaller than the minimum value allowed ("' + min + '")')
         return
       }
       if (val > max) {
-        alert(`'${field.id}' value ("${val}") is larger than the maximum value allowed ("${max}")`)
+        alert("'" + field.id + "'" + ' value ("' + val + '") is larger than the maximum value allowed ("' + max + '")')
         return
       }
-      const threshold = 1.0e-10
-      const steps = (val / step)
+      var threshold = 1.0e-10
+      var steps = (val / step)
       if ((steps !== parseInt(steps)) && (Math.abs(Math.round(steps) - steps) > threshold)) {
-        alert(`'${field.id}' value ("${val}") is not a multiple of the step increment ("${step}")`)
+        alert("'" + field.id + "'" + ' value ("' + val + '") is not a multiple of the step increment ("' + step + '")')
         return
       }
     }
@@ -328,191 +328,23 @@ window.onload  = () => {
   // ===============================================================================================
   // form field data collection helper
 
-/* =================================================================================================
- * the following functionality has been entirely re-implemented directly in the ExoAirPlay receiver.
- * no special tooling is needed for the sender to "cast" audio playlists in the formats:
- *  - .m3u  (audio/x-mpegurl)
- *  - .html (text/html)
- * =================================================================================================
-
-  const get_fetch_response = async (url) => {
-    let response, proxied_url
-
-    try {
-      response = await fetch(url)
-      if (response.status !== 200) throw 'bad response'
-    }
-    catch(error) {
-      // -----------------------------------------
-      // CORS is probably not allowed; attempt a workaround..
-      // -----------------------------------------
-      // options:
-      //   * https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
-      // winner:
-      //   * https://ovsoinc.github.io/yacdn.org/
-      // runner up:
-      //   * https://codetabs.com/cors-proxy/cors-proxy.html
-      // -----------------------------------------
-      proxied_url = `https://yacdn.org/proxy/${url}`
-
-      try {
-        response = await fetch(proxied_url)
-        if (response.status !== 200) throw 'bad response'
-      }
-      catch(error) {
-        proxied_url = `https://api.codetabs.com/v1/proxy?quest=${url}`
-
-        try {
-          response = await fetch(proxied_url)
-          if (response.status !== 200) throw 'bad response'
-        }
-        catch(error) {
-          window.alert("Error: Unable to download playlist. Aborting operation.")
-          return false
-        }
-      }
-    }
-    return response
-  }
-
-  const get_text_from_fetch_response = async (response) => {
-    const buffer   = await response.arrayBuffer()
-    const mimetype = response.headers.get("content-type") || ''
-
-    let encoding = 'ascii'
-    const encoding_regex = /^.*;\s*charset=(\S+)/i
-    if (encoding_regex.test(mimetype))
-      encoding = mimetype.replace(encoding_regex, '$1').toLowerCase()
-
-    //console.log('MIME:', mimetype)
-    //console.log('ENCODING:', encoding)
-
-    const decoder = new TextDecoder(encoding)
-    const text    = decoder.decode(buffer)
-    return text
-  }
-
-  const playlist_regex = /\.(?:m3u)(?:[\?#]|$)/i
-
-  const expand_playlist = async () => {
-    let url, text
-
-    url = $video_url.value
-    if (!url)
-      return null
-    if (!playlist_regex.test(url))
-      return null
-    if (false === window.confirm("Is this URL an audio playlist?\n\nIf yes, this page will download and individually queue each file."))
-      return null
-
-    text = await get_fetch_response(url)
-    if (false === text)
-      return false
-
-    text = await get_text_from_fetch_response(text)
-    text = text.split(/[\r\n]+/g)
-
-    if (!Array.isArray(text) || !text.length)
-      return null
-
-    // remove whitespace
-    text = text.map(line => line.trim())
-
-    // not sure if this is a good idea.. convert Windows path separators
-    text = text.map(line => line.replace(/[\\]/g, '/'))
-
-    // remove empty lines and comments
-    text = text.filter(line => (line.length && (line[0] !== '#')))
-    if (!text.length)
-      return null
-
-    // resolve relative URL paths
-    text = text.map(path => (new URL(path, url)).href)
-
-    return text
-  }
-
-  const htmlpage_regex = /(?:\/|\.s?html?)(?:[\?#]|$)/i
-  const linkhref_regex  = /href="([^"]+\.)(mp3|m4a|ogg|wav|flac)"/ig
-  const format_priority = ['mp3','m4a','ogg','wav','flac']
-
-  const expand_htmlpage = async () => {
-    let url, text, url_chunks, matches, urls
-
-    url = $video_url.value
-    if (!url)
-      return null
-    if (!htmlpage_regex.test(url))
-      return null
-    if (false === window.confirm("Is this URL an html page that contains links to audio files?\n\nIf yes, this page will download and individually queue each file."))
-      return null
-
-    text = await get_fetch_response(url)
-    if (false === text)
-      return false
-
-    text = await get_text_from_fetch_response(text)
-    text = text.replace(/[\r\n]+/g, ' ')
-
-    url_chunks = {}
-    while ((matches = linkhref_regex.exec(text)) != null) {
-      let m1 = matches[1]
-      let m2 = matches[2]
-
-      let lm1 = m1.toLowerCase()
-      let lm2 = m2.toLowerCase()
-
-      if (url_chunks[lm1]) {
-        let old = url_chunks[lm1] // lm1 => [m1, m2]
-        let lo2 = old[1].toLowerCase()
-
-        let po = format_priority.indexOf(lo2)
-        let pm = format_priority.indexOf(lm2)
-
-        if ((pm >=0) && (pm < po))
-          url_chunks[lm1] = [m1, m2]
-      }
-      else {
-        url_chunks[lm1] = [m1, m2]
-      }
-    }
-
-    urls = []
-    for (let key in url_chunks) {
-      let old = url_chunks[key]
-      let url = old[0] + old[1]
-      urls.push(url)
-    }
-
-    if (!Array.isArray(urls) || !urls.length)
-      return null
-
-    // resolve relative URL paths
-    urls = urls.map(path => (new URL(path, url)).href)
-
-    return urls
-  }
-
- * =================================================================================================
- */
-
-  const get_video_POST_data = (url) => {
+  var get_video_POST_data = function(url) {
     if (!url)
           url = $video_url.value
-    const txt = $caption_url.value
-    const ref = $referer_url.value
+    var txt = $caption_url.value
+    var ref = $referer_url.value
 
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    let data = `Content-Location: ${url}\nStart-Position: 0`
+    var data = 'Content-Location: ' + url + "\n" + 'Start-Position: 0'
     if (txt) {
-      data += `\nCaption-Location: ${txt}`
+      data += "\n" + 'Caption-Location: ' + txt
     }
     if (ref) {
-      data += `\nReferer: ${ref}`
+      data += "\n" + 'Referer: ' + ref
     }
     return data
   }
@@ -520,53 +352,7 @@ window.onload  = () => {
   // ===============================================================================================
   // form field submission helper
 
-/* =================================================================================================
- * the following functionality has been entirely re-implemented directly in the ExoAirPlay receiver.
- * no special tooling is needed for the sender to "cast" audio playlists in the formats:
- *  - .m3u  (audio/x-mpegurl)
- *  - .html (text/html)
- * =================================================================================================
-
-  const request_delay = (delay_ms) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, delay_ms)
-    })
-  }
-
-  const send_video_POST_data = async (initial_path) => {
-    let urls = null
-
-    if (urls == null)
-      urls = await expand_playlist()
-    if (urls == null)
-      urls = await expand_htmlpage()
-
-    // special return value to indicate that operation is aborted.
-    if (urls === false) return
-
-    let path, data
-    if (Array.isArray(urls) && urls.length) {
-      for (let i = 0; i < urls.length; i++) {
-        path = (i === 0) ? initial_path : '/queue'
-        data = get_video_POST_data(urls[i])
-
-        send_message(path, data)
-
-        await request_delay(2500)  // 2.5 seconds between each request is high, but there's no rush since the URLs are being added to a queue and won't be used immediately; better to allow the receiver time to process each request, so they are queued in the correct order.
-      }
-    }
-    else {
-      path = initial_path
-      data = get_video_POST_data()
-
-      send_message(path, data)
-    }
-  }
-
- * =================================================================================================
- */
-
-  const send_video_POST_data = async (initial_path) => {
+  var send_video_POST_data = function(initial_path) {
     path = initial_path
     data = get_video_POST_data()
 
@@ -576,165 +362,165 @@ window.onload  = () => {
   // ===============================================================================================
   // add event listeners to form fields
 
-  $play.onclick = (event) => {
+  $play.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const path = '/play'
+    var path = '/play'
     send_video_POST_data(path)
   }
 
-  $queue.onclick = (event) => {
+  $queue.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const path = '/queue'
+    var path = '/queue'
     send_video_POST_data(path)
   }
 
-  $pause.onclick = (event) => {
+  $pause.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/rate?value=0.0', null)
   }
 
-  $resume.onclick = (event) => {
+  $resume.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/rate?value=1.0', null)
   }
 
-  $captions_on.onclick = (event) => {
+  $captions_on.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/show-captions?toggle=1', null)
   }
 
-  $captions_off.onclick = (event) => {
+  $captions_off.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/show-captions?toggle=0', null)
   }
 
-  $stop.onclick = (event) => {
+  $stop.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/stop', null)
   }
 
-  $seek.onclick = (event) => {
+  $seek.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const hrs = get_value($seek_hours,   0)    // const hrs = parseInt($seek_hours.value,   10) || 0
-    const min = get_value($seek_minutes, 0)    // const min = parseInt($seek_minutes.value, 10) || 0
-    const sec = get_value($seek_seconds, 0)    // const sec = parseInt($seek_seconds.value, 10) || 0
+    var hrs = get_value($seek_hours,   0)    // var hrs = parseInt($seek_hours.value,   10) || 0
+    var min = get_value($seek_minutes, 0)    // var min = parseInt($seek_minutes.value, 10) || 0
+    var sec = get_value($seek_seconds, 0)    // var sec = parseInt($seek_seconds.value, 10) || 0
 
-    const offset = (sec) + (min * 60) + (hrs * 60 * 60)
+    var offset = (sec) + (min * 60) + (hrs * 60 * 60)
 
-    const path = `/scrub?position=${offset}`
-    const data = null
+    var path = '/scrub?position=' + offset
+    var data = null
 
     send_message(path, data)
   }
 
-  $seek_offset.onclick = (event) => {
+  $seek_offset.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const min = get_value($seek_offset_minutes, 0)    // const min = parseInt($seek_offset_minutes.value, 10) || 0
-    const sec = get_value($seek_offset_seconds, 0)    // const sec = parseInt($seek_offset_seconds.value, 10) || 0
-    const ms  = get_value($seek_offset_ms,      0)    // const ms  = parseInt($seek_offset_ms.value,      10) || 0
+    var min = get_value($seek_offset_minutes, 0)    // var min = parseInt($seek_offset_minutes.value, 10) || 0
+    var sec = get_value($seek_offset_seconds, 0)    // var sec = parseInt($seek_offset_seconds.value, 10) || 0
+    var ms  = get_value($seek_offset_ms,      0)    // var ms  = parseInt($seek_offset_ms.value,      10) || 0
 
-    const offset = (ms) + (sec * 1000) + (min * 60 * 1000)
+    var offset = (ms) + (sec * 1000) + (min * 60 * 1000)
 
-    const path = `/add-scrub-offset?value=${offset}`
-    const data = null
+    var path = '/add-scrub-offset?value=' + offset
+    var data = null
 
     send_message(path, data)
   }
 
-  $set_txt_offset.onclick = (event) => {
+  $set_txt_offset.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const min = get_value($set_txt_offset_minutes, 0)    // const min = parseInt($set_txt_offset_minutes.value, 10) || 0
-    const sec = get_value($set_txt_offset_seconds, 0)    // const sec = parseInt($set_txt_offset_seconds.value, 10) || 0
-    const ms  = get_value($set_txt_offset_ms,      0)    // const ms  = parseInt($set_txt_offset_ms.value,      10) || 0
+    var min = get_value($set_txt_offset_minutes, 0)    // var min = parseInt($set_txt_offset_minutes.value, 10) || 0
+    var sec = get_value($set_txt_offset_seconds, 0)    // var sec = parseInt($set_txt_offset_seconds.value, 10) || 0
+    var ms  = get_value($set_txt_offset_ms,      0)    // var ms  = parseInt($set_txt_offset_ms.value,      10) || 0
 
-    const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+    var offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
-    const path = `/set-captions-offset?value=${offset}`
-    const data = null
+    var path = '/set-captions-offset?value=' + offset
+    var data = null
 
     send_message(path, data)
   }
 
-  $add_txt_offset.onclick = (event) => {
+  $add_txt_offset.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const min = get_value($add_txt_offset_minutes, 0)    // const min = parseInt($add_txt_offset_minutes.value, 10) || 0
-    const sec = get_value($add_txt_offset_seconds, 0)    // const sec = parseInt($add_txt_offset_seconds.value, 10) || 0
-    const ms  = get_value($add_txt_offset_ms,      0)    // const ms  = parseInt($add_txt_offset_ms.value,      10) || 0
+    var min = get_value($add_txt_offset_minutes, 0)    // var min = parseInt($add_txt_offset_minutes.value, 10) || 0
+    var sec = get_value($add_txt_offset_seconds, 0)    // var sec = parseInt($add_txt_offset_seconds.value, 10) || 0
+    var ms  = get_value($add_txt_offset_ms,      0)    // var ms  = parseInt($add_txt_offset_ms.value,      10) || 0
 
-    const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+    var offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
-    const path = `/add-captions-offset?value=${offset}`
-    const data = null
+    var path = '/add-captions-offset?value=' + offset
+    var data = null
 
     send_message(path, data)
   }
 
-  $rate.onclick = (event) => {
+  $rate.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const rate = get_value($rate_factor, 0.0)  // const rate = parseFloat($rate_factor.value) || 0.0
-    const path = `/rate?value=${rate}`
-    const data = null
+    var rate = get_value($rate_factor, 0.0)  // var rate = parseFloat($rate_factor.value) || 0.0
+    var path = '/rate?value=' + rate
+    var data = null
 
     send_message(path, data)
   }
 
-  $volume.onclick = (event) => {
+  $volume.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const vol = get_value($volume_factor, 0.0) // const vol  = parseFloat($volume_factor.value) || 0.0
-    const path = `/volume?value=${vol}`
-    const data = null
+    var vol = get_value($volume_factor, 0.0) // var vol  = parseFloat($volume_factor.value) || 0.0
+    var path = '/volume?value=' + vol
+    var data = null
 
     send_message(path, data)
   }
 
-  $previous.onclick = (event) => {
+  $previous.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/previous', null)
   }
 
-  $next.onclick = (event) => {
+  $next.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     send_message('/next', null)
   }
 
-  $sample_videos.onchange = (event) => {
+  $sample_videos.onchange = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    const item = $sample_videos.selectedOptions[0]
-    const url  = item.getAttribute('x-video-url')
-    const txt  = item.getAttribute('x-caption-url')
-    const ref  = item.getAttribute('x-referer-url')
+    var item = $sample_videos.selectedOptions[0]
+    var url  = item.getAttribute('x-video-url')
+    var txt  = item.getAttribute('x-caption-url')
+    var ref  = item.getAttribute('x-referer-url')
 
     if (url) {
       $video_url.value   = url
@@ -743,15 +529,15 @@ window.onload  = () => {
     }
   }
 
-  $image_file.onchange = (event) => {
+  $image_file.onchange = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     if (!$image_file.files || !$image_file.files.length)
       return
 
-    const path = '/photo'
-    const data = $image_file.files[0]
+    var path = '/photo'
+    var data = $image_file.files[0]
 
     send_message(path, data)
 
