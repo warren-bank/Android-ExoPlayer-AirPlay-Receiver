@@ -52,11 +52,11 @@ body .contents .oneline.fullwidth > * {
   width: 100%;
 }
 
-body .contents div.left {
+body .contents .left {
   text-align: left;
 }
 
-body .contents div.right {
+body .contents .right {
   text-align: right;
 }
 
@@ -111,6 +111,9 @@ window.onload  = () => {
   const $video_url               = document.querySelector('input#video_url')
   const $caption_url             = document.querySelector('input#caption_url')
   const $referer_url             = document.querySelector('input#referer_url')
+  const $start_position_hours    = document.querySelector('input#start_position_hours')
+  const $start_position_minutes  = document.querySelector('input#start_position_minutes')
+  const $start_position_seconds  = document.querySelector('input#start_position_seconds')
   const $play                    = document.querySelector('button#play')
   const $queue                   = document.querySelector('button#queue')
   const $pause                   = document.querySelector('button#pause')
@@ -502,12 +505,18 @@ window.onload  = () => {
     const txt = $caption_url.value
     const ref = $referer_url.value
 
+    const hrs = get_value($start_position_hours,   0)    // const hrs = parseInt($start_position_hours.value,   10) || 0
+    const min = get_value($start_position_minutes, 0)    // const min = parseInt($start_position_minutes.value, 10) || 0
+    const sec = get_value($start_position_seconds, 0)    // const sec = parseInt($start_position_seconds.value, 10) || 0
+
+    const offset = (sec) + (min * 60) + (hrs * 60 * 60)
+
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    let data = `Content-Location: ${url}\nStart-Position: 0`
+    let data = `Content-Location: ${url}\nStart-Position: ${offset}`
     if (txt) {
       data += `\nCaption-Location: ${txt}`
     }
@@ -735,11 +744,21 @@ window.onload  = () => {
     const url  = item.getAttribute('x-video-url')
     const txt  = item.getAttribute('x-caption-url')
     const ref  = item.getAttribute('x-referer-url')
+    const pos  = item.getAttribute('x-start-position') || '00:00:00'
 
     if (url) {
       $video_url.value   = url
       $caption_url.value = (txt) ? txt : ''
       $referer_url.value = (ref) ? ref : ''
+
+      const pos_chunks = pos.split(':')
+      const hrs = (pos_chunks.length >= 3) ? parseInt(pos_chunks[pos_chunks.length - 3], 10) : 0
+      const min = (pos_chunks.length >= 2) ? parseInt(pos_chunks[pos_chunks.length - 2], 10) : 0
+      const sec = (pos_chunks.length >= 1) ? parseInt(pos_chunks[pos_chunks.length - 1], 10) : 0
+
+      $start_position_hours.value   = (hrs) ? hrs : ''
+      $start_position_minutes.value = (min) ? min : ''
+      $start_position_seconds.value = (sec) ? sec : ''
     }
   }
 
@@ -766,38 +785,88 @@ window.onload  = () => {
   <div class="contents">
     <h3>Network Address of AirPlay Receiver:</h3>
     <div>
-      <div class="left oneline">
-        <label for="airplay_host">Host:</label>
-        <input id="airplay_host" type="text" size="15" placeholder="192.168.0.100" />
-      </div>
-      <div class="left oneline">
-        <label for="airplay_port">Port:</label>
-        <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" size="6" placeholder="8192" />
-      </div>
-      <div class="left oneline">
-        <label for="airplay_tls">HTTPS:</label>
-        <input id="airplay_tls" type="checkbox" />
-      </div>
+      <table align="center">
+        <tr>
+          <td class="oneline right">
+            <label for="airplay_host">Host:</label>
+          </td>
+          <td class="oneline left">
+            <input id="airplay_host" type="text" size="15" placeholder="192.168.0.100" />
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label for="airplay_port">Port:</label>
+          </td>
+          <td class="oneline left">
+            <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" size="6" placeholder="8192" />
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label for="airplay_tls">HTTPS:</label>
+          </td>
+          <td class="oneline left">
+            <input id="airplay_tls" type="checkbox" />
+          </td>
+        </tr>
+      </table>
     </div>
     <hr />
     <h3>Network Location of Video Media:</h3>
     <div>
-      <div class="oneline right">
-        <label for="video_url">Video URL:</label>
-        <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
-      </div>
-      <div class="oneline right">
-        <label for="caption_url">Caption URL:</label>
-        <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
-      </div>
-      <div class="oneline right">
-        <label for="referer_url">Referer URL:</label>
-        <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
-      </div>
-      <div class="oneline">
-        <button id="play">Play</button>
-        <button id="queue">Add to Queue</button>
-      </div>
+      <table align="center">
+        <tr>
+          <td class="oneline right">
+            <label for="video_url">Video URL:</label>
+          </td>
+          <td class="oneline left">
+            <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label for="caption_url">Caption URL:</label>
+          </td>
+          <td class="oneline left">
+            <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label for="referer_url">Referer URL:</label>
+          </td>
+          <td class="oneline left">
+            <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label>Start Position:</label>
+          </td>
+          <td class="oneline left">
+            <table align="left">
+              <tr>
+                <td class="oneline">
+                  <input id="start_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+                </td>
+                <td class="oneline">
+                  <input id="start_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+                </td>
+                <td class="oneline">
+                  <input id="start_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline" colspan=2>
+            <button id="play">Play</button>
+            <button id="queue">Add to Queue</button>
+          </td>
+        </tr>
+      </table>
     </div>
     <hr />
     <h3>Remote Control of Video Playback:</h3>
@@ -920,7 +989,8 @@ window.onload  = () => {
                   x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8"
                   x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt"
                   x-referer-url="https://players.akamai.com/hls/"
-                 >Big Buck Bunny (vid:hls, subs:srt)</option>
+                  x-start-position="00:00:30"
+                 >Big Buck Bunny (vid:hls, subs:srt, pos:30s)</option>
           <option value="2"
                   x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
                   x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"

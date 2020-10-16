@@ -76,15 +76,16 @@ window.onload  = () => {
   // ===============================================================================================
   // form fields
 
-  const $airplay_host  = document.querySelector('input#airplay_host')
-  const $airplay_port  = document.querySelector('input#airplay_port')
-  const $airplay_tls   = document.querySelector('input#airplay_tls')
-  const $video_url     = document.querySelector('input#video_url')
-  const $caption_url   = document.querySelector('input#caption_url')
-  const $referer_url   = document.querySelector('input#referer_url')
-  const $play          = document.querySelector('button#play')
+  const $airplay_host   = document.querySelector('input#airplay_host')
+  const $airplay_port   = document.querySelector('input#airplay_port')
+  const $airplay_tls    = document.querySelector('input#airplay_tls')
+  const $video_url      = document.querySelector('input#video_url')
+  const $caption_url    = document.querySelector('input#caption_url')
+  const $referer_url    = document.querySelector('input#referer_url')
+  const $start_position = document.querySelector('input#start_position')
+  const $play           = document.querySelector('button#play')
 
-  const $sample_videos = document.querySelector('select#sample_videos')
+  const $sample_videos  = document.querySelector('select#sample_videos')
 
   // ===============================================================================================
   // XHR helper
@@ -288,13 +289,14 @@ window.onload  = () => {
           url = $video_url.value
     const txt = $caption_url.value
     const ref = $referer_url.value
+    const pos = $start_position.value || 0
 
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    let data = `Content-Location: ${url}\nStart-Position: 0`
+    let data = `Content-Location: ${url}\nStart-Position: ${pos}`
     if (txt) {
       data += `\nCaption-Location: ${txt}`
     }
@@ -379,11 +381,20 @@ window.onload  = () => {
     const url  = item.getAttribute('x-video-url')
     const txt  = item.getAttribute('x-caption-url')
     const ref  = item.getAttribute('x-referer-url')
+    const pos  = item.getAttribute('x-start-position') || '00:00:00'
 
     if (url) {
       $video_url.value   = url
       $caption_url.value = (txt) ? txt : ''
       $referer_url.value = (ref) ? ref : ''
+
+      const pos_chunks = pos.split(':')
+      const hrs = (pos_chunks.length >= 3) ? parseInt(pos_chunks[pos_chunks.length - 3], 10) : 0
+      const min = (pos_chunks.length >= 2) ? parseInt(pos_chunks[pos_chunks.length - 2], 10) : 0
+      const sec = (pos_chunks.length >= 1) ? parseInt(pos_chunks[pos_chunks.length - 1], 10) : 0
+
+      const offset = (sec) + (min * 60) + (hrs * 60 * 60)
+      $start_position.value = offset
 
       $play.click()
     }
@@ -432,6 +443,10 @@ window.onload  = () => {
       <div class="oneline right">
         <label for="referer_url">Referer URL:</label>
         <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
+      </div>
+      <div class="oneline right">
+        <label for="start_position">Start Position:</label>
+        <input id="start_position" type="number" x-type="range" x-min="0" x-max="999999" x-step="1" size="6" value="0" />
       </div>
       <div class="oneline">
         <button id="play">Play</button>
@@ -1115,6 +1130,50 @@ window.onload  = () => {
                 x-caption-url=""
                 x-video-url="https://archive.org/download/norahjonesmusicoggvorbis/Begin%20Again/"
                >Norah Jones - 2019 - Begin Again</option>
+
+        <option value="-2" disabled>&nbsp;</option>
+        <option value="-1" disabled>&nbsp;</option>
+        <option value="-2" disabled>&nbsp;</option>
+
+        <option value="130"
+                x-referer-url="https://archive.org/details/PattiSmith1971"
+                x-caption-url=""
+                x-video-url="https://archive.org/download/PattiSmith1971/"
+               >Patti Smith - 1971.12.25 - New York City - St Mark's Church - Poetry Project</option>
+        <option value="131"
+                x-referer-url="https://archive.org/details/pattismith2001-08-10"
+                x-caption-url=""
+                x-video-url="https://archive.org/download/pattismith2001-08-10/Patti%20Smith%202001-08-10%20Chicago%2C%20IL%2C%20USA/"
+               >Patti Smith - 2001.08.10 - Chicago, IL - Congress Theater - Young Greens of America convention</option>
+        <option value="132"
+                x-referer-url="https://archive.org/details/patti-smith-2020-03-08-the-fillmore-san-francisco-ca"
+                x-caption-url=""
+                x-video-url="https://archive.org/download/patti-smith-2020-03-08-the-fillmore-san-francisco-ca/PattiSmith2020-03-08TheFillmoreSanFranciscoCA.mp3"
+               >Patti Smith - 2020.03.08 - San Francisco, CA - The Fillmore</option>
+        <option value="133"
+                x-referer-url="https://archive.org/details/Rockgust11021-03-2011PattiSmith"
+                x-caption-url=""
+                x-video-url="https://archive.org/download/Rockgust11021-03-2011PattiSmith/RockgustN11021-03-2011PattiSmith.mp3"
+                x-start-position="00:22:00"
+               >Patti Smith - unidentified concert #01</option>
+        <option value="134"
+                x-referer-url="https://archive.org/details/ttanttapunk-2012-10-02-pattismith"
+                x-caption-url=""
+                x-video-url="https://archive.org/download/ttanttapunk-2012-10-02-pattismith/TTANTTAPUNK.mp3"
+                x-start-position="00:28:20"
+               >Patti Smith - unidentified concert #02</option>
+        <option value="135"
+                x-referer-url="https://archive.org/details/LargaDuracin18EasterPattiSmithGroup"
+                x-caption-url=""
+                x-video-url="https://archive.org/download/LargaDuracin18EasterPattiSmithGroup/Larga%20Duraci%C3%B3n%2018%20-%20Easter%20%28Patti%20Smith%20Group%29.mp3"
+                x-start-position="00:02:22"
+               >Patti Smith - unidentified concert #03</option>
+        <option value="136"
+                x-referer-url="https://archive.org/details/110228_pelose_pattiSmith"
+                x-caption-url=""
+                x-video-url="https://ia800309.us.archive.org/17/items/110228_pelose_pattiSmith/Pelose_pattiSmith.mp3"
+                x-start-position="00:05:25"
+               >Patti Smith - unidentified concert #04</option>
       </select>
     </div>
   </div>
