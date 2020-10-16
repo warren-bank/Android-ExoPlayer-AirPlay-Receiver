@@ -11,6 +11,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -107,7 +108,7 @@ public final class PlayerManager implements EventListener {
     this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
 
     this.currentItemIndex = C.INDEX_UNSET;
-    this.handler = new Handler();
+    this.handler = new Handler(Looper.getMainLooper());
   }
 
   private DefaultLoadControl getLoadControl(Context context) {
@@ -377,35 +378,36 @@ public final class PlayerManager implements EventListener {
 
     boolean isEnded = (exoPlayer != null) && !exoPlayer.isPlaying() && exoPlayer.getPlayWhenReady();
 
-    if (isEnded) {
+    if (isEnded || remove_previous_items) {
+      truncateQueue(0);
+      currentItemIndex = C.INDEX_UNSET;
       exoPlayer.setPlayWhenReady(false);
       exoPlayer.retry();
     }
-
-    Runnable runCompletionAction = new Runnable() {
-      @Override
-      public void run() {
-        if (remove_previous_items) {
-          truncateQueue(samples.length);
-
-          currentItemIndex = C.INDEX_UNSET;
-          selectQueueItem(0);
-        }
-
-        if (isEnded)
-          exoPlayer.setPlayWhenReady(true);
-      }
-    };
 
     mediaQueue.addAll(
       Arrays.asList(samples)
     );
 
-    concatenatingMediaSource.addMediaSources(
-      Arrays.asList(mediaSources),
-      handler,
-      runCompletionAction
-    );
+    if (isEnded || remove_previous_items) {
+      Runnable runCompletionAction = new Runnable() {
+        @Override
+        public void run() {
+          selectQueueItem(0);
+        }
+      };
+
+      concatenatingMediaSource.addMediaSources(
+        Arrays.asList(mediaSources),
+        handler,
+        runCompletionAction
+      );
+    }
+    else {
+      concatenatingMediaSource.addMediaSources(
+        Arrays.asList(mediaSources)
+      );
+    }
   }
 
   /**
