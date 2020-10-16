@@ -18,20 +18,26 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
     return HttpHtmlPlaylistExtractor.format_priority.indexOf(format);
   }
 
+  private ArrayList<String> hash_keys;
   private HashMap<String, String[]> url_chunks;
 
   @Override
   protected void preParse(URL context) {
+    hash_keys  = new ArrayList<String>();
     url_chunks = new HashMap<String, String[]>();
   }
 
   @Override
   protected void postParse(URL context, ArrayList<String> matches) {
+    String hash_key;
+    String[] val;
     String href;
     URL url;
 
-    for (String[] val : url_chunks.values()) {
-      href = val[0] + val[1];
+    for (int i=0; i < hash_keys.size(); i++) {
+      hash_key = hash_keys.get(i);
+      val      = url_chunks.get(hash_key);
+      href     = val[0] + val[1];
 
       try {
         // if `href` contains a  relative spec, then resolve it relative to context
@@ -44,6 +50,9 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
       }
       catch(Exception e) {}
     }
+
+    hash_keys.clear();
+    hash_keys = null;
 
     url_chunks.clear();
     url_chunks = null;
@@ -90,6 +99,7 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
           url_chunks.put(lm1, new String[] {m1,m2});
       }
       else {
+        hash_keys.add(lm1);
         url_chunks.put(lm1, new String[] {m1,m2});
       }
     }
