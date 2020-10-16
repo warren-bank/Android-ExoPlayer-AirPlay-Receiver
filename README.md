@@ -5,12 +5,51 @@ Android app to run on a set-top box and play video URLs "cast" to it with a stat
 
 - - - -
 
+#### Overview:
+
+There is no UI when the app starts.
+It's a foreground service with a notification, which runs a web server on port 8192.
+The IP address of the server is given in the notification message.
+
+When a video URL is "cast" to the server, a video player opens full-screen.
+
+When an audio URL is "cast" to the server, the music plays in the background.. even when the screen is off.
+
+When either audio or video media is playing and the player's window doesn't have focus
+(ex: listening to background audio, or by pressing the "home" button while watching a video),
+another notification is added to control playback or refocus the player's window.
+
+[This page](http://webcast-reloaded.surge.sh/airplay_sender.html) is the simplest way to send signals to a running instance,
+though other ["high level" tools](#usage-high-level) exist to capture media URLs from the wild.
+
+Audio or video files/playlists can also be started directly from the Android file system,
+which makes this app a very suitable replacement for a general-purpose video player.
+
+Playlists can be generated dynamically from:
+* a single directory in the Android file system
+* a recursive directory tree in the Android file system
+* any HTML page with anchor tags that link to media files
+  - very useful for playing files from a remote directory listing
+
+Playlists can be read explicitly from any text file with an `.m3u` file extension,
+which lists one media item path per line:
+* the `.m3u` file can be read from either the Android file system or a remote URL
+* each item path can refer to either the Android file system or a remote URL
+
+When a video file is played from the Android file system,
+its directory is automatically scanned for matching subtitle file(s).
+A match will have the same filename and any of the following extensions: `srt,ttml,vtt,webvtt,ssa,ass`.
+Nested extension(s) can optionally be used to distinguish between [different languages](https://en.wikipedia.org/wiki/Language_localisation#Language_tags_and_codes) (ex: `.en-US.srt`, `.es-MX.vtt`).
+
+- - - -
+
 #### Background:
 
 * I use Chromecasts _a lot_
   - they are incredibly adaptable
     * though their protocol is [proprietary and locked down](https://blog.oakbits.com/google-cast-protocol-receiver-authentication.html)
-  - though the [Google Cast SDK for Android](https://developers.google.com/cast/docs/android_sender) is nearly ubiquitous, I very rarely cast video from apps
+  - I very rarely cast video from Android apps
+    * though the [Google Cast SDK for Android](https://developers.google.com/cast/docs/android_sender) is nearly ubiquitous
   - I find much better video content to stream on websites, and wrote some tools to identify and cast these URLs
     * [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to use with desktop web browsers
     * [Android app](https://github.com/warren-bank/Android-WebCast) to use with mobile devices
@@ -347,7 +386,7 @@ __extended APIs:__
   - __brilliant__
   - what I like:
     * quality of code is excellent
-    * implements 99% of what I've described
+    * implements 90% of what I've described
       - [media player](https://github.com/yixia/VitamioBundle) used to render video URLs
       - _HttpCore_ web server that implements all _AirPlay_ video APIs
       - _jmDNS_ Bonjour registration
