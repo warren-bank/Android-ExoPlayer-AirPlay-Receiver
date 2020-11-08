@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Mendaftar AirPlay Layanan...</string>
+  <string name="toast_registration_success">AirPlay Pendaftaran Sukses</string>
+  <string name="toast_registration_failure">AirPlay pendaftaran gagal</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Penerima: menjalankan layanan</string>
+  <string name="notification_service_content_line1">ExoAirPlayer berjalan di:</string>
+  <string name="notification_service_content_line3">Klik untuk menghentikan layanan.</string>
+  <string name="track_selection_button">Pilih trek</string>
+  <string name="text_offset_selection_button">Sinkronisasi gagal.</string>
+  <string name="text_offset_selection_title">Teks Captions Advance/Delay Waktu Offset</string>
+</resources>

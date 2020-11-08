@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Registrácia AirPlay služba...</string>
+  <string name="toast_registration_success">AirPlay úspech pri registrácii</string>
+  <string name="toast_registration_failure">AirPlay registrácia zlyhala</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Prijímač: služba je spustená</string>
+  <string name="notification_service_content_line1">ExoAirPlayer spustenie na:</string>
+  <string name="notification_service_content_line3">Kliknutím zastavte službu.</string>
+  <string name="track_selection_button">Vybrať skladby</string>
+  <string name="text_offset_selection_button">Synchroničné titulky</string>
+  <string name="text_offset_selection_title">Posunutie času posunovania textu/posunutie času oneskorenia</string>
+</resources>

@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">กำลังลงทะเบียน AirPlay เซอร์วิส...</string>
+  <string name="toast_registration_success">AirPlay การลงทะเบียนสำเร็จ</string>
+  <string name="toast_registration_failure">AirPlay การลงทะเบียนล้มเหลว</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay ผู้รับ: เซอร์วิสที่รันอยู่</string>
+  <string name="notification_service_content_line1">ExoAirPlayer การรันที่:</string>
+  <string name="notification_service_content_line3">คลิกเพื่อหยุดบริการ.</string>
+  <string name="track_selection_button">เลือกเพลง</string>
+  <string name="text_offset_selection_button">หัวข้อการซิงค์</string>
+  <string name="text_offset_selection_title">ตัวดักจับข้อความล่วงหน้า/ออฟเซ็ตเวลาหน่วง</string>
+</resources>

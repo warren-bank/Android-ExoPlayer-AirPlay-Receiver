@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Registravimas AirPlay Paslaugos...</string>
+  <string name="toast_registration_success">AirPlay Registracijos sėkmė</string>
+  <string name="toast_registration_failure">AirPlay Registracija nepavyko</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Imtuvas: paslaugos teikimas</string>
+  <string name="notification_service_content_line1">ExoAirPlayer Veikia:</string>
+  <string name="notification_service_content_line3">Spragtelkite norėdami sustabdyti paslaugą.</string>
+  <string name="track_selection_button">Pažymėti takelius</string>
+  <string name="text_offset_selection_button">Sinchronizuoti antrašcijas</string>
+  <string name="text_offset_selection_title">Teksto captions avansas/uždelsimas laiko poslinkis</string>
+</resources>

@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Registriranje AirPlay usluga...</string>
+  <string name="toast_registration_success">AirPlay Uspjeh kod registracije</string>
+  <string name="toast_registration_failure">AirPlay Registracija nije uspjela</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Jedan prijemnik: servis koji radi.</string>
+  <string name="notification_service_content_line1">ExoAirPlayer U redu\?:</string>
+  <string name="notification_service_content_line3">Jedan klik da zaustavite službu..</string>
+  <string name="track_selection_button">Prevod i obrada:</string>
+  <string name="text_offset_selection_button">Prevod i adaptacija:</string>
+  <string name="text_offset_selection_title">Prevod i obrada: 1.</string>
+</resources>

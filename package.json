@@ -1,0 +1,11 @@
+{
+  "name": "@warren-bank/Android-ExoPlayer-AirPlay-Receiver",
+  "private": true,
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "@warren-bank/translate-android-strings": "^1.6.0"
+  },
+  "scripts": {
+    "translate": "node_modules/.bin/translate-android-strings -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/strings.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res\" -m --nc --nw -b \"ExoAirPlayer\" -b \"ExoPlayer\" -b \"AirPlay\""
+  }
+}

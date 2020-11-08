@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Đăng ký AirPlay dịch vụ...</string>
+  <string name="toast_registration_success">AirPlay đã thành công</string>
+  <string name="toast_registration_failure">AirPlay đăng ký không</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: chạy dịch vụ</string>
+  <string name="notification_service_content_line1">ExoAirPlayer đang chạy:</string>
+  <string name="notification_service_content_line3">Nhấp để dừng dịch vụ.</string>
+  <string name="track_selection_button">Chọn theo dõi</string>
+  <string name="text_offset_selection_button">Trình quản lý đồng bộ</string>
+  <string name="text_offset_selection_title">Độ lệch thời gian chơ ̀ tạm/trê ̃ văn bản</string>
+</resources>

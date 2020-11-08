@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">രജിസ്റ്റര് ചെയ്യുക AirPlay സേവനം...</string>
+  <string name="toast_registration_success">AirPlay രജിസ്ട്രേഷൻ വിജയങ്ങൾ</string>
+  <string name="toast_registration_failure">AirPlay രജിസ്ട്രേഷന് പരാജയം</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay ലഭിച്ചവര്: സേവനം നടത്തുന്നു</string>
+  <string name="notification_service_content_line1">ExoAirPlayer പ്രവര്ത്തിപ്പിക്കുന്നു:</string>
+  <string name="notification_service_content_line3">സേവനം നിര്ത്താന് ഞൊട്ടുക.</string>
+  <string name="track_selection_button">ട്രാക്കുകള് തെരഞ്ഞെടുക്കുക</string>
+  <string name="text_offset_selection_button">സിന്ക് ക്യാപ്ഷനുകള്</string>
+  <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+</resources>

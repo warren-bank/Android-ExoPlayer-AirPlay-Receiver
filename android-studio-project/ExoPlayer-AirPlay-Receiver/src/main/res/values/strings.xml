@@ -7,7 +7,7 @@
   <string name="toast_registration_failure">AirPlay registration failed</string>
 
   <!-- HTTP request header -->
-  <string name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</string>
+  <string translatable="false" name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</string>
 
   <!-- foreground service notification -->
   <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: service running</string>

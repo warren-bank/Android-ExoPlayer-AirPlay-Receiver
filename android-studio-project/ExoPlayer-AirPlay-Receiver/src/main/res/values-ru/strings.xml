@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Регистрация AirPlay служба...</string>
+  <string name="toast_registration_success">AirPlay регистрация успешно</string>
+  <string name="toast_registration_failure">AirPlay регистрация завершилась неудачно</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Получатель: запуск службы</string>
+  <string name="notification_service_content_line1">ExoAirPlayer запуск в:</string>
+  <string name="notification_service_content_line3">Щелкните, чтобы остановить службу.</string>
+  <string name="track_selection_button">Выбрать дорожки</string>
+  <string name="text_offset_selection_button">Синхронизация заголовков</string>
+  <string name="text_offset_selection_title">Сдвиг времени вперед/Задержка заголовков текста</string>
+</resources>

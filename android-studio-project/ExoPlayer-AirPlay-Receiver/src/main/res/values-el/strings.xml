@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Εγγραφή. AirPlay υπηρεσο:...</string>
+  <string name="toast_registration_success">AirPlay επιτυχία εγγραφής.</string>
+  <string name="toast_registration_failure">AirPlay Αποτυχία εγγραφής.</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Λήψη: εκτέλεση υπηρεσίας</string>
+  <string name="notification_service_content_line1">ExoAirPlayer εκτέλεση σε::</string>
+  <string name="notification_service_content_line3">Πατήστε για τερματισμό της υπηρεσίας..</string>
+  <string name="track_selection_button">Επιλογή κομματιών</string>
+  <string name="text_offset_selection_button">Συγχρονισμός:</string>
+  <string name="text_offset_selection_title">Προκαταβολές κειμένων Advance/Delay Time Offset</string>
+</resources>

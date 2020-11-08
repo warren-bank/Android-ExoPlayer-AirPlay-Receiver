@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Reġistrazzjoni AirPlay servizz...</string>
+  <string name="toast_registration_success">AirPlay suċċess reġistrazzjoni</string>
+  <string name="toast_registration_failure">AirPlay reġistrazzjoni fallew</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Riċevitur: tħaddim tas-servizz</string>
+  <string name="notification_service_content_line1">ExoAirPlayer taħdem f \':</string>
+  <string name="notification_service_content_line3">Ikklikkja biex tieqaf servizz.</string>
+  <string name="track_selection_button">Agħżel binarji</string>
+  <string name="text_offset_selection_button">Il-kapzjonijiet sinkronizzat</string>
+  <string name="text_offset_selection_title">Test Captions Avvanz/Dewmien Ħin Offset</string>
+</resources>

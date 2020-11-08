@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">등록 AirPlay 서비스...</string>
+  <string name="toast_registration_success">AirPlay 등록 성공</string>
+  <string name="toast_registration_failure">AirPlay 등록 실패</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay 수신자: 실행 중인 서비스</string>
+  <string name="notification_service_content_line1">ExoAirPlayer 실행 중인:</string>
+  <string name="notification_service_content_line3">서비스를 중지하려면 누르십시오..</string>
+  <string name="track_selection_button">트랙 선택하기</string>
+  <string name="text_offset_selection_button">동기화 캡션</string>
+  <string name="text_offset_selection_title">텍스트 캡션 추가/지연 시간 간격띄우기</string>
+</resources>

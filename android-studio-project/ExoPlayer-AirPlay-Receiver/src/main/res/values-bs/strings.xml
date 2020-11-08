@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Registracija AirPlay servis...</string>
+  <string name="toast_registration_success">AirPlay uspjeh registracije</string>
+  <string name="toast_registration_failure">AirPlay registracija nije uspjela</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Primalac: usluga u izvođenju</string>
+  <string name="notification_service_content_line1">ExoAirPlayer izvodi se na:</string>
+  <string name="notification_service_content_line3">Kliknite da biste zaustavili servis.</string>
+  <string name="track_selection_button">Izaberite tragove</string>
+  <string name="text_offset_selection_button">Sinkroniziraj naslove</string>
+  <string name="text_offset_selection_title">Akontacija akontacije/kašnjenje u vremenskom periodu</string>
+</resources>

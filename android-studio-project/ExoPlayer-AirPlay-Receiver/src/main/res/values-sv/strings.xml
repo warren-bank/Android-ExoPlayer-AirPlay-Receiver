@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Registrering AirPlay tjänst...</string>
+  <string name="toast_registration_success">AirPlay Registreringsframgång</string>
+  <string name="toast_registration_failure">AirPlay registrering misslyckades</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Mottagare: service som körs</string>
+  <string name="notification_service_content_line1">ExoAirPlayer körs på:</string>
+  <string name="notification_service_content_line3">Klicka för att stoppa tjänsten.</string>
+  <string name="track_selection_button">Välj spår</string>
+  <string name="text_offset_selection_button">Synkronisera rubriker</string>
+  <string name="text_offset_selection_title">Tidsförskjutning för texttext Advance / Delay-tid</string>
+</resources>

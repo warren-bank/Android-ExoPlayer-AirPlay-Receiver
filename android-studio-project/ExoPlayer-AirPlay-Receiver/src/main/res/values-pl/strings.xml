@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Rejestrowanie AirPlay usługa...</string>
+  <string name="toast_registration_success">AirPlay sukces rejestracji</string>
+  <string name="toast_registration_failure">AirPlay niepowodzenie rejestracji</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Odbiornik: usługa uruchomiona</string>
+  <string name="notification_service_content_line1">ExoAirPlayer uruchamianie w:</string>
+  <string name="notification_service_content_line3">Kliknij, aby zatrzymać usługę.</string>
+  <string name="track_selection_button">Wybierz ścieżki</string>
+  <string name="text_offset_selection_button">Podpisy synchronizacji</string>
+  <string name="text_offset_selection_title">Przesunięcie tekstu-przesunięcie czasu opóźnienia/opóźnienia</string>
+</resources>

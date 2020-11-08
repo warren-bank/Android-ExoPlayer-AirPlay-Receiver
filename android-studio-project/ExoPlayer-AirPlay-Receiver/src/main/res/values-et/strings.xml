@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Registreerimine AirPlay Teenus...</string>
+  <string name="toast_registration_success">AirPlay Registreerimine edu</string>
+  <string name="toast_registration_failure">AirPlay registreerimine nurjus</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Saaja: teenus töötab</string>
+  <string name="notification_service_content_line1">ExoAirPlayer tööaeg:</string>
+  <string name="notification_service_content_line3">Klõpsa teenuse peatamiseks.</string>
+  <string name="track_selection_button">Vali palad</string>
+  <string name="text_offset_selection_button">Sünkroniseeri pealdised</string>
+  <string name="text_offset_selection_title">Teksti eelmised ja viivitused</string>
+</resources>

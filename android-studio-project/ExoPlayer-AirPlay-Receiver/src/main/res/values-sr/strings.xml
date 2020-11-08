@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Регистрација AirPlay услуга...</string>
+  <string name="toast_registration_success">AirPlay успех регистрације</string>
+  <string name="toast_registration_failure">AirPlay није успело</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Пријемник: услуга ради</string>
+  <string name="notification_service_content_line1">ExoAirPlayer трèање на:</string>
+  <string name="notification_service_content_line3">Кликните да бисте зауставили услугу.</string>
+  <string name="track_selection_button">Изабери нумере</string>
+  <string name="text_offset_selection_button">Наслови синхронизације</string>
+  <string name="text_offset_selection_title">Предујам за поруке унапред/одлагање времена офсет</string>
+</resources>

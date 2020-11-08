@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="toast_registration_started">Clárathóir AirPlay seirbhís...</string>
+  <string name="toast_registration_success">AirPlay Rath clárúcháin</string>
+  <string name="toast_registration_failure">AirPlay theip ar chlárú</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Glacadóir: rith ag rith</string>
+  <string name="notification_service_content_line1">ExoAirPlayer á rith ag:</string>
+  <string name="notification_service_content_line3">Cliceáil chun seirbhís a stopadh.</string>
+  <string name="track_selection_button">Roghnaigh lorgairí</string>
+  <string name="text_offset_selection_button">Sioncrónaigh</string>
+  <string name="text_offset_selection_title">Réamhshocrú Téacs/Am Ama A Fhritháireamh I</string>
+</resources>
