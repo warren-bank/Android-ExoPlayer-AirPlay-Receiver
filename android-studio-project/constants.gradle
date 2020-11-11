@@ -1,11 +1,12 @@
 project.ext {
-    releaseVersionCode = Integer.parseInt("002001716", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersionCode  = Integer.parseInt("002001716", 10)  //Integer.MAX_VALUE == 2147483647
     releaseVersion      = '002.00.17-16API'
+    javaVersion         = JavaVersion.VERSION_1_8
     minSdkVersion       = 16
     targetSdkVersion    = 28
     compileSdkVersion   = 28
     buildToolsVersion   = '28.0.3'
-    javaVersion         = JavaVersion.VERSION_1_8
+
     libVersionAndroidX  = '1.1.0'
     libVersionMaterial  = '1.0.0'
     libVersionExoPlayer = '2.11.7'
