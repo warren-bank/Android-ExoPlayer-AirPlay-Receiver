@@ -40,6 +40,10 @@ body .contents div:last-child {
   margin-bottom: 0;
 }
 
+body .contents textarea {
+  width: 100%;
+}
+
 body .contents .oneline {
   height: 2em;
   line-height: 2em;
@@ -66,8 +70,12 @@ body .contents div.flex {
   flex-wrap: nowrap;
 }
 body .contents div.flex > div {
-  flex-grow: 1;
+  flex-grow: 0;
   flex-shrink: 0;
+}
+body .contents div.flex > div:first-child {
+  flex-grow: 1;
+  padding: 0 1em;
 }
 
 input, button {
@@ -120,6 +128,8 @@ window.onload  = function() {
   var $resume                  = document.querySelector('button#resume')
   var $captions_on             = document.querySelector('button#captions_on')
   var $captions_off            = document.querySelector('button#captions_off')
+  var $previous                = document.querySelector('button#previous')
+  var $next                    = document.querySelector('button#next')
   var $stop                    = document.querySelector('button#stop')
   var $seek_hours              = document.querySelector('input#seek_hours')
   var $seek_minutes            = document.querySelector('input#seek_minutes')
@@ -141,8 +151,9 @@ window.onload  = function() {
   var $rate                    = document.querySelector('button#rate')
   var $volume_factor           = document.querySelector('input#volume_factor')
   var $volume                  = document.querySelector('button#volume')
-  var $previous                = document.querySelector('button#previous')
-  var $next                    = document.querySelector('button#next')
+  var $toast_message           = document.querySelector('textarea#toast_message')
+  var $show_toast              = document.querySelector('button#show_toast')
+  var $show_player             = document.querySelector('button#show_player')
   var $sample_videos           = document.querySelector('select#sample_videos')
   var $image_file              = document.querySelector('input#image_file')
 
@@ -415,6 +426,20 @@ window.onload  = function() {
     send_message('/show-captions?toggle=0', null)
   }
 
+  $previous.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/previous', null)
+  }
+
+  $next.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/next', null)
+  }
+
   $stop.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -508,18 +533,29 @@ window.onload  = function() {
     send_message(path, data)
   }
 
-  $previous.onclick = function(event) {
+  $show_toast.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    send_message('/previous', null)
+    var msg = $toast_message.value.trim()
+
+    if (!msg)
+      return
+
+    var path = '/show-toast'
+    var data = msg
+
+    send_message(path, data)
   }
 
-  $next.onclick = function(event) {
+  $show_player.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    send_message('/next', null)
+    var path = '/show-player'
+    var data = null
+
+    send_message(path, data)
   }
 
   $sample_videos.onchange = function(event) {
@@ -764,6 +800,17 @@ window.onload  = function() {
           </td>
         </tr>
       </table>
+    </div>
+    <hr />
+    <h3>User Interface:</h3>
+    <div class="flex">
+      <div>
+        <textarea id="toast_message" rows="5"></textarea>
+      </div>
+      <div>
+        <div><button id="show_toast">Show Toast</button></div>
+        <div><button id="show_player">Show Player</button></div>
+      </div>
     </div>
     <hr />
     <div class="flex">
