@@ -40,6 +40,10 @@ body .contents div:last-child {
   margin-bottom: 0;
 }
 
+body .contents textarea {
+  width: 100%;
+}
+
 body .contents .oneline {
   height: 2em;
   line-height: 2em;
@@ -66,8 +70,12 @@ body .contents div.flex {
   flex-wrap: nowrap;
 }
 body .contents div.flex > div {
-  flex-grow: 1;
+  flex-grow: 0;
   flex-shrink: 0;
+}
+body .contents div.flex > div:first-child {
+  flex-grow: 1;
+  padding: 0 1em;
 }
 
 input, button {
@@ -120,6 +128,8 @@ window.onload  = () => {
   const $resume                  = document.querySelector('button#resume')
   const $captions_on             = document.querySelector('button#captions_on')
   const $captions_off            = document.querySelector('button#captions_off')
+  const $previous                = document.querySelector('button#previous')
+  const $next                    = document.querySelector('button#next')
   const $stop                    = document.querySelector('button#stop')
   const $seek_hours              = document.querySelector('input#seek_hours')
   const $seek_minutes            = document.querySelector('input#seek_minutes')
@@ -141,8 +151,9 @@ window.onload  = () => {
   const $rate                    = document.querySelector('button#rate')
   const $volume_factor           = document.querySelector('input#volume_factor')
   const $volume                  = document.querySelector('button#volume')
-  const $previous                = document.querySelector('button#previous')
-  const $next                    = document.querySelector('button#next')
+  const $toast_message           = document.querySelector('textarea#toast_message')
+  const $show_toast              = document.querySelector('button#show_toast')
+  const $show_player             = document.querySelector('button#show_player')
   const $sample_videos           = document.querySelector('select#sample_videos')
   const $image_file              = document.querySelector('input#image_file')
 
@@ -629,6 +640,20 @@ window.onload  = () => {
     send_message('/show-captions?toggle=0', null)
   }
 
+  $previous.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/previous', null)
+  }
+
+  $next.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/next', null)
+  }
+
   $stop.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -722,18 +747,29 @@ window.onload  = () => {
     send_message(path, data)
   }
 
-  $previous.onclick = (event) => {
+  $show_toast.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    send_message('/previous', null)
+    const msg = $toast_message.value.trim()
+
+    if (!msg)
+      return
+
+    const path = '/show-toast'
+    const data = msg
+
+    send_message(path, data)
   }
 
-  $next.onclick = (event) => {
+  $show_player.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    send_message('/next', null)
+    const path = '/show-player'
+    const data = null
+
+    send_message(path, data)
   }
 
   $sample_videos.onchange = (event) => {
@@ -978,6 +1014,17 @@ window.onload  = () => {
           </td>
         </tr>
       </table>
+    </div>
+    <hr />
+    <h3>User Interface:</h3>
+    <div class="flex">
+      <div>
+        <textarea id="toast_message" rows="5"></textarea>
+      </div>
+      <div>
+        <div><button id="show_toast">Show Toast</button></div>
+        <div><button id="show_player">Show Player</button></div>
+      </div>
     </div>
     <hr />
     <div class="flex">

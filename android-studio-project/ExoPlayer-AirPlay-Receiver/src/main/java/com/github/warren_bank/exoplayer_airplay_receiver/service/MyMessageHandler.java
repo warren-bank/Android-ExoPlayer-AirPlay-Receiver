@@ -110,6 +110,15 @@ final class MyMessageHandler extends Handler {
       }
 
       // =======================================================================
+      // Display Toast containing a text message
+      // =======================================================================
+
+      case Constant.Msg.Msg_Show_Toast : {
+        Toast.makeText(service.getApplicationContext(), (String) msg.obj, Toast.LENGTH_LONG).show();
+        break;
+      }
+
+      // =======================================================================
       // Add media URLs to ExoPlayer queue.
       // Display a video player when starting playback of a video URL,
       //   or explicitly requested to do so.

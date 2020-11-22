@@ -176,9 +176,10 @@ public class Constant {
         public static final int Msg_Text_Set_Time               = 12;
         public static final int Msg_Text_Add_Time               = 13;
 
-        public static final int Msg_Show_Player                 = 14;
+        public static final int Msg_Show_Toast                  = 14;
+        public static final int Msg_Show_Player                 = 15;
 
-        public static final int Msg_Runtime_Permissions_Granted = 15;
+        public static final int Msg_Runtime_Permissions_Granted = 16;
     }
 
     public interface Target {
@@ -200,6 +201,7 @@ public class Constant {
         public static final String TXT_SET_OFFSET               = "/set-captions-offset";
         public static final String TXT_ADD_OFFSET               = "/add-captions-offset";
 
+        public static final String TOAST_SHOW                   = "/show-toast";
         public static final String PLAYER_SHOW                  = "/show-player";
     }
 

@@ -325,7 +325,6 @@ public class RequestListenerThread extends Thread {
         }
       }
 
-      String requestBody = "";
       byte[] entityContent = null;
       if (httpRequest instanceof HttpEntityEnclosingRequest) {
         HttpEntity entity = ((HttpEntityEnclosingRequest) httpRequest).getEntity();
@@ -534,10 +533,11 @@ public class RequestListenerThread extends Thread {
           target.equals(Constant.Target.QUEUE)     //Add video to end of queue
         )
       ) {
-        String playUrl  = "";
-        String textUrl  = "";
-        String referUrl = "";
-        Double startPos = 0.0;
+        String requestBody = "";
+        String playUrl     = "";
+        String textUrl     = "";
+        String referUrl    = "";
+        Double startPos    = 0.0;
 
         requestBody = new String(entityContent);
         requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
@@ -686,6 +686,23 @@ public class RequestListenerThread extends Thread {
           }
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (
+        (entityContent != null) &&
+        target.equals(Constant.Target.TOAST_SHOW)
+      ) {
+        String requestBody = "";
+
+        requestBody = new String(entityContent);
+        requestBody = requestBody.trim();
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+
+        if (!requestBody.isEmpty()) {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Show_Toast;
+          msg.obj = requestBody;
+          MainApp.broadcastMessage(msg);
+        }
       }
       else if (target.equals(Constant.Target.PLAYER_SHOW)) {
         Message msg = Message.obtain();
