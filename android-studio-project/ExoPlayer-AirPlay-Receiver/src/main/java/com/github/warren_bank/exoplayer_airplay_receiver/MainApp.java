@@ -1,9 +1,9 @@
 package com.github.warren_bank.exoplayer_airplay_receiver;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.TLSSocketFactory;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PermissiveHostnameVerifier;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PermissiveSSLSocketFactory;
 
 import android.app.Application;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
@@ -38,17 +38,14 @@ public class MainApp extends Application {
     super.onCreate();
     instance = this;
 
-    if (
-      (Build.VERSION.SDK_INT >= 16) &&
-      (Build.VERSION.SDK_INT <  20)
-    ) {
-      try {
-        TLSSocketFactory socketFactory = new TLSSocketFactory();
+    try {
+      PermissiveHostnameVerifier hostnameVerifier = new PermissiveHostnameVerifier();
+      PermissiveSSLSocketFactory socketFactory    = new PermissiveSSLSocketFactory();
 
-        HttpsURLConnection.setDefaultSSLSocketFactory(socketFactory);
-      }
-      catch(Exception e) {}
+      HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+      HttpsURLConnection.setDefaultSSLSocketFactory(socketFactory);
     }
+    catch(Exception e) {}
   }
 
   public ConcurrentHashMap<String, Handler> getHandlerMap() {
