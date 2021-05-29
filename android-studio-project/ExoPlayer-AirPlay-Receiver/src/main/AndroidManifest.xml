@@ -64,6 +64,7 @@
                 <data android:scheme="file"/>
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
+                <data android:scheme="rtsp"/>
 
                 <!-- audio/video -->
 
@@ -83,6 +84,7 @@
                 <data android:mimeType="application/x-mpegurl"/>
                 <data android:mimeType="application/x-mpegURL"/>
                 <data android:mimeType="application/x-ogg"/>
+                <data android:mimeType="application/x-rtsp"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

@@ -20,8 +20,8 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.DiscontinuityReason;
@@ -30,23 +30,30 @@ import com.google.android.exoplayer2.Player.TimelineChangeReason;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.analytics.AnalyticsCollector;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.rtsp.RtspMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
+import com.google.android.exoplayer2.util.Clock;
+import com.google.android.exoplayer2.util.EventLogger;
+import com.google.android.exoplayer2.util.MimeTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,12 +102,20 @@ public final class PlayerManager implements EventListener {
     MyRenderersFactory renderersFactory = new MyRenderersFactory(context);
     this.textSynchronizer = (TextSynchronizer) renderersFactory;
     DefaultLoadControl loadControl = getLoadControl(context);
-    this.exoPlayer = ExoPlayerFactory.newSimpleInstance(context, (RenderersFactory) renderersFactory, trackSelector, loadControl);
+    EventLogger exoLogger = new EventLogger(trackSelector);
+    AnalyticsCollector analyticsCollector = new AnalyticsCollector(Clock.DEFAULT);
+    analyticsCollector.addListener(exoLogger);
+    this.exoPlayer = new SimpleExoPlayer.Builder(
+      context,
+      (RenderersFactory) renderersFactory,
+      trackSelector,
+      new DefaultMediaSourceFactory(context, new DefaultExtractorsFactory()),
+      loadControl,
+      DefaultBandwidthMeter.getSingletonInstance(context),
+      analyticsCollector
+    ).build();
     this.exoPlayer.addListener(this);
     this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-
-    ExoPlayerEventLogger exoLogger = new ExoPlayerEventLogger(trackSelector);
-    this.exoPlayer.addListener(exoLogger);
 
     String userAgent = context.getResources().getString(R.string.user_agent);
     this.httpDataSourceFactory   = new DefaultHttpDataSourceFactory(userAgent);
@@ -118,17 +133,23 @@ public final class PlayerManager implements EventListener {
 
     Log.d(TAG, "memory=" + (float)(((int)((memorySizeInBytes*100)/(1024*1024*1024)))/100f) + "GB, buffer factor=" + (int)(factor*100) + "%");
 
-    DefaultLoadControl loadControl  = new DefaultLoadControl(
-      /* DefaultAllocator allocator=                          */ (new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE)),
-      /* int minBufferMs= minBufferAudioMs= minBufferVideoMs= */ (int) (factor * DefaultLoadControl.DEFAULT_MIN_BUFFER_MS),
-      /* int maxBufferMs=                                     */ (int) (factor * DefaultLoadControl.DEFAULT_MAX_BUFFER_MS),
-      /* int bufferForPlaybackMs=                             */ (int) (factor * DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS),
-      /* int bufferForPlaybackAfterRebufferMs=                */ (int) (factor * DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS),
-      /* int targetBufferBytes=                               */ (int) (factor * DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES),
-      /* boolean prioritizeTimeOverSizeThresholds=            */                 DefaultLoadControl.DEFAULT_PRIORITIZE_TIME_OVER_SIZE_THRESHOLDS
-    );
+    DefaultLoadControl.Builder builder = new DefaultLoadControl.Builder();
 
-    return loadControl;
+    if (Math.abs(factor - 1.0f) > 0.00001f) { // if (factor != 1.0f)
+      builder
+        .setBufferDurationsMs(
+          /* int minBufferMs= minBufferAudioMs= minBufferVideoMs= */ (int) (factor * DefaultLoadControl.DEFAULT_MIN_BUFFER_MS),
+          /* int maxBufferMs=                                     */ (int) (factor * DefaultLoadControl.DEFAULT_MAX_BUFFER_MS),
+          /* int bufferForPlaybackMs=                             */ (int) (factor * DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS),
+          /* int bufferForPlaybackAfterRebufferMs=                */ (int) (factor * DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS)
+        )
+        .setTargetBufferBytes(
+          /* int targetBufferBytes=                               */ (int) (factor * DefaultLoadControl.DEFAULT_TARGET_BUFFER_BYTES)
+        )
+      ;
+    }
+
+    return builder.build();
   }
 
   /**
@@ -930,17 +951,19 @@ public final class PlayerManager implements EventListener {
     if (factory == null)
       return null;
 
-    Uri uri = Uri.parse(sample.uri);
+    MediaItem mediaItem = new MediaItem.Builder().setUri(sample.uri).setMimeType(sample.uri_mimeType).build();
 
     switch (sample.uri_mimeType) {
       case MimeTypes.APPLICATION_M3U8:
-        return new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
+        return new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
       case MimeTypes.APPLICATION_MPD:
-        return new DashMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
+        return new DashMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
       case MimeTypes.APPLICATION_SS:
-        return new SsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
+        return new SsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
+      case MimeTypes.APPLICATION_RTSP:
+        return new RtspMediaSource.Factory().createMediaSource(mediaItem);
       default:
-        return new ExtractorMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri);
+        return new ProgressiveMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
     }
   }
 
@@ -948,7 +971,7 @@ public final class PlayerManager implements EventListener {
     ArrayList<MediaSource> captions = new ArrayList<MediaSource>();
     DataSource.Factory factory;
     Uri uri;
-    Format format;
+    MediaItem.Subtitle mediaItem;
 
     if (!TextUtils.isEmpty(sample.caption) && !TextUtils.isEmpty(sample.caption_mimeType)) {
       factory = ExternalStorageUtils.isFileUri(sample.caption)
@@ -958,11 +981,11 @@ public final class PlayerManager implements EventListener {
       if (factory == null)
         return null;
 
-      uri    = Uri.parse(sample.caption);
-      format = Format.createTextSampleFormat(/* id= */ null, sample.caption_mimeType, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ "en");
+      uri       = Uri.parse(sample.caption);
+      mediaItem = new MediaItem.Subtitle(uri, sample.caption_mimeType, /* language= */ null, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT);
 
       captions.add(
-        new SingleSampleMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(uri, format, C.TIME_UNSET)
+        new SingleSampleMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem, C.TIME_UNSET)
       );
     }
     else if (ExternalStorageUtils.isFileUri(sample.uri)) {
@@ -983,11 +1006,11 @@ public final class PlayerManager implements EventListener {
         return null;
 
       for (String caption : uriCaptions) {
-        uri    = Uri.parse(caption);
-        format = Format.createTextSampleFormat(/* id= */ null, VideoSource.get_caption_mimeType(caption), /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT, /* language= */ null);
+        uri       = Uri.parse(caption);
+        mediaItem = new MediaItem.Subtitle(uri, VideoSource.get_caption_mimeType(caption), /* language= */ null, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT);
 
         captions.add(
-          new SingleSampleMediaSource.Factory(factory).createMediaSource(uri, format, C.TIME_UNSET)
+          new SingleSampleMediaSource.Factory(factory).createMediaSource(mediaItem, C.TIME_UNSET)
         );
       }
     }
@@ -1004,8 +1027,9 @@ public final class PlayerManager implements EventListener {
       return null;
 
     Uri uri = RawResourceDataSource.buildRawResourceUri(rawResourceId);
+    MediaItem mediaItem = MediaItem.fromUri(uri);
 
-    return new ExtractorMediaSource.Factory(rawDataSourceFactory).createMediaSource(uri);
+    return new ProgressiveMediaSource.Factory(rawDataSourceFactory).createMediaSource(mediaItem);
   }
 
   private void addRawVideoItem(int rawResourceId) {

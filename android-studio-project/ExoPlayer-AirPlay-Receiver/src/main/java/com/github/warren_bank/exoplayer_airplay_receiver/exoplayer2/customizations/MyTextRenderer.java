@@ -2,7 +2,6 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 import android.os.Looper;
 import androidx.annotation.Nullable;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.text.SubtitleDecoderFactory;
 import com.google.android.exoplayer2.text.TextOutput;
 
@@ -35,7 +34,7 @@ public class MyTextRenderer extends NonFinalTextRenderer implements TextSynchron
   }
 
   @Override
-  public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
+  public void render(long positionUs, long elapsedRealtimeUs) {
     positionUs        += offsetPositionUs;
     elapsedRealtimeUs += offsetPositionUs;
 
