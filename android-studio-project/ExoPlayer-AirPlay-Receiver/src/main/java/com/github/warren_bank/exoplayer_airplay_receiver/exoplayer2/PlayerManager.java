@@ -865,6 +865,7 @@ public final class PlayerManager implements EventListener {
   private void setHttpRequestHeaders(int currentItemIndex) {
     VideoSource sample = getItem(currentItemIndex);
     if (sample == null) return;
+    if (ExternalStorageUtils.isFileUri(sample.uri)) return;
 
     if (sample.referer != null) {
       Uri referer   = Uri.parse(sample.referer);
@@ -873,12 +874,30 @@ public final class PlayerManager implements EventListener {
       setHttpRequestHeader("origin",  origin);
       setHttpRequestHeader("referer", sample.referer);
     }
+    else {
+      setHttpRequestHeader("origin",  null);
+      setHttpRequestHeader("referer", null);
+    }
+
+    switch (sample.uri_mimeType) {
+      case "video/mp4":
+      case "video/mpeg":
+      case "video/x-mkv":
+      case "video/x-msvideo":
+        setHttpRequestHeader("range", "bytes=0-");
+        break;
+      default:
+        setHttpRequestHeader("range", null);
+    }
   }
 
   private void setHttpRequestHeader(String name, String value) {
     if (httpDataSourceFactory == null) return;
 
-    httpDataSourceFactory.getDefaultRequestProperties().set(name, value);
+    if (value == null)
+      httpDataSourceFactory.getDefaultRequestProperties().remove(name);
+    else
+      httpDataSourceFactory.getDefaultRequestProperties().set(name, value);
   }
 
   private MediaSource buildMediaSource(VideoSource sample) {
