@@ -51,8 +51,8 @@ Nested extension(s) can optionally be used to distinguish between [different lan
   - I very rarely cast video from Android apps
     * though the [Google Cast SDK for Android](https://developers.google.com/cast/docs/android_sender) is nearly ubiquitous
   - I find much better video content to stream on websites, and wrote some tools to identify and cast these URLs
-    * [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to use with desktop web browsers
-    * [Android app](https://github.com/warren-bank/Android-WebCast) to use with mobile devices
+    * [_WebCast-Reloaded_ Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to use with desktop web browsers
+    * [_WebCast_ Android app](https://github.com/warren-bank/Android-WebCast) to use with mobile devices
 * I also really like using Android set-top boxes
   - mainly to play video files stored on an attached drive
   - they are incredibly adaptable
@@ -148,11 +148,11 @@ __AirPlay APIs:__
       --data-binary @- \
       "http://${airplay_ip}/photo"
   ```
-* play video #1 (add text captions, set 'Referer' request header, seek to beginning):
+* play video #1 (seek to beginning):
   ```bash
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
-      --data-binary "Content-Location: ${video_url_1}\nCaption-Location: ${caption_url_1}\nReferer: ${videos_page}\nStart-Position: 0" \
+      --data-binary "Content-Location: ${video_url_1}\nStart-Position: 0" \
       "http://${airplay_ip}/play"
   ```
 * seek to `30 seconds` within currently playing video:
@@ -192,6 +192,13 @@ __extended APIs:__
   ```bash
     curl --silent -X GET \
       "http://${airplay_ip}/add-scrub-offset?value=-30000"
+  ```
+* play video #1 (add text captions, set 'Referer' request header, seek to beginning):
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_url_1}\nCaption-Location: ${caption_url_1}\nReferer: ${videos_page}\nStart-Position: 0" \
+      "http://${airplay_ip}/play"
   ```
 * add video #2 to end of queue (add text captions, set 'Referer' request header, seek to 50%):
   ```bash
@@ -339,37 +346,35 @@ __extended APIs:__
     * "cast" video URLs to its playlist
     * control all aspects of playback
 
-* [Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) that can run in any Chromium-based desktop web browser, and be used to:
+* [_WebCast-Reloaded_ Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) that can run in any Chromium-based desktop web browser, and be used to:
   - intercept the URL of (nearly) all videos on any website
   - display these video URLs as a list of links
     * clicking on any link will transfer the URL of the video (as well as the URL of the referer webpage) to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
-      - more precisely, the link to the SPA is displayed as a small [AirPlay icon](https://github.com/warren-bank/crx-webcast-reloaded/raw/v0.6.0/chrome_extension/data/airplay.png)
+      - more precisely, the link to the SPA is displayed as a small AirPlay icon ![AirPlay icon](https://github.com/warren-bank/crx-webcast-reloaded/raw/v0.6.0/chrome_extension/data/airplay.png)
       - the other links transfer the video URL to other tools
         * webpage to watch the video in an HTML5 player with the ability to "cast" the video to a Chromecast
         * a running instance of [HLS-Proxy](https://github.com/warren-bank/HLS-Proxy)
 
-* Greasemonkey userscripts
-  - that can run in any web browser with support:
-    * [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) for Chrome/Chromium
-    * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) for Firefox
+* [_WebCast_ Android app](https://github.com/warren-bank/Android-WebCast) that is open-source, and can be used to:
+  - intercept the URL of (nearly) all videos on any website
+  - display these video URLs as a list
+  - when the app's settings are configured to use an external video player:
+    * clicking on any video will broadcast an Intent to start the video in another application (ex: _ExoAirPlayer_)
+
+* [Greasemonkey userscripts](https://warren-bank.github.io/Android-WebMonkey/index.html)
+  - that can run in any web browser with support for userscripts:
+    * [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) extension for Chrome/Chromium
+    * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) addon for Firefox
+    * [WebMonkey](https://github.com/warren-bank/Android-WebMonkey) application for Android
     * etc&hellip;
   - and be used to:
-    * apply site-specific knowledge to obtain the URL of a video on the requested page as it loads
-    * automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
-  - list of available scripts for supported websites:
-    * [script](https://github.com/warren-bank/crx-CBS-News/raw/greasemonkey-userscript/greasemonkey-userscript/CBS-News.user.js) for [CBS News](https://www.cbsnews.com/live/)
-    * [script](https://github.com/warren-bank/crx-pbs-passport/raw/greasemonkey-userscript/greasemonkey-userscript/PBS-Passport.user.js) for [PBS](https://www.pbs.org/shows/)
-    * [script](https://github.com/warren-bank/crx-Tubi-TV/raw/greasemonkey-userscript/greasemonkey-userscript/Tubi-TV.user.js) for [Tubi TV](https://tubitv.com/)
-    * [script](https://github.com/warren-bank/crx-Youtube/raw/greasemonkey-userscript/greasemonkey-userscript/Youtube.user.js) for [Youtube](https://www.youtube.com/)
-    * [script](https://github.com/warren-bank/crx-Crackle/raw/greasemonkey-userscript/greasemonkey-userscript/Crackle.user.js) for [Crackle](https://www.crackle.com/)
-    * [script](https://github.com/warren-bank/crx-US-TV-Go/raw/greasemonkey-userscript/greasemonkey-userscript/US-TV-Go.user.js) for [US TV Go](https://ustvgo.tv/)
-    * [script](https://github.com/warren-bank/crx-StreamLive-To/raw/greasemonkey-userscript/greasemonkey-userscript/StreamLive-To.user.js) for [StreamLive To](https://streamlive.to/channels)
-    * [script](https://github.com/warren-bank/crx-YourSports-Stream/raw/greasemonkey-userscript/greasemonkey-userscript/YourSports-Stream.user.js) for [YourSports Stream](http://yoursports.stream/)
-    * [script](https://github.com/warren-bank/crx-123TV/raw/greasemonkey-userscript/greasemonkey-userscript/123TV.user.js) for [123TV](http://123tvnow.com/category/united-states-usa/)
-    * [script](https://github.com/warren-bank/crx-Arconai-TV/raw/greasemonkey-userscript/greasemonkey-userscript/Arconai-TV.user.js) for [Arconai TV](https://www.arconaitv.us/)
-    * [script](https://github.com/warren-bank/crx-Ok-ru/raw/greasemonkey-userscript/greasemonkey-userscript/Ok-ru.user.js) for [embedded videos hosted by ok.ru](https://ok.ru/)
+    * apply site-specific knowledge to obtain the URL of a video on the requested page
+    * in _WebMonkey_:
+      - broadcast an Intent to start the video in another application (ex: _ExoAirPlayer_)
+    * in other web browsers:
+      - automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
 
-* [Android app](https://github.com/tutikka/DroidPlay) that is open-source, and can be used to:
+* [_DroidPlay_ Android app](https://github.com/tutikka/DroidPlay) that is open-source, and can be used to:
   - discover AirPlay receivers on the same LAN
   - display images from the local file system
     * sends the entire file in POST data to the receiver

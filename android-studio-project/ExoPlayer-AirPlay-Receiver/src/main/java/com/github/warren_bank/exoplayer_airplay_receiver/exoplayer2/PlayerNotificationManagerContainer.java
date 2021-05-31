@@ -2,6 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyPlayerNotificationManager;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
 import com.google.android.exoplayer2.Player;
@@ -147,7 +148,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
   private String getMediaItemTitle(int currentItemIndex, URI uri) {
     if (uri == null) return null;
 
-    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
+    boolean isAudio = MediaTypeUtils.isAudioFileUrl(uri.toString());
     return getMediaItemTitle(currentItemIndex, uri, isAudio);
   }
 
@@ -162,8 +163,8 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
     queuePosition    = String.format("[%d/%d]", position_current, position_last);
 
     mimeType = isAudio
-      ? "audio/" + VideoSource.get_audio_fileExtension(uri.toString())
-      : VideoSource.get_video_mimeType(uri.toString());
+      ? MediaTypeUtils.get_audio_mimeType(uri.toString())
+      : MediaTypeUtils.get_video_mimeType(uri.toString());
 
     title = queuePosition + " " + mimeType;
     return title;
@@ -178,7 +179,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
   private String getMediaItemDescription(URI uri) {
     if (uri == null) return null;
 
-    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
+    boolean isAudio = MediaTypeUtils.isAudioFileUrl(uri.toString());
     return getMediaItemDescription(uri, isAudio);
   }
 
@@ -192,7 +193,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
       isStream = false;
     }
     else {
-      video_mimeType = VideoSource.get_video_mimeType(uri.toString());
+      video_mimeType = MediaTypeUtils.get_video_mimeType(uri.toString());
 
       switch (video_mimeType) {
         case "application/x-mpegURL" :
@@ -254,7 +255,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
   private Bitmap getMediaItemBitmap(URI uri) {
     if (uri == null) return null;
 
-    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
+    boolean isAudio = MediaTypeUtils.isAudioFileUrl(uri.toString());
     return getMediaItemBitmap(uri, isAudio);
   }
 
@@ -274,7 +275,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
     URI uri = getMediaItemUri(currentItemIndex);
     if (uri == null) return null;
 
-    boolean isAudio = VideoSource.isAudioFileUrl(uri.toString());
+    boolean isAudio = MediaTypeUtils.isAudioFileUrl(uri.toString());
 
     String mediaId     = uri.toString();                                    // URL
     String title       = getMediaItemTitle(currentItemIndex, uri, isAudio); // [index/total] mime-type

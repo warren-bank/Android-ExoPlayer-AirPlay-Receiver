@@ -6,6 +6,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
@@ -1007,7 +1008,7 @@ public final class PlayerManager implements EventListener {
 
       for (String caption : uriCaptions) {
         uri       = Uri.parse(caption);
-        mediaItem = new MediaItem.Subtitle(uri, VideoSource.get_caption_mimeType(caption), /* language= */ null, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT);
+        mediaItem = new MediaItem.Subtitle(uri, MediaTypeUtils.get_caption_mimeType(caption), /* language= */ null, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT);
 
         captions.add(
           new SingleSampleMediaSource.Factory(factory).createMediaSource(mediaItem, C.TIME_UNSET)
