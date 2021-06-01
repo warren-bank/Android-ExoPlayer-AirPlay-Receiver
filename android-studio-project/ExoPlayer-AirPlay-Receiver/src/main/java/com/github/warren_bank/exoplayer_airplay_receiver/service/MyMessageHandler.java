@@ -127,10 +127,13 @@ final class MyMessageHandler extends Handler {
       case Constant.Msg.Msg_Video_Play  :
       case Constant.Msg.Msg_Video_Queue : {
         HashMap<String, String> map = (HashMap) msg.obj;
-        String playUrl  = map.get(Constant.PlayURL);
-        String textUrl  = map.get(Constant.CaptionURL);
-        String referUrl = map.get(Constant.RefererURL);
-        String startPos = map.get(Constant.Start_Pos);
+        String playUrl   = map.get(Constant.PlayURL);
+        String textUrl   = map.get(Constant.CaptionURL);
+        String referUrl  = map.get(Constant.RefererURL);
+        String startPos  = map.get(Constant.Start_Pos);
+        String stopPos   = map.get(Constant.Stop_Pos);
+        String drmScheme = map.get(Constant.DRM_Scheme);
+        String drmUrl    = map.get(Constant.DRM_URL);
 
         // normalize empty data fields to: null
         if (TextUtils.isEmpty(playUrl))
@@ -140,13 +143,19 @@ final class MyMessageHandler extends Handler {
         if (TextUtils.isEmpty(referUrl))
           referUrl = null;
         if (TextUtils.isEmpty(startPos))
-          startPos = "0";
+          startPos = "-1";
+        if (TextUtils.isEmpty(stopPos))
+          stopPos = "-1";
+        if (TextUtils.isEmpty(drmScheme))
+          drmScheme = null;
+        if (TextUtils.isEmpty(drmUrl))
+          drmUrl = null;
 
         // ignore bad requests
         if (playUrl == null)
           break;
 
-        Log.d(tag, ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; position = " + startPos + "; captions = " + textUrl + "; referer = " + referUrl);
+        Log.d(tag, ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
 
         if (requiresExternalStoragePermission(service, msg, playUrl, textUrl))
           break;
@@ -161,11 +170,14 @@ final class MyMessageHandler extends Handler {
         extractPlaylists(
           playerManager,
           service,
-          /* uri=           */          playUrl,
-          /* caption=       */          textUrl,
-          /* referer=       */          referUrl,
-          /* startPosition= */          Float.valueOf(startPos),
-          /* remove_previous_items= */  (msg.what == Constant.Msg.Msg_Video_Play)
+          /* uri=                   */ playUrl,
+          /* caption=               */ textUrl,
+          /* referer=               */ referUrl,
+          /* startPosition=         */ Float.valueOf(startPos),
+          /* stopPosition=          */ Float.valueOf(stopPos),
+          /* drm_scheme=            */ drmScheme,
+          /* drm_license_server=    */ drmUrl,
+          /* remove_previous_items= */ (msg.what == Constant.Msg.Msg_Video_Play)
         );
         break;
       }
@@ -281,6 +293,9 @@ final class MyMessageHandler extends Handler {
     String caption,
     String referer,
     float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server,
     boolean remove_previous_items
   ) {
     final Handler  handler  = new Handler(networkingHandlerThread.getLooper());
@@ -304,7 +319,7 @@ final class MyMessageHandler extends Handler {
         if (matches == null)
           matches = recursiveDirectoryExtractor.expandPlaylist(uri);
 
-        addItems(playerManager, service, matches, uri, caption, referer, startPosition, remove_previous_items);
+        addItems(playerManager, service, matches, uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, remove_previous_items);
       }
     };
 
@@ -319,6 +334,9 @@ final class MyMessageHandler extends Handler {
     String caption,
     String referer,
     float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server,
     boolean remove_previous_items
   ) {
     final Handler  handler  = new Handler(mainLooper);
@@ -328,7 +346,7 @@ final class MyMessageHandler extends Handler {
         String playUrl;
 
         if (matches == null) {
-          playerManager.addItem(uri, caption, referer, startPosition, remove_previous_items);
+          playerManager.addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, remove_previous_items);
 
           playUrl = uri;
         }
@@ -348,7 +366,7 @@ final class MyMessageHandler extends Handler {
             uris[i] = playUrl;
           }
 
-          playerManager.addItems(uris, caption, referer, startPosition, remove_previous_items);
+          playerManager.addItems(uris, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, remove_previous_items);
 
           playUrl = uris[0];
         }

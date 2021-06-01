@@ -6,6 +6,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
@@ -268,18 +269,24 @@ public final class PlayerManager implements EventListener {
     String uri,
     String caption,
     String referer,
-    float startPosition
+    float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server
   ) {
-    addItem(uri, caption, referer, startPosition, /* remove_previous_items= */ false);
+    addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, /* remove_previous_items= */ false);
   }
 
   /**
    * Appends {@link VideoSource} to the media queue.
    *
-   * @param uri The URL to a video file or stream.
-   * @param caption The URL to a file containing text captions (srt or vtt).
-   * @param referer The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
-   * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param uri                   The URL to a video file or stream.
+   * @param caption               The URL to a file containing text captions (srt or vtt).
+   * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
+   * @param startPosition         The position at which to start playback within the video file or (non-live) stream. When value < 1.0 and stopPosition < value, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param stopPosition          The position at which to stop playback within the video file or (non-live) stream. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param drm_scheme            The DRM scheme; value in: ["widevine","playready","clearkey"]
+   * @param drm_license_server    The URL to obtain DRM license keys.
    * @param remove_previous_items A boolean flag to indicate whether all previous items in queue should be removed after new items have been appended.
    */
   public void addItem(
@@ -287,9 +294,12 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server,
     boolean remove_previous_items
   ) {
-    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, startPosition);
+    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server);
     addItem(sample, remove_previous_items);
   }
 
@@ -325,18 +335,24 @@ public final class PlayerManager implements EventListener {
     String[] uris,
     String caption,
     String referer,
-    float startPosition
+    float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server
   ) {
-    addItems(uris, caption, referer, startPosition, /* remove_previous_items= */ false);
+    addItems(uris, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, /* remove_previous_items= */ false);
   }
 
   /**
    * Appends {@link VideoSource} to the media queue.
    *
-   * @param uris Array of URLs to video files or streams.
-   * @param caption The URL to a file containing text captions (srt or vtt).
-   * @param referer The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
-   * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param uris                  Array of URLs to video files or streams.
+   * @param caption               The URL to a file containing text captions (srt or vtt).
+   * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
+   * @param startPosition         The position at which to start playback within the video file or (non-live) stream. When value < 1.0 and stopPosition < value, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param stopPosition          The position at which to stop playback within the video file or (non-live) stream. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
+   * @param drm_scheme            The DRM scheme; value in: ["widevine","playready","clearkey"]
+   * @param drm_license_server    The URL to obtain DRM license keys.
    * @param remove_previous_items A boolean flag to indicate whether all previous items in queue should be removed after new items have been appended.
    */
   public void addItems(
@@ -344,6 +360,9 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server,
     boolean remove_previous_items
   ) {
     VideoSource[] samples = new VideoSource[uris.length];
@@ -352,7 +371,10 @@ public final class PlayerManager implements EventListener {
 
     for (int i=0; i < uris.length; i++) {
       uri        = uris[i];
-      sample     = VideoSource.createVideoSource(uri, (i == 0) ? caption : null, referer, (i == 0) ? startPosition : 0f);
+      sample     = (i == 0)
+                     ? VideoSource.createVideoSource(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server)
+                     : VideoSource.createVideoSource(uri, null,    referer, -1f,           -1f,          drm_scheme, drm_license_server)
+                   ;
       samples[i] = sample;
     }
 
@@ -515,9 +537,12 @@ public final class PlayerManager implements EventListener {
     String uri,
     String caption,
     String referer,
-    float startPosition
+    float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server
   ) {
-    addItem(uri, caption, referer, startPosition, /* remove_previous_items= */ true);
+    addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, /* remove_previous_items= */ true);
   }
 
   /**
@@ -610,9 +635,12 @@ public final class PlayerManager implements EventListener {
     String uri,
     String caption,
     String referer,
-    float startPosition
+    float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server
   ) {
-    addItem(uri, caption, referer, startPosition);
+    addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server);
   }
 
   /**
@@ -939,9 +967,13 @@ public final class PlayerManager implements EventListener {
       mediaSources = captions.toArray(mediaSources);
     }
 
-    return (mediaSources.length == 1)
+    MediaSource mergedMediaSource = (mediaSources.length == 1)
       ? mediaSources[0]
       : new MergingMediaSource(mediaSources);
+
+    MediaSource clippedMediaSource = applyClippingProperties(mergedMediaSource, sample);
+
+    return clippedMediaSource;
   }
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
@@ -952,7 +984,7 @@ public final class PlayerManager implements EventListener {
     if (factory == null)
       return null;
 
-    MediaItem mediaItem = new MediaItem.Builder().setUri(sample.uri).setMimeType(sample.uri_mimeType).build();
+    MediaItem mediaItem = sample.getMediaItem();
 
     switch (sample.uri_mimeType) {
       case MimeTypes.APPLICATION_M3U8:
@@ -1001,9 +1033,7 @@ public final class PlayerManager implements EventListener {
 
       ArrayList<String> uriCaptions = ExternalStorageUtils.findMatchingSubtitles(sample.uri);
 
-      if (uriCaptions == null)
-        return null;
-      if (uriCaptions.isEmpty())
+      if ((uriCaptions == null) || uriCaptions.isEmpty())
         return null;
 
       for (String caption : uriCaptions) {
@@ -1017,10 +1047,16 @@ public final class PlayerManager implements EventListener {
     }
 
     // normalize that non-null return value must include matches
-    if (captions.isEmpty())
+    if ((captions == null) || captions.isEmpty())
       captions = null;
 
     return captions;
+  }
+
+  private MediaSource applyClippingProperties(MediaSource mediaSource, VideoSource sample) {
+    MediaItem mediaItem = sample.getMediaItem();
+
+    return MediaSourceUtils.applyClippingProperties(mediaSource, mediaItem);
   }
 
   private MediaSource buildRawVideoMediaSource(int rawResourceId) {
@@ -1041,7 +1077,7 @@ public final class PlayerManager implements EventListener {
     int rawResourceId,
     boolean remove_previous_items
   ) {
-    VideoSource sample      = VideoSource.createVideoSource("raw", /* caption= */ (String) null, /* referer= */ (String) null, /* startPosition= */ 0f);
+    VideoSource sample      = VideoSource.createVideoSource();
     MediaSource mediaSource = buildRawVideoMediaSource(rawResourceId);
     addItem(sample, mediaSource, remove_previous_items);
   }

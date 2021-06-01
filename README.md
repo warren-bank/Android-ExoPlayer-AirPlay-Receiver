@@ -115,6 +115,19 @@ __AirPlay APIs:__
   caption_url_2='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.vtt'
   caption_url_3='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/comments.vtt'
 
+  # URLs for test video DRM:
+  #   https://exoplayer.dev/drm.html
+  #     widevine:  requires Android 4.4+
+  #     clearkey:  requires Android 5.0+
+  #     playready: requires AndroidTV
+  drm_videos_page='https://github.com/google/ExoPlayer/blob/r2.14.0/demos/main/src/main/assets/media.exolist.json'
+  drm_video_url_1='https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd'
+  drm_video_url_1_license_scheme='widevine'
+  drm_video_url_1_license_server='https://proxy.uat.widevine.com/proxy?provider=widevine_test'
+  drm_video_url_2='https://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest'
+  drm_video_url_2_license_scheme='playready'
+  drm_video_url_2_license_server='https://playready.directtaps.net/pr/svc/rightsmanager.asmx'
+
   # URLs for test audio:
   audio_flac_nfo='https://archive.org/details/tntvillage_457399'
   audio_flac_url='https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1970%20Black%20Sabbath/1970%20Black%20Sabbath%20%5B1986%20France%20NELCD%206002%20Castle%5D/Black%20Sabbath%20-%20Black%20Sabbath%20%281986%2C%20Castle%20Communications%2C%20NELCD%206002%29.flac'
@@ -214,6 +227,21 @@ __extended APIs:__
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
       --data-binary "Content-Location: ${video_url_3}\nCaption-Location: ${caption_url_3}\nReferer: ${videos_page}\nStart-Position: 30" \
+      "http://${airplay_ip}/queue"
+  ```
+* play DRM video #1 (seek to 10 seconds, end playback at 30 seconds):
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${drm_video_url_1}\nDRM-License-Scheme: ${drm_video_url_1_license_scheme}\nDRM-License-Server: ${drm_video_url_1_license_server}\nStart-Position: 10\nStop-Position: 30" \
+      "http://${airplay_ip}/play"
+  ```
+* add DRM video #2 to end of queue (seek to 50%):
+  ```bash
+    # note: position < 1 is a percent of the total track length
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${drm_video_url_2}\nDRM-License-Scheme: ${drm_video_url_2_license_scheme}\nDRM-License-Server: ${drm_video_url_2_license_server}\nStart-Position: 0.5" \
       "http://${airplay_ip}/queue"
   ```
 * skip forward to next video in queue:
@@ -338,6 +366,26 @@ __extended APIs:__
       --data-binary "Content-Location: ${recursive_path}" \
       "http://${airplay_ip}/play"
   ```
+
+#### Notes:
+
+* POST data sent in requests to `/play` and `/queue` API endpoints:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys are not case sensitive
+  - recognized keys include:
+    * _content-location_
+    * _caption-location_
+    * _referer_
+    * _start-position_
+    * _stop-position_
+    * _drm-license-scheme_
+      - valid values include:
+        * _widevine_
+        * _clearkey_
+        * _playready_
+    * _drm-license-server_
 
 #### Usage (high level):
 

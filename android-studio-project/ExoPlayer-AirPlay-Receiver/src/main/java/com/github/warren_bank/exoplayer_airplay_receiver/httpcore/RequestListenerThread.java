@@ -413,7 +413,7 @@ public class RequestListenerThread extends Thread {
         StringEntity returnBody = new StringEntity("");
 
         String position = StringUtils.getQueryStringValue(target, "?position=");
-        if (!position.isEmpty()) {
+        if (!TextUtils.isEmpty(position)) {
           //perform seek operation
           try {
             float pos = Float.parseFloat(position);
@@ -463,7 +463,7 @@ public class RequestListenerThread extends Thread {
       }
       else if (target.startsWith(Constant.Target.RATE)) { //Set playback rate (special case: 0 is pause)
         String value = StringUtils.getQueryStringValue(target, "?value=");
-        if (!value.isEmpty()) {
+        if (!TextUtils.isEmpty(value)) {
           try {
             float rate = Float.parseFloat(value);
             Log.d(tag, "airplay rate = " + rate);
@@ -533,34 +533,41 @@ public class RequestListenerThread extends Thread {
           target.equals(Constant.Target.QUEUE)     //Add video to end of queue
         )
       ) {
-        String requestBody = "";
-        String playUrl     = "";
-        String textUrl     = "";
-        String referUrl    = "";
-        Double startPos    = 0.0;
+        String playUrl   = null;
+        String textUrl   = null;
+        String referUrl  = null;
+        String startPos  = null;
+        String stopPos   = null;
+        String drmScheme = null;
+        String drmUrl    = null;
 
-        requestBody = new String(entityContent);
-        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
-        Log.d(tag, " airplay play action request content = " + requestBody);
-        //a video from iPhone
         if (contentType.equalsIgnoreCase("application/x-apple-binary-plist")) {
           //<BINARY PLIST DATA>
           HashMap map = BplistParser.parse(entityContent);
+
           playUrl  = (String) map.get("Content-Location");
-          textUrl  = (String) map.get("Caption-Location");
-          referUrl = (String) map.get("Referer");
-          startPos = (Double) map.get("Start-Position");
+          startPos = Double.toString(
+                      (Double) map.get("Start-Position")
+                     );
         }
         else {
-          //iTunes pushed videos or Youku
-          playUrl  = StringUtils.getRequestBodyValue(requestBody, "Content-Location:");
-          textUrl  = StringUtils.getRequestBodyValue(requestBody, "Caption-Location:");
-          referUrl = StringUtils.getRequestBodyValue(requestBody, "Referer:");
-          String v = StringUtils.getRequestBodyValue(requestBody, "Start-Position:");
-          startPos = (v.isEmpty()) ? 0.0 : Double.valueOf(v);
+          String requestBody;
+          requestBody = new String(entityContent);
+          requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+          Log.d(tag, " airplay play action request content = " + requestBody);
+
+          HashMap<String, String> map = StringUtils.parseRequestBody(requestBody);
+
+          playUrl   = (String) map.get("content-location");
+          textUrl   = (String) map.get("caption-location");
+          referUrl  = (String) map.get("referer");
+          startPos  = (String) map.get("start-position");
+          stopPos   = (String) map.get("stop-position");
+          drmScheme = (String) map.get("drm-license-scheme");
+          drmUrl    = (String) map.get("drm-license-server");
         }
 
-        if (playUrl.isEmpty()) {
+        if (TextUtils.isEmpty(playUrl)) {
           if (target.equals(Constant.Target.PLAY)) {
             // treat an empty PLAY request as equivalent to Constant.Target.PLAYER_SHOW
 
@@ -577,14 +584,17 @@ public class RequestListenerThread extends Thread {
           }
         }
         else {
-          Log.d(tag, "airplay playUrl = " + playUrl + "; start Pos = " + startPos + "; captions = " + textUrl + "; referer = " + referUrl);
+          Log.d(tag, "Media URL = " + playUrl + "; Start At = " + startPos + "; Stop At = " + stopPos + "; Captions = " + textUrl + "; Referer = " + referUrl + "; DRM Scheme = " + drmScheme + "; DRM License URL = " + drmUrl);
 
           Message msg = Message.obtain();
           HashMap<String, String> map = new HashMap<String, String>();
           map.put(Constant.PlayURL,    playUrl);
           map.put(Constant.CaptionURL, textUrl);
           map.put(Constant.RefererURL, referUrl);
-          map.put(Constant.Start_Pos,  Double.toString(startPos));
+          map.put(Constant.Start_Pos,  startPos);
+          map.put(Constant.Stop_Pos,   stopPos);
+          map.put(Constant.DRM_Scheme, drmScheme);
+          map.put(Constant.DRM_URL,    drmUrl);
           msg.what = target.equals(Constant.Target.PLAY)
             ? Constant.Msg.Msg_Video_Play
             : Constant.Msg.Msg_Video_Queue;
@@ -596,7 +606,7 @@ public class RequestListenerThread extends Thread {
       }
       else if (target.startsWith(Constant.Target.SCRUB_OFFSET)) { //perform seek operation relative to position of current video
         String value = StringUtils.getQueryStringValue(target, "?value=");
-        if (!value.isEmpty()) {
+        if (!TextUtils.isEmpty(value)) {
           try {
             long offset = Long.parseLong(value, 10);
             Log.d(tag, "airplay scrub offset = " + offset);
@@ -629,7 +639,7 @@ public class RequestListenerThread extends Thread {
       }
       else if (target.startsWith(Constant.Target.VOLUME)) { //set audio volume (special case: 0 is mute)
         String value = StringUtils.getQueryStringValue(target, "?value=");
-        if (!value.isEmpty()) {
+        if (!TextUtils.isEmpty(value)) {
           try {
             float audioVolume = Float.parseFloat(value);
             Log.d(tag, "airplay volume = " + audioVolume);
@@ -648,7 +658,7 @@ public class RequestListenerThread extends Thread {
       }
       else if (target.startsWith(Constant.Target.TXT_SHOW)) { //toggle text captions on/off
         String value = StringUtils.getQueryStringValue(target, "?toggle=");
-        if (!value.isEmpty()) {
+        if (!TextUtils.isEmpty(value)) {
           try {
             int toggleValue = Integer.parseInt(value, 10);
             Log.d(tag, "airplay captions = " + toggleValue);
@@ -670,7 +680,7 @@ public class RequestListenerThread extends Thread {
         target.startsWith(Constant.Target.TXT_ADD_OFFSET)
       ) { //update time offset for text captions
         String value = StringUtils.getQueryStringValue(target, "?value=");
-        if (!value.isEmpty()) {
+        if (!TextUtils.isEmpty(value)) {
           try {
             long offset = Long.parseLong(value, 10);
             Log.d(tag, "airplay text offset = " + offset);
@@ -691,13 +701,12 @@ public class RequestListenerThread extends Thread {
         (entityContent != null) &&
         target.equals(Constant.Target.TOAST_SHOW)
       ) {
-        String requestBody = "";
-
+        String requestBody;
         requestBody = new String(entityContent);
         requestBody = requestBody.trim();
         requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
 
-        if (!requestBody.isEmpty()) {
+        if (!TextUtils.isEmpty(requestBody)) {
           Message msg = Message.obtain();
           msg.what = Constant.Msg.Msg_Show_Toast;
           msg.obj = requestBody;

@@ -76,16 +76,19 @@ window.onload  = () => {
   // ===============================================================================================
   // form fields
 
-  const $airplay_host   = document.querySelector('input#airplay_host')
-  const $airplay_port   = document.querySelector('input#airplay_port')
-  const $airplay_tls    = document.querySelector('input#airplay_tls')
-  const $video_url      = document.querySelector('input#video_url')
-  const $caption_url    = document.querySelector('input#caption_url')
-  const $referer_url    = document.querySelector('input#referer_url')
-  const $start_position = document.querySelector('input#start_position')
-  const $play           = document.querySelector('button#play')
+  const $airplay_host       = document.querySelector('input#airplay_host')
+  const $airplay_port       = document.querySelector('input#airplay_port')
+  const $airplay_tls        = document.querySelector('input#airplay_tls')
+  const $video_url          = document.querySelector('input#video_url')
+  const $caption_url        = document.querySelector('input#caption_url')
+  const $referer_url        = document.querySelector('input#referer_url')
+  const $start_position     = document.querySelector('input#start_position')
+  const $stop_position      = document.querySelector('input#stop_position')
+  const $drm_license_scheme = document.querySelector('select#drm_license_scheme')
+  const $drm_license_server = document.querySelector('input#drm_license_server')
+  const $play               = document.querySelector('button#play')
 
-  const $sample_videos  = document.querySelector('select#sample_videos')
+  const $sample_videos      = document.querySelector('select#sample_videos')
 
   // ===============================================================================================
   // XHR helper
@@ -284,24 +287,49 @@ window.onload  = () => {
  * =================================================================================================
  */
 
+  const get_time_offset = (when) => {
+    switch (when) {
+      case 'start':
+        return $start_position.value || 0
+      case 'stop':
+        return $stop_position.value || 0
+      default:
+        return -1
+    }
+  }
+
   const get_video_POST_data = (url) => {
     if (!url)
           url = $video_url.value
     const txt = $caption_url.value
     const ref = $referer_url.value
-    const pos = $start_position.value || 0
+
+    const start_offset = get_time_offset('start')
+    const stop_offset  = get_time_offset('stop')
+
+    const drm_scheme   = $drm_license_scheme.value
+    const drm_server   = $drm_license_server.value
 
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    let data = `Content-Location: ${url}\nStart-Position: ${pos}`
+    let data = `Content-Location: ${url}`
     if (txt) {
       data += `\nCaption-Location: ${txt}`
     }
     if (ref) {
       data += `\nReferer: ${ref}`
+    }
+    if (start_offset > 0) {
+      data += `\nStart-Position: ${start_offset}`
+    }
+    if (stop_offset > 0) {
+      data += `\nStop-Position: ${stop_offset}`
+    }
+    if (drm_scheme && drm_server) {
+      data += `\nDRM-License-Scheme: ${drm_scheme}\nDRM-License-Server: ${drm_server}`
     }
     return data
   }
@@ -377,24 +405,55 @@ window.onload  = () => {
     event.preventDefault()
     event.stopPropagation()
 
+    const set_time_offset = (when, item) => {
+      let pos
+
+      switch (when) {
+        case 'start':
+          pos  = item.getAttribute('x-start-position') || '00:00:00'
+          break
+        case 'stop':
+          pos  = item.getAttribute('x-stop-position') || '00:00:00'
+          break
+        default:
+          return
+      }
+
+      const pos_chunks = pos.split(':')
+      const hrs        = (pos_chunks.length >= 3) ? parseInt(pos_chunks[pos_chunks.length - 3], 10) : 0
+      const min        = (pos_chunks.length >= 2) ? parseInt(pos_chunks[pos_chunks.length - 2], 10) : 0
+      const sec        = (pos_chunks.length >= 1) ? parseInt(pos_chunks[pos_chunks.length - 1], 10) : 0
+      const offset     = (sec) + (min * 60) + (hrs * 60 * 60)
+
+      switch (when) {
+        case 'start':
+          $start_position.value = offset
+          break
+        case 'stop':
+          $stop_position.value = offset
+          break
+      }
+    }
+
     const item = $sample_videos.selectedOptions[0]
     const url  = item.getAttribute('x-video-url')
     const txt  = item.getAttribute('x-caption-url')
     const ref  = item.getAttribute('x-referer-url')
-    const pos  = item.getAttribute('x-start-position') || '00:00:00'
+    const drm  = {
+      scheme:    item.getAttribute('x-drm-license-scheme'),
+      server:    item.getAttribute('x-drm-license-server')
+    }
 
     if (url) {
       $video_url.value   = url
       $caption_url.value = (txt) ? txt : ''
       $referer_url.value = (ref) ? ref : ''
 
-      const pos_chunks = pos.split(':')
-      const hrs = (pos_chunks.length >= 3) ? parseInt(pos_chunks[pos_chunks.length - 3], 10) : 0
-      const min = (pos_chunks.length >= 2) ? parseInt(pos_chunks[pos_chunks.length - 2], 10) : 0
-      const sec = (pos_chunks.length >= 1) ? parseInt(pos_chunks[pos_chunks.length - 1], 10) : 0
+      set_time_offset('start', item)
+      set_time_offset('stop',  item)
 
-      const offset = (sec) + (min * 60) + (hrs * 60 * 60)
-      $start_position.value = offset
+      $drm_license_scheme.value = (drm.scheme) ? drm.scheme : ''
+      $drm_license_server.value = (drm.server) ? drm.server : ''
 
       $play.click()
     }
@@ -447,6 +506,23 @@ window.onload  = () => {
       <div class="oneline right">
         <label for="start_position">Start Position:</label>
         <input id="start_position" type="number" x-type="range" x-min="0" x-max="999999" x-step="1" size="6" value="0" />
+      </div>
+      <div class="oneline right">
+        <label for="stop_position">Stop Position:</label>
+        <input id="stop_position" type="number" x-type="range" x-min="0" x-max="999999" x-step="1" size="6" value="0" />
+      </div>
+      <div class="oneline right">
+        <label for="drm_license_scheme">DRM Scheme:</label>
+        <select id="drm_license_scheme">
+          <option value="">Scheme:</option>
+          <option value="widevine">Widevine</option>
+          <option value="clearkey">ClearKey</option>
+          <option value="playready">PlayReady</option>
+        </select>
+      </div>
+      <div class="oneline right">
+        <label for="drm_license_server">DRM License Server:</label>
+        <input id="drm_license_server" type="url" size="100" placeholder="https://widevine.example.com/" />
       </div>
       <div class="oneline">
         <button id="play">Play</button>

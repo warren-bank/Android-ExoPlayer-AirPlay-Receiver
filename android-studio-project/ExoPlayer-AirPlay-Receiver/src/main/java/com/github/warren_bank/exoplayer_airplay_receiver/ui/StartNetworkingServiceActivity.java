@@ -73,11 +73,8 @@ public class StartNetworkingServiceActivity extends Activity {
 
     if (data != null) {
       newIntent.setAction(NetworkingService.ACTION_PLAY);
-
-      newIntent.putExtra(Constant.PlayURL,                                              data.toString()                                    );
-      newIntent.putExtra(Constant.CaptionURL, oldIntent.hasExtra(Constant.CaptionURL) ? oldIntent.getStringExtra(Constant.CaptionURL) : "" );
-      newIntent.putExtra(Constant.RefererURL, oldIntent.hasExtra(Constant.RefererURL) ? oldIntent.getStringExtra(Constant.RefererURL) : "" );
-      newIntent.putExtra(Constant.Start_Pos,  oldIntent.hasExtra(Constant.Start_Pos)  ? oldIntent.getStringExtra(Constant.Start_Pos)  : "0");
+      newIntent.replaceExtras(oldIntent);
+      newIntent.putExtra(Constant.PlayURL, data.toString());
     }
   }
 

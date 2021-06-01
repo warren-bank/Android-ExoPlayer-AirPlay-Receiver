@@ -10,6 +10,9 @@ public class Constant {
     public static final String CaptionURL       = "textUrl";
     public static final String RefererURL       = "referUrl";
     public static final String Start_Pos        = "startPos";
+    public static final String Stop_Pos         = "stopPos";
+    public static final String DRM_Scheme       = "drmScheme";
+    public static final String DRM_URL          = "drmUrl";
 
     public static String getServerInfoResponse(String mac) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"

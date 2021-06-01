@@ -3,6 +3,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.HashMap;
 
 public class StringUtils {
 
@@ -39,6 +40,33 @@ public class StringUtils {
   public static String getRequestBodyValue(String requestBody, String prefix) {
     String suffix = "\n";
     return StringUtils.getValue(requestBody, prefix, suffix);
+  }
+
+  public static HashMap<String, String> parseRequestBody(String requestBody) {
+    return parseRequestBody(requestBody, /* normalize_lowercase_keys= */ true);
+  }
+
+  public static HashMap<String, String> parseRequestBody(String requestBody, boolean normalize_lowercase_keys) {
+    HashMap<String, String> values = new HashMap<String, String>();
+
+    String[] lines = requestBody.split("(?:\\r?\\n)+");
+    String[] parts;
+    for (String line : lines) {
+      parts = line.split("\\s*[:=]\\s*", 2);
+
+      if (parts.length == 2) {
+        parts[0] = parts[0].trim();
+        parts[1] = parts[1].trim();
+
+        if (normalize_lowercase_keys)
+          parts[0] = parts[0].toLowerCase();
+
+        if (!parts[0].isEmpty() && !parts[1].isEmpty())
+          values.put(parts[0], parts[1]);
+      }
+    }
+
+    return values;
   }
 
   public static String convertEscapedLinefeeds(String requestBody) {

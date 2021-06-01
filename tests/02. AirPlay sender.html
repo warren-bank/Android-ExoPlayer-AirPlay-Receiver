@@ -6,6 +6,10 @@
   <link rel="icon" href="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v1.0.0/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/launcher.png" type="image/x-icon" />
   <style>
 
+* {
+  box-sizing: border-box !important;
+}
+
 body {
   margin: 0;
   padding: 15px;
@@ -50,6 +54,7 @@ body .contents .oneline {
   white-space: nowrap;
 }
 body .contents .oneline > * {
+  height: 100%;
   vertical-align: middle;
 }
 body .contents .oneline.fullwidth > * {
@@ -122,6 +127,11 @@ window.onload  = () => {
   const $start_position_hours    = document.querySelector('input#start_position_hours')
   const $start_position_minutes  = document.querySelector('input#start_position_minutes')
   const $start_position_seconds  = document.querySelector('input#start_position_seconds')
+  const $stop_position_hours     = document.querySelector('input#stop_position_hours')
+  const $stop_position_minutes   = document.querySelector('input#stop_position_minutes')
+  const $stop_position_seconds   = document.querySelector('input#stop_position_seconds')
+  const $drm_license_scheme      = document.querySelector('select#drm_license_scheme')
+  const $drm_license_server      = document.querySelector('input#drm_license_server')
   const $play                    = document.querySelector('button#play')
   const $queue                   = document.querySelector('button#queue')
   const $pause                   = document.querySelector('button#pause')
@@ -510,29 +520,60 @@ window.onload  = () => {
  * =================================================================================================
  */
 
+  const get_time_offset = (when) => {
+    let hrs, min, sec
+
+    switch (when) {
+      case 'start':
+        hrs = get_value($start_position_hours,   0)    // hrs = parseInt($start_position_hours.value,   10) || 0
+        min = get_value($start_position_minutes, 0)    // min = parseInt($start_position_minutes.value, 10) || 0
+        sec = get_value($start_position_seconds, 0)    // sec = parseInt($start_position_seconds.value, 10) || 0
+        break
+      case 'stop':
+        hrs = get_value($stop_position_hours,   0)     // hrs = parseInt($stop_position_hours.value,   10) || 0
+        min = get_value($stop_position_minutes, 0)     // min = parseInt($stop_position_minutes.value, 10) || 0
+        sec = get_value($stop_position_seconds, 0)     // sec = parseInt($stop_position_seconds.value, 10) || 0
+        break
+      default:
+        return -1
+    }
+
+    const offset = (sec) + (min * 60) + (hrs * 60 * 60)
+    return offset
+  }
+
   const get_video_POST_data = (url) => {
     if (!url)
           url = $video_url.value
     const txt = $caption_url.value
     const ref = $referer_url.value
 
-    const hrs = get_value($start_position_hours,   0)    // const hrs = parseInt($start_position_hours.value,   10) || 0
-    const min = get_value($start_position_minutes, 0)    // const min = parseInt($start_position_minutes.value, 10) || 0
-    const sec = get_value($start_position_seconds, 0)    // const sec = parseInt($start_position_seconds.value, 10) || 0
+    const start_offset = get_time_offset('start')
+    const stop_offset  = get_time_offset('stop')
 
-    const offset = (sec) + (min * 60) + (hrs * 60 * 60)
+    const drm_scheme   = $drm_license_scheme.value
+    const drm_server   = $drm_license_server.value
 
     if (!url) {
       alert('Video URL is required')
       return
     }
 
-    let data = `Content-Location: ${url}\nStart-Position: ${offset}`
+    let data = `Content-Location: ${url}`
     if (txt) {
       data += `\nCaption-Location: ${txt}`
     }
     if (ref) {
       data += `\nReferer: ${ref}`
+    }
+    if (start_offset > 0) {
+      data += `\nStart-Position: ${start_offset}`
+    }
+    if (stop_offset > 0) {
+      data += `\nStop-Position: ${stop_offset}`
+    }
+    if (drm_scheme && drm_server) {
+      data += `\nDRM-License-Scheme: ${drm_scheme}\nDRM-License-Server: ${drm_server}`
     }
     return data
   }
@@ -776,25 +817,58 @@ window.onload  = () => {
     event.preventDefault()
     event.stopPropagation()
 
-    const item = $sample_videos.selectedOptions[0]
-    const url  = item.getAttribute('x-video-url')
-    const txt  = item.getAttribute('x-caption-url')
-    const ref  = item.getAttribute('x-referer-url')
-    const pos  = item.getAttribute('x-start-position') || '00:00:00'
+    const set_time_offset = (when, item) => {
+      let pos
 
-    if (url) {
-      $video_url.value   = url
-      $caption_url.value = (txt) ? txt : ''
-      $referer_url.value = (ref) ? ref : ''
+      switch (when) {
+        case 'start':
+          pos  = item.getAttribute('x-start-position') || '00:00:00'
+          break
+        case 'stop':
+          pos  = item.getAttribute('x-stop-position') || '00:00:00'
+          break
+        default:
+          return
+      }
 
       const pos_chunks = pos.split(':')
       const hrs = (pos_chunks.length >= 3) ? parseInt(pos_chunks[pos_chunks.length - 3], 10) : 0
       const min = (pos_chunks.length >= 2) ? parseInt(pos_chunks[pos_chunks.length - 2], 10) : 0
       const sec = (pos_chunks.length >= 1) ? parseInt(pos_chunks[pos_chunks.length - 1], 10) : 0
 
-      $start_position_hours.value   = (hrs) ? hrs : ''
-      $start_position_minutes.value = (min) ? min : ''
-      $start_position_seconds.value = (sec) ? sec : ''
+      switch (when) {
+        case 'start':
+          $start_position_hours.value   = (hrs) ? hrs : ''
+          $start_position_minutes.value = (min) ? min : ''
+          $start_position_seconds.value = (sec) ? sec : ''
+          break
+        case 'stop':
+          $stop_position_hours.value   = (hrs) ? hrs : ''
+          $stop_position_minutes.value = (min) ? min : ''
+          $stop_position_seconds.value = (sec) ? sec : ''
+          break
+      }
+    }
+
+    const item = $sample_videos.selectedOptions[0]
+    const url  = item.getAttribute('x-video-url')
+    const txt  = item.getAttribute('x-caption-url')
+    const ref  = item.getAttribute('x-referer-url')
+    const drm  = {
+      scheme:    item.getAttribute('x-drm-license-scheme'),
+      server:    item.getAttribute('x-drm-license-server')
+    }
+
+    if (url) {
+      $video_url.value   = url
+      $caption_url.value = (txt) ? txt : ''
+      $referer_url.value = (ref) ? ref : ''
+
+      set_time_offset('start', item)
+      set_time_offset('stop',  item)
+
+      $drm_license_scheme.value = (drm.scheme) ? drm.scheme : ''
+      $drm_license_server.value = (drm.server) ? drm.server : ''
     }
   }
 
@@ -891,6 +965,48 @@ window.onload  = () => {
                 </td>
                 <td class="oneline">
                   <input id="start_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label>Stop Position:</label>
+          </td>
+          <td class="oneline left">
+            <table align="left">
+              <tr>
+                <td class="oneline">
+                  <input id="stop_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+                </td>
+                <td class="oneline">
+                  <input id="stop_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+                </td>
+                <td class="oneline">
+                  <input id="stop_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label>DRM:</label>
+          </td>
+          <td class="oneline left">
+            <table align="left" width="100%">
+              <tr>
+                <td class="oneline">
+                  <select id="drm_license_scheme">
+                    <option value="">Scheme:</option>
+                    <option value="widevine">Widevine</option>
+                    <option value="clearkey">ClearKey</option>
+                    <option value="playready">PlayReady</option>
+                  </select>
+                </td>
+                <td class="oneline" width="100%">
+                  <input id="drm_license_server" type="url" style="width: 100%;" placeholder="https://widevine.example.com/" />
                 </td>
               </tr>
             </table>
@@ -1049,21 +1165,26 @@ window.onload  = () => {
                   x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html"
                  >Tears Of Steel (vid:dash, subs:vtt)</option>
           <option value="4"
+                  x-video-url="https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd"
+                  x-drm-license-scheme="widevine"
+                  x-drm-license-server="https://proxy.uat.widevine.com/proxy?provider=widevine_test"
+                 >Tears Of Steel (vid:dash, drm:widevine)</option>
+          <option value="5"
                   x-video-url="https://html5demos.com/assets/dizzy.mp4"
                   x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml"
                   x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598"
                  >Dizzy (vid:mp4, subs:ttml)</option>
-          <option value="5"
+          <option value="6"
                   x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4"
                   x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass"
                   x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605"
                  >Sample (vid:mp4, subs:ssa)</option>
-          <option value="6"
+          <option value="7"
                   x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u"
                   x-caption-url=""
                   x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore"
                  >Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
-          <option value="7"
+          <option value="8"
                   x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/"
                   x-caption-url=""
                   x-referer-url="https://archive.org/details/tntvillage_455310"
