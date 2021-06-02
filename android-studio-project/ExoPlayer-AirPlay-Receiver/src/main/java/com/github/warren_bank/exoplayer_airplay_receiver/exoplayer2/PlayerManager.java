@@ -117,7 +117,18 @@ public final class PlayerManager implements EventListener {
       analyticsCollector
     ).build();
     this.exoPlayer.addListener(this);
-    this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+
+    // -------------------------------------------------------------------------
+    // ExoPlayer issue #8994 (github.com/google/ExoPlayer/issues/8994)
+    //   - using ExoPlayer r2.14.0, the following line causes the app to crash
+    //     when an RTSP stream is contained in POST data for /play API endpoint
+    //   - as an interesting note, there is no problem
+    //     when an RTSP stream is appended to a non-empty queue
+    // -------------------------------------------------------------------------
+    // TO DO:
+    //   - monitor progress of issue, and uncomment line when resolved
+    // -------------------------------------------------------------------------
+    //this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 
     String userAgent = context.getResources().getString(R.string.user_agent);
     this.httpDataSourceFactory   = new DefaultHttpDataSourceFactory(userAgent);
