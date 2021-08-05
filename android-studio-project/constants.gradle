@@ -3,9 +3,9 @@ project.ext {
     releaseVersion      = '002.00.24-16API'
     javaVersion         = JavaVersion.VERSION_1_8
     minSdkVersion       = 16
-    targetSdkVersion    = 28
-    compileSdkVersion   = 28
-    buildToolsVersion   = '28.0.3'
+    targetSdkVersion    = 29
+    compileSdkVersion   = 30
+    buildToolsVersion   = '30.0.3'
 
     libVersionAndroidX  = '1.1.0'
     libVersionMaterial  = '1.0.0'
