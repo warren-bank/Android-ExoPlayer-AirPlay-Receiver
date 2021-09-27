@@ -98,6 +98,11 @@ input[type="url"] {
   font-family: monospace;
 }
 
+input[type="text"][size="15"],
+input[type="number"] {
+  width: 10em;
+}
+
 input[type="file"] {
   display: none;
 }
@@ -713,7 +718,7 @@ window.onload  = function() {
             <label for="airplay_port">Port:</label>
           </td>
           <td class="oneline left">
-            <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" size="6" placeholder="8192" />
+            <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" min="1" max="999999" step="1" size="6" placeholder="8192" />
           </td>
         </tr>
         <tr>
@@ -762,13 +767,13 @@ window.onload  = function() {
             <table align="left">
               <tr>
                 <td class="oneline">
-                  <input id="start_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+                  <input id="start_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
                 </td>
                 <td class="oneline">
-                  <input id="start_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+                  <input id="start_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
                 </td>
                 <td class="oneline">
-                  <input id="start_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+                  <input id="start_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
                 </td>
               </tr>
             </table>
@@ -782,13 +787,13 @@ window.onload  = function() {
             <table align="left">
               <tr>
                 <td class="oneline">
-                  <input id="stop_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+                  <input id="stop_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
                 </td>
                 <td class="oneline">
-                  <input id="stop_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+                  <input id="stop_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
                 </td>
                 <td class="oneline">
-                  <input id="stop_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+                  <input id="stop_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
                 </td>
               </tr>
             </table>
@@ -861,13 +866,13 @@ window.onload  = function() {
       <table align="center">
         <tr>
           <td class="oneline">
-            <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" size="3" placeholder="hour" /> : 
+            <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
           </td>
           <td class="oneline">
-            <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="min" /> : 
+            <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
           </td>
           <td class="oneline">
-            <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" size="3" placeholder="sec" />
+            <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
           </td>
           <td class="oneline fullwidth">
             <button id="seek">Seek to Position</button>
@@ -875,13 +880,13 @@ window.onload  = function() {
         </tr>
         <tr>
           <td class="oneline">
-            <input id="seek_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+            <input id="seek_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
           </td>
           <td class="oneline">
-            <input id="seek_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+            <input id="seek_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
           </td>
           <td class="oneline">
-            <input id="seek_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+            <input id="seek_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
           </td>
           <td class="oneline fullwidth">
             <button id="seek_offset">Add to Position</button>
@@ -889,13 +894,13 @@ window.onload  = function() {
         </tr>
         <tr>
           <td class="oneline">
-            <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+            <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
           </td>
           <td class="oneline">
-            <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+            <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
           </td>
           <td class="oneline">
-            <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+            <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
           </td>
           <td class="oneline fullwidth">
             <button id="set_txt_offset">Set CC Offset</button>
@@ -903,13 +908,13 @@ window.onload  = function() {
         </tr>
         <tr>
           <td class="oneline">
-            <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="min" /> : 
+            <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
           </td>
           <td class="oneline">
-            <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" size="3" placeholder="sec" /> : 
+            <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
           </td>
           <td class="oneline">
-            <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" size="3" placeholder="ms" />
+            <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
           </td>
           <td class="oneline fullwidth">
             <button id="add_txt_offset">Add CC Offset</button>
@@ -919,7 +924,7 @@ window.onload  = function() {
       <table align="center">
         <tr>
           <td class="oneline">
-            <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" size="3" placeholder="1.0" />
+            <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" min="0" max="1000" step="0.1" size="3" placeholder="1.0" />
           </td>
           <td class="oneline fullwidth">
             <button id="rate">Change Speed</button>
@@ -927,7 +932,7 @@ window.onload  = function() {
         </tr>
         <tr>
           <td class="oneline">
-            <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="1" x-step="0.001" size="3" placeholder="1.0" />
+            <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="1" x-step="0.001" min="0" max="1" step="0.1" size="3" placeholder="1.0" />
           </td>
           <td class="oneline fullwidth">
             <button id="volume">Change Volume</button>
