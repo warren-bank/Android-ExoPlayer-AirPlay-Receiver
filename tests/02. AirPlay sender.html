@@ -331,8 +331,9 @@ window.onload  = () => {
       const isFloat = (step.indexOf('.') >= 0)
 
       if (!isFloat && (val.indexOf('.') >= 0)) {
-        alert(`'${field.id}' requires an Integer value`)
-        return
+        let error_msg = `'${field.id}' requires an Integer value`
+        alert(error_msg)
+        throw new Error(error_msg)
       }
 
       if (isFloat) {
@@ -349,22 +350,26 @@ window.onload  = () => {
       }
 
       if (isNaN(val)) {
-        alert(`'${field.id}' could not be parsed as ${isFloat ? 'a Float' : 'an Integer'}`)
-        return
+        let error_msg = `'${field.id}' could not be parsed as ${isFloat ? 'a Float' : 'an Integer'}`
+        alert(error_msg)
+        throw new Error(error_msg)
       }
       if (val < min) {
-        alert(`'${field.id}' value ("${val}") is smaller than the minimum value allowed ("${min}")`)
-        return
+        let error_msg = `'${field.id}' value ("${val}") is smaller than the minimum value allowed ("${min}")`
+        alert(error_msg)
+        throw new Error(error_msg)
       }
       if (val > max) {
-        alert(`'${field.id}' value ("${val}") is larger than the maximum value allowed ("${max}")`)
-        return
+        let error_msg = `'${field.id}' value ("${val}") is larger than the maximum value allowed ("${max}")`
+        alert(error_msg)
+        throw new Error(error_msg)
       }
       const threshold = 1.0e-10
       const steps = (val / step)
       if ((steps !== parseInt(steps)) && (Math.abs(Math.round(steps) - steps) > threshold)) {
-        alert(`'${field.id}' value ("${val}") is not a multiple of the step increment ("${step}")`)
-        return
+        let error_msg = `'${field.id}' value ("${val}") is not a multiple of the step increment ("${step}")`
+        alert(error_msg)
+        throw new Error(error_msg)
       }
     }
 
@@ -578,8 +583,9 @@ window.onload  = () => {
     const drm_server   = $drm_license_server.value
 
     if (!url) {
-      alert('Video URL is required')
-      return
+      let error_msg = 'Video URL is required'
+      alert(error_msg)
+      throw new Error(error_msg)
     }
 
     let data = `Content-Location: ${url}`
@@ -631,19 +637,25 @@ window.onload  = () => {
     let path, data
     if (Array.isArray(urls) && urls.length) {
       for (let i = 0; i < urls.length; i++) {
-        path = (i === 0) ? initial_path : '/queue'
-        data = get_video_POST_data(urls[i])
+        try {
+          path = (i === 0) ? initial_path : '/queue'
+          data = get_video_POST_data(urls[i])
 
-        send_message(path, data)
+          send_message(path, data)
+        }
+        catch(e){}
 
         await request_delay(2500)  // 2.5 seconds between each request is high, but there's no rush since the URLs are being added to a queue and won't be used immediately; better to allow the receiver time to process each request, so they are queued in the correct order.
       }
     }
     else {
-      path = initial_path
-      data = get_video_POST_data()
+      try {
+        path = initial_path
+        data = get_video_POST_data()
 
-      send_message(path, data)
+        send_message(path, data)
+      }
+      catch(e){}
     }
   }
 
@@ -651,10 +663,13 @@ window.onload  = () => {
  */
 
   const send_video_POST_data = async (initial_path) => {
-    path = initial_path
-    data = get_video_POST_data()
+    try {
+      const path = initial_path
+      const data = get_video_POST_data()
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   // ===============================================================================================
@@ -729,86 +744,104 @@ window.onload  = () => {
     event.preventDefault()
     event.stopPropagation()
 
-    const hrs = get_value($seek_hours,   0)    // const hrs = parseInt($seek_hours.value,   10) || 0
-    const min = get_value($seek_minutes, 0)    // const min = parseInt($seek_minutes.value, 10) || 0
-    const sec = get_value($seek_seconds, 0)    // const sec = parseInt($seek_seconds.value, 10) || 0
+    try {
+      const hrs = get_value($seek_hours,   0)    // const hrs = parseInt($seek_hours.value,   10) || 0
+      const min = get_value($seek_minutes, 0)    // const min = parseInt($seek_minutes.value, 10) || 0
+      const sec = get_value($seek_seconds, 0)    // const sec = parseInt($seek_seconds.value, 10) || 0
 
-    const offset = (sec) + (min * 60) + (hrs * 60 * 60)
+      const offset = (sec) + (min * 60) + (hrs * 60 * 60)
 
-    const path = `/scrub?position=${offset}`
-    const data = null
+      const path = `/scrub?position=${offset}`
+      const data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $seek_offset.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    const min = get_value($seek_offset_minutes, 0)    // const min = parseInt($seek_offset_minutes.value, 10) || 0
-    const sec = get_value($seek_offset_seconds, 0)    // const sec = parseInt($seek_offset_seconds.value, 10) || 0
-    const ms  = get_value($seek_offset_ms,      0)    // const ms  = parseInt($seek_offset_ms.value,      10) || 0
+    try {
+      const min = get_value($seek_offset_minutes, 0)    // const min = parseInt($seek_offset_minutes.value, 10) || 0
+      const sec = get_value($seek_offset_seconds, 0)    // const sec = parseInt($seek_offset_seconds.value, 10) || 0
+      const ms  = get_value($seek_offset_ms,      0)    // const ms  = parseInt($seek_offset_ms.value,      10) || 0
 
-    const offset = (ms) + (sec * 1000) + (min * 60 * 1000)
+      const offset = (ms) + (sec * 1000) + (min * 60 * 1000)
 
-    const path = `/add-scrub-offset?value=${offset}`
-    const data = null
+      const path = `/add-scrub-offset?value=${offset}`
+      const data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $set_txt_offset.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    const min = get_value($set_txt_offset_minutes, 0)    // const min = parseInt($set_txt_offset_minutes.value, 10) || 0
-    const sec = get_value($set_txt_offset_seconds, 0)    // const sec = parseInt($set_txt_offset_seconds.value, 10) || 0
-    const ms  = get_value($set_txt_offset_ms,      0)    // const ms  = parseInt($set_txt_offset_ms.value,      10) || 0
+    try {
+      const min = get_value($set_txt_offset_minutes, 0)    // const min = parseInt($set_txt_offset_minutes.value, 10) || 0
+      const sec = get_value($set_txt_offset_seconds, 0)    // const sec = parseInt($set_txt_offset_seconds.value, 10) || 0
+      const ms  = get_value($set_txt_offset_ms,      0)    // const ms  = parseInt($set_txt_offset_ms.value,      10) || 0
 
-    const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+      const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
-    const path = `/set-captions-offset?value=${offset}`
-    const data = null
+      const path = `/set-captions-offset?value=${offset}`
+      const data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $add_txt_offset.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    const min = get_value($add_txt_offset_minutes, 0)    // const min = parseInt($add_txt_offset_minutes.value, 10) || 0
-    const sec = get_value($add_txt_offset_seconds, 0)    // const sec = parseInt($add_txt_offset_seconds.value, 10) || 0
-    const ms  = get_value($add_txt_offset_ms,      0)    // const ms  = parseInt($add_txt_offset_ms.value,      10) || 0
+    try {
+      const min = get_value($add_txt_offset_minutes, 0)    // const min = parseInt($add_txt_offset_minutes.value, 10) || 0
+      const sec = get_value($add_txt_offset_seconds, 0)    // const sec = parseInt($add_txt_offset_seconds.value, 10) || 0
+      const ms  = get_value($add_txt_offset_ms,      0)    // const ms  = parseInt($add_txt_offset_ms.value,      10) || 0
 
-    const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+      const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
-    const path = `/add-captions-offset?value=${offset}`
-    const data = null
+      const path = `/add-captions-offset?value=${offset}`
+      const data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $rate.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    const rate = get_value($rate_factor, 0.0)  // const rate = parseFloat($rate_factor.value) || 0.0
-    const path = `/rate?value=${rate}`
-    const data = null
+    try {
+      const rate = get_value($rate_factor, 0.0)  // const rate = parseFloat($rate_factor.value) || 0.0
+      const path = `/rate?value=${rate}`
+      const data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $volume.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    const vol = get_value($volume_factor, 0.0) // const vol  = parseFloat($volume_factor.value) || 0.0
-    const path = `/volume?value=${vol}`
-    const data = null
+    try {
+      const vol = get_value($volume_factor, 0.0) // const vol  = parseFloat($volume_factor.value) || 0.0
+      const path = `/volume?value=${vol}`
+      const data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $show_toast.onclick = (event) => {

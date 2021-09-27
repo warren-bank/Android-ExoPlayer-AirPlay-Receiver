@@ -328,10 +328,12 @@ window.onload  = function() {
       var step = field.getAttribute('x-step')
 
       var isFloat = (step.indexOf('.') >= 0)
+      var error_msg
 
       if (!isFloat && (val.indexOf('.') >= 0)) {
-        alert("'" + field.id + "'" + ' requires an Integer value')
-        return
+        error_msg = "'" + field.id + "'" + ' requires an Integer value'
+        alert(error_msg)
+        throw new Error(error_msg)
       }
 
       if (isFloat) {
@@ -348,22 +350,26 @@ window.onload  = function() {
       }
 
       if (isNaN(val)) {
-        alert("'" + field.id + "'" + ' could not be parsed as ' + (isFloat ? 'a Float' : 'an Integer'))
-        return
+        error_msg = "'" + field.id + "'" + ' could not be parsed as ' + (isFloat ? 'a Float' : 'an Integer')
+        alert(error_msg)
+        throw new Error(error_msg)
       }
       if (val < min) {
-        alert("'" + field.id + "'" + ' value ("' + val + '") is smaller than the minimum value allowed ("' + min + '")')
-        return
+        error_msg = "'" + field.id + "'" + ' value ("' + val + '") is smaller than the minimum value allowed ("' + min + '")'
+        alert(error_msg)
+        throw new Error(error_msg)
       }
       if (val > max) {
-        alert("'" + field.id + "'" + ' value ("' + val + '") is larger than the maximum value allowed ("' + max + '")')
-        return
+        error_msg = "'" + field.id + "'" + ' value ("' + val + '") is larger than the maximum value allowed ("' + max + '")'
+        alert(error_msg)
+        throw new Error(error_msg)
       }
       var threshold = 1.0e-10
       var steps = (val / step)
       if ((steps !== parseInt(steps)) && (Math.abs(Math.round(steps) - steps) > threshold)) {
-        alert("'" + field.id + "'" + ' value ("' + val + '") is not a multiple of the step increment ("' + step + '")')
-        return
+        error_msg = "'" + field.id + "'" + ' value ("' + val + '") is not a multiple of the step increment ("' + step + '")'
+        alert(error_msg)
+        throw new Error(error_msg)
       }
     }
 
@@ -408,9 +414,12 @@ window.onload  = function() {
     var drm_scheme   = $drm_license_scheme.value
     var drm_server   = $drm_license_server.value
 
+    var error_msg
+
     if (!url) {
-      alert('Video URL is required')
-      return
+      error_msg = 'Video URL is required'
+      alert(error_msg)
+      throw new Error(error_msg)
     }
 
     var data = 'Content-Location: ' + url
@@ -437,10 +446,13 @@ window.onload  = function() {
   // form field submission helper
 
   var send_video_POST_data = function(initial_path) {
-    path = initial_path
-    data = get_video_POST_data()
+    try {
+      var path = initial_path
+      var data = get_video_POST_data()
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   // ===============================================================================================
@@ -515,86 +527,104 @@ window.onload  = function() {
     event.preventDefault()
     event.stopPropagation()
 
-    var hrs = get_value($seek_hours,   0)    // var hrs = parseInt($seek_hours.value,   10) || 0
-    var min = get_value($seek_minutes, 0)    // var min = parseInt($seek_minutes.value, 10) || 0
-    var sec = get_value($seek_seconds, 0)    // var sec = parseInt($seek_seconds.value, 10) || 0
+    try {
+      var hrs = get_value($seek_hours,   0)    // var hrs = parseInt($seek_hours.value,   10) || 0
+      var min = get_value($seek_minutes, 0)    // var min = parseInt($seek_minutes.value, 10) || 0
+      var sec = get_value($seek_seconds, 0)    // var sec = parseInt($seek_seconds.value, 10) || 0
 
-    var offset = (sec) + (min * 60) + (hrs * 60 * 60)
+      var offset = (sec) + (min * 60) + (hrs * 60 * 60)
 
-    var path = '/scrub?position=' + offset
-    var data = null
+      var path = '/scrub?position=' + offset
+      var data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $seek_offset.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    var min = get_value($seek_offset_minutes, 0)    // var min = parseInt($seek_offset_minutes.value, 10) || 0
-    var sec = get_value($seek_offset_seconds, 0)    // var sec = parseInt($seek_offset_seconds.value, 10) || 0
-    var ms  = get_value($seek_offset_ms,      0)    // var ms  = parseInt($seek_offset_ms.value,      10) || 0
+    try {
+      var min = get_value($seek_offset_minutes, 0)    // var min = parseInt($seek_offset_minutes.value, 10) || 0
+      var sec = get_value($seek_offset_seconds, 0)    // var sec = parseInt($seek_offset_seconds.value, 10) || 0
+      var ms  = get_value($seek_offset_ms,      0)    // var ms  = parseInt($seek_offset_ms.value,      10) || 0
 
-    var offset = (ms) + (sec * 1000) + (min * 60 * 1000)
+      var offset = (ms) + (sec * 1000) + (min * 60 * 1000)
 
-    var path = '/add-scrub-offset?value=' + offset
-    var data = null
+      var path = '/add-scrub-offset?value=' + offset
+      var data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $set_txt_offset.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    var min = get_value($set_txt_offset_minutes, 0)    // var min = parseInt($set_txt_offset_minutes.value, 10) || 0
-    var sec = get_value($set_txt_offset_seconds, 0)    // var sec = parseInt($set_txt_offset_seconds.value, 10) || 0
-    var ms  = get_value($set_txt_offset_ms,      0)    // var ms  = parseInt($set_txt_offset_ms.value,      10) || 0
+    try {
+      var min = get_value($set_txt_offset_minutes, 0)    // var min = parseInt($set_txt_offset_minutes.value, 10) || 0
+      var sec = get_value($set_txt_offset_seconds, 0)    // var sec = parseInt($set_txt_offset_seconds.value, 10) || 0
+      var ms  = get_value($set_txt_offset_ms,      0)    // var ms  = parseInt($set_txt_offset_ms.value,      10) || 0
 
-    var offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+      var offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
-    var path = '/set-captions-offset?value=' + offset
-    var data = null
+      var path = '/set-captions-offset?value=' + offset
+      var data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $add_txt_offset.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    var min = get_value($add_txt_offset_minutes, 0)    // var min = parseInt($add_txt_offset_minutes.value, 10) || 0
-    var sec = get_value($add_txt_offset_seconds, 0)    // var sec = parseInt($add_txt_offset_seconds.value, 10) || 0
-    var ms  = get_value($add_txt_offset_ms,      0)    // var ms  = parseInt($add_txt_offset_ms.value,      10) || 0
+    try {
+      var min = get_value($add_txt_offset_minutes, 0)    // var min = parseInt($add_txt_offset_minutes.value, 10) || 0
+      var sec = get_value($add_txt_offset_seconds, 0)    // var sec = parseInt($add_txt_offset_seconds.value, 10) || 0
+      var ms  = get_value($add_txt_offset_ms,      0)    // var ms  = parseInt($add_txt_offset_ms.value,      10) || 0
 
-    var offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+      var offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
-    var path = '/add-captions-offset?value=' + offset
-    var data = null
+      var path = '/add-captions-offset?value=' + offset
+      var data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $rate.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    var rate = get_value($rate_factor, 0.0)  // var rate = parseFloat($rate_factor.value) || 0.0
-    var path = '/rate?value=' + rate
-    var data = null
+    try {
+      var rate = get_value($rate_factor, 0.0)  // var rate = parseFloat($rate_factor.value) || 0.0
+      var path = '/rate?value=' + rate
+      var data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $volume.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    var vol = get_value($volume_factor, 0.0) // var vol  = parseFloat($volume_factor.value) || 0.0
-    var path = '/volume?value=' + vol
-    var data = null
+    try {
+      var vol = get_value($volume_factor, 0.0) // var vol  = parseFloat($volume_factor.value) || 0.0
+      var path = '/volume?value=' + vol
+      var data = null
 
-    send_message(path, data)
+      send_message(path, data)
+    }
+    catch(e){}
   }
 
   $show_toast.onclick = function(event) {
