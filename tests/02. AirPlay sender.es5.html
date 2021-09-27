@@ -173,25 +173,29 @@ window.onload  = function() {
   var encoded_urls = {
     video:   null,
     caption: null,
-    referer: null
+    referer: null,
+    drm:     null
   }
 
   var get_encoded_video_url = function() {
     var b64, hash_regex_pattern, matches
 
     b64 = '[A-Za-z0-9+/=%]'
-    hash_regex_pattern = '^#/watch/(' + b64 + '+?)(?:/subtitle/(' + b64 + '+?))?(?:/referer/(' + b64 + '+?))?$'
+    hash_regex_pattern = '^#/watch/(' + b64 + '+?)(?:/subtitle/(' + b64 + '+?))?(?:/referer/(' + b64 + '+?))?(?:/drm/(' + b64 + '+?))?$'
     hash_regex_pattern = new RegExp(hash_regex_pattern)
 
     matches = hash_regex_pattern.exec(window.location.hash)
     if (matches && matches.length && matches[1]) {
       encoded_urls.video = matches[1]
 
-      if (matches[2])
+      if ((matches.length > 2) && matches[2])
         encoded_urls.caption = matches[2]
 
-      if (matches[3])
+      if ((matches.length > 3) && matches[3])
         encoded_urls.referer = matches[3]
+
+      if ((matches.length > 4) && matches[4])
+        encoded_urls.drm = matches[4]
     }
   }
 
@@ -236,6 +240,7 @@ window.onload  = function() {
 
   var prepopulate_form_fields = function() {
     var airplay_host, airplay_port, airplay_tls
+    var base64_payload, payload, pattern, matches
 
     airplay_host = get_cookie_value('airplay_host')
     airplay_port = get_cookie_value('airplay_port')
@@ -253,6 +258,18 @@ window.onload  = function() {
 
     if (encoded_urls.referer)
       $referer_url.value = decode_URL(encoded_urls.referer)
+
+    if (encoded_urls.drm) {
+      base64_payload = encoded_urls.drm
+      payload        = decode_URL(base64_payload)
+
+      pattern = /^(widevine|clearkey|playready)\|(https?:.*)$/i
+      matches = pattern.exec(payload)
+      if (matches) {
+        $drm_license_scheme.value = matches[1].toLowerCase()
+        $drm_license_server.value = matches[2]
+      }
+    }
   }
 
   prepopulate_form_fields()
