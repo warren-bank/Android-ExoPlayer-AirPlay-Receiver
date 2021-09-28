@@ -3,4 +3,6 @@
 
   <integer name="NOTIFICATION_ID_NETWORKING_SERVICE">1</integer>
   <integer name="NOTIFICATION_ID_EXOPLAYER_CONTROLS">2</integer>
+
+  <integer name="AUDIO_VOLUME_MAX_DB_BOOST">50</integer>
 </resources>
