@@ -82,6 +82,7 @@ public final class PlayerManager implements EventListener {
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
   private SimpleExoPlayer exoPlayer;
+  private float audioVolume;
   private float audioVolumeMax;
   private AudioListener audioListener;
   private LoudnessEnhancer loudnessEnhancer;
@@ -126,6 +127,7 @@ public final class PlayerManager implements EventListener {
     this.exoPlayer.addListener(this);
     this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 
+    this.audioVolume    = 1.0f;
     this.audioVolumeMax = (float) (ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_PERCENT) / 100.0f);
 
     if (Build.VERSION.SDK_INT >= 19) {
@@ -133,6 +135,7 @@ public final class PlayerManager implements EventListener {
         @Override
         public void onAudioSessionIdChanged(int audioSessionId) {
           if (loudnessEnhancer != null) {
+            loudnessEnhancer.setEnabled(false);
             loudnessEnhancer.release();
             loudnessEnhancer = null;
           }
@@ -140,6 +143,8 @@ public final class PlayerManager implements EventListener {
           if (audioSessionId != C.AUDIO_SESSION_ID_UNSET) {
             try {
               loudnessEnhancer = new LoudnessEnhancer(audioSessionId);
+
+              AirPlay_volume(audioVolume);
             }
             catch (Exception e) {}
           }
@@ -707,8 +712,6 @@ public final class PlayerManager implements EventListener {
    *                    The value 2.0 is amplified  to 200% input volume.
    */
   public void AirPlay_volume(float audioVolume) {
-    if (exoPlayer == null) return;
-
     if (audioVolume < 0.0f) {
       audioVolume = 0.0f;
     }
@@ -716,12 +719,17 @@ public final class PlayerManager implements EventListener {
       audioVolume = audioVolumeMax;
     }
 
+    this.audioVolume = audioVolume;
+
+    if (exoPlayer == null) return;
+
     if (audioVolume <= 1.0f) {
       exoPlayer.setVolume(audioVolume); // range of values: 0.0 (mute) - 1.0 (unity gain)
 
       if (loudnessEnhancer != null) {
         try {
           loudnessEnhancer.setTargetGain(0);
+          loudnessEnhancer.setEnabled(false);
         }
         catch (Exception e) {}
       }
@@ -734,6 +742,7 @@ public final class PlayerManager implements EventListener {
           int gainmB = (int) (1000 * Math.log10(audioVolume));
 
           loudnessEnhancer.setTargetGain(gainmB);
+          loudnessEnhancer.setEnabled(true);
         }
         catch (Exception e) {}
       }
@@ -861,6 +870,7 @@ public final class PlayerManager implements EventListener {
     }
 
     if (loudnessEnhancer != null) {
+      loudnessEnhancer.setEnabled(false);
       loudnessEnhancer.release();
       loudnessEnhancer = null;
     }
