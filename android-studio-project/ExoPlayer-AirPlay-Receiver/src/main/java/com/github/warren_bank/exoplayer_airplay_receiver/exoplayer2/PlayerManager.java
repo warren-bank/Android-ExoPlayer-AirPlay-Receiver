@@ -8,10 +8,13 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
+import android.media.audiofx.LoudnessEnhancer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -33,6 +36,7 @@ import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsCollector;
+import com.google.android.exoplayer2.audio.AudioListener;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
@@ -78,6 +82,9 @@ public final class PlayerManager implements EventListener {
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
   private SimpleExoPlayer exoPlayer;
+  private float audioVolumeMax;
+  private AudioListener audioListener;
+  private LoudnessEnhancer loudnessEnhancer;
   private DefaultHttpDataSourceFactory httpDataSourceFactory;
   private DefaultDataSourceFactory rawDataSourceFactory;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
@@ -118,6 +125,31 @@ public final class PlayerManager implements EventListener {
     ).build();
     this.exoPlayer.addListener(this);
     this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+
+    this.audioVolumeMax = (float) (ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_PERCENT) / 100.0f);
+
+    if (Build.VERSION.SDK_INT >= 19) {
+      this.audioListener = new AudioListener() {
+        @Override
+        public void onAudioSessionIdChanged(int audioSessionId) {
+          if (loudnessEnhancer != null) {
+            loudnessEnhancer.release();
+            loudnessEnhancer = null;
+          }
+
+          if (audioSessionId != C.AUDIO_SESSION_ID_UNSET) {
+            try {
+              loudnessEnhancer = new LoudnessEnhancer(audioSessionId);
+            }
+            catch (Exception e) {}
+          }
+        }
+      };
+
+      this.exoPlayer.addAudioListener(this.audioListener);
+
+      this.audioListener.onAudioSessionIdChanged( this.exoPlayer.getAudioSessionId() );
+    }
 
     String userAgent = context.getResources().getString(R.string.user_agent);
     this.httpDataSourceFactory   = new DefaultHttpDataSourceFactory(userAgent);
@@ -668,12 +700,44 @@ public final class PlayerManager implements EventListener {
   /**
    * Change audio volume level.
    *
-   * @param audioVolume New rate audio volume level. The range of acceptable values is 0.0 to 1.0. The value 0.0 is equivalent to 'mute'. The value 1.0 is unity gain.
+   * @param audioVolume New audio volume level.
+   *                    The range of acceptable values is 0.0 to AUDIO_VOLUME_MAX_PERCENT/100.
+   *                    The value 0.0 is equivalent to 'mute'.
+   *                    The value 1.0 is unity gain at 100% input volume.
+   *                    The value 2.0 is amplified  to 200% input volume.
    */
   public void AirPlay_volume(float audioVolume) {
     if (exoPlayer == null) return;
 
-    exoPlayer.setVolume(audioVolume); // range of values: 0.0 (mute) - 1.0 (unity gain)
+    if (audioVolume < 0.0f) {
+      audioVolume = 0.0f;
+    }
+    if (audioVolume > audioVolumeMax) {
+      audioVolume = audioVolumeMax;
+    }
+
+    if (audioVolume <= 1.0f) {
+      exoPlayer.setVolume(audioVolume); // range of values: 0.0 (mute) - 1.0 (unity gain)
+
+      if (loudnessEnhancer != null) {
+        try {
+          loudnessEnhancer.setTargetGain(0);
+        }
+        catch (Exception e) {}
+      }
+    }
+    else {
+      exoPlayer.setVolume(1.0f);
+
+      if (loudnessEnhancer != null) {
+        try {
+          int gainmB = (int) (1000 * Math.log10(audioVolume));
+
+          loudnessEnhancer.setTargetGain(gainmB);
+        }
+        catch (Exception e) {}
+      }
+    }
   }
 
   /**
@@ -781,6 +845,12 @@ public final class PlayerManager implements EventListener {
     if (exoPlayer != null) {
       try {
         exoPlayer.stop(true);
+
+        if (audioListener != null) {
+          exoPlayer.removeAudioListener(audioListener);
+          audioListener = null;
+        }
+
         exoPlayer.removeListener(this);
         exoPlayer.release();
       }
@@ -788,6 +858,11 @@ public final class PlayerManager implements EventListener {
       finally {
         exoPlayer = null;
       }
+    }
+
+    if (loudnessEnhancer != null) {
+      loudnessEnhancer.release();
+      loudnessEnhancer = null;
     }
   }
 
