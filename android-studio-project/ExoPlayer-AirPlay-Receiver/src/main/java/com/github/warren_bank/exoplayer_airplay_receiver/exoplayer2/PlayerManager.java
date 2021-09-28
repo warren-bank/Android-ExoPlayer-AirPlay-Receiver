@@ -83,7 +83,7 @@ public final class PlayerManager implements EventListener {
   private ConcatenatingMediaSource concatenatingMediaSource;
   private SimpleExoPlayer exoPlayer;
   private float audioVolume;
-  private float audioVolumeMax;
+  private int   audioVolumeMaxDbBoost;
   private AudioListener audioListener;
   private LoudnessEnhancer loudnessEnhancer;
   private DefaultHttpDataSourceFactory httpDataSourceFactory;
@@ -127,8 +127,8 @@ public final class PlayerManager implements EventListener {
     this.exoPlayer.addListener(this);
     this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 
-    this.audioVolume    = 1.0f;
-    this.audioVolumeMax = (float) (ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_PERCENT) / 100.0f);
+    this.audioVolume           = 1.0f;
+    this.audioVolumeMaxDbBoost = ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_DB_BOOST);
 
     if (Build.VERSION.SDK_INT >= 19) {
       this.audioListener = new AudioListener() {
@@ -706,17 +706,17 @@ public final class PlayerManager implements EventListener {
    * Change audio volume level.
    *
    * @param audioVolume New audio volume level.
-   *                    The range of acceptable values is 0.0 to AUDIO_VOLUME_MAX_PERCENT/100.
-   *                    The value 0.0 is equivalent to 'mute'.
-   *                    The value 1.0 is unity gain at 100% input volume.
-   *                    The value 2.0 is amplified  to 200% input volume.
+   *                    The range of acceptable values is 0.0 to (AUDIO_VOLUME_MAX_DB_BOOST + 1.0).
+   *                    The value 0.0 is   0% input volume (equivalent to 'mute').
+   *                    The value 1.0 is 100% input volume (unity gain).
+   *                    The value 6.5 is 100% input volume and amplified by 5.5 dB.
    */
   public void AirPlay_volume(float audioVolume) {
     if (audioVolume < 0.0f) {
       audioVolume = 0.0f;
     }
-    if (audioVolume > audioVolumeMax) {
-      audioVolume = audioVolumeMax;
+    if (audioVolume > (audioVolumeMaxDbBoost + 1.0f)) {
+      audioVolume = (float) audioVolumeMaxDbBoost + 1.0f;
     }
 
     this.audioVolume = audioVolume;
@@ -739,9 +739,10 @@ public final class PlayerManager implements EventListener {
 
       if (loudnessEnhancer != null) {
         try {
-          int gainmB = (int) (1000 * Math.log10(audioVolume));
+          float gain_dB = audioVolume - 1.0f;
+          int   gain_mB = (int) (gain_dB * 100.0f);
 
-          loudnessEnhancer.setTargetGain(gainmB);
+          loudnessEnhancer.setTargetGain(gain_mB);
           loudnessEnhancer.setEnabled(true);
         }
         catch (Exception e) {}

@@ -269,11 +269,11 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/volume?value=1.0"
   ```
-* set audio volume to 150%:
+* set audio volume to 100% and amplify by 10.5 dB:
   ```bash
-    # note: audio amplification requires Android 4.4+; 300% is the max value allowed.
+    # note: audio amplification requires Android 4.4+
     curl --silent -X GET \
-      "http://${airplay_ip}/volume?value=1.5"
+      "http://${airplay_ip}/volume?value=11.5"
   ```
 * turn text captions off:
   ```bash
