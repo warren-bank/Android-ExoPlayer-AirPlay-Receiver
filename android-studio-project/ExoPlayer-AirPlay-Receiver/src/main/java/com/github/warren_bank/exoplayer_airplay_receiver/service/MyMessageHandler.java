@@ -13,8 +13,10 @@ import com.github.warren_bank.exoplayer_airplay_receiver.ui.RuntimePermissionsRe
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -115,6 +117,18 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Msg.Msg_Show_Toast : {
         Toast.makeText(service.getApplicationContext(), (String) msg.obj, Toast.LENGTH_LONG).show();
+        break;
+      }
+
+      // =======================================================================
+      // Start Activity
+      // =======================================================================
+
+      case Constant.Msg.Msg_Start_Activity : {
+        startActivity(
+          service,
+          /* map= */ (HashMap) msg.obj
+        );
         break;
       }
 
@@ -258,6 +272,75 @@ final class MyMessageHandler extends Handler {
       }
 
     }
+  }
+
+  private void startActivity(NetworkingService service, HashMap<String, ArrayList<String>> map) {
+    Log.d(tag, "starting Activity from HashMap");
+    Intent intent = new Intent();
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+    // explicit
+    if (map.containsKey("package") && map.containsKey("class")) {
+      intent.setClassName(
+        (String) StringUtils.getLastListItem(map.get("package")),
+        (String) StringUtils.getLastListItem(map.get("class"))
+      );
+    }
+
+    // implicit
+    if (map.containsKey("action")) {
+      intent.setAction(
+        (String) StringUtils.getLastListItem(map.get("action"))
+      );
+    }
+
+    if (map.containsKey("data")) {
+      Uri data = Uri.parse(
+        (String) StringUtils.getLastListItem(map.get("data"))
+      );
+
+      if (map.containsKey("type")) {
+        intent.setDataAndType(
+          data,
+          (String) StringUtils.getLastListItem(map.get("type"))
+        );
+      }
+      else {
+        intent.setData(data);
+      }
+    }
+
+    if (map.containsKey("category")) {
+      for (String category : map.get("category")) {
+        intent.addCategory(category);
+      }
+    }
+
+    if (map.containsKey("flag")) {
+      for (String flag : map.get("flag")) {
+        try {
+          if (flag.startsWith("0x"))
+            intent.addFlags(Integer.parseInt(flag.substring(2), 16));
+          else
+            intent.addFlags(Integer.parseInt(flag, 10));
+        }
+        catch (Exception e) {}
+      }
+    }
+
+    for (String key : map.keySet()) {
+      if (key.startsWith("extra-")) {
+        String name = key.substring(6);
+        ArrayList<String> values = map.get(key);
+
+        if (values.size() > 1)
+          intent.putExtra(name, (String[]) values.toArray(new String[values.size()]));
+        else
+          intent.putExtra(name, (String) values.get(0));
+      }
+    }
+
+    service.startActivity(intent);
   }
 
   private void startImageViewerActivity(NetworkingService service, byte[] pic) {

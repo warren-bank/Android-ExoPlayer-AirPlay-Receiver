@@ -47,6 +47,9 @@ body .contents div:last-child {
 body .contents textarea {
   width: 100%;
 }
+body .contents textarea#intent_data {
+  white-space: nowrap;
+}
 
 body .contents .oneline {
   height: 2em;
@@ -169,6 +172,9 @@ window.onload  = () => {
   const $toast_message           = document.querySelector('textarea#toast_message')
   const $show_toast              = document.querySelector('button#show_toast')
   const $show_player             = document.querySelector('button#show_player')
+  const $intent_data             = document.querySelector('textarea#intent_data')
+  const $load_video              = document.querySelector('button#load_video')
+  const $send_intent             = document.querySelector('button#send_intent')
   const $sample_videos           = document.querySelector('select#sample_videos')
   const $image_file              = document.querySelector('input#image_file')
 
@@ -284,8 +290,8 @@ window.onload  = () => {
   // XHR helper
 
   const send_message = (path, data) => {
-    const host = $airplay_host.value
-    const port = $airplay_port.value || '8192'
+    const host = $airplay_host.value.trim()
+    const port = $airplay_port.value.trim() || '8192'
     const tls  = $airplay_tls.checked
     const url = `${ tls ? 'https' : 'http' }://${host}:${port}${path}`
 
@@ -318,7 +324,7 @@ window.onload  = () => {
   // form field validation helper
 
   const get_value = (field, default_value) => {
-    let val = field.value
+    let val = field.value.trim()
 
     if (!val) {
       val = default_value
@@ -449,7 +455,7 @@ window.onload  = () => {
   const expand_playlist = async () => {
     let url, text
 
-    url = $video_url.value
+    url = $video_url.value.trim()
     if (!url)
       return null
     if (!playlist_regex.test(url))
@@ -491,7 +497,7 @@ window.onload  = () => {
   const expand_htmlpage = async () => {
     let url, text, url_chunks, matches, urls
 
-    url = $video_url.value
+    url = $video_url.value.trim()
     if (!url)
       return null
     if (!htmlpage_regex.test(url))
@@ -572,15 +578,15 @@ window.onload  = () => {
 
   const get_video_POST_data = (url) => {
     if (!url)
-          url = $video_url.value
-    const txt = $caption_url.value
-    const ref = $referer_url.value
+          url = $video_url.value.trim()
+    const txt = $caption_url.value.trim()
+    const ref = $referer_url.value.trim()
 
     const start_offset = get_time_offset('start')
     const stop_offset  = get_time_offset('stop')
 
-    const drm_scheme   = $drm_license_scheme.value
-    const drm_server   = $drm_license_server.value
+    const drm_scheme   = $drm_license_scheme.value.trim()
+    const drm_server   = $drm_license_server.value.trim()
 
     if (!url) {
       let error_msg = 'Video URL is required'
@@ -605,6 +611,64 @@ window.onload  = () => {
       data += `\nDRM-License-Scheme: ${drm_scheme}\nDRM-License-Server: ${drm_server}`
     }
     return data
+  }
+
+  const video_file_ext_regex = /^.*\.(mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism(?:[vc]|\/manifest)?)(?:[\?#].*)?$/
+
+  const get_video_mimeType = (url) => {
+    if (!url)
+      return ''
+
+    url = url.toLowerCase()
+
+    if (url.indexOf('rtsp://') === 0)
+      return 'application/x-rtsp'
+
+    if (!video_file_ext_regex.test(url))
+      return ''
+
+    const file_ext = url.replace(video_file_ext_regex, '$1')
+
+    switch(file_ext) {
+      case 'mp4':
+      case 'mp4v':
+      case 'm4v':
+        return 'video/mp4'
+      case 'mpv':
+        return 'video/MPV'
+      case 'm1v':
+      case 'mpg':
+      case 'mpg2':
+      case 'mpeg':
+        return 'video/mpeg'
+      case 'xvid':
+        return 'video/x-xvid'
+      case 'webm':
+        return 'video/webm'
+      case '3gp':
+        return 'video/3gpp'
+      case 'avi':
+        return 'video/x-msvideo'
+      case 'mov':
+        return 'video/quicktime'
+      case 'mkv':
+        return 'video/x-mkv'
+      case 'ogg':
+      case 'ogv':
+      case 'ogm':
+        return 'video/ogg'
+      case 'm3u8':
+        return 'application/x-mpegURL'
+      case 'mpd':
+        return 'application/dash+xml'
+      case 'ism':
+      case 'ism/manifest':
+      case 'ismv':
+      case 'ismc':
+        return 'application/vnd.ms-sstr+xml'
+    }
+
+    return ''
   }
 
   // ===============================================================================================
@@ -865,6 +929,57 @@ window.onload  = () => {
 
     const path = '/show-player'
     const data = null
+
+    send_message(path, data)
+  }
+
+  $load_video.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    let start_offset, stop_offset
+    try {
+      start_offset = get_time_offset('start')
+    }
+    catch(e){}
+    try {
+      stop_offset = get_time_offset('stop')
+    }
+    catch(e){}
+
+    const video_url  = $video_url.value.trim()
+    const video_type = get_video_mimeType(video_url).toLowerCase()
+
+    const data = [
+      'package:',
+      'class:',
+      'action: android.intent.action.VIEW',
+      `data: ${video_url}`,
+      `type: ${video_type}`,
+      'category: android.intent.category.DEFAULT',
+      'category: android.intent.category.BROWSABLE',
+      'flag: 0x10000000',
+      'flag: 0x00008000',
+      `extra-referUrl:  ${$referer_url.value.trim()}`,
+      `extra-textUrl:   ${$caption_url.value.trim()}`,
+      `extra-startPos:  ${start_offset ? start_offset : ''}`,
+      `extra-stopPos:   ${stop_offset  ? stop_offset  : ''}`,
+      `extra-drmScheme: ${$drm_license_scheme.value.trim()}`,
+      `extra-drmUrl:    ${$drm_license_server.value.trim()}`
+    ]
+
+    $intent_data.value = data.join("\n")
+  }
+
+  $send_intent.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/start-activity'
+    const data = $intent_data.value.trim()
+
+    if (!data)
+      return
 
     send_message(path, data)
   }
@@ -1196,6 +1311,17 @@ window.onload  = () => {
       <div>
         <div><button id="show_toast">Show Toast</button></div>
         <div><button id="show_player">Show Player</button></div>
+      </div>
+    </div>
+    <hr />
+    <h3>Start Activity:</h3>
+    <div class="flex">
+      <div>
+        <textarea id="intent_data" rows="18"></textarea>
+      </div>
+      <div>
+        <div><button id="load_video">Load Video</button></div>
+        <div><button id="send_intent">Send Intent</button></div>
       </div>
     </div>
     <hr />

@@ -372,6 +372,43 @@ __extended APIs:__
       --data-binary "Content-Location: ${recursive_path}" \
       "http://${airplay_ip}/play"
   ```
+* show the video player in the top-most foreground Activity:
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/show-player"
+  ```
+* show a Toast containing a custom message:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/plain" \
+      --data-binary "Lorem Ipsum" \
+      "http://${airplay_ip}/show-toast"
+  ```
+* start an Intent:
+  ```bash
+    post_body='
+      package:
+      class:
+      action: android.intent.action.VIEW
+      data: http://example.com/video.m3u8
+      type: application/x-mpegURL
+      category: android.intent.category.DEFAULT
+      category: android.intent.category.BROWSABLE
+      flag: 0x10000000
+      flag: 0x00008000
+      extra-referUrl: http://example.com/videos.html
+      extra-textUrl: http://example.com/video.srt
+      extra-startPos:
+      extra-stopPos:
+      extra-drmScheme: widevine
+      extra-drmUrl: http://widevine.example.com/
+    '
+
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "${post_body}" \
+      "http://${airplay_ip}/start-activity"
+  ```
 
 #### Notes:
 
@@ -392,6 +429,39 @@ __extended APIs:__
         * _clearkey_
         * _playready_
     * _drm-license-server_
+  - keys required:
+    * _content-location_
+* POST data sent in requests to `/start-activity` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - lines of text containing no value are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys __are__ case sensitive
+  - recognized keys include:
+    * _package_
+    * _class_
+    * _action_
+    * _data_
+      - URI
+    * _type_
+      - content/mime type
+      - value is not normalized to lower-case
+    * _category_
+      - use key on multiple lines to declare more than one value
+    * _flag_
+      - use key on multiple lines to declare more than one value
+      - format value in decimal (base 10), or hex (base 16) with "0x" prefix
+    * _extra-*_
+      - name of extra matches the "*" glob
+      - value of extra is either a String or String[]
+        * depending on whether the fully qualified key had been used on multiple lines to declare more than one value
+  - keys required to start an explicit Intent:
+    * _package_ and _class_
+  - keys required to start an implicit Intent:
+    * _action_
+  - all other keys are optional
+* POST data sent in requests to `/show-toast` API endpoint:
+  - contains an arbitrary block of text
 
 #### Usage (high level):
 

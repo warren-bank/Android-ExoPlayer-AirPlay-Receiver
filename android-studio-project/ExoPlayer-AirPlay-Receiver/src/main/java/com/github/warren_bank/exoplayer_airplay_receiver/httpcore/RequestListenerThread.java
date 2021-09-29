@@ -42,6 +42,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -711,6 +712,13 @@ public class RequestListenerThread extends Thread {
           msg.what = Constant.Msg.Msg_Show_Toast;
           msg.obj = requestBody;
           MainApp.broadcastMessage(msg);
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        }
+        else {
+          Log.d(tag, "airplay Toast message missing");
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
       }
       else if (target.equals(Constant.Target.PLAYER_SHOW)) {
@@ -719,6 +727,33 @@ public class RequestListenerThread extends Thread {
         MainApp.broadcastMessage(msg);
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (
+        (entityContent != null) &&
+        target.equals(Constant.Target.ACTIVITY_START)
+      ) {
+        String requestBody;
+        requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+
+        HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ false);
+
+        if (
+          /* explicit */ (map.containsKey("package") && map.containsKey("class")) ||
+          /* implicit */  map.containsKey("action")
+        ) {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Start_Activity;
+          msg.obj = map;
+          MainApp.broadcastMessage(msg);
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        }
+        else {
+          Log.d(tag, "airplay Intent parameters missing");
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+        }
       }
 
       // =======================================================================

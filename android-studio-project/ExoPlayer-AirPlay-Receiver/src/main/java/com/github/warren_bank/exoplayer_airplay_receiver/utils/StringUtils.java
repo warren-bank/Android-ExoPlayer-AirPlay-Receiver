@@ -3,7 +3,9 @@ package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class StringUtils {
 
@@ -43,14 +45,42 @@ public class StringUtils {
   }
 
   public static HashMap<String, String> parseRequestBody(String requestBody) {
-    return parseRequestBody(requestBody, /* normalize_lowercase_keys= */ true);
+    return StringUtils.parseRequestBody(requestBody, /* normalize_lowercase_keys= */ true);
   }
 
   public static HashMap<String, String> parseRequestBody(String requestBody, boolean normalize_lowercase_keys) {
     HashMap<String, String> values = new HashMap<String, String>();
 
+    HashMap<String, ArrayList<String>> duplicateKeyValues = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, normalize_lowercase_keys);
+    ArrayList<String> arrayList;
+    String value;
+
+    for (String key : duplicateKeyValues.keySet()) {
+      arrayList = (ArrayList<String>) duplicateKeyValues.get(key);
+      value     = (String) StringUtils.getLastListItem(arrayList);
+
+      if (value != null)
+        values.put(key, value);
+    }
+
+    return values;
+  }
+
+  public static <T> T getLastListItem(List<T> list) {
+    return ((list == null) || list.isEmpty()) ? null : list.get(list.size() - 1);
+  }
+
+  public static HashMap<String, ArrayList<String>> parseRequestBody_allowDuplicateKeys(String requestBody) {
+    return StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
+  }
+
+  public static HashMap<String, ArrayList<String>> parseRequestBody_allowDuplicateKeys(String requestBody, boolean normalize_lowercase_keys) {
+    HashMap<String, ArrayList<String>> values = new HashMap<String, ArrayList<String>>();
+
     String[] lines = requestBody.split("(?:\\r?\\n)+");
     String[] parts;
+    ArrayList<String> arrayList;
+
     for (String line : lines) {
       parts = line.split("\\s*[:=]\\s*", 2);
 
@@ -61,8 +91,13 @@ public class StringUtils {
         if (normalize_lowercase_keys)
           parts[0] = parts[0].toLowerCase();
 
-        if (!parts[0].isEmpty() && !parts[1].isEmpty())
-          values.put(parts[0], parts[1]);
+        if (!parts[0].isEmpty() && !parts[1].isEmpty()) {
+          if (!values.containsKey(parts[0]))
+            values.put(parts[0], new ArrayList<String>());
+
+          arrayList = (ArrayList<String>) values.get(parts[0]);
+          arrayList.add(parts[1]);
+        }
       }
     }
 
