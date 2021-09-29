@@ -384,7 +384,7 @@ __extended APIs:__
       --data-binary "Lorem Ipsum" \
       "http://${airplay_ip}/show-toast"
   ```
-* start an Intent:
+* start an Activity with custom Intent attributes:
   ```bash
     post_body='
       package:
