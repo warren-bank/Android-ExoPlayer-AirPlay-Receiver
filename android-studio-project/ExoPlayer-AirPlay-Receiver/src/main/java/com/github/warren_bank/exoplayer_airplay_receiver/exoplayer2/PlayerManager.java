@@ -13,6 +13,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
 import android.media.audiofx.LoudnessEnhancer;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -69,6 +70,9 @@ public final class PlayerManager implements EventListener {
 
   private static final String TAG = "PlayerManager";
 
+  private static final float audioVolumePercentIncrement = 0.05f;  //  20 steps from 0.0 to  1.0
+  private static final float audioVolumeBoostIncrement   = 0.5f;   // 100 steps from 1.0 to 51.0 (though 2.0 ... 4.0 is a more typical range of values)
+
   private final class MyArrayList<E> extends ArrayList<E> {
     public void retainLast(int count) {
       int last = this.size() - count;
@@ -78,6 +82,7 @@ public final class PlayerManager implements EventListener {
     }
   }
 
+  private Context context;
   private PlayerView playerView;
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
@@ -105,6 +110,7 @@ public final class PlayerManager implements EventListener {
   }
 
   private PlayerManager(Context context) {
+    this.context = context;
     this.playerView = null;
     this.mediaQueue = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
@@ -174,7 +180,7 @@ public final class PlayerManager implements EventListener {
 
     DefaultLoadControl.Builder builder = new DefaultLoadControl.Builder();
 
-    if (Math.abs(factor - 1.0f) > 0.00001f) { // if (factor != 1.0f)
+    if (Float.compare(factor, 1.0f) != 0) { // if (factor != 1.0f)
       builder
         .setBufferDurationsMs(
           /* int minBufferMs= minBufferAudioMs= minBufferVideoMs= */ (int) (factor * DefaultLoadControl.DEFAULT_MIN_BUFFER_MS),
@@ -591,7 +597,7 @@ public final class PlayerManager implements EventListener {
     if (exoPlayer == null) return;
 
     if (exoPlayer.isCurrentWindowSeekable()) {
-      long positionMs = ((long) positionSec) * 1000;
+      long positionMs = (long) (positionSec * 1000.0f);
       exoPlayer.seekTo(currentItemIndex, positionMs);
     }
   }
@@ -618,7 +624,7 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_rate(float rate) {
     if (exoPlayer == null) return;
 
-    if (rate == 0f) {
+    if (Float.compare(rate, 0.0f) == 0) { // if (rate == 0.0f)
       // pause playback
       if (exoPlayer.getPlayWhenReady())
         exoPlayer.setPlayWhenReady(false);
@@ -705,26 +711,33 @@ public final class PlayerManager implements EventListener {
   /**
    * Change audio volume level.
    *
-   * @param audioVolume New audio volume level.
-   *                    The range of acceptable values is 0.0 to (AUDIO_VOLUME_MAX_DB_BOOST + 1.0).
-   *                    The value 0.0 is   0% input volume (equivalent to 'mute').
-   *                    The value 1.0 is 100% input volume (unity gain).
-   *                    The value 6.5 is 100% input volume and amplified by 5.5 dB.
+   * @param newAudioVolume New audio volume level.
+   *                       The range of acceptable values is 0.0 to (AUDIO_VOLUME_MAX_DB_BOOST + 1.0).
+   *                       The value 0.0 is   0% input volume (equivalent to 'mute').
+   *                       The value 1.0 is 100% input volume (unity gain).
+   *                       The value 6.5 is 100% input volume and amplified by 5.5 dB.
    */
-  public void AirPlay_volume(float audioVolume) {
-    if (audioVolume < 0.0f) {
-      audioVolume = 0.0f;
-    }
-    if (audioVolume > (audioVolumeMaxDbBoost + 1.0f)) {
-      audioVolume = (float) audioVolumeMaxDbBoost + 1.0f;
-    }
+  public void AirPlay_volume(float newAudioVolume) {
+    if (exoPlayer == null)
+      return;
 
-    this.audioVolume = audioVolume;
+    float maxVolume = (loudnessEnhancer != null)
+      ? (float) (audioVolumeMaxDbBoost + 1.0f)
+      : 1.0f;
 
-    if (exoPlayer == null) return;
+    if (Float.compare(newAudioVolume, 0.0f) < 0) // if (newAudioVolume < 0.0f)
+      newAudioVolume = 0.0f;
 
-    if (audioVolume <= 1.0f) {
-      exoPlayer.setVolume(audioVolume); // range of values: 0.0 (mute) - 1.0 (unity gain)
+    if (Float.compare(newAudioVolume, maxVolume) > 0) // if (newAudioVolume > maxVolume)
+      newAudioVolume = maxVolume;
+
+    if (Float.compare(this.audioVolume, newAudioVolume) == 0) // if (this.audioVolume == newAudioVolume)
+      return;
+
+    this.audioVolume = newAudioVolume;
+
+    if (Float.compare(newAudioVolume, 1.0f) <= 0) { // if (newAudioVolume <= 1.0f)
+      exoPlayer.setVolume(newAudioVolume); // range of values: 0.0 (mute) ... 1.0 (unity gain)
 
       if (loudnessEnhancer != null) {
         try {
@@ -739,7 +752,7 @@ public final class PlayerManager implements EventListener {
 
       if (loudnessEnhancer != null) {
         try {
-          float gain_dB = audioVolume - 1.0f;
+          float gain_dB = newAudioVolume - 1.0f;
           int   gain_mB = (int) (gain_dB * 100.0f);
 
           loudnessEnhancer.setTargetGain(gain_mB);
@@ -813,13 +826,53 @@ public final class PlayerManager implements EventListener {
 
       switch(event.getKeyCode()) {
         case KeyEvent.KEYCODE_SPACE :
-        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE :
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE : {
           if (isPlayerReady()) {
             // toggle pause
             exoPlayer.setPlayWhenReady( !exoPlayer.getPlayWhenReady() );
             isHandled = true;
           }
           break;
+        }
+
+        case KeyEvent.KEYCODE_VOLUME_DOWN : {
+          if (Float.compare(audioVolume, 1.0f) > 0) { // if (audioVolume > 1.0f)
+            // decrease amplification
+            float newAudioVolume = audioVolume - audioVolumeBoostIncrement;
+            if (Float.compare(newAudioVolume, 1.0f) < 0) // if (newAudioVolume < 1.0f)
+              newAudioVolume = 1.0f;
+            AirPlay_volume(newAudioVolume);
+            isHandled = true;
+          }
+          break;
+        }
+
+        case KeyEvent.KEYCODE_VOLUME_UP : {
+          if (Float.compare(audioVolume, 1.0f) < 0) { // if (audioVolume < 1.0f)
+            // increase volume
+            float newAudioVolume = audioVolume + audioVolumePercentIncrement;
+            if (Float.compare(newAudioVolume, 1.0f) > 0) // if (newAudioVolume > 1.0f)
+              newAudioVolume = 1.0f;
+            AirPlay_volume(newAudioVolume);
+            isHandled = true;
+          }
+          else {
+            AudioManager systemAudioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            int systemVolume            = systemAudioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+            int systemVolumeMax         = systemAudioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+            if (systemVolume == systemVolumeMax) {
+              float maxVolume = (float) (audioVolumeMaxDbBoost + 1.0f);
+
+              if (Float.compare(audioVolume, maxVolume) < 0) { // if (audioVolume < maxVolume)
+                // increase amplification
+                AirPlay_volume(audioVolume + audioVolumeBoostIncrement);
+                isHandled = true;
+              }
+            }
+          }
+          break;
+        }
       }
     }
 
@@ -980,7 +1033,7 @@ public final class PlayerManager implements EventListener {
 
     float position = sample.startPosition;
 
-    if ((position > 0f) && (position < 1f)) {
+    if ((Float.compare(position, 0.0f) > 0) && (Float.compare(position, 1.0f) < 0)) { // if ((position > 0.0f) && (position < 1.0f))
       // percentage
       long duration = exoPlayer.getDuration(); // ms
       if (duration != C.TIME_UNSET) {
@@ -988,9 +1041,9 @@ public final class PlayerManager implements EventListener {
         exoPlayer.seekTo(currentItemIndex, positionMs);
       }
     }
-    else if (position >= 1f) {
+    else if (Float.compare(position, 1.0f) >= 0) { // if (position >= 1.0f)
       // fixed offset in seconds
-      long positionMs = ((long) position) * 1000;
+      long positionMs = (long) (position * 1000.0f);
       exoPlayer.seekTo(currentItemIndex, positionMs);
     }
     else {
