@@ -1,6 +1,6 @@
 project.ext {
-    releaseVersionCode  = Integer.parseInt("002002716", 10)  //Integer.MAX_VALUE == 2147483647
-    releaseVersion      = '002.00.27-16API'
+    releaseVersionCode  = Integer.parseInt("002002816", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersion      = '002.00.28-16API'
     javaVersion         = JavaVersion.VERSION_1_8
     minSdkVersion       = 16
     targetSdkVersion    = 29

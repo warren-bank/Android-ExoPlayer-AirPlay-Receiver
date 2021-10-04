@@ -21,6 +21,19 @@ android {
         archivesBaseName += "-$versionName"
     }
 
+    flavorDimensions "decoderExtensions"
+
+    productFlavors {
+        noDecoderExtensions {
+            dimension "decoderExtensions"
+            buildConfigField "boolean", "USE_DECODER_EXTENSIONS", "false"
+        }
+        withDecoderExtensions {
+            dimension "decoderExtensions"
+            buildConfigField "boolean", "USE_DECODER_EXTENSIONS", "true"
+        }
+    }
+
     buildTypes {
         release {
             shrinkResources true
@@ -33,6 +46,15 @@ android {
         debug {
             debuggable    true
             jniDebuggable true
+        }
+    }
+
+    splits {
+        abi {
+            enable gradle.startParameter.taskNames.any { it.toLowerCase().contains("withdecoderextensions") }
+            reset()
+            include "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
+            universalApk false
         }
     }
 
@@ -63,6 +85,8 @@ dependencies {
     implementation      'com.googlecode.plist:dd-plist:'                          + project.ext.libVersionDdPlist            // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
     implementation      'org.apache.httpcomponents:httpcore:'                     + project.ext.libVersionHttpCore           // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
     implementation      'org.jmdns:jmdns:'                                        + project.ext.libVersionJmDNS              // (209 KB) https://mvnrepository.com/artifact/org.jmdns/jmdns
+
+    withDecoderExtensionsImplementation fileTree(dir: "libs/decoder_extensions", include: ["extension-*.aar"])
 }
 
 apply plugin: 'com.google.android.gms.strict-version-matcher-plugin'
