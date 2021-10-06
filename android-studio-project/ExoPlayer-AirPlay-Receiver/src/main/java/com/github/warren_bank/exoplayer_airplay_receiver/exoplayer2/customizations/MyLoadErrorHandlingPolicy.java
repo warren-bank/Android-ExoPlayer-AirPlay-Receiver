@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.upstream.DefaultLoadErrorHandlingPolicy;
 import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException;
+import com.google.android.exoplayer2.upstream.LoadErrorHandlingPolicy;
 
 import java.io.IOException;
 
@@ -37,15 +38,27 @@ public class MyLoadErrorHandlingPolicy extends DefaultLoadErrorHandlingPolicy {
     this.offlineRetryDelayMs = offlineRetryDelayMs;
   }
 
+  // ===========================================================================
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/upstream/DefaultLoadErrorHandlingPolicy.java#L108
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/upstream/LoadErrorHandlingPolicy.java#L70
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/source/LoadEventInfo.java
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/source/MediaLoadData.java
+  // ===========================================================================
+
   @Override
-  public long getRetryDelayMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
+  public long getRetryDelayMsFor(LoadErrorHandlingPolicy.LoadErrorInfo loadErrorInfo) {
+    int         dataType       = loadErrorInfo.mediaLoadData.dataType;
+    long        loadDurationMs = loadErrorInfo.loadEventInfo.loadDurationMs;
+    IOException exception      = loadErrorInfo.exception;
+    int         errorCount     = loadErrorInfo.errorCount;
+
     Log.e(TAG, "getRetryDelayMsFor [" + errorCount + "@" + loadDurationMs + "]", exception);
 
     isOffline = (exception instanceof HttpDataSourceException);
 
     return (isOffline)
       ? offlineRetryDelayMs
-      : super.getRetryDelayMsFor(dataType, loadDurationMs, exception, errorCount)
+      : super.getRetryDelayMsFor(loadErrorInfo)
     ;
   }
 

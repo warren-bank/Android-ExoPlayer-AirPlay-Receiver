@@ -4,7 +4,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyLoadErrorHandlingPolicy;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
@@ -25,9 +24,9 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.DiscontinuityReason;
@@ -692,8 +691,8 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_next() {
     if (exoPlayer == null) return;
 
-    if (exoPlayer.hasNext()) {
-      exoPlayer.next();
+    if (exoPlayer.hasNextWindow()) {
+      exoPlayer.seekToNextWindow();
     }
   }
 
@@ -703,8 +702,8 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_previous() {
     if (exoPlayer == null) return;
 
-    if (exoPlayer.hasPrevious()) {
-      exoPlayer.previous();
+    if (exoPlayer.hasPreviousWindow()) {
+      exoPlayer.seekToPreviousWindow();
     }
   }
 
@@ -930,7 +929,11 @@ public final class PlayerManager implements EventListener {
     }
   }
 
+  // ===========================================================================
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/common/src/main/java/com/google/android/exoplayer2/Player.java#L83
+  // ===========================================================================
   // Player.EventListener implementation.
+  // ===========================================================================
 
   @Override
   public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
@@ -944,22 +947,50 @@ public final class PlayerManager implements EventListener {
 
   @Override
   public void onTimelineChanged(
-      Timeline timeline, @Nullable Object manifest, @TimelineChangeReason int reason
+      Timeline timeline, @TimelineChangeReason int reason
   ){
     updateCurrentItemIndex();
   }
 
   @Override
-  public void onPlayerError(ExoPlaybackException error) {
-    if (exoPlayer == null)
-      return;
-    if (error.type != ExoPlaybackException.TYPE_SOURCE)
+  public void onPlayerError(PlaybackException error) {
+    if ((error == null) || (exoPlayer == null))
       return;
 
-    if (ExoPlayerUtils.isBehindLiveWindow(error) || ExoPlayerUtils.isHttpDataSource(error))
-      retry();
-    else
-      exoPlayer.next();
+    switch(error.errorCode) {
+      case PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW :
+      case PlaybackException.ERROR_CODE_IO_READ_POSITION_OUT_OF_RANGE :
+      case PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED :
+      case PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT :
+      case PlaybackException.ERROR_CODE_DRM_SYSTEM_ERROR :
+      case PlaybackException.ERROR_CODE_DRM_DEVICE_REVOKED :
+      case PlaybackException.ERROR_CODE_DRM_LICENSE_EXPIRED : {
+        retry();
+        break;
+      }
+      case PlaybackException.ERROR_CODE_IO_INVALID_HTTP_CONTENT_TYPE :
+      case PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS :
+      case PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND :
+      case PlaybackException.ERROR_CODE_IO_NO_PERMISSION :
+      case PlaybackException.ERROR_CODE_IO_CLEARTEXT_NOT_PERMITTED :
+      case PlaybackException.ERROR_CODE_PARSING_CONTAINER_MALFORMED :
+      case PlaybackException.ERROR_CODE_PARSING_MANIFEST_MALFORMED :
+      case PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED :
+      case PlaybackException.ERROR_CODE_PARSING_MANIFEST_UNSUPPORTED :
+      case PlaybackException.ERROR_CODE_DECODER_INIT_FAILED :
+      case PlaybackException.ERROR_CODE_DECODER_QUERY_FAILED :
+      case PlaybackException.ERROR_CODE_DECODING_FAILED :
+      case PlaybackException.ERROR_CODE_DECODING_FORMAT_EXCEEDS_CAPABILITIES :
+      case PlaybackException.ERROR_CODE_DECODING_FORMAT_UNSUPPORTED :
+      case PlaybackException.ERROR_CODE_AUDIO_TRACK_INIT_FAILED :
+      case PlaybackException.ERROR_CODE_DRM_SCHEME_UNSUPPORTED :
+      case PlaybackException.ERROR_CODE_DRM_PROVISIONING_FAILED :
+      case PlaybackException.ERROR_CODE_DRM_CONTENT_ERROR :
+      case PlaybackException.ERROR_CODE_DRM_LICENSE_ACQUISITION_FAILED : {
+        exoPlayer.seekToNextWindow();
+        break;
+      }
+    }
   }
 
   // Internal methods.
@@ -974,8 +1005,8 @@ public final class PlayerManager implements EventListener {
   private void retry() {
     if (exoPlayer == null) return;
 
-    exoPlayer.retry();
     exoPlayer.seekToDefaultPosition();
+    exoPlayer.retry();
   }
 
   private void truncateQueue(int count) {

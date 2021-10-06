@@ -18,9 +18,13 @@ import android.graphics.Bitmap;
 public class MyPlayerNotificationManager extends PlayerNotificationManager {
   private PlayerManager playerManager;
 
+  public void setPlayerManager(PlayerManager pm) {
+    playerManager = pm;
+  }
+
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.11.3/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L989
-  // https://github.com/google/ExoPlayer/blob/r2.11.3/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L1037
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L1171
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L1215
   // ===========================================================================
   // * startOrUpdateNotification(...)
   //   - calls createNotification(...)
@@ -40,7 +44,7 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
     @Nullable Bitmap largeIcon
   ) {
     int currentItemIndex = player.getCurrentWindowIndex();
-    VideoSource sample   = playerManager.getItem(currentItemIndex);
+    VideoSource sample   = (playerManager == null) ? null : playerManager.getItem(currentItemIndex);
 
     return (sample == null)
       ? null
@@ -48,11 +52,94 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.11.3/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L447
-  // https://github.com/google/ExoPlayer/blob/r2.11.3/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L524
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L308
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L351
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L557
   // ===========================================================================
-  // * createWithNotificationChannel(...)
-  //   - static method that performs a task before calling the class constructor
+  // * class Builder{...}
+  // ===========================================================================
+
+  public static class Builder extends PlayerNotificationManager.Builder {
+    public Builder(Context context, int notificationId, String channelId) {
+      super(context, notificationId, channelId);
+    }
+
+    @Override
+    public MyPlayerNotificationManager build() {
+      if (channelNameResourceId != 0) {
+        NotificationUtil.createNotificationChannel(
+          context,
+          channelId,
+          channelNameResourceId,
+          channelDescriptionResourceId,
+          channelImportance);
+      }
+
+      return new MyPlayerNotificationManager(
+        context,
+        channelId,
+        notificationId,
+        mediaDescriptionAdapter,
+        notificationListener,
+        customActionReceiver,
+        smallIconResourceId,
+        playActionIconResourceId,
+        pauseActionIconResourceId,
+        stopActionIconResourceId,
+        rewindActionIconResourceId,
+        fastForwardActionIconResourceId,
+        previousActionIconResourceId,
+        nextActionIconResourceId,
+        groupKey
+      );
+    }
+  }
+
+  // ===========================================================================
+  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L710
+  // ===========================================================================
+  // * PlayerNotificationManager(...)
+  //   - constructor
+  // ===========================================================================
+
+  protected MyPlayerNotificationManager(
+    Context context,
+    String channelId,
+    int notificationId,
+    MediaDescriptionAdapter mediaDescriptionAdapter,
+    @Nullable NotificationListener notificationListener,
+    @Nullable CustomActionReceiver customActionReceiver,
+    int smallIconResourceId,
+    int playActionIconResourceId,
+    int pauseActionIconResourceId,
+    int stopActionIconResourceId,
+    int rewindActionIconResourceId,
+    int fastForwardActionIconResourceId,
+    int previousActionIconResourceId,
+    int nextActionIconResourceId,
+    @Nullable String groupKey
+  ) {
+    super(
+      context,
+      channelId,
+      notificationId,
+      mediaDescriptionAdapter,
+      notificationListener,
+      customActionReceiver,
+      smallIconResourceId,
+      playActionIconResourceId,
+      pauseActionIconResourceId,
+      stopActionIconResourceId,
+      rewindActionIconResourceId,
+      fastForwardActionIconResourceId,
+      previousActionIconResourceId,
+      nextActionIconResourceId,
+      groupKey
+    );
+  }
+
+  // ===========================================================================
+  // convenience method
   // ===========================================================================
 
   public static MyPlayerNotificationManager createWithNotificationChannel(
@@ -64,28 +151,22 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
     int notificationId,
     MediaDescriptionAdapter mediaDescriptionAdapter
   ) {
-    NotificationUtil.createNotificationChannel(context, channelId, channelName, channelDescription, NotificationUtil.IMPORTANCE_LOW);
-
-    return new MyPlayerNotificationManager(playerManager, context, channelId, notificationId, mediaDescriptionAdapter);
-  }
-
-  public MyPlayerNotificationManager(
-    PlayerManager playerManager,
-    Context context,
-    String channelId,
-    int notificationId,
-    MediaDescriptionAdapter mediaDescriptionAdapter
-  ) {
-    super(
+    MyPlayerNotificationManager.Builder builder = new MyPlayerNotificationManager.Builder(
       context,
-      channelId,
       notificationId,
-      mediaDescriptionAdapter,
-      /* notificationListener= */ null,
-      /* customActionReceiver= */ null
+      channelId
     );
 
-    this.playerManager = playerManager;
+    builder
+      .setChannelNameResourceId(channelName)
+      .setChannelDescriptionResourceId(channelDescription)
+      .setMediaDescriptionAdapter(mediaDescriptionAdapter)
+    ;
+
+    MyPlayerNotificationManager myPlayerNotificationManager = builder.build();
+    myPlayerNotificationManager.setPlayerManager(playerManager);
+
+    return myPlayerNotificationManager;
   }
 
 }
