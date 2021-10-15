@@ -377,6 +377,12 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/show-player"
   ```
+* hide the video player so it is no-longer the top-most foreground Activity:
+  ```bash
+    # note: audio playback will continue in the background
+    curl --silent -X GET \
+      "http://${airplay_ip}/hide-player"
+  ```
 * show a Toast containing a custom message:
   ```bash
     curl --silent -X POST \

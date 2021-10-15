@@ -181,9 +181,10 @@ public class Constant {
 
         public static final int Msg_Show_Toast                  = 14;
         public static final int Msg_Show_Player                 = 15;
-        public static final int Msg_Start_Activity              = 16;
+        public static final int Msg_Hide_Player                 = 16;
+        public static final int Msg_Start_Activity              = 17;
 
-        public static final int Msg_Runtime_Permissions_Granted = 17;
+        public static final int Msg_Runtime_Permissions_Granted = 18;
     }
 
     public interface Target {
@@ -207,6 +208,7 @@ public class Constant {
 
         public static final String TOAST_SHOW                   = "/show-toast";
         public static final String PLAYER_SHOW                  = "/show-player";
+        public static final String PLAYER_HIDE                  = "/hide-player";
         public static final String ACTIVITY_START               = "/start-activity";
     }
 

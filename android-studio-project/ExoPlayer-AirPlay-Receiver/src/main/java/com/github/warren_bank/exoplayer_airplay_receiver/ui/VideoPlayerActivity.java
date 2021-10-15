@@ -48,6 +48,7 @@ public class VideoPlayerActivity extends VideoActivity {
 
       switch (msg.what) {
         case Constant.Msg.Msg_Photo :
+        case Constant.Msg.Msg_Hide_Player :
           activity.finish();
           break;
       }

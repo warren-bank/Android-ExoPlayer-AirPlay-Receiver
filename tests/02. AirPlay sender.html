@@ -172,6 +172,7 @@ window.onload  = () => {
   const $toast_message           = document.querySelector('textarea#toast_message')
   const $show_toast              = document.querySelector('button#show_toast')
   const $show_player             = document.querySelector('button#show_player')
+  const $hide_player             = document.querySelector('button#hide_player')
   const $intent_data             = document.querySelector('textarea#intent_data')
   const $load_video              = document.querySelector('button#load_video')
   const $send_intent             = document.querySelector('button#send_intent')
@@ -933,6 +934,16 @@ window.onload  = () => {
     send_message(path, data)
   }
 
+  $hide_player.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/hide-player'
+    const data = null
+
+    send_message(path, data)
+  }
+
   $load_video.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -1311,6 +1322,7 @@ window.onload  = () => {
       <div>
         <div><button id="show_toast">Show Toast</button></div>
         <div><button id="show_player">Show Player</button></div>
+        <div><button id="hide_player">Hide Player</button></div>
       </div>
     </div>
     <hr />

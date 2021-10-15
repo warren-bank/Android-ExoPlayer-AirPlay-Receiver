@@ -728,6 +728,13 @@ public class RequestListenerThread extends Thread {
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.equals(Constant.Target.PLAYER_HIDE)) {
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Hide_Player;
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (
         (entityContent != null) &&
         target.equals(Constant.Target.ACTIVITY_START)
