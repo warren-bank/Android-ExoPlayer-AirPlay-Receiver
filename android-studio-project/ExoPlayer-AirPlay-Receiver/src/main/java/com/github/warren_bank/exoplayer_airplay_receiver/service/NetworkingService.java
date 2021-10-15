@@ -125,6 +125,8 @@ public class NetworkingService extends Service {
       return;
     }
 
+    hide_player();
+
     playbackStatusMonitor.stop();
     playerNotificationManager.release();
     playerManager.release();
@@ -153,6 +155,12 @@ public class NetworkingService extends Service {
         }
       }
     }.start();
+  }
+
+  private void hide_player() {
+    Message msg = Message.obtain();
+    msg.what = Constant.Msg.Msg_Hide_Player;
+    MainApp.broadcastMessage(msg);
   }
 
   @Override
