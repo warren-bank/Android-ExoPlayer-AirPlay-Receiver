@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Process;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.RemoteViews;
@@ -116,14 +117,11 @@ public class NetworkingService extends Service {
     super.onDestroy();
     Log.d(tag, "onDestroy");
 
-    shutdown(false);
+    shutdown();
   }
 
-  private void shutdown(boolean useForce) {
-    if (playerManager == null) {
-      if (useForce) stopSelf();
-      return;
-    }
+  private void shutdown() {
+    if (playerManager == null) return;
 
     hide_player();
 
@@ -151,7 +149,7 @@ public class NetworkingService extends Service {
           Log.e(tag, "problem shutting down HTTP server and Bonjour services", e);
         }
         finally {
-          if (useForce) stopSelf();
+          Process.killProcess(Process.myPid()); //Quit the program completely
         }
       }
     }.start();
@@ -384,7 +382,9 @@ public class NetworkingService extends Service {
 
     switch (action) {
       case ACTION_STOP : {
-        shutdown(true);
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Exit_Service;
+        MainApp.broadcastMessage(msg);
         break;
       }
       case ACTION_PLAY : {

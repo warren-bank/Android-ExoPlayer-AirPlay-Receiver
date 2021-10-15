@@ -21,7 +21,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -95,7 +94,6 @@ final class MyMessageHandler extends Handler {
         toast.show();
 
         service.stopSelf();
-        Process.killProcess(Process.myPid()); //Quit the program completely
         break;
       }
 
@@ -129,6 +127,15 @@ final class MyMessageHandler extends Handler {
           service,
           /* map= */ (HashMap) msg.obj
         );
+        break;
+      }
+
+      // =======================================================================
+      // Exit Service
+      // =======================================================================
+
+      case Constant.Msg.Msg_Exit_Service : {
+        service.stopSelf();
         break;
       }
 

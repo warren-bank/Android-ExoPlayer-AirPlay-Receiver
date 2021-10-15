@@ -762,6 +762,13 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
       }
+      else if (target.equals(Constant.Target.SERVICE_EXIT)) {
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Exit_Service;
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
 
       // =======================================================================
       else {

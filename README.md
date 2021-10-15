@@ -415,6 +415,12 @@ __extended APIs:__
       --data-binary "${post_body}" \
       "http://${airplay_ip}/start-activity"
   ```
+* exit the Service:
+  ```bash
+    # note: also closes the video player foreground Activity, and kills the process
+    curl --silent -X GET \
+      "http://${airplay_ip}/exit-service"
+  ```
 
 #### Notes:
 

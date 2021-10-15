@@ -171,8 +171,9 @@ window.onload  = () => {
   const $volume                  = document.querySelector('button#volume')
   const $toast_message           = document.querySelector('textarea#toast_message')
   const $show_toast              = document.querySelector('button#show_toast')
-  const $show_player             = document.querySelector('button#show_player')
   const $hide_player             = document.querySelector('button#hide_player')
+  const $show_player             = document.querySelector('button#show_player')
+  const $exit_service            = document.querySelector('button#exit_service')
   const $intent_data             = document.querySelector('textarea#intent_data')
   const $load_video              = document.querySelector('button#load_video')
   const $send_intent             = document.querySelector('button#send_intent')
@@ -924,6 +925,16 @@ window.onload  = () => {
     send_message(path, data)
   }
 
+  $hide_player.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/hide-player'
+    const data = null
+
+    send_message(path, data)
+  }
+
   $show_player.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -934,11 +945,11 @@ window.onload  = () => {
     send_message(path, data)
   }
 
-  $hide_player.onclick = (event) => {
+  $exit_service.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    const path = '/hide-player'
+    const path = '/exit-service'
     const data = null
 
     send_message(path, data)
@@ -1321,9 +1332,26 @@ window.onload  = () => {
       </div>
       <div>
         <div><button id="show_toast">Show Toast</button></div>
-        <div><button id="show_player">Show Player</button></div>
-        <div><button id="hide_player">Hide Player</button></div>
+        <div></div>
+        <div></div>
       </div>
+    </div>
+    <div>
+      <table align="center">
+        <tr>
+          <td class="oneline fullwidth">
+            <button id="hide_player">Hide Player</button>
+          </td>
+          <td class="oneline fullwidth">
+            <button id="show_player">Show Player</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan=2 align="center" class="oneline">
+            <button id="exit_service">Quit Application</button>
+          </td>
+        </tr>
+      </table>
     </div>
     <hr />
     <h3>Start Activity:</h3>
