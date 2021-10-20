@@ -75,11 +75,13 @@
                 <data android:mimeType="*/avi"/>
                 <data android:mimeType="*/mkv"/>
                 <data android:mimeType="application/3gpp*"/>
+                <data android:mimeType="application/dash+xml"/>
                 <data android:mimeType="application/mp4"/>
                 <data android:mimeType="application/mpeg*"/>
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/vnd.3gp*"/>
                 <data android:mimeType="application/vnd.apple.mpegurl"/>
+                <data android:mimeType="application/vnd.ms-sstr+xml"/>
                 <data android:mimeType="application/x-extension-mp4"/>
                 <data android:mimeType="application/x-flac"/>
                 <data android:mimeType="application/x-matroska"/>

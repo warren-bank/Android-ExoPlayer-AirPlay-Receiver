@@ -542,6 +542,9 @@ public class RequestListenerThread extends Thread {
         String drmScheme = null;
         String drmUrl    = null;
 
+        HashMap<String, String> reqHeadersMap = null;
+        HashMap<String, String> drmHeadersMap = null;
+
         if (contentType.equalsIgnoreCase("application/x-apple-binary-plist")) {
           //<BINARY PLIST DATA>
           HashMap map = BplistParser.parse(entityContent);
@@ -557,15 +560,18 @@ public class RequestListenerThread extends Thread {
           requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
           Log.d(tag, " airplay play action request content = " + requestBody);
 
-          HashMap<String, String> map = StringUtils.parseRequestBody(requestBody);
+          HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
 
-          playUrl   = (String) map.get("content-location");
-          textUrl   = (String) map.get("caption-location");
-          referUrl  = (String) map.get("referer");
-          startPos  = (String) map.get("start-position");
-          stopPos   = (String) map.get("stop-position");
-          drmScheme = (String) map.get("drm-license-scheme");
-          drmUrl    = (String) map.get("drm-license-server");
+          playUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("content-location"));
+          textUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("caption-location"));
+          referUrl  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("referer"));
+          startPos  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("start-position"));
+          stopPos   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("stop-position"));
+          drmScheme = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("drm-license-scheme"));
+          drmUrl    = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("drm-license-server"));
+
+          reqHeadersMap = StringUtils.parseDuplicateKeyValues((ArrayList<String>) map.get("req-header"), /* normalize_lowercase_keys= */ true);
+          drmHeadersMap = StringUtils.parseDuplicateKeyValues((ArrayList<String>) map.get("drm-header"), /* normalize_lowercase_keys= */ true);
         }
 
         if (TextUtils.isEmpty(playUrl)) {
@@ -587,15 +593,21 @@ public class RequestListenerThread extends Thread {
         else {
           Log.d(tag, "Media URL = " + playUrl + "; Start At = " + startPos + "; Stop At = " + stopPos + "; Captions = " + textUrl + "; Referer = " + referUrl + "; DRM Scheme = " + drmScheme + "; DRM License URL = " + drmUrl);
 
+          HashMap<String, String> dataMap = new HashMap<String, String>();
+          dataMap.put(Constant.PlayURL,    playUrl);
+          dataMap.put(Constant.CaptionURL, textUrl);
+          dataMap.put(Constant.RefererURL, referUrl);
+          dataMap.put(Constant.Start_Pos,  startPos);
+          dataMap.put(Constant.Stop_Pos,   stopPos);
+          dataMap.put(Constant.DRM_Scheme, drmScheme);
+          dataMap.put(Constant.DRM_URL,    drmUrl);
+
+          HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+          map.put(Constant.Video_Source_Map.DATA,        dataMap);
+          map.put(Constant.Video_Source_Map.REQ_HEADERS, reqHeadersMap);
+          map.put(Constant.Video_Source_Map.DRM_HEADERS, drmHeadersMap);
+
           Message msg = Message.obtain();
-          HashMap<String, String> map = new HashMap<String, String>();
-          map.put(Constant.PlayURL,    playUrl);
-          map.put(Constant.CaptionURL, textUrl);
-          map.put(Constant.RefererURL, referUrl);
-          map.put(Constant.Start_Pos,  startPos);
-          map.put(Constant.Stop_Pos,   stopPos);
-          map.put(Constant.DRM_Scheme, drmScheme);
-          map.put(Constant.DRM_URL,    drmUrl);
           msg.what = target.equals(Constant.Target.PLAY)
             ? Constant.Msg.Msg_Video_Play
             : Constant.Msg.Msg_Video_Queue;

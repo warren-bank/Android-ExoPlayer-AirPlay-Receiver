@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,6 +103,30 @@ public class StringUtils {
     }
 
     return values;
+  }
+
+  public static HashMap<String, String> parseDuplicateKeyValues(String[] strArray) {
+    return StringUtils.parseDuplicateKeyValues(strArray, /* normalize_lowercase_keys= */ true);
+  }
+
+  public static HashMap<String, String> parseDuplicateKeyValues(String[] strArray, boolean normalize_lowercase_keys) {
+    if ((strArray == null) || (strArray.length == 0)) return null;
+
+    List<String> list = (List<String>) Arrays.asList(strArray);
+
+    return parseDuplicateKeyValues(list, normalize_lowercase_keys);
+  }
+
+  public static HashMap<String, String> parseDuplicateKeyValues(List<String> list) {
+    return StringUtils.parseDuplicateKeyValues(list, /* normalize_lowercase_keys= */ true);
+  }
+
+  public static HashMap<String, String> parseDuplicateKeyValues(List<String> list, boolean normalize_lowercase_keys) {
+    if ((list == null) || list.isEmpty()) return null;
+
+    String requestBody = String.join("\n", list);
+
+    return StringUtils.parseRequestBody(requestBody, normalize_lowercase_keys);
   }
 
   public static String convertEscapedLinefeeds(String requestBody) {

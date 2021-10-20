@@ -63,6 +63,7 @@ import com.google.android.exoplayer2.util.MimeTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /** Manages ExoPlayer and an internal media queue */
 public final class PlayerManager implements EventListener {
@@ -162,9 +163,10 @@ public final class PlayerManager implements EventListener {
     }
 
     String userAgent = context.getResources().getString(R.string.user_agent);
-    this.httpDataSourceFactory   = new DefaultHttpDataSourceFactory(userAgent);
-    this.rawDataSourceFactory    = new DefaultDataSourceFactory(context, userAgent);
-    this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
+    this.httpDataSourceFactory     = new DefaultHttpDataSourceFactory(userAgent);
+    this.rawDataSourceFactory      = new DefaultDataSourceFactory(context, userAgent);
+    this.loadErrorHandlingPolicy   = new MyLoadErrorHandlingPolicy();
+    VideoSource.DEFAULT_USER_AGENT = userAgent;
 
     this.currentItemIndex = C.INDEX_UNSET;
     this.handler = new Handler(Looper.getMainLooper());
@@ -311,12 +313,14 @@ public final class PlayerManager implements EventListener {
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
-    String drm_license_server
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, /* remove_previous_items= */ false);
+    addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
   }
 
   /**
@@ -325,23 +329,27 @@ public final class PlayerManager implements EventListener {
    * @param uri                   The URL to a video file or stream.
    * @param caption               The URL to a file containing text captions (srt or vtt).
    * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
+   * @param reqHeadersMap         Map of HTTP headers to include in requests to retrieve the video file or stream.
    * @param startPosition         The position at which to start playback within the video file or (non-live) stream. When value < 1.0 and stopPosition < value, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param stopPosition          The position at which to stop playback within the video file or (non-live) stream. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param drm_scheme            The DRM scheme; value in: ["widevine","playready","clearkey"]
    * @param drm_license_server    The URL to obtain DRM license keys.
+   * @param drmHeadersMap         Map of HTTP headers to include in requests to retrieve the DRM license keys.
    * @param remove_previous_items A boolean flag to indicate whether all previous items in queue should be removed after new items have been appended.
    */
   public void addItem(
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
+    HashMap<String, String> drmHeadersMap,
     boolean remove_previous_items
   ) {
-    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server);
+    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
     addItem(sample, remove_previous_items);
   }
 
@@ -377,12 +385,14 @@ public final class PlayerManager implements EventListener {
     String[] uris,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
-    String drm_license_server
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
   ) {
-    addItems(uris, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, /* remove_previous_items= */ false);
+    addItems(uris, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
   }
 
   /**
@@ -391,20 +401,24 @@ public final class PlayerManager implements EventListener {
    * @param uris                  Array of URLs to video files or streams.
    * @param caption               The URL to a file containing text captions (srt or vtt).
    * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
+   * @param reqHeadersMap         Map of HTTP headers to include in requests to retrieve the video file or stream.
    * @param startPosition         The position at which to start playback within the video file or (non-live) stream. When value < 1.0 and stopPosition < value, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param stopPosition          The position at which to stop playback within the video file or (non-live) stream. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param drm_scheme            The DRM scheme; value in: ["widevine","playready","clearkey"]
    * @param drm_license_server    The URL to obtain DRM license keys.
+   * @param drmHeadersMap         Map of HTTP headers to include in requests to retrieve the DRM license keys.
    * @param remove_previous_items A boolean flag to indicate whether all previous items in queue should be removed after new items have been appended.
    */
   public void addItems(
     String[] uris,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
+    HashMap<String, String> drmHeadersMap,
     boolean remove_previous_items
   ) {
     VideoSource[] samples = new VideoSource[uris.length];
@@ -414,8 +428,8 @@ public final class PlayerManager implements EventListener {
     for (int i=0; i < uris.length; i++) {
       uri        = uris[i];
       sample     = (i == 0)
-                     ? VideoSource.createVideoSource(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server)
-                     : VideoSource.createVideoSource(uri, null,    referer, -1f,           -1f,          drm_scheme, drm_license_server)
+                     ? VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap)
+                     : VideoSource.createVideoSource(uri, null,    referer, reqHeadersMap, -1f,           -1f,          drm_scheme, drm_license_server, drmHeadersMap)
                    ;
       samples[i] = sample;
     }
@@ -571,20 +585,19 @@ public final class PlayerManager implements EventListener {
 
   /**
    * Clears the media queue and adds the specified {@link VideoSource}.
-   *
-   * @param uri The URL to a video file or stream.
-   * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    */
   public void AirPlay_play(
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
-    String drm_license_server
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, /* remove_previous_items= */ true);
+    addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ true);
   }
 
   /**
@@ -668,21 +681,19 @@ public final class PlayerManager implements EventListener {
 
   /**
    * Appends {@link VideoSource} to the media queue.
-   *
-   * @param uri The URL to a video file or stream.
-   * @param referer The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
-   * @param startPosition The position at which to start playback within the video file or (non-live) stream. When value < 1.0, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    */
   public void AirPlay_queue(
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
-    String drm_license_server
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server);
+    addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
   }
 
   /**
@@ -1083,41 +1094,15 @@ public final class PlayerManager implements EventListener {
   }
 
   private void setHttpRequestHeaders(int currentItemIndex) {
+    if (httpDataSourceFactory == null) return;
+
     VideoSource sample = getItem(currentItemIndex);
     if (sample == null) return;
     if (ExternalStorageUtils.isFileUri(sample.uri)) return;
 
-    if (sample.referer != null) {
-      Uri referer   = Uri.parse(sample.referer);
-      String origin = referer.getScheme() + "://" + referer.getAuthority();
-
-      setHttpRequestHeader("origin",  origin);
-      setHttpRequestHeader("referer", sample.referer);
+    if (sample.reqHeadersMap != null) {
+      httpDataSourceFactory.setDefaultRequestProperties(sample.reqHeadersMap);
     }
-    else {
-      setHttpRequestHeader("origin",  null);
-      setHttpRequestHeader("referer", null);
-    }
-
-    switch (sample.uri_mimeType) {
-      case "video/mp4":
-      case "video/mpeg":
-      case "video/x-mkv":
-      case "video/x-msvideo":
-        setHttpRequestHeader("range", "bytes=0-");
-        break;
-      default:
-        setHttpRequestHeader("range", null);
-    }
-  }
-
-  private void setHttpRequestHeader(String name, String value) {
-    if (httpDataSourceFactory == null) return;
-
-    if (value == null)
-      httpDataSourceFactory.getDefaultRequestProperties().remove(name);
-    else
-      httpDataSourceFactory.getDefaultRequestProperties().set(name, value);
   }
 
   private MediaSource buildMediaSource(VideoSource sample) {

@@ -5,19 +5,26 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.util.Util;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
+import java.util.HashMap;
+
 public final class VideoSource {
+
+  public static String DEFAULT_USER_AGENT = null;
 
   public final String uri;
   public final String caption;
   public final String uri_mimeType;
   public final String caption_mimeType;
   public final String referer;
+  public final HashMap<String, String> reqHeadersMap;
   public final float startPosition;
   public final float stopPosition;
   public final String drm_scheme;
   public final String drm_license_server;
+  public final HashMap<String, String> drmHeadersMap;
 
   // static factory
 
@@ -30,12 +37,14 @@ public final class VideoSource {
   public static VideoSource createVideoSource(String uri) {
     return VideoSource.createVideoSource(
       uri,
-      (String) null, /* caption            */
-      (String) null, /* referer            */
-      -1f,           /* startPosition      */
-      -1f,           /* stopPosition       */
-      (String) null, /* drm_scheme         */
-      (String) null  /* drm_license_server */
+      (String)  null, /* caption            */
+      (String)  null, /* referer            */
+      (HashMap) null, /* reqHeadersMap      */
+      -1f,            /* startPosition      */
+      -1f,            /* stopPosition       */
+      (String)  null, /* drm_scheme         */
+      (String)  null, /* drm_license_server */
+      (HashMap) null  /* drmHeadersMap      */
     );
   }
 
@@ -43,22 +52,26 @@ public final class VideoSource {
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
-    String drm_license_server
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
   ) {
-    return new VideoSource(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server);
+    return new VideoSource(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
   }
 
   private VideoSource(
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
-    String drm_license_server
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
   ) {
     if (uri == null)
       uri = "";
@@ -66,15 +79,47 @@ public final class VideoSource {
     if ((stopPosition >= 1f) && (stopPosition <= startPosition))
       stopPosition = -1f;
 
+    String uri_mimeType     = MediaTypeUtils.get_media_mimeType(uri);
+    String caption_mimeType = MediaTypeUtils.get_caption_mimeType(caption);
+
+    if (reqHeadersMap == null)
+      reqHeadersMap = new HashMap<String, String>();
+    if (!TextUtils.isEmpty(referer))
+      reqHeadersMap.put("referer", referer);
+    if (reqHeadersMap.containsKey("referer")) {
+      referer = (String) reqHeadersMap.get("referer");
+
+      if (!reqHeadersMap.containsKey("origin")) {
+        Uri refererUri = Uri.parse(referer);
+        String origin  = refererUri.getScheme() + "://" + refererUri.getAuthority();
+        reqHeadersMap.put("origin", origin);
+      }
+    }
+    if (!reqHeadersMap.containsKey("range")) {
+      switch (uri_mimeType) {
+        case "video/mp4":
+        case "video/mpeg":
+        case "video/x-mkv":
+        case "video/x-msvideo":
+          reqHeadersMap.put("range", "bytes=0-");
+          break;
+      }
+    }
+    if (!reqHeadersMap.containsKey("user-agent") && (DEFAULT_USER_AGENT != null)) {
+      reqHeadersMap.put("user-agent", DEFAULT_USER_AGENT);
+    }
+
     this.uri                = uri;
     this.caption            = caption;
-    this.uri_mimeType       = MediaTypeUtils.get_media_mimeType(uri);
-    this.caption_mimeType   = MediaTypeUtils.get_caption_mimeType(caption);
+    this.uri_mimeType       = uri_mimeType;
+    this.caption_mimeType   = caption_mimeType;
     this.referer            = referer;
+    this.reqHeadersMap      = reqHeadersMap;
     this.startPosition      = startPosition;
     this.stopPosition       = stopPosition;
     this.drm_scheme         = drm_scheme;
     this.drm_license_server = drm_license_server;
+    this.drmHeadersMap      = drmHeadersMap;
   }
 
   // Public methods.
@@ -112,6 +157,10 @@ public final class VideoSource {
         .setDrmPlayClearContentWithoutKey(true)
         .setDrmMultiSession(true)
       ;
+
+      if (drmHeadersMap != null) {
+        builder.setDrmLicenseRequestHeaders(drmHeadersMap);
+      }
     }
 
     return builder.build();

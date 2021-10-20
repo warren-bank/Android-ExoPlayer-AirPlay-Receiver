@@ -132,6 +132,7 @@ window.onload  = () => {
   const $video_url               = document.querySelector('input#video_url')
   const $caption_url             = document.querySelector('input#caption_url')
   const $referer_url             = document.querySelector('input#referer_url')
+  const $req_headers             = document.querySelector('textarea#req_headers')
   const $start_position_hours    = document.querySelector('input#start_position_hours')
   const $start_position_minutes  = document.querySelector('input#start_position_minutes')
   const $start_position_seconds  = document.querySelector('input#start_position_seconds')
@@ -140,6 +141,7 @@ window.onload  = () => {
   const $stop_position_seconds   = document.querySelector('input#stop_position_seconds')
   const $drm_license_scheme      = document.querySelector('select#drm_license_scheme')
   const $drm_license_server      = document.querySelector('input#drm_license_server')
+  const $drm_headers             = document.querySelector('textarea#drm_headers')
   const $play                    = document.querySelector('button#play')
   const $queue                   = document.querySelector('button#queue')
   const $pause                   = document.querySelector('button#pause')
@@ -578,6 +580,29 @@ window.onload  = () => {
     return offset
   }
 
+  const get_video_POST_data_headers = (which) => {
+    if (typeof which !== 'string') return null
+
+    let $textarea = null
+    switch(which.toLowerCase()) {
+      case 'req-header':
+        $textarea = $req_headers
+        break
+      case 'drm-header':
+        $textarea = $drm_headers
+        break
+    }
+    if (!$textarea) return null
+
+    let headers = $textarea.value.trim()
+    if (!headers) return null
+
+    headers = headers.split(/\s*[\r\n]+\s*/g)
+    headers.unshift('')
+    headers = headers.join("\n" + which + ': ')
+    return headers
+  }
+
   const get_video_POST_data = (url) => {
     if (!url)
           url = $video_url.value.trim()
@@ -589,6 +614,9 @@ window.onload  = () => {
 
     const drm_scheme   = $drm_license_scheme.value.trim()
     const drm_server   = $drm_license_server.value.trim()
+
+    const req_headers  = get_video_POST_data_headers('req-header')
+    const drm_headers  = get_video_POST_data_headers('drm-header')
 
     if (!url) {
       let error_msg = 'Video URL is required'
@@ -603,6 +631,9 @@ window.onload  = () => {
     if (ref) {
       data += `\nReferer: ${ref}`
     }
+    if (req_headers) {
+      data += req_headers
+    }
     if (start_offset > 0) {
       data += `\nStart-Position: ${start_offset}`
     }
@@ -611,6 +642,10 @@ window.onload  = () => {
     }
     if (drm_scheme && drm_server) {
       data += `\nDRM-License-Scheme: ${drm_scheme}\nDRM-License-Server: ${drm_server}`
+
+      if (drm_headers) {
+        data += drm_headers
+      }
     }
     return data
   }
@@ -990,7 +1025,26 @@ window.onload  = () => {
       `extra-drmUrl:    ${$drm_license_server.value.trim()}`
     ]
 
-    $intent_data.value = data.join("\n")
+    let intent_data = data.join("\n")
+
+    const header_groups = [
+      {POST: 'req-header', EXTRA: 'reqHeader'},
+      {POST: 'drm-header', EXTRA: 'drmHeader'}
+    ]
+    for (let header_group of header_groups) {
+      let headers = get_video_POST_data_headers(header_group.POST)
+
+      if (headers) {
+        headers = headers.replace(new RegExp('\\b(' + header_group.POST + ')(: )', 'g'), 'extra-' + header_group.EXTRA + '$2')
+
+        intent_data += headers
+      }
+      else {
+        intent_data += `\nextra-${header_group.EXTRA}:`
+      }
+    }
+
+    $intent_data.value = intent_data
   }
 
   $send_intent.onclick = (event) => {
@@ -1145,6 +1199,14 @@ window.onload  = () => {
         </tr>
         <tr>
           <td class="oneline right">
+            <label for="req_headers">HTTP Headers:</label>
+          </td>
+          <td class="oneline left">
+            <textarea id="req_headers" rows="5"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
             <label>Start Position:</label>
           </td>
           <td class="oneline left">
@@ -1203,6 +1265,14 @@ window.onload  = () => {
                 </td>
               </tr>
             </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label for="drm_headers">DRM Headers:</label>
+          </td>
+          <td class="oneline left">
+            <textarea id="drm_headers" rows="5"></textarea>
           </td>
         </tr>
         <tr>
@@ -1332,8 +1402,6 @@ window.onload  = () => {
       </div>
       <div>
         <div><button id="show_toast">Show Toast</button></div>
-        <div></div>
-        <div></div>
       </div>
     </div>
     <div>

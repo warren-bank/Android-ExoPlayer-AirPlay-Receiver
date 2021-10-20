@@ -408,6 +408,14 @@ __extended APIs:__
       extra-stopPos:
       extra-drmScheme: widevine
       extra-drmUrl: http://widevine.example.com/
+
+      extra-reqHeader: Referer: http://example.com/videos.html
+      extra-reqHeader: Origin: http://example.com
+      extra-reqHeader: X-Requested-With: XMLHttpRequest
+      extra-reqHeader: User-Agent: Chrome/90
+
+      extra-drmHeader: Authorization: Bearer xxxxx
+      extra-drmHeader: Cookie: token=xxxxx; sessionID=yyyyy
     '
 
     curl --silent -X POST \
@@ -433,6 +441,8 @@ __extended APIs:__
     * _content-location_
     * _caption-location_
     * _referer_
+    * _req-header_
+      - use key on multiple lines to declare more than one value
     * _start-position_
     * _stop-position_
     * _drm-license-scheme_
@@ -441,6 +451,8 @@ __extended APIs:__
         * _clearkey_
         * _playready_
     * _drm-license-server_
+    * _drm-header_
+      - use key on multiple lines to declare more than one value
   - keys required:
     * _content-location_
 * POST data sent in requests to `/start-activity` API endpoint:

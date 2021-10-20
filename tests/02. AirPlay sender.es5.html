@@ -132,6 +132,7 @@ window.onload  = function() {
   var $video_url               = document.querySelector('input#video_url')
   var $caption_url             = document.querySelector('input#caption_url')
   var $referer_url             = document.querySelector('input#referer_url')
+  var $req_headers             = document.querySelector('textarea#req_headers')
   var $start_position_hours    = document.querySelector('input#start_position_hours')
   var $start_position_minutes  = document.querySelector('input#start_position_minutes')
   var $start_position_seconds  = document.querySelector('input#start_position_seconds')
@@ -140,6 +141,7 @@ window.onload  = function() {
   var $stop_position_seconds   = document.querySelector('input#stop_position_seconds')
   var $drm_license_scheme      = document.querySelector('select#drm_license_scheme')
   var $drm_license_server      = document.querySelector('input#drm_license_server')
+  var $drm_headers             = document.querySelector('textarea#drm_headers')
   var $play                    = document.querySelector('button#play')
   var $queue                   = document.querySelector('button#queue')
   var $pause                   = document.querySelector('button#pause')
@@ -410,6 +412,29 @@ window.onload  = function() {
     return offset
   }
 
+  var get_video_POST_data_headers = function(which) {
+    if (typeof which !== 'string') return null
+
+    var $textarea = null
+    switch(which.toLowerCase()) {
+      case 'req-header':
+        $textarea = $req_headers
+        break
+      case 'drm-header':
+        $textarea = $drm_headers
+        break
+    }
+    if (!$textarea) return null
+
+    var headers = $textarea.value.trim()
+    if (!headers) return null
+
+    headers = headers.split(/\s*[\r\n]+\s*/g)
+    headers.unshift('')
+    headers = headers.join("\n" + which + ': ')
+    return headers
+  }
+
   var get_video_POST_data = function(url) {
     if (!url)
           url = $video_url.value.trim()
@@ -421,6 +446,9 @@ window.onload  = function() {
 
     var drm_scheme   = $drm_license_scheme.value.trim()
     var drm_server   = $drm_license_server.value.trim()
+
+    var req_headers  = get_video_POST_data_headers('req-header')
+    var drm_headers  = get_video_POST_data_headers('drm-header')
 
     var error_msg
 
@@ -437,6 +465,9 @@ window.onload  = function() {
     if (ref) {
       data += "\n" + 'Referer: ' + ref
     }
+    if (req_headers) {
+      data += req_headers
+    }
     if (start_offset > 0) {
       data += "\n" + 'Start-Position: ' + start_offset
     }
@@ -446,6 +477,10 @@ window.onload  = function() {
     if (drm_scheme && drm_server) {
       data += "\n" + 'DRM-License-Scheme: ' + drm_scheme
       data += "\n" + 'DRM-License-Server: ' + drm_server
+
+      if (drm_headers) {
+        data += drm_headers
+      }
     }
     return data
   }
@@ -742,7 +777,8 @@ window.onload  = function() {
     event.preventDefault()
     event.stopPropagation()
 
-    var start_offset, stop_offset, video_url, video_type, data
+    var start_offset, stop_offset, video_url, video_type, data, intent_data
+    var header_groups, header_group, headers
 
     try {
       start_offset = get_time_offset('start')
@@ -774,7 +810,27 @@ window.onload  = function() {
       'extra-drmUrl: '    + $drm_license_server.value.trim()
     ]
 
-    $intent_data.value = data.join("\n")
+    intent_data = data.join("\n")
+
+    header_groups = [
+      {POST: 'req-header', EXTRA: 'reqHeader'},
+      {POST: 'drm-header', EXTRA: 'drmHeader'}
+    ]
+    for (var i=0; i < header_groups.length; i++) {
+      header_group = header_groups[i]
+      headers      = get_video_POST_data_headers(header_group.POST)
+
+      if (headers) {
+        headers = headers.replace(new RegExp('\\b(' + header_group.POST + ')(: )', 'g'), 'extra-' + header_group.EXTRA + '$2')
+
+        intent_data += headers
+      }
+      else {
+        intent_data += "\n" + 'extra-' + header_group.EXTRA + ':'
+      }
+    }
+
+    $intent_data.value = intent_data
   }
 
   $send_intent.onclick = function(event) {
@@ -929,6 +985,14 @@ window.onload  = function() {
         </tr>
         <tr>
           <td class="oneline right">
+            <label for="req_headers">HTTP Headers:</label>
+          </td>
+          <td class="oneline left">
+            <textarea id="req_headers" rows="5"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
             <label>Start Position:</label>
           </td>
           <td class="oneline left">
@@ -987,6 +1051,14 @@ window.onload  = function() {
                 </td>
               </tr>
             </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="oneline right">
+            <label for="drm_headers">DRM Headers:</label>
+          </td>
+          <td class="oneline left">
+            <textarea id="drm_headers" rows="5"></textarea>
           </td>
         </tr>
         <tr>
@@ -1116,8 +1188,6 @@ window.onload  = function() {
       </div>
       <div>
         <div><button id="show_toast">Show Toast</button></div>
-        <div></div>
-        <div></div>
       </div>
     </div>
     <div>

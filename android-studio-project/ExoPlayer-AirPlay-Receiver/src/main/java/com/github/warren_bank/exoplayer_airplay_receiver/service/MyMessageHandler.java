@@ -147,14 +147,19 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Msg.Msg_Video_Play  :
       case Constant.Msg.Msg_Video_Queue : {
-        HashMap<String, String> map = (HashMap) msg.obj;
-        String playUrl   = map.get(Constant.PlayURL);
-        String textUrl   = map.get(Constant.CaptionURL);
-        String referUrl  = map.get(Constant.RefererURL);
-        String startPos  = map.get(Constant.Start_Pos);
-        String stopPos   = map.get(Constant.Stop_Pos);
-        String drmScheme = map.get(Constant.DRM_Scheme);
-        String drmUrl    = map.get(Constant.DRM_URL);
+        HashMap<String, HashMap<String, String>> map = (HashMap) msg.obj;
+
+        HashMap<String, String> dataMap       = (HashMap) map.get(Constant.Video_Source_Map.DATA);
+        HashMap<String, String> reqHeadersMap = (HashMap) map.get(Constant.Video_Source_Map.REQ_HEADERS);
+        HashMap<String, String> drmHeadersMap = (HashMap) map.get(Constant.Video_Source_Map.DRM_HEADERS);
+
+        String playUrl   = dataMap.get(Constant.PlayURL);
+        String textUrl   = dataMap.get(Constant.CaptionURL);
+        String referUrl  = dataMap.get(Constant.RefererURL);
+        String startPos  = dataMap.get(Constant.Start_Pos);
+        String stopPos   = dataMap.get(Constant.Stop_Pos);
+        String drmScheme = dataMap.get(Constant.DRM_Scheme);
+        String drmUrl    = dataMap.get(Constant.DRM_URL);
 
         // normalize empty data fields to: null
         if (TextUtils.isEmpty(playUrl))
@@ -194,10 +199,12 @@ final class MyMessageHandler extends Handler {
           /* uri=                   */ playUrl,
           /* caption=               */ textUrl,
           /* referer=               */ referUrl,
+          /* reqHeadersMap=         */ reqHeadersMap,
           /* startPosition=         */ Float.valueOf(startPos),
           /* stopPosition=          */ Float.valueOf(stopPos),
           /* drm_scheme=            */ drmScheme,
           /* drm_license_server=    */ drmUrl,
+          /* drmHeadersMap=         */ drmHeadersMap,
           /* remove_previous_items= */ (msg.what == Constant.Msg.Msg_Video_Play)
         );
         break;
@@ -382,10 +389,12 @@ final class MyMessageHandler extends Handler {
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
+    HashMap<String, String> drmHeadersMap,
     boolean remove_previous_items
   ) {
     final Handler  handler  = new Handler(networkingHandlerThread.getLooper());
@@ -409,7 +418,7 @@ final class MyMessageHandler extends Handler {
         if (matches == null)
           matches = recursiveDirectoryExtractor.expandPlaylist(uri);
 
-        addItems(playerManager, service, matches, uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, remove_previous_items);
+        addItems(playerManager, service, matches, uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
       }
     };
 
@@ -423,10 +432,12 @@ final class MyMessageHandler extends Handler {
     String uri,
     String caption,
     String referer,
+    HashMap<String, String> reqHeadersMap,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
+    HashMap<String, String> drmHeadersMap,
     boolean remove_previous_items
   ) {
     final Handler  handler  = new Handler(mainLooper);
@@ -436,7 +447,7 @@ final class MyMessageHandler extends Handler {
         String playUrl;
 
         if (matches == null) {
-          playerManager.addItem(uri, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, remove_previous_items);
+          playerManager.addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
 
           playUrl = uri;
         }
@@ -456,7 +467,7 @@ final class MyMessageHandler extends Handler {
             uris[i] = playUrl;
           }
 
-          playerManager.addItems(uris, caption, referer, startPosition, stopPosition, drm_scheme, drm_license_server, remove_previous_items);
+          playerManager.addItems(uris, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
 
           playUrl = uris[0];
         }

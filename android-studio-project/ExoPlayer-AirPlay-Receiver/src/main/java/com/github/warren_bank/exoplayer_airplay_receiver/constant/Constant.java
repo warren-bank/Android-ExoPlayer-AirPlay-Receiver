@@ -9,10 +9,12 @@ public class Constant {
     public static final String PlayURL          = "playUrl";
     public static final String CaptionURL       = "textUrl";
     public static final String RefererURL       = "referUrl";
+    public static final String ReqHeader        = "reqHeader";
     public static final String Start_Pos        = "startPos";
     public static final String Stop_Pos         = "stopPos";
     public static final String DRM_Scheme       = "drmScheme";
     public static final String DRM_URL          = "drmUrl";
+    public static final String DRM_Header       = "drmHeader";
 
     public static String getServerInfoResponse(String mac) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
@@ -219,6 +221,12 @@ public class Constant {
         public static final String Status_stop                  = "stopped";
         public static final String Status_pause                 = "paused";
         public static final String Status_load                  = "loading";
+    }
+
+    public interface Video_Source_Map {
+        public static final String DATA                         = "data";
+        public static final String REQ_HEADERS                  = "req-header";
+        public static final String DRM_HEADERS                  = "drm-header";
     }
 
 }

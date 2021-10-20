@@ -107,9 +107,9 @@ public class ImageViewerActivity extends Activity {
 
       switch (msg.what) {
         case Constant.Msg.Msg_Stop :
-          activity.finish();
-          break;
         case Constant.Msg.Msg_Video_Play :
+        case Constant.Msg.Msg_Hide_Player :
+        case Constant.Msg.Msg_Exit_Service :
           activity.finish();
           break;
       }

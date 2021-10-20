@@ -9,6 +9,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListene
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
 import javax.jmdns.JmDNS;
@@ -389,15 +390,25 @@ public class NetworkingService extends Service {
       }
       case ACTION_PLAY : {
         if (intent.hasExtra(Constant.PlayURL)) {
+
+          HashMap<String, String> dataMap = new HashMap<String, String>();
+          dataMap.put(Constant.PlayURL,    intent.getStringExtra(Constant.PlayURL)    );
+          dataMap.put(Constant.CaptionURL, intent.getStringExtra(Constant.CaptionURL) );
+          dataMap.put(Constant.RefererURL, intent.getStringExtra(Constant.RefererURL) );
+          dataMap.put(Constant.Start_Pos,  intent.getStringExtra(Constant.Start_Pos)  );
+          dataMap.put(Constant.Stop_Pos,   intent.getStringExtra(Constant.Stop_Pos)   );
+          dataMap.put(Constant.DRM_Scheme, intent.getStringExtra(Constant.DRM_Scheme) );
+          dataMap.put(Constant.DRM_URL,    intent.getStringExtra(Constant.DRM_URL)    );
+
+          HashMap<String, String> reqHeadersMap = StringUtils.parseDuplicateKeyValues((String[]) getStringArrayExtra(intent, Constant.ReqHeader),  /* normalize_lowercase_keys= */ true);
+          HashMap<String, String> drmHeadersMap = StringUtils.parseDuplicateKeyValues((String[]) getStringArrayExtra(intent, Constant.DRM_Header), /* normalize_lowercase_keys= */ true);
+
+          HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+          map.put(Constant.Video_Source_Map.DATA,        dataMap);
+          map.put(Constant.Video_Source_Map.REQ_HEADERS, reqHeadersMap);
+          map.put(Constant.Video_Source_Map.DRM_HEADERS, drmHeadersMap);
+
           Message msg = Message.obtain();
-          HashMap<String, String> map = new HashMap<String, String>();
-          map.put(Constant.PlayURL,    intent.getStringExtra(Constant.PlayURL)    );
-          map.put(Constant.CaptionURL, intent.getStringExtra(Constant.CaptionURL) );
-          map.put(Constant.RefererURL, intent.getStringExtra(Constant.RefererURL) );
-          map.put(Constant.Start_Pos,  intent.getStringExtra(Constant.Start_Pos)  );
-          map.put(Constant.Stop_Pos,   intent.getStringExtra(Constant.Stop_Pos)   );
-          map.put(Constant.DRM_Scheme, intent.getStringExtra(Constant.DRM_Scheme) );
-          map.put(Constant.DRM_URL,    intent.getStringExtra(Constant.DRM_URL)    );
           msg.what = Constant.Msg.Msg_Video_Play;
           msg.obj  = map;
 
@@ -406,6 +417,20 @@ public class NetworkingService extends Service {
         break;
       }
     }
+  }
+
+  private String[] getStringArrayExtra(Intent intent, String key) {
+    String[] extra = (String[]) intent.getStringArrayExtra(key);
+
+    if (extra == null) {
+      String value = (String) intent.getStringExtra(key);
+
+      if (value != null) {
+        extra = new String[] {value};
+      }
+    }
+
+    return extra;
   }
 
   // -------------------------------------------------------------------------
