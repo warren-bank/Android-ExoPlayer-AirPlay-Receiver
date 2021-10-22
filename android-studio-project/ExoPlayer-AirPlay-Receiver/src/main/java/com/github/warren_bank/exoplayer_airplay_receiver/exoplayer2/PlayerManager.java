@@ -162,7 +162,7 @@ public final class PlayerManager implements EventListener {
       this.audioListener.onAudioSessionIdChanged( this.exoPlayer.getAudioSessionId() );
     }
 
-    String userAgent = context.getResources().getString(R.string.user_agent);
+    String userAgent               = context.getString(R.string.user_agent);
     this.httpDataSourceFactory     = new DefaultHttpDataSourceFactory(userAgent);
     this.rawDataSourceFactory      = new DefaultDataSourceFactory(context, userAgent);
     this.loadErrorHandlingPolicy   = new MyLoadErrorHandlingPolicy();

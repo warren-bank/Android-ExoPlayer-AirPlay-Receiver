@@ -14,6 +14,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ToastUtils;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -114,7 +115,13 @@ final class MyMessageHandler extends Handler {
       // =======================================================================
 
       case Constant.Msg.Msg_Show_Toast : {
-        Toast.makeText(service.getApplicationContext(), (String) msg.obj, Toast.LENGTH_LONG).show();
+        String text;
+        text = (String) msg.obj;
+        text = ToastUtils.interpolate_variables(service.getApplicationContext(), text);
+
+        if (!TextUtils.isEmpty(text)) {
+          Toast.makeText(service.getApplicationContext(), text, Toast.LENGTH_LONG).show();
+        }
         break;
       }
 

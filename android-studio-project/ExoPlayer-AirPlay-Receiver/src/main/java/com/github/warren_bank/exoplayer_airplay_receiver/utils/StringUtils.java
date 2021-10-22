@@ -1,5 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
+import android.text.TextUtils;
+
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -124,7 +126,7 @@ public class StringUtils {
   public static HashMap<String, String> parseDuplicateKeyValues(List<String> list, boolean normalize_lowercase_keys) {
     if ((list == null) || list.isEmpty()) return null;
 
-    String requestBody = String.join("\n", list);
+    String requestBody = TextUtils.join("\n", list);
 
     return StringUtils.parseRequestBody(requestBody, normalize_lowercase_keys);
   }

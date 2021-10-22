@@ -47,6 +47,8 @@ body .contents div:last-child {
 body .contents textarea {
   width: 100%;
 }
+body .contents textarea#req_headers,
+body .contents textarea#drm_headers,
 body .contents textarea#intent_data {
   white-space: nowrap;
 }
@@ -104,6 +106,11 @@ input[type="url"] {
 input[type="text"][size="15"],
 input[type="number"] {
   width: 10em;
+}
+
+select#toast_variables {
+  width: 8em;
+  padding: 4px;
 }
 
 input[type="file"] {
@@ -172,6 +179,7 @@ window.onload  = () => {
   const $volume_factor           = document.querySelector('input#volume_factor')
   const $volume                  = document.querySelector('button#volume')
   const $toast_message           = document.querySelector('textarea#toast_message')
+  const $toast_variables         = document.querySelector('select#toast_variables')
   const $show_toast              = document.querySelector('button#show_toast')
   const $hide_player             = document.querySelector('button#hide_player')
   const $show_player             = document.querySelector('button#show_player')
@@ -945,6 +953,19 @@ window.onload  = () => {
     catch(e){}
   }
 
+  $toast_variables.addEventListener('change', (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const variable = $toast_variables.value
+
+    if (variable) {
+      $toast_message.value += variable
+
+      $toast_variables.value = ''
+    }
+  })
+
   $show_toast.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -1401,6 +1422,17 @@ window.onload  = () => {
         <textarea id="toast_message" rows="5"></textarea>
       </div>
       <div>
+        <div>
+          <select id="toast_variables">
+            <option value="">Add Variable:</option>
+            <option value="{{date}}">Date</option>
+            <option value="{{time}}">Time</option>
+            <option value="{{version}}">Version of ExoAirPlayer</option>
+            <option value="{{abi}}">List of ABIs Supported by Device</option>
+            <option value="{{top-process}}">Package Name of Top Process</option>
+            <option value="{{top-activity}}">Class Name of Top Activity</option>
+          </select>
+        </div>
         <div><button id="show_toast">Show Toast</button></div>
       </div>
     </div>
