@@ -166,4 +166,18 @@ public class StringUtils {
     }
   }
 
+  public static String toString(HashMap<String, String> map) {
+    if (map == null) return null;
+
+    String value = "";
+    for (String key : map.keySet()) {
+      value += key + ": " + map.get(key) + "\n";
+    }
+
+    value = value.trim();
+    value = (value == "") ? null : value;
+
+    return value;
+  }
+
 }

@@ -117,7 +117,7 @@ final class MyMessageHandler extends Handler {
       case Constant.Msg.Msg_Show_Toast : {
         String text;
         text = (String) msg.obj;
-        text = ToastUtils.interpolate_variables(service.getApplicationContext(), text);
+        text = ToastUtils.interpolate_variables(service.getApplicationContext(), playerManager, text);
 
         if (!TextUtils.isEmpty(text)) {
           Toast.makeText(service.getApplicationContext(), text, Toast.LENGTH_LONG).show();

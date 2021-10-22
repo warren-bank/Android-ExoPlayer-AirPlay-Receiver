@@ -7,6 +7,12 @@
   <string name="toast_registration_failure">AirPlay registration failed</string>
 
   <!-- strings that are interpolated within "/show-toast" text -->
+  <string translatable="false" name="toast_variable_video_uri">{{video-uri}}</string>
+  <string translatable="false" name="toast_variable_video_caption">{{video-caption}}</string>
+  <string translatable="false" name="toast_variable_video_req_headers">{{video-req-headers}}</string>
+  <string translatable="false" name="toast_variable_video_drm_scheme">{{video-drm-scheme}}</string>
+  <string translatable="false" name="toast_variable_video_drm_server">{{video-drm-server}}</string>
+  <string translatable="false" name="toast_variable_video_drm_headers">{{video-drm-headers}}</string>
   <string translatable="false" name="toast_variable_date">{{date}}</string>
   <string translatable="false" name="toast_variable_time">{{time}}</string>
   <string translatable="false" name="toast_variable_version">{{version}}</string>

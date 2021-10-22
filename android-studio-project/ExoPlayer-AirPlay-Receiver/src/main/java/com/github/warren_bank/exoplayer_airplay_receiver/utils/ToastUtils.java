@@ -2,6 +2,8 @@ package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoSource;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -13,8 +15,17 @@ import java.util.Date;
 
 public class ToastUtils {
 
-  public static String interpolate_variables(Context context, String text) {
+  public static String interpolate_variables(Context context, PlayerManager playerManager, String text) {
     if (TextUtils.isEmpty(text)) return null;
+
+    if (playerManager != null) {
+      text = ToastUtils.interpolate_video_uri(context, playerManager, text);
+      text = ToastUtils.interpolate_video_caption(context, playerManager, text);
+      text = ToastUtils.interpolate_video_req_headers(context, playerManager, text);
+      text = ToastUtils.interpolate_video_drm_scheme(context, playerManager, text);
+      text = ToastUtils.interpolate_video_drm_server(context, playerManager, text);
+      text = ToastUtils.interpolate_video_drm_headers(context, playerManager, text);
+    }
 
     text = ToastUtils.interpolate_date(context, text);
     text = ToastUtils.interpolate_time(context, text);
@@ -26,6 +37,128 @@ public class ToastUtils {
     text = (TextUtils.isEmpty(text)) ? null : text.trim();
 
     return text;
+  }
+
+  private static VideoSource getVideoSource(PlayerManager playerManager) {
+    if (playerManager == null) return null;
+
+    return playerManager.getItem(
+      playerManager.getCurrentItemIndex()
+    );
+  }
+
+  private static String interpolate_video_uri(Context context, PlayerManager playerManager, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_video_uri);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      VideoSource sample = getVideoSource(playerManager);
+      String video_uri = (sample == null) ? null : sample.uri;
+
+      return ToastUtils.interpolate_variable(text, variable_substring, video_uri);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
+  }
+
+  private static String interpolate_video_caption(Context context, PlayerManager playerManager, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_video_caption);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      VideoSource sample = getVideoSource(playerManager);
+      String video_caption = (sample == null) ? null : sample.caption;
+
+      return ToastUtils.interpolate_variable(text, variable_substring, video_caption);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
+  }
+
+  private static String interpolate_video_req_headers(Context context, PlayerManager playerManager, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_video_req_headers);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      VideoSource sample = getVideoSource(playerManager);
+      String video_req_headers = (sample == null) ? null : StringUtils.toString(sample.reqHeadersMap);
+
+      return ToastUtils.interpolate_variable(text, variable_substring, video_req_headers);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
+  }
+
+  private static String interpolate_video_drm_scheme(Context context, PlayerManager playerManager, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_video_drm_scheme);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      VideoSource sample = getVideoSource(playerManager);
+      String video_drm_scheme = (sample == null) ? null : sample.drm_scheme;
+
+      return ToastUtils.interpolate_variable(text, variable_substring, video_drm_scheme);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
+  }
+
+  private static String interpolate_video_drm_server(Context context, PlayerManager playerManager, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_video_drm_server);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      VideoSource sample = getVideoSource(playerManager);
+      String video_drm_server = (sample == null) ? null : sample.drm_license_server;
+
+      return ToastUtils.interpolate_variable(text, variable_substring, video_drm_server);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
+  }
+
+  private static String interpolate_video_drm_headers(Context context, PlayerManager playerManager, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_video_drm_headers);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      VideoSource sample = getVideoSource(playerManager);
+      String video_drm_headers = (sample == null) ? null : StringUtils.toString(sample.drmHeadersMap);
+
+      return ToastUtils.interpolate_variable(text, variable_substring, video_drm_headers);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
   }
 
   private static String interpolate_date(Context context, String text) {
