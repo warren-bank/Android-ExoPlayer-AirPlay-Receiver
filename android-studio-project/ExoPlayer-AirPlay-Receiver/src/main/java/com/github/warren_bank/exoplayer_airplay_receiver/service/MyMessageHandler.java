@@ -163,6 +163,7 @@ final class MyMessageHandler extends Handler {
         String playUrl   = dataMap.get(Constant.PlayURL);
         String textUrl   = dataMap.get(Constant.CaptionURL);
         String referUrl  = dataMap.get(Constant.RefererURL);
+        String useCache  = dataMap.get(Constant.UseCache);
         String startPos  = dataMap.get(Constant.Start_Pos);
         String stopPos   = dataMap.get(Constant.Stop_Pos);
         String drmScheme = dataMap.get(Constant.DRM_Scheme);
@@ -183,6 +184,9 @@ final class MyMessageHandler extends Handler {
           drmScheme = null;
         if (TextUtils.isEmpty(drmUrl))
           drmUrl = null;
+
+        // normalize boolean data fields to: ["true", "false"]
+        useCache = StringUtils.normalizeBooleanString(useCache);
 
         // ignore bad requests
         if (playUrl == null)
@@ -207,6 +211,7 @@ final class MyMessageHandler extends Handler {
           /* caption=               */ textUrl,
           /* referer=               */ referUrl,
           /* reqHeadersMap=         */ reqHeadersMap,
+          /* useCache=              */ "true".equals(useCache),
           /* startPosition=         */ Float.valueOf(startPos),
           /* stopPosition=          */ Float.valueOf(stopPos),
           /* drm_scheme=            */ drmScheme,
@@ -397,6 +402,7 @@ final class MyMessageHandler extends Handler {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
@@ -425,7 +431,7 @@ final class MyMessageHandler extends Handler {
         if (matches == null)
           matches = recursiveDirectoryExtractor.expandPlaylist(uri);
 
-        addItems(playerManager, service, matches, uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
+        addItems(playerManager, service, matches, uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
       }
     };
 
@@ -440,6 +446,7 @@ final class MyMessageHandler extends Handler {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
@@ -454,7 +461,7 @@ final class MyMessageHandler extends Handler {
         String playUrl;
 
         if (matches == null) {
-          playerManager.addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
+          playerManager.addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
 
           playUrl = uri;
         }
@@ -474,7 +481,7 @@ final class MyMessageHandler extends Handler {
             uris[i] = playUrl;
           }
 
-          playerManager.addItems(uris, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
+          playerManager.addItems(uris, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
 
           playUrl = uris[0];
         }

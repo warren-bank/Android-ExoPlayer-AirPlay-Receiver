@@ -20,6 +20,7 @@ public final class VideoSource {
   public final String caption_mimeType;
   public final String referer;
   public final HashMap<String, String> reqHeadersMap;
+  public final boolean useCache;
   public final float startPosition;
   public final float stopPosition;
   public final String drm_scheme;
@@ -40,6 +41,7 @@ public final class VideoSource {
       (String)  null, /* caption            */
       (String)  null, /* referer            */
       (HashMap) null, /* reqHeadersMap      */
+      false,          /* useCache           */
       -1f,            /* startPosition      */
       -1f,            /* stopPosition       */
       (String)  null, /* drm_scheme         */
@@ -53,13 +55,14 @@ public final class VideoSource {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    return new VideoSource(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    return new VideoSource(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
   }
 
   private VideoSource(
@@ -67,6 +70,7 @@ public final class VideoSource {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
@@ -75,6 +79,12 @@ public final class VideoSource {
   ) {
     if (uri == null)
       uri = "";
+
+    if (useCache) {
+      String uri_lc = ((uri.length() > 8) ? uri.substring(0, 8) : uri).toLowerCase();
+
+      useCache = uri_lc.startsWith("http://") || uri_lc.startsWith("https://");
+    }
 
     if ((stopPosition >= 1f) && (stopPosition <= startPosition))
       stopPosition = -1f;
@@ -115,6 +125,7 @@ public final class VideoSource {
     this.caption_mimeType   = caption_mimeType;
     this.referer            = referer;
     this.reqHeadersMap      = reqHeadersMap;
+    this.useCache           = useCache;
     this.startPosition      = startPosition;
     this.stopPosition       = stopPosition;
     this.drm_scheme         = drm_scheme;

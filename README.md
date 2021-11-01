@@ -404,6 +404,7 @@ __extended APIs:__
       flag: 0x00008000
       extra-referUrl: http://example.com/videos.html
       extra-textUrl: http://example.com/video.srt
+      extra-useCache: true
       extra-startPos:
       extra-stopPos:
       extra-drmScheme: widevine
@@ -443,6 +444,7 @@ __extended APIs:__
     * _referer_
     * _req-header_
       - use key on multiple lines to declare more than one value
+    * _use-cache_
     * _start-position_
     * _stop-position_
     * _drm-license-scheme_

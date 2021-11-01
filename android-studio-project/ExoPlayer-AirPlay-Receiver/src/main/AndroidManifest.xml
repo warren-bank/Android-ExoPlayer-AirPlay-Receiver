@@ -29,6 +29,22 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".exoplayer2.customizations.MyDownloadService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.downloadService.action.RESTART" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".ui.ImageViewerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"

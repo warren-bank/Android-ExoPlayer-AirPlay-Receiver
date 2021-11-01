@@ -37,7 +37,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsCollector;
 import com.google.android.exoplayer2.audio.AudioListener;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -54,9 +53,9 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.util.Clock;
 import com.google.android.exoplayer2.util.EventLogger;
 import com.google.android.exoplayer2.util.MimeTypes;
@@ -86,13 +85,16 @@ public final class PlayerManager implements EventListener {
   private PlayerView playerView;
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
+  private MyRenderersFactory renderersFactory;
+  private DefaultHttpDataSource.Factory httpDataSourceFactory;
+  private DataSource.Factory defaultDataSourceFactory;
+  private CacheDataSource.Factory cacheDataSourceFactory;
+  private DownloadTracker downloadTracker;
   private SimpleExoPlayer exoPlayer;
   private float audioVolume;
   private int   audioVolumeMaxDbBoost;
   private AudioListener audioListener;
   private LoudnessEnhancer loudnessEnhancer;
-  private DefaultHttpDataSourceFactory httpDataSourceFactory;
-  private DefaultDataSourceFactory rawDataSourceFactory;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
   private Handler handler;
@@ -114,18 +116,28 @@ public final class PlayerManager implements EventListener {
     this.playerView = null;
     this.mediaQueue = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
+
     this.trackSelector = new DefaultTrackSelector(context);
-    MyRenderersFactory renderersFactory = new MyRenderersFactory(context);
+    this.renderersFactory = new MyRenderersFactory(context);
     this.textSynchronizer = (TextSynchronizer) renderersFactory;
     DefaultLoadControl loadControl = getLoadControl(context);
     EventLogger exoLogger = new EventLogger(trackSelector);
     AnalyticsCollector analyticsCollector = new AnalyticsCollector(Clock.DEFAULT);
     analyticsCollector.addListener(exoLogger);
+
+    String userAgent               = context.getString(R.string.user_agent);
+    VideoSource.DEFAULT_USER_AGENT = userAgent;
+    ExoPlayerUtils.setUserAgent(userAgent);
+    this.httpDataSourceFactory     = ExoPlayerUtils.getHttpDataSourceFactory(context);
+    this.defaultDataSourceFactory  = ExoPlayerUtils.getDefaultDataSourceFactory(context);
+    this.cacheDataSourceFactory    = ExoPlayerUtils.getCacheDataSourceFactory(context);
+    this.downloadTracker           = ExoPlayerUtils.getDownloadTracker(context);
+
     this.exoPlayer = new SimpleExoPlayer.Builder(
       context,
       (RenderersFactory) renderersFactory,
       trackSelector,
-      new DefaultMediaSourceFactory(context, new DefaultExtractorsFactory()),
+      new DefaultMediaSourceFactory(cacheDataSourceFactory),
       loadControl,
       DefaultBandwidthMeter.getSingletonInstance(context),
       analyticsCollector
@@ -162,14 +174,11 @@ public final class PlayerManager implements EventListener {
       this.audioListener.onAudioSessionIdChanged( this.exoPlayer.getAudioSessionId() );
     }
 
-    String userAgent               = context.getString(R.string.user_agent);
-    this.httpDataSourceFactory     = new DefaultHttpDataSourceFactory(userAgent);
-    this.rawDataSourceFactory      = new DefaultDataSourceFactory(context, userAgent);
-    this.loadErrorHandlingPolicy   = new MyLoadErrorHandlingPolicy();
-    VideoSource.DEFAULT_USER_AGENT = userAgent;
+    this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
+    this.currentItemIndex        = C.INDEX_UNSET;
+    this.handler                 = new Handler(Looper.getMainLooper());
 
-    this.currentItemIndex = C.INDEX_UNSET;
-    this.handler = new Handler(Looper.getMainLooper());
+    this.downloadTracker.startDownloadService();
   }
 
   private DefaultLoadControl getLoadControl(Context context) {
@@ -314,13 +323,14 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
+    addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
   }
 
   /**
@@ -330,6 +340,7 @@ public final class PlayerManager implements EventListener {
    * @param caption               The URL to a file containing text captions (srt or vtt).
    * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
    * @param reqHeadersMap         Map of HTTP headers to include in requests to retrieve the video file or stream.
+   * @param useCache              Boolean flag to indicate whether to prefetch this item to a local cache.
    * @param startPosition         The position at which to start playback within the video file or (non-live) stream. When value < 1.0 and stopPosition < value, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param stopPosition          The position at which to stop playback within the video file or (non-live) stream. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param drm_scheme            The DRM scheme; value in: ["widevine","playready","clearkey"]
@@ -342,6 +353,7 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
@@ -349,7 +361,7 @@ public final class PlayerManager implements EventListener {
     HashMap<String, String> drmHeadersMap,
     boolean remove_previous_items
   ) {
-    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
     addItem(sample, remove_previous_items);
   }
 
@@ -386,13 +398,14 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItems(uris, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
+    addItems(uris, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
   }
 
   /**
@@ -402,6 +415,7 @@ public final class PlayerManager implements EventListener {
    * @param caption               The URL to a file containing text captions (srt or vtt).
    * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
    * @param reqHeadersMap         Map of HTTP headers to include in requests to retrieve the video file or stream.
+   * @param useCache              Boolean flag to indicate whether to prefetch this item to a local cache.
    * @param startPosition         The position at which to start playback within the video file or (non-live) stream. When value < 1.0 and stopPosition < value, it is interpreted to mean a percentage of the total video length. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param stopPosition          The position at which to stop playback within the video file or (non-live) stream. When value >= 1.0, it is interpreted to mean a fixed offset in seconds.
    * @param drm_scheme            The DRM scheme; value in: ["widevine","playready","clearkey"]
@@ -414,6 +428,7 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
@@ -428,8 +443,8 @@ public final class PlayerManager implements EventListener {
     for (int i=0; i < uris.length; i++) {
       uri        = uris[i];
       sample     = (i == 0)
-                     ? VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap)
-                     : VideoSource.createVideoSource(uri, null,    referer, reqHeadersMap, -1f,           -1f,          drm_scheme, drm_license_server, drmHeadersMap)
+                     ? VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap)
+                     : VideoSource.createVideoSource(uri, null,    referer, reqHeadersMap, useCache, -1f,           -1f,          drm_scheme, drm_license_server, drmHeadersMap)
                    ;
       samples[i] = sample;
     }
@@ -591,13 +606,14 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ true);
+    addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ true);
   }
 
   /**
@@ -687,13 +703,14 @@ public final class PlayerManager implements EventListener {
     String caption,
     String referer,
     HashMap<String, String> reqHeadersMap,
+    boolean useCache,
     float startPosition,
     float stopPosition,
     String drm_scheme,
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, reqHeadersMap, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
   }
 
   /**
@@ -896,13 +913,22 @@ public final class PlayerManager implements EventListener {
     try {
       release_exoPlayer();
 
-      mediaQueue.clear();
-      concatenatingMediaSource.clear();
+      if (mediaQueue != null)
+        mediaQueue.clear();
+
+      if (concatenatingMediaSource != null)
+        concatenatingMediaSource.clear();
+
+      if (downloadTracker != null)
+        downloadTracker.removeAllDownloads();
 
       mediaQueue               = null;
       concatenatingMediaSource = null;
+      renderersFactory         = null;
       httpDataSourceFactory    = null;
-      rawDataSourceFactory     = null;
+      defaultDataSourceFactory = null;
+      cacheDataSourceFactory   = null;
+      downloadTracker          = null;
       loadErrorHandlingPolicy  = null;
       currentItemIndex         = C.INDEX_UNSET;
     }
@@ -1063,6 +1089,7 @@ public final class PlayerManager implements EventListener {
       if (currentItemIndex != C.INDEX_UNSET) {
         seekToStartPosition(currentItemIndex);
         setHttpRequestHeaders(currentItemIndex);
+        downloadToCache(currentItemIndex);
       }
     }
   }
@@ -1105,6 +1132,17 @@ public final class PlayerManager implements EventListener {
     }
   }
 
+  private void downloadToCache(int currentItemIndex) {
+    if (downloadTracker == null) return;
+
+    VideoSource sample = getItem(currentItemIndex);
+    if (sample == null) return;
+
+    if (sample.useCache) {
+      downloadTracker.startDownload(sample.getMediaItem(), renderersFactory);
+    }
+  }
+
   private MediaSource buildMediaSource(VideoSource sample) {
     MediaSource            video    = buildUriMediaSource(sample);
     ArrayList<MediaSource> captions = buildCaptionMediaSources(sample);
@@ -1133,8 +1171,10 @@ public final class PlayerManager implements EventListener {
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
     DataSource.Factory factory = ExternalStorageUtils.isFileUri(sample.uri)
-      ? rawDataSourceFactory
-      : httpDataSourceFactory;
+      ? defaultDataSourceFactory
+      : sample.useCache
+          ? cacheDataSourceFactory
+          : httpDataSourceFactory;
 
     if (factory == null)
       return null;
@@ -1163,7 +1203,7 @@ public final class PlayerManager implements EventListener {
 
     if (!TextUtils.isEmpty(sample.caption) && !TextUtils.isEmpty(sample.caption_mimeType)) {
       factory = ExternalStorageUtils.isFileUri(sample.caption)
-        ? rawDataSourceFactory
+        ? defaultDataSourceFactory
         : httpDataSourceFactory;
 
       if (factory == null)
@@ -1181,7 +1221,7 @@ public final class PlayerManager implements EventListener {
       // search within same directory as media file for external captions in a supported format.
       // file naming convention: "${video_filename}.*.${supported_caption_extension}"
 
-      factory = rawDataSourceFactory;
+      factory = defaultDataSourceFactory;
 
       if (factory == null)
         return null;
@@ -1215,13 +1255,13 @@ public final class PlayerManager implements EventListener {
   }
 
   private MediaSource buildRawVideoMediaSource(int rawResourceId) {
-    if (rawDataSourceFactory == null)
+    if (defaultDataSourceFactory == null)
       return null;
 
     Uri uri = RawResourceDataSource.buildRawResourceUri(rawResourceId);
     MediaItem mediaItem = MediaItem.fromUri(uri);
 
-    return new ProgressiveMediaSource.Factory(rawDataSourceFactory).createMediaSource(mediaItem);
+    return new ProgressiveMediaSource.Factory(defaultDataSourceFactory).createMediaSource(mediaItem);
   }
 
   private void addRawVideoItem(int rawResourceId) {

@@ -180,4 +180,17 @@ public class StringUtils {
     return value;
   }
 
+  public static String normalizeBooleanString(String bool) {
+    if (!TextUtils.isEmpty(bool))
+      bool = bool.toLowerCase();
+
+    return (
+        TextUtils.isEmpty(bool)
+     || bool.equals("false")
+     || bool.equals("0")
+     || bool.equals("null")
+     || bool.equals("undefined")
+    ) ? "false" : "true";
+  }
+
 }

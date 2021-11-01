@@ -10,6 +10,7 @@ public class Constant {
     public static final String CaptionURL       = "textUrl";
     public static final String RefererURL       = "referUrl";
     public static final String ReqHeader        = "reqHeader";
+    public static final String UseCache         = "useCache";
     public static final String Start_Pos        = "startPos";
     public static final String Stop_Pos         = "stopPos";
     public static final String DRM_Scheme       = "drmScheme";

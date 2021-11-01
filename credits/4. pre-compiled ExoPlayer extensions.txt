@@ -1,0 +1,34 @@
+----------------------------------------------------------------------------------------------------
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/libs/decoder_extensions/extension-av1.aar
+source:   https://github.com/moneytoo/Player/raw/v0.65/app/libs/extension-av1-release.aar
+origin:   https://github.com/google/ExoPlayer/tree/r2.15.1/extensions/av1
+license:  Apache 2.0
+            https://github.com/google/ExoPlayer/blob/r2.15.1/LICENSE
+purpose:  uses libgav1 native library to decode AV1 videos
+
+----------------------------------------
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/libs/decoder_extensions/extension-ffmpeg.aar
+source:   https://github.com/moneytoo/Player/raw/v0.65/app/libs/extension-ffmpeg-release.aar
+origin:   https://github.com/google/ExoPlayer/tree/r2.15.1/extensions/ffmpeg
+license:  Apache 2.0
+            https://github.com/google/ExoPlayer/blob/r2.15.1/LICENSE
+purpose:  uses FFmpeg for decoding and can render audio encoded in a variety of formats
+
+----------------------------------------------------------------------------------------------------
+
+references:
+===========
+
+issue:    https://github.com/google/ExoPlayer/issues/1434
+summary:  ExoPlayer development team refuses to publish pre-compiled binaries for the native extensions
+
+workaround:
+===========
+
+notes:    "Just Player" is another open-source video player using ExoPlayer.
+          The developer (Marcel Dopita) updates frequently,
+          and pre-compiled binaries for native extensions are committed to its repo.
+
+----------------------------------------------------------------------------------------------------

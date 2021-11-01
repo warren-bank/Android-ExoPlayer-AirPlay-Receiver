@@ -537,6 +537,7 @@ public class RequestListenerThread extends Thread {
         String playUrl   = null;
         String textUrl   = null;
         String referUrl  = null;
+        String useCache  = null;
         String startPos  = null;
         String stopPos   = null;
         String drmScheme = null;
@@ -565,6 +566,7 @@ public class RequestListenerThread extends Thread {
           playUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("content-location"));
           textUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("caption-location"));
           referUrl  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("referer"));
+          useCache  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("use-cache"));
           startPos  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("start-position"));
           stopPos   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("stop-position"));
           drmScheme = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("drm-license-scheme"));
@@ -597,6 +599,7 @@ public class RequestListenerThread extends Thread {
           dataMap.put(Constant.PlayURL,    playUrl);
           dataMap.put(Constant.CaptionURL, textUrl);
           dataMap.put(Constant.RefererURL, referUrl);
+          dataMap.put(Constant.UseCache,   useCache);
           dataMap.put(Constant.Start_Pos,  startPos);
           dataMap.put(Constant.Stop_Pos,   stopPos);
           dataMap.put(Constant.DRM_Scheme, drmScheme);

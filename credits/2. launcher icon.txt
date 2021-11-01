@@ -1,6 +1,0 @@
-filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/launcher.png
-source:   https://www.iconfinder.com/icons/3324974/airplay_icon#png-256
-license:  Creative Commons (Attribution 3.0 Unported)
-            http://creativecommons.org/licenses/by/3.0/
-author:   Cole Bemis
-            https://www.iconfinder.com/colebemis

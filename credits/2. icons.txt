@@ -1,0 +1,48 @@
+----------------------------------------------------------------------------------------------------
+
+notification icons:
+===================
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/exoplayer_notification_icon_audio.png
+source:   https://github.com/google/material-design-icons/blob/4.0.0/png/image/audiotrack/materialicons/48dp/2x/baseline_audiotrack_black_48dp.png
+license:  Apache 2.0
+            https://github.com/google/material-design-icons/blob/4.0.0/LICENSE
+purpose:  used by ExoPlayer MediaSession extension while playing an audio track
+
+----------------------------------------
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/exoplayer_notification_icon_video.png
+source:   https://github.com/google/material-design-icons/blob/4.0.0/png/notification/ondemand_video/materialicons/48dp/2x/baseline_ondemand_video_black_48dp.png
+license:  Apache 2.0
+            https://github.com/google/material-design-icons/blob/4.0.0/LICENSE
+purpose:  used by ExoPlayer MediaSession extension while playing a video track
+
+----------------------------------------
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/exoplayer_notification_icon_download_active.png
+source:   https://github.com/google/material-design-icons/blob/4.0.0/png/file/download/materialiconssharp/48dp/2x/sharp_download_black_48dp.png
+license:  Apache 2.0
+            https://github.com/google/material-design-icons/blob/4.0.0/LICENSE
+purpose:  used by ExoPlayer DownloadService while a track is downloading for temporary storage in the local filesystem cache
+
+----------------------------------------
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/exoplayer_notification_icon_download_complete.png
+source:   https://github.com/google/material-design-icons/blob/4.0.0/png/file/download_done/materialiconssharp/48dp/2x/sharp_download_done_black_48dp.png
+license:  Apache 2.0
+            https://github.com/google/material-design-icons/blob/4.0.0/LICENSE
+purpose:  used by ExoPlayer DownloadService after a track has finished downloading for temporary storage in the local filesystem cache
+
+----------------------------------------------------------------------------------------------------
+
+launcher icon:
+==============
+
+filepath: android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/launcher.png
+source:   https://www.iconfinder.com/icons/3324974/airplay_icon#png-256
+license:  Creative Commons (Attribution 3.0 Unported)
+            http://creativecommons.org/licenses/by/3.0/
+author:   Cole Bemis
+            https://www.iconfinder.com/colebemis
+
+----------------------------------------------------------------------------------------------------

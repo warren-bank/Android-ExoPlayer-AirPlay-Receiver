@@ -53,6 +53,10 @@ body .contents textarea#intent_data {
   white-space: nowrap;
 }
 
+body .contents ul {
+  margin: 0;
+}
+
 body .contents .oneline {
   height: 2em;
   line-height: 2em;
@@ -140,6 +144,7 @@ window.onload  = () => {
   const $caption_url             = document.querySelector('input#caption_url')
   const $referer_url             = document.querySelector('input#referer_url')
   const $req_headers             = document.querySelector('textarea#req_headers')
+  const $use_cache               = document.querySelector('input#use_cache')
   const $start_position_hours    = document.querySelector('input#start_position_hours')
   const $start_position_minutes  = document.querySelector('input#start_position_minutes')
   const $start_position_seconds  = document.querySelector('input#start_position_seconds')
@@ -617,6 +622,8 @@ window.onload  = () => {
     const txt = $caption_url.value.trim()
     const ref = $referer_url.value.trim()
 
+    const use_cache = $use_cache.checked ? 'true' : 'false'
+
     const start_offset = get_time_offset('start')
     const stop_offset  = get_time_offset('stop')
 
@@ -641,6 +648,9 @@ window.onload  = () => {
     }
     if (req_headers) {
       data += req_headers
+    }
+    if (use_cache) {
+      data += `\nUse-Cache: ${use_cache}`
     }
     if (start_offset > 0) {
       data += `\nStart-Position: ${start_offset}`
@@ -1040,6 +1050,7 @@ window.onload  = () => {
       'flag: 0x00008000',
       `extra-referUrl:  ${$referer_url.value.trim()}`,
       `extra-textUrl:   ${$caption_url.value.trim()}`,
+      `extra-useCache:  ${$use_cache.checked ? 'true' : 'false'}`,
       `extra-startPos:  ${start_offset ? start_offset : ''}`,
       `extra-stopPos:   ${stop_offset  ? stop_offset  : ''}`,
       `extra-drmScheme: ${$drm_license_scheme.value.trim()}`,
@@ -1224,6 +1235,31 @@ window.onload  = () => {
           </td>
           <td class="oneline left">
             <textarea id="req_headers" rows="5"></textarea>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td class="right">
+            <label for="use_cache">Use Cache:</label>
+          </td>
+          <td class="left">
+            <table align="left">
+              <tr valign="top">
+                <td>
+                  <input id="use_cache" type="checkbox" />
+                </td>
+                <td>
+                  <ul>
+                    <li>download to prefetch video for temporary storage in the local filesystem cache, and delete at shutdown</li>
+                    <li>does not support:
+                      <ul>
+                        <li>live streams</li>
+                        <li>[Android &lt; 4.3] DRM protected streams</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>

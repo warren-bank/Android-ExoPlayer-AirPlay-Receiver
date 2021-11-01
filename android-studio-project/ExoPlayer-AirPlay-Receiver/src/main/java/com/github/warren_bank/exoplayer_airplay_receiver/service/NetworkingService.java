@@ -22,7 +22,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.util.Log;
@@ -72,7 +74,7 @@ public class NetworkingService extends Service {
     // Handler runs in UI Thread.
     // SimpleExoPlayer requires that all interaction occurs in the same Thread it was initialized.
     //   note: all network requests will need to occur in a separate Thread.
-    handler = new MyMessageHandler(getMainLooper(), NetworkingService.this);
+    handler = new MyMessageHandler(Looper.getMainLooper(), NetworkingService.this);
     MainApp.registerHandler(NetworkingService.class.getName(), handler);
 
     Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_registration_started), Toast.LENGTH_SHORT);
@@ -150,7 +152,15 @@ public class NetworkingService extends Service {
           Log.e(tag, "problem shutting down HTTP server and Bonjour services", e);
         }
         finally {
-          Process.killProcess(Process.myPid()); //Quit the program completely
+          // wait a few moments to allow cleanup to complete, then quit the program by forcefully killing the process.
+          // the only cleanup that may occur is the deletion of all downloaded files from the cache directory.
+          final Handler handler = new Handler(Looper.getMainLooper());
+          handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              Process.killProcess(Process.myPid());
+            }
+          }, 7500);
         }
       }
     }.start();
@@ -395,6 +405,7 @@ public class NetworkingService extends Service {
           dataMap.put(Constant.PlayURL,    intent.getStringExtra(Constant.PlayURL)    );
           dataMap.put(Constant.CaptionURL, intent.getStringExtra(Constant.CaptionURL) );
           dataMap.put(Constant.RefererURL, intent.getStringExtra(Constant.RefererURL) );
+          dataMap.put(Constant.UseCache,   intent.getStringExtra(Constant.UseCache)   );
           dataMap.put(Constant.Start_Pos,  intent.getStringExtra(Constant.Start_Pos)  );
           dataMap.put(Constant.Stop_Pos,   intent.getStringExtra(Constant.Stop_Pos)   );
           dataMap.put(Constant.DRM_Scheme, intent.getStringExtra(Constant.DRM_Scheme) );

@@ -1,5 +1,10 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
+/*
+ * based on:
+ *   https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/java/com/google/android/exoplayer2/demo/TrackSelectionDialog.java
+ */
+
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 
 import android.app.Dialog;

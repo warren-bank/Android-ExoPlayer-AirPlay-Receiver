@@ -1,6 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
 
 import android.content.Context;
 import android.os.Looper;
@@ -15,9 +15,7 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
   public MyRenderersFactory(Context context) {
     super(
       context,
-      /* int extensionRendererMode = */ BuildConfig.USE_DECODER_EXTENSIONS
-        ? DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON
-        : DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
+      /* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(/* boolean preferExtensionRenderer= */ false)
     );
     textRenderer = null;
   }
