@@ -4,6 +4,28 @@
   <meta charset="UTF-8" />
   <title>AirPlay sender</title>
   <link rel="icon" href="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v1.0.0/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/drawable/launcher.png" type="image/x-icon" />
+  <script>
+    // use feature detection to determine whether the browser's javascript engine supports ES6.
+    // if not, redirect to an ES5 version of this page.
+
+    (function(){
+      var supports_es6 = function() {
+        "use strict";
+
+        try { eval("const foo = (x)=>x+1"); }
+        catch (e) { return false; }
+        return true;
+      }
+
+      var redirect_to_es5 = function() {
+        window.location = window.location.href.replace('sender.html', 'sender.es5.html')
+      }
+
+      if (!supports_es6()) {
+        redirect_to_es5()
+      }
+    })()
+  </script>
   <style>
 
 * {
