@@ -42,74 +42,93 @@ body {
   text-align: center;
 }
 
-body .contents {
-  margin 0 auto;
+body > div.contents {
+  margin: 0 auto;
   display: inline-block;
+
+  position: relative;
+  z-index: 0;
 }
 
-body .contents > h3 {
+body > div.contents > button#ui_mode {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.75em;
+}
+
+body > div.contents[x-ui-mode="basic"] .advanced_ui_mode {
+  display: none !important;
+}
+
+body > div.contents > div.section > h3 {
   margin-top: 0.75em;
   margin-bottom: 0.75em;
 }
-body .contents > h3:first-child {
+body > div.contents > div.section > h3:first-child {
   margin-top: 0;
 }
 
-body .contents > div {
+body > div.contents > div.section > div {
   display: inline-block;
 }
 
-body .contents div {
+body > div.contents > div.section div {
   margin-bottom: 0.75em;
 }
-body .contents div:last-child {
+body > div.contents > div.section div:last-child {
   margin-bottom: 0;
 }
 
-body .contents textarea {
+body > div.contents > div.section textarea {
   width: 100%;
 }
-body .contents textarea#req_headers,
-body .contents textarea#drm_headers,
-body .contents textarea#intent_data {
+body > div.contents > div.section textarea#req_headers,
+body > div.contents > div.section textarea#drm_headers,
+body > div.contents > div.section textarea#intent_data {
   white-space: nowrap;
 }
 
-body .contents ul {
+body > div.contents > div.section select#toast_variables {
+  width: 8em;
+  padding: 4px;
+}
+
+body > div.contents > div.section ul {
   margin: 0;
 }
 
-body .contents .oneline {
+body > div.contents > div.section .oneline {
   height: 2em;
   line-height: 2em;
   white-space: nowrap;
 }
-body .contents .oneline > * {
+body > div.contents > div.section .oneline > * {
   height: 100%;
   vertical-align: middle;
 }
-body .contents .oneline.fullwidth > * {
+body > div.contents > div.section .oneline.fullwidth > * {
   width: 100%;
 }
 
-body .contents .left {
+body > div.contents > div.section .left {
   text-align: left;
 }
 
-body .contents .right {
+body > div.contents > div.section .right {
   text-align: right;
 }
 
-body .contents div.flex {
+body > div.contents > div.section div.flex {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
-body .contents div.flex > div {
+body > div.contents > div.section div.flex > div {
   flex-grow: 0;
   flex-shrink: 0;
 }
-body .contents div.flex > div:first-child {
+body > div.contents > div.section div.flex > div:first-child {
   flex-grow: 1;
   padding: 0 1em;
 }
@@ -134,11 +153,6 @@ input[type="number"] {
   width: 10em;
 }
 
-select#toast_variables {
-  width: 8em;
-  padding: 4px;
-}
-
 input[type="file"] {
   display: none;
 }
@@ -159,6 +173,8 @@ window.onload  = () => {
   // ===============================================================================================
   // form fields
 
+  const $contents                = document.querySelector('body > div.contents')
+  const $ui_mode                 = document.querySelector('button#ui_mode')
   const $airplay_host            = document.querySelector('input#airplay_host')
   const $airplay_port            = document.querySelector('input#airplay_port')
   const $airplay_tls             = document.querySelector('input#airplay_tls')
@@ -816,6 +832,27 @@ window.onload  = () => {
   // ===============================================================================================
   // add event listeners to form fields
 
+  $ui_mode.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const button        = event.target
+    const basic_ui_mode = ($contents.getAttribute('x-ui-mode') === 'basic')
+
+    if (basic_ui_mode) {
+      // switch from basic to advanced
+
+      $contents.setAttribute('x-ui-mode', 'advanced')
+      button.innerText = 'show basic mode'
+    }
+    else {
+      // switch from advanced to basic
+
+      $contents.setAttribute('x-ui-mode', 'basic')
+      button.innerText = 'show advanced mode'
+    }
+  }
+
   $play.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -1193,394 +1230,413 @@ window.onload  = () => {
   </script>
 </head>
 <body>
-  <div class="contents">
-    <h3>Network Address of AirPlay Receiver:</h3>
-    <div>
-      <table align="center">
-        <tr>
-          <td class="oneline right">
-            <label for="airplay_host">Host:</label>
-          </td>
-          <td class="oneline left">
-            <input id="airplay_host" type="text" size="15" placeholder="192.168.0.100" />
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label for="airplay_port">Port:</label>
-          </td>
-          <td class="oneline left">
-            <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" min="1" max="999999" step="1" size="6" placeholder="8192" />
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label for="airplay_tls">HTTPS:</label>
-          </td>
-          <td class="oneline left">
-            <input id="airplay_tls" type="checkbox" />
-          </td>
-        </tr>
-      </table>
-    </div>
-    <hr />
-    <h3>Network Location of Video Media:</h3>
-    <div>
-      <table align="center">
-        <tr>
-          <td class="oneline right">
-            <label for="video_url">Video URL:</label>
-          </td>
-          <td class="oneline left">
-            <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label for="caption_url">Caption URL:</label>
-          </td>
-          <td class="oneline left">
-            <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label for="referer_url">Referer URL:</label>
-          </td>
-          <td class="oneline left">
-            <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label for="req_headers">HTTP Headers:</label>
-          </td>
-          <td class="oneline left">
-            <textarea id="req_headers" rows="5"></textarea>
-          </td>
-        </tr>
-        <tr valign="top">
-          <td class="right">
-            <label for="use_cache">Use Cache:</label>
-          </td>
-          <td class="left">
-            <table align="left">
-              <tr valign="top">
-                <td>
-                  <input id="use_cache" type="checkbox" />
-                </td>
-                <td>
-                  <ul>
-                    <li>download to prefetch video for temporary storage in the local filesystem cache, and delete at shutdown</li>
-                    <li>does not support:
-                      <ul>
-                        <li>live streams</li>
-                        <li>[Android &lt; 4.3] DRM protected streams</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label>Start Position:</label>
-          </td>
-          <td class="oneline left">
-            <table align="left">
-              <tr>
-                <td class="oneline">
-                  <input id="start_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
-                </td>
-                <td class="oneline">
-                  <input id="start_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
-                </td>
-                <td class="oneline">
-                  <input id="start_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label>Stop Position:</label>
-          </td>
-          <td class="oneline left">
-            <table align="left">
-              <tr>
-                <td class="oneline">
-                  <input id="stop_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
-                </td>
-                <td class="oneline">
-                  <input id="stop_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
-                </td>
-                <td class="oneline">
-                  <input id="stop_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label>DRM:</label>
-          </td>
-          <td class="oneline left">
-            <table align="left" width="100%">
-              <tr>
-                <td class="oneline">
-                  <select id="drm_license_scheme">
-                    <option value="">Scheme:</option>
-                    <option value="widevine">Widevine</option>
-                    <option value="clearkey">ClearKey</option>
-                    <option value="playready">PlayReady</option>
-                  </select>
-                </td>
-                <td class="oneline" width="100%">
-                  <input id="drm_license_server" type="url" style="width: 100%;" placeholder="https://widevine.example.com/" />
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline right">
-            <label for="drm_headers">DRM Headers:</label>
-          </td>
-          <td class="oneline left">
-            <textarea id="drm_headers" rows="5"></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline" colspan=2>
-            <button id="play">Play</button>
-            <button id="queue">Add to Queue</button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <hr />
-    <h3>Remote Control of Video Playback:</h3>
-    <div>
-      <table align="center">
-        <tr>
-          <td class="oneline fullwidth">
-            <button id="pause">Pause</button>
-          </td>
-          <td class="oneline fullwidth">
-            <button id="resume">Resume</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline fullwidth">
-            <button id="captions_on">CC On</button>
-          </td>
-          <td class="oneline fullwidth">
-            <button id="captions_off">CC Off</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline fullwidth">
-            <button id="previous">Previous</button>
-          </td>
-          <td class="oneline fullwidth">
-            <button id="next">Next</button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=2 align="center" class="oneline">
-            <button id="stop">Stop</button>
-          </td>
-        </tr>
-      </table>
-      <table align="center">
-        <tr>
-          <td class="oneline">
-            <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
-          </td>
-          <td class="oneline">
-            <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
-          </td>
-          <td class="oneline">
-            <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
-          </td>
-          <td class="oneline fullwidth">
-            <button id="seek">Seek to Position</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline">
-            <input id="seek_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
-          </td>
-          <td class="oneline">
-            <input id="seek_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
-          </td>
-          <td class="oneline">
-            <input id="seek_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
-          </td>
-          <td class="oneline fullwidth">
-            <button id="seek_offset">Add to Position</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline">
-            <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
-          </td>
-          <td class="oneline">
-            <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
-          </td>
-          <td class="oneline">
-            <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
-          </td>
-          <td class="oneline fullwidth">
-            <button id="set_txt_offset">Set CC Offset</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline">
-            <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
-          </td>
-          <td class="oneline">
-            <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
-          </td>
-          <td class="oneline">
-            <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
-          </td>
-          <td class="oneline fullwidth">
-            <button id="add_txt_offset">Add CC Offset</button>
-          </td>
-        </tr>
-      </table>
-      <table align="center">
-        <tr>
-          <td class="oneline">
-            <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" min="0" max="1000" step="0.1" size="3" placeholder="1.0" />
-          </td>
-          <td class="oneline fullwidth">
-            <button id="rate">Change Speed</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="oneline">
-            <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="51" x-step="0.001" min="0" max="51" step="0.1" size="3" placeholder="1.0" />
-          </td>
-          <td class="oneline fullwidth">
-            <button id="volume">Change Volume</button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <hr />
-    <h3>User Interface:</h3>
-    <div class="flex">
+  <div class="contents" x-ui-mode="basic">
+    <button id="ui_mode">show advanced mode</button>
+
+    <div class="section">
+      <h3>Network Address of AirPlay Receiver:</h3>
       <div>
-        <textarea id="toast_message" rows="5"></textarea>
+        <table align="center">
+          <tr>
+            <td class="oneline right">
+              <label for="airplay_host">Host:</label>
+            </td>
+            <td class="oneline left">
+              <input id="airplay_host" type="text" size="15" placeholder="192.168.0.100" />
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline right">
+              <label for="airplay_port">Port:</label>
+            </td>
+            <td class="oneline left">
+              <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" min="1" max="999999" step="1" size="6" placeholder="8192" />
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline right">
+              <label for="airplay_tls">HTTPS:</label>
+            </td>
+            <td class="oneline left">
+              <input id="airplay_tls" type="checkbox" />
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <hr />
+      <h3>Network Location of Video Media:</h3>
+      <div>
+        <table align="center">
+          <tr>
+            <td class="oneline right">
+              <label for="video_url">Video URL:</label>
+            </td>
+            <td class="oneline left">
+              <input id="video_url" type="url" size="100" placeholder="https://example.com/master.m3u8" />
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline right">
+              <label for="caption_url">Caption URL:</label>
+            </td>
+            <td class="oneline left">
+              <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline right">
+              <label for="referer_url">Referer URL:</label>
+            </td>
+            <td class="oneline left">
+              <input id="referer_url" type="url" size="100" placeholder="https://example.com/videos.html" />
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline right">
+              <label for="req_headers">HTTP Headers:</label>
+            </td>
+            <td class="oneline left">
+              <textarea id="req_headers" rows="5"></textarea>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode" valign="top">
+            <td class="right">
+              <label for="use_cache">Use Cache:</label>
+            </td>
+            <td class="left">
+              <table align="left">
+                <tr valign="top">
+                  <td>
+                    <input id="use_cache" type="checkbox" />
+                  </td>
+                  <td>
+                    <ul>
+                      <li>download to prefetch video for temporary storage in the local filesystem cache, and delete at shutdown</li>
+                      <li>does not support:
+                        <ul>
+                          <li>live streams</li>
+                          <li>[Android &lt; 4.3] DRM protected streams</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline right">
+              <label>Start Position:</label>
+            </td>
+            <td class="oneline left">
+              <table align="left">
+                <tr>
+                  <td class="oneline">
+                    <input id="start_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
+                  </td>
+                  <td class="oneline">
+                    <input id="start_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
+                  </td>
+                  <td class="oneline">
+                    <input id="start_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline right">
+              <label>Stop Position:</label>
+            </td>
+            <td class="oneline left">
+              <table align="left">
+                <tr>
+                  <td class="oneline">
+                    <input id="stop_position_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
+                  </td>
+                  <td class="oneline">
+                    <input id="stop_position_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
+                  </td>
+                  <td class="oneline">
+                    <input id="stop_position_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline right">
+              <label>DRM:</label>
+            </td>
+            <td class="oneline left">
+              <table align="left" width="100%">
+                <tr>
+                  <td class="oneline">
+                    <select id="drm_license_scheme">
+                      <option value="">Scheme:</option>
+                      <option value="widevine">Widevine</option>
+                      <option value="clearkey">ClearKey</option>
+                      <option value="playready">PlayReady</option>
+                    </select>
+                  </td>
+                  <td class="oneline" width="100%">
+                    <input id="drm_license_server" type="url" style="width: 100%;" placeholder="https://widevine.example.com/" />
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline right">
+              <label for="drm_headers">DRM Headers:</label>
+            </td>
+            <td class="oneline left">
+              <textarea id="drm_headers" rows="5"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline" colspan=2>
+              <button id="play">Play</button>
+              <button id="queue">Add to Queue</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <hr />
+      <h3>Remote Control of Video Playback:</h3>
+      <div>
+        <table align="center">
+          <tr>
+            <td class="oneline fullwidth">
+              <button id="pause">Pause</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="resume">Resume</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline fullwidth">
+              <button id="captions_on">CC On</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="captions_off">CC Off</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline fullwidth">
+              <button id="previous">Previous</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="next">Next</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan=2 align="center" class="oneline">
+              <button id="stop">Stop</button>
+            </td>
+          </tr>
+        </table>
+        <table align="center">
+          <tr>
+            <td class="oneline">
+              <input id="seek_hours"   type="number" x-type="range" x-min="0" x-max="24" x-step="1" min="0" max="24" step="1" size="3" placeholder="hour" /> : 
+            </td>
+            <td class="oneline">
+              <input id="seek_minutes" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="min" /> : 
+            </td>
+            <td class="oneline">
+              <input id="seek_seconds" type="number" x-type="range" x-min="0" x-max="59" x-step="1" min="0" max="59" step="1" size="3" placeholder="sec" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="seek">Seek to Position</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline">
+              <input id="seek_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
+            </td>
+            <td class="oneline">
+              <input id="seek_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
+            </td>
+            <td class="oneline">
+              <input id="seek_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="seek_offset">Add to Position</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="set_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
+            </td>
+            <td class="oneline">
+              <input id="set_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
+            </td>
+            <td class="oneline">
+              <input id="set_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="set_txt_offset">Set CC Offset</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline">
+              <input id="add_txt_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
+            </td>
+            <td class="oneline">
+              <input id="add_txt_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
+            </td>
+            <td class="oneline">
+              <input id="add_txt_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="add_txt_offset">Add CC Offset</button>
+            </td>
+          </tr>
+        </table>
+        <table align="center">
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" min="0" max="1000" step="0.1" size="3" placeholder="1.0" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="rate">Change Speed</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="51" x-step="0.001" min="0" max="51" step="0.1" size="3" placeholder="1.0" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="volume">Change Volume</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <hr />
+      <h3>User Interface:</h3>
+      <div class="advanced_ui_mode flex">
+        <div>
+          <textarea id="toast_message" rows="5"></textarea>
+        </div>
+        <div>
+          <div>
+            <select id="toast_variables">
+              <option value="">Add Variable:</option>
+              <option value="{{video-uri}}">Video URI</option>
+              <option value="{{video-caption}}">Caption URI</option>
+              <option value="{{video-req-headers}}">Video HTTP Headers</option>
+              <option value="{{video-drm-scheme}}">DRM Scheme</option>
+              <option value="{{video-drm-server}}">DRM License Server URL</option>
+              <option value="{{video-drm-headers}}">DRM HTTP Headers</option>
+              <option value="{{date}}">Date</option>
+              <option value="{{time}}">Time</option>
+              <option value="{{version}}">ExoAirPlayer Version</option>
+              <option value="{{abi}}">ABIs Supported by Device</option>
+              <option value="{{top-process}}">[Android &lt; 5.1.1] Package Name of Top Process</option>
+              <option value="{{top-activity}}">[Android &lt; 5.0.0] Class Name of Top Activity</option>
+            </select>
+          </div>
+          <div><button id="show_toast">Show Toast</button></div>
+        </div>
       </div>
       <div>
+        <table align="center">
+          <tr>
+            <td class="oneline fullwidth">
+              <button id="hide_player">Hide Player</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="show_player">Show Player</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan=2 align="center" class="oneline">
+              <button id="exit_service">Quit Application</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="advanced_ui_mode section">
+      <hr />
+      <h3>Start Activity:</h3>
+      <div class="flex">
         <div>
-          <select id="toast_variables">
-            <option value="">Add Variable:</option>
-            <option value="{{video-uri}}">Video URI</option>
-            <option value="{{video-caption}}">Caption URI</option>
-            <option value="{{video-req-headers}}">Video HTTP Headers</option>
-            <option value="{{video-drm-scheme}}">DRM Scheme</option>
-            <option value="{{video-drm-server}}">DRM License Server URL</option>
-            <option value="{{video-drm-headers}}">DRM HTTP Headers</option>
-            <option value="{{date}}">Date</option>
-            <option value="{{time}}">Time</option>
-            <option value="{{version}}">ExoAirPlayer Version</option>
-            <option value="{{abi}}">ABIs Supported by Device</option>
-            <option value="{{top-process}}">[Android &lt; 5.1.1] Package Name of Top Process</option>
-            <option value="{{top-activity}}">[Android &lt; 5.0.0] Class Name of Top Activity</option>
+          <textarea id="intent_data" rows="18"></textarea>
+        </div>
+        <div>
+          <div><button id="load_video">Load Video</button></div>
+          <div><button id="send_intent">Send Intent</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="advanced_ui_mode section">
+      <hr />
+      <div class="flex">
+        <div>
+          <h3>Sample Videos:</h3>
+          <select id="sample_videos">
+            <option value="0">-- video --</option>
+            <option value="1"
+                    x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8"
+                    x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt"
+                    x-referer-url="https://players.akamai.com/hls/"
+                    x-start-position="00:00:30"
+                   >Big Buck Bunny (vid:hls, subs:srt, pos:30s)</option>
+            <option value="2"
+                    x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
+                    x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"
+                    x-referer-url="https://players.akamai.com/hls/"
+                   >Sintel (vid:hls, subs:srt)</option>
+            <option value="3"
+                    x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest"
+                    x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt"
+                    x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html"
+                   >Tears Of Steel (vid:dash, subs:vtt)</option>
+            <option value="4"
+                    x-video-url="https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd"
+                    x-drm-license-scheme="widevine"
+                    x-drm-license-server="https://proxy.uat.widevine.com/proxy?provider=widevine_test"
+                   >Tears Of Steel (vid:dash, drm:widevine)</option>
+            <option value="5"
+                    x-video-url="https://html5demos.com/assets/dizzy.mp4"
+                    x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml"
+                    x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598"
+                   >Dizzy (vid:mp4, subs:ttml)</option>
+            <option value="6"
+                    x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4"
+                    x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass"
+                    x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605"
+                   >Sample (vid:mp4, subs:ssa)</option>
+            <option value="7"
+                    x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u"
+                    x-caption-url=""
+                    x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore"
+                   >Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
+            <option value="8"
+                    x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/"
+                    x-caption-url=""
+                    x-referer-url="https://archive.org/details/tntvillage_455310"
+                   >Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1967) Live From New York City</option>
           </select>
         </div>
-        <div><button id="show_toast">Show Toast</button></div>
-      </div>
-    </div>
-    <div>
-      <table align="center">
-        <tr>
-          <td class="oneline fullwidth">
-            <button id="hide_player">Hide Player</button>
-          </td>
-          <td class="oneline fullwidth">
-            <button id="show_player">Show Player</button>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=2 align="center" class="oneline">
-            <button id="exit_service">Quit Application</button>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <hr />
-    <h3>Start Activity:</h3>
-    <div class="flex">
-      <div>
-        <textarea id="intent_data" rows="18"></textarea>
-      </div>
-      <div>
-        <div><button id="load_video">Load Video</button></div>
-        <div><button id="send_intent">Send Intent</button></div>
-      </div>
-    </div>
-    <hr />
-    <div class="flex">
-      <div>
-        <h3>Sample Videos:</h3>
-        <select id="sample_videos">
-          <option value="0">-- video --</option>
-          <option value="1"
-                  x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8"
-                  x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt"
-                  x-referer-url="https://players.akamai.com/hls/"
-                  x-start-position="00:00:30"
-                 >Big Buck Bunny (vid:hls, subs:srt, pos:30s)</option>
-          <option value="2"
-                  x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
-                  x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"
-                  x-referer-url="https://players.akamai.com/hls/"
-                 >Sintel (vid:hls, subs:srt)</option>
-          <option value="3"
-                  x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest"
-                  x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt"
-                  x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html"
-                 >Tears Of Steel (vid:dash, subs:vtt)</option>
-          <option value="4"
-                  x-video-url="https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd"
-                  x-drm-license-scheme="widevine"
-                  x-drm-license-server="https://proxy.uat.widevine.com/proxy?provider=widevine_test"
-                 >Tears Of Steel (vid:dash, drm:widevine)</option>
-          <option value="5"
-                  x-video-url="https://html5demos.com/assets/dizzy.mp4"
-                  x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml"
-                  x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598"
-                 >Dizzy (vid:mp4, subs:ttml)</option>
-          <option value="6"
-                  x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4"
-                  x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass"
-                  x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605"
-                 >Sample (vid:mp4, subs:ssa)</option>
-          <option value="7"
-                  x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u"
-                  x-caption-url=""
-                  x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore"
-                 >Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
-          <option value="8"
-                  x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/"
-                  x-caption-url=""
-                  x-referer-url="https://archive.org/details/tntvillage_455310"
-                 >Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1967) Live From New York City</option>
-        </select>
-      </div>
-      <div>
-        <h3>Display Image:</h3>
-        <button><label for="image_file">Choose File</label></button>
-        <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
+        <div>
+          <h3>Display Image:</h3>
+          <button><label for="image_file">Choose File</label></button>
+          <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
+        </div>
       </div>
     </div>
 
