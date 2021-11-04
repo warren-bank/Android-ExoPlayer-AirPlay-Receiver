@@ -887,10 +887,20 @@ public final class PlayerManager implements EventListener {
 
   /**
    * Delete files on internal storage used to temporarily cache video data.
+   * Cancel all active and pending cache download operations.
    */
   public void AirPlay_delete_cache() {
     if (downloadTracker != null)
       downloadTracker.removeAllDownloads();
+
+    if (mediaQueue != null) {
+      for (int i = 0; i < mediaQueue.size(); i++) {
+        VideoSource sample = mediaQueue.get(i);
+
+        if (sample.useCache)
+          sample.updateUseCache(false);
+      }
+    }
   }
 
   // Miscellaneous methods.

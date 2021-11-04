@@ -20,7 +20,7 @@ public final class VideoSource {
   public       String caption_mimeType;
   public final String referer;
   public final HashMap<String, String> reqHeadersMap;
-  public final boolean useCache;
+  public       boolean useCache;
   public final float startPosition;
   public final float stopPosition;
   public final String drm_scheme;
@@ -145,6 +145,10 @@ public final class VideoSource {
 
     this.caption            = caption;
     this.caption_mimeType   = caption_mimeType;
+  }
+
+  public void updateUseCache(boolean useCache) {
+    this.useCache           = useCache;
   }
 
   public MediaItem getMediaItem() {
