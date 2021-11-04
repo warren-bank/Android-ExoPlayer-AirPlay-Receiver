@@ -526,6 +526,54 @@ public final class PlayerManager implements EventListener {
   }
 
   /**
+   * Update the {@code caption} for the current media queue {@link VideoSource} and corresponding playlist {@link MediaSource}.
+   *
+   * @param caption The URL to a file containing text captions (srt or vtt).
+   */
+  public void loadCaptions(String caption) {
+    if ((mediaQueue == null) || (concatenatingMediaSource == null))
+      return;
+    if (currentItemIndex == C.INDEX_UNSET)
+      return;
+    if (TextUtils.isEmpty(caption))
+      return;
+
+    int sample_index = currentItemIndex;
+    long positionMs  = exoPlayer.getCurrentPosition();
+
+    VideoSource sample = getItem(sample_index);
+    if (sample == null)
+      return;
+
+    if (caption.equals(sample.caption))
+      return;
+
+    currentItemIndex = C.INDEX_UNSET;
+    exoPlayer.setPlayWhenReady(false);
+    exoPlayer.retry();
+
+    sample.updateCaption(caption);
+    MediaSource mediaSource = buildMediaSource(sample);
+
+    Runnable addCompletionAction = new Runnable() {
+      @Override
+      public void run() {
+        selectQueueItem(sample_index);
+        exoPlayer.seekTo(sample_index, positionMs);
+      }
+    };
+
+    Runnable removeCompletionAction = new Runnable() {
+      @Override
+      public void run() {
+        concatenatingMediaSource.addMediaSource(sample_index, mediaSource, handler, addCompletionAction);
+      }
+    };
+
+    concatenatingMediaSource.removeMediaSource(sample_index, handler, removeCompletionAction);
+  }
+
+  /**
    * @return The size of the media queue.
    */
   public int getMediaQueueSize() {

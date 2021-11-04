@@ -15,9 +15,9 @@ public final class VideoSource {
   public static String DEFAULT_USER_AGENT = null;
 
   public final String uri;
-  public final String caption;
   public final String uri_mimeType;
-  public final String caption_mimeType;
+  public       String caption;
+  public       String caption_mimeType;
   public final String referer;
   public final HashMap<String, String> reqHeadersMap;
   public final boolean useCache;
@@ -120,8 +120,8 @@ public final class VideoSource {
     }
 
     this.uri                = uri;
-    this.caption            = caption;
     this.uri_mimeType       = uri_mimeType;
+    this.caption            = caption;
     this.caption_mimeType   = caption_mimeType;
     this.referer            = referer;
     this.reqHeadersMap      = reqHeadersMap;
@@ -138,6 +138,13 @@ public final class VideoSource {
   @Override
   public String toString() {
     return uri;
+  }
+
+  public void updateCaption(String caption) {
+    String caption_mimeType = MediaTypeUtils.get_caption_mimeType(caption);
+
+    this.caption            = caption;
+    this.caption_mimeType   = caption_mimeType;
   }
 
   public MediaItem getMediaItem() {

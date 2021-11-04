@@ -178,18 +178,19 @@ public class Constant {
         public static final int Msg_Video_Next                  =  8;
         public static final int Msg_Video_Prev                  =  9;
         public static final int Msg_Audio_Volume                = 10;
-        public static final int Msg_Text_Show                   = 11;
-        public static final int Msg_Text_Set_Time               = 12;
-        public static final int Msg_Text_Add_Time               = 13;
+        public static final int Msg_Text_Load                   = 11;
+        public static final int Msg_Text_Show                   = 12;
+        public static final int Msg_Text_Set_Time               = 13;
+        public static final int Msg_Text_Add_Time               = 14;
 
-        public static final int Msg_Show_Toast                  = 14;
-        public static final int Msg_Show_Player                 = 15;
-        public static final int Msg_Hide_Player                 = 16;
-        public static final int Msg_Start_Activity              = 17;
-        public static final int Msg_Delete_Cache                = 18;
-        public static final int Msg_Exit_Service                = 19;
+        public static final int Msg_Show_Toast                  = 15;
+        public static final int Msg_Show_Player                 = 16;
+        public static final int Msg_Hide_Player                 = 17;
+        public static final int Msg_Start_Activity              = 18;
+        public static final int Msg_Delete_Cache                = 19;
+        public static final int Msg_Exit_Service                = 20;
 
-        public static final int Msg_Runtime_Permissions_Granted = 20;
+        public static final int Msg_Runtime_Permissions_Granted = 21;
     }
 
     public interface Target {
@@ -207,6 +208,7 @@ public class Constant {
         public static final String NEXT                         = "/next";
         public static final String PREVIOUS                     = "/previous";
         public static final String VOLUME                       = "/volume";
+        public static final String TXT_LOAD                     = "/load-captions";
         public static final String TXT_SHOW                     = "/show-captions";
         public static final String TXT_SET_OFFSET               = "/set-captions-offset";
         public static final String TXT_ADD_OFFSET               = "/add-captions-offset";

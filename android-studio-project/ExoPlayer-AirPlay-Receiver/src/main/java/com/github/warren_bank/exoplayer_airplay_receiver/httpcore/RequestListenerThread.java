@@ -620,6 +620,29 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         }
       }
+      else if ((entityContent != null) && target.equals(Constant.Target.TXT_LOAD)) { //Load new text captions for current video in queue
+        String requestBody;
+        requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+        Log.d(tag, " airplay load caption request content = " + requestBody);
+
+        HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
+        String textUrl = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("caption-location"));
+
+        if (!TextUtils.isEmpty(textUrl)) {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Text_Load;
+          msg.obj = textUrl;
+          MainApp.broadcastMessage(msg);
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        }
+        else {
+          Log.d(tag, "airplay caption URL missing");
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+        }
+      }
       else if (target.startsWith(Constant.Target.SCRUB_OFFSET)) { //perform seek operation relative to position of current video
         String value = StringUtils.getQueryStringValue(target, "?value=");
         if (!TextUtils.isEmpty(value)) {

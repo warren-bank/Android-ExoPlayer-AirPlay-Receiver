@@ -275,6 +275,13 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/volume?value=11.5"
   ```
+* load new text captions for current video in queue:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Caption-Location: ${caption_url_1}" \
+      "http://${airplay_ip}/load-captions"
+  ```
 * turn text captions off:
   ```bash
     curl --silent -X GET \
@@ -457,6 +464,13 @@ __extended APIs:__
       - use key on multiple lines to declare more than one value
   - keys required:
     * _content-location_
+* POST data sent in requests to `/load-captions` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys are not case sensitive
+  - recognized keys include:
+    * _caption-location_
 * POST data sent in requests to `/start-activity` API endpoint:
   - contains one _key:value_ pair per line of text
   - lines of text containing unrecognized keys are ignored

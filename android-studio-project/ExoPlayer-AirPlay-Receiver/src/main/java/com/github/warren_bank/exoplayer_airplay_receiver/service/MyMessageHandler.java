@@ -237,6 +237,16 @@ final class MyMessageHandler extends Handler {
       }
 
       // =======================================================================
+      // Update caption URL to current video in ExoPlayer queue.
+      // =======================================================================
+
+      case Constant.Msg.Msg_Text_Load : {
+        String textUrl = (String) msg.obj;
+        playerManager.loadCaptions(textUrl);
+        break;
+      }
+
+      // =======================================================================
       // ExoPlayer playback controls:
       // =======================================================================
 

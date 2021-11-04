@@ -195,6 +195,7 @@ window.onload  = () => {
   const $drm_headers             = document.querySelector('textarea#drm_headers')
   const $play                    = document.querySelector('button#play')
   const $queue                   = document.querySelector('button#queue')
+  const $load_captions           = document.querySelector('button#load_captions')
   const $pause                   = document.querySelector('button#pause')
   const $resume                  = document.querySelector('button#resume')
   const $captions_on             = document.querySelector('button#captions_on')
@@ -871,6 +872,18 @@ window.onload  = () => {
     send_video_POST_data(path)
   }
 
+  $load_captions.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/load-captions'
+    const txt  = $caption_url.value.trim()
+    const data = `Caption-Location: ${txt}`
+
+    if (txt)
+      send_message(path, data)
+  }
+
   $pause.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -1410,9 +1423,14 @@ window.onload  = () => {
             </td>
           </tr>
           <tr>
-            <td class="oneline" colspan=2>
+            <td colspan=2 align="center" class="oneline">
               <button id="play">Play</button>
               <button id="queue">Add to Queue</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td colspan=2 align="center" class="oneline">
+              <button id="load_captions">Load Captions</button>
             </td>
           </tr>
         </table>
