@@ -186,9 +186,10 @@ public class Constant {
         public static final int Msg_Show_Player                 = 15;
         public static final int Msg_Hide_Player                 = 16;
         public static final int Msg_Start_Activity              = 17;
-        public static final int Msg_Exit_Service                = 18;
+        public static final int Msg_Delete_Cache                = 18;
+        public static final int Msg_Exit_Service                = 19;
 
-        public static final int Msg_Runtime_Permissions_Granted = 19;
+        public static final int Msg_Runtime_Permissions_Granted = 20;
     }
 
     public interface Target {
@@ -214,6 +215,7 @@ public class Constant {
         public static final String PLAYER_SHOW                  = "/show-player";
         public static final String PLAYER_HIDE                  = "/hide-player";
         public static final String ACTIVITY_START               = "/start-activity";
+        public static final String CACHE_DELETE                 = "/delete-cache";
         public static final String SERVICE_EXIT                 = "/exit-service";
     }
 

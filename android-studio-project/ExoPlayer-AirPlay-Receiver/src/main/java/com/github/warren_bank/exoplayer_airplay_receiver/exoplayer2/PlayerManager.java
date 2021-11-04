@@ -837,6 +837,14 @@ public final class PlayerManager implements EventListener {
     textSynchronizer.addTextOffset(offset);
   }
 
+  /**
+   * Delete files on internal storage used to temporarily cache video data.
+   */
+  public void AirPlay_delete_cache() {
+    if (downloadTracker != null)
+      downloadTracker.removeAllDownloads();
+  }
+
   // Miscellaneous methods.
 
   /**
