@@ -54,6 +54,7 @@ body > div.contents > div.section > div {
 body > div.contents > div.section div {
   margin-bottom: 0.75em;
 }
+body > div.contents > div.section div.flex > div,
 body > div.contents > div.section div:last-child {
   margin-bottom: 0;
 }
@@ -202,14 +203,15 @@ window.onload  = function() {
   var $toast_message           = document.querySelector('textarea#toast_message')
   var $toast_variables         = document.querySelector('select#toast_variables')
   var $show_toast              = document.querySelector('button#show_toast')
+  var $image_file              = document.querySelector('input#image_file')
   var $hide_player             = document.querySelector('button#hide_player')
   var $show_player             = document.querySelector('button#show_player')
-  var $exit_service            = document.querySelector('button#exit_service')
   var $intent_data             = document.querySelector('textarea#intent_data')
   var $load_video              = document.querySelector('button#load_video')
   var $send_intent             = document.querySelector('button#send_intent')
+  var $delete_cache            = document.querySelector('button#delete_cache')
+  var $exit_service            = document.querySelector('button#exit_service')
   var $sample_videos           = document.querySelector('select#sample_videos')
-  var $image_file              = document.querySelector('input#image_file')
 
   // ===============================================================================================
   // extract data from URL #hash
@@ -811,6 +813,21 @@ window.onload  = function() {
     send_message(path, data)
   }
 
+  $image_file.onchange = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (!$image_file.files || !$image_file.files.length)
+      return
+
+    var path = '/photo'
+    var data = $image_file.files[0]
+
+    send_message(path, data)
+
+    $image_file.value = null
+  }
+
   $hide_player.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -826,16 +843,6 @@ window.onload  = function() {
     event.stopPropagation()
 
     var path = '/show-player'
-    var data = null
-
-    send_message(path, data)
-  }
-
-  $exit_service.onclick = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-
-    var path = '/exit-service'
     var data = null
 
     send_message(path, data)
@@ -915,6 +922,26 @@ window.onload  = function() {
     send_message(path, data)
   }
 
+  $delete_cache.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/delete-cache'
+    var data = null
+
+    send_message(path, data)
+  }
+
+  $exit_service.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/exit-service'
+    var data = null
+
+    send_message(path, data)
+  }
+
   $sample_videos.onchange = function(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -972,21 +999,6 @@ window.onload  = function() {
       $drm_license_scheme.value = (drm.scheme) ? drm.scheme : ''
       $drm_license_server.value = (drm.server) ? drm.server : ''
     }
-  }
-
-  $image_file.onchange = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-
-    if (!$image_file.files || !$image_file.files.length)
-      return
-
-    var path = '/photo'
-    var data = $image_file.files[0]
-
-    send_message(path, data)
-
-    $image_file.value = null
   }
 
 }
@@ -1315,17 +1327,18 @@ window.onload  = function() {
       </div>
       <div>
         <table align="center">
+          <tr class="advanced_ui_mode">
+            <td colspan=2 align="center" class="oneline">
+              <button><label for="image_file">Display Image File</label></button>
+              <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
+            </td>
+          </tr>
           <tr>
             <td class="oneline fullwidth">
               <button id="hide_player">Hide Player</button>
             </td>
             <td class="oneline fullwidth">
               <button id="show_player">Show Player</button>
-            </td>
-          </tr>
-          <tr>
-            <td colspan=2 align="center" class="oneline">
-              <button id="exit_service">Quit Application</button>
             </td>
           </tr>
         </table>
@@ -1348,60 +1361,68 @@ window.onload  = function() {
 
     <div class="advanced_ui_mode section">
       <hr />
-      <div class="flex">
-        <div>
-          <h3>Sample Videos:</h3>
-          <select id="sample_videos">
-            <option value="0">-- video --</option>
-            <option value="1"
-                    x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8"
-                    x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt"
-                    x-referer-url="https://players.akamai.com/hls/"
-                    x-start-position="00:00:30"
-                   >Big Buck Bunny (vid:hls, subs:srt, pos:30s)</option>
-            <option value="2"
-                    x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
-                    x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"
-                    x-referer-url="https://players.akamai.com/hls/"
-                   >Sintel (vid:hls, subs:srt)</option>
-            <option value="3"
-                    x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest"
-                    x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt"
-                    x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html"
-                   >Tears Of Steel (vid:dash, subs:vtt)</option>
-            <option value="4"
-                    x-video-url="https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd"
-                    x-drm-license-scheme="widevine"
-                    x-drm-license-server="https://proxy.uat.widevine.com/proxy?provider=widevine_test"
-                   >Tears Of Steel (vid:dash, drm:widevine)</option>
-            <option value="5"
-                    x-video-url="https://html5demos.com/assets/dizzy.mp4"
-                    x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml"
-                    x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598"
-                   >Dizzy (vid:mp4, subs:ttml)</option>
-            <option value="6"
-                    x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4"
-                    x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass"
-                    x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605"
-                   >Sample (vid:mp4, subs:ssa)</option>
-            <option value="7"
-                    x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u"
-                    x-caption-url=""
-                    x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore"
-                   >Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
-            <option value="8"
-                    x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/"
-                    x-caption-url=""
-                    x-referer-url="https://archive.org/details/tntvillage_455310"
-                   >Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1967) Live From New York City</option>
-          </select>
-        </div>
-        <div>
-          <h3>Display Image:</h3>
-          <button><label for="image_file">Choose File</label></button>
-          <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
-        </div>
+      <h3>Program Management:</h3>
+      <div>
+        <table align="center">
+          <tr>
+            <td class="oneline fullwidth">
+              <button id="delete_cache">Delete Cache</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="exit_service">Quit Application</button>
+            </td>
+          </tr>
+        </table>
       </div>
+    </div>
+
+    <div class="advanced_ui_mode section">
+      <hr />
+      <h3>Sample Videos:</h3>
+      <select id="sample_videos">
+        <option value="0">-- video --</option>
+        <option value="1"
+                x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8"
+                x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt"
+                x-referer-url="https://players.akamai.com/hls/"
+                x-start-position="00:00:30"
+               >Big Buck Bunny (vid:hls, subs:srt, pos:30s)</option>
+        <option value="2"
+                x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
+                x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"
+                x-referer-url="https://players.akamai.com/hls/"
+               >Sintel (vid:hls, subs:srt)</option>
+        <option value="3"
+                x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest"
+                x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt"
+                x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html"
+               >Tears Of Steel (vid:dash, subs:vtt)</option>
+        <option value="4"
+                x-video-url="https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd"
+                x-drm-license-scheme="widevine"
+                x-drm-license-server="https://proxy.uat.widevine.com/proxy?provider=widevine_test"
+               >Tears Of Steel (vid:dash, drm:widevine)</option>
+        <option value="5"
+                x-video-url="https://html5demos.com/assets/dizzy.mp4"
+                x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml"
+                x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598"
+               >Dizzy (vid:mp4, subs:ttml)</option>
+        <option value="6"
+                x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4"
+                x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass"
+                x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605"
+               >Sample (vid:mp4, subs:ssa)</option>
+        <option value="7"
+                x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u"
+                x-caption-url=""
+                x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore"
+               >Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
+        <option value="8"
+                x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/"
+                x-caption-url=""
+                x-referer-url="https://archive.org/details/tntvillage_455310"
+               >Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1967) Live From New York City</option>
+      </select>
     </div>
 
   </div>
