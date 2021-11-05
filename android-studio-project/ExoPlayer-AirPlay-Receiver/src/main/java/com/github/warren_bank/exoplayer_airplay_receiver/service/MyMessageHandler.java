@@ -3,6 +3,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.service;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoSource;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.DirectoryIndexMediaPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.DirectoryIndexRecursiveMediaPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.FileM3uPlaylistExtractor;
@@ -18,6 +19,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.ToastUtils;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -126,12 +128,25 @@ final class MyMessageHandler extends Handler {
       }
 
       // =======================================================================
-      // Start Activity
+      // Start new Activity
       // =======================================================================
 
       case Constant.Msg.Msg_Start_Activity : {
         startActivity(
           service,
+          /* map= */ (HashMap) msg.obj
+        );
+        break;
+      }
+
+      // =======================================================================
+      // Share current video in queue with new Activity
+      // =======================================================================
+
+      case Constant.Msg.Msg_Video_Share : {
+        shareVideo(
+          service,
+          playerManager.getCurrentItem(),
           /* map= */ (HashMap) msg.obj
         );
         break;
@@ -382,6 +397,106 @@ final class MyMessageHandler extends Handler {
           intent.putExtra(name, (String[]) values.toArray(new String[values.size()]));
         else
           intent.putExtra(name, (String) values.get(0));
+      }
+    }
+
+    service.startActivity(intent);
+  }
+
+  private void shareVideo(NetworkingService service, VideoSource sample, HashMap<String, String> map) {
+    Log.d(tag, "starting Activity from current video in queue");
+
+    if ((sample == null) || TextUtils.isEmpty(sample.uri))
+      return;
+
+    Uri data = Uri.parse(sample.uri);
+
+    Intent intent = new Intent();
+    intent.setAction("android.intent.action.VIEW");
+    intent.addCategory("android.intent.category.DEFAULT");
+    intent.addCategory("android.intent.category.BROWSABLE");
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+    if (TextUtils.isEmpty(sample.uri_mimeType)) {
+      intent.setData(data);
+    }
+    else {
+      intent.setDataAndType(data, sample.uri_mimeType.toLowerCase());
+    }
+
+    String[]  string_names = new String[] {"referUrl", "textUrl", "drmScheme", "drmUrl"};
+    String[] hashmap_names = new String[] {"reqHeader", "drmHeader"};
+    String lc_name, alias_name;
+    String string_value;
+    HashMap<String, String> hashmap_value;
+    String[] array_value;
+    Bundle bundle_value;
+
+    for (String name : string_names) {
+      lc_name      = name.toLowerCase();
+      alias_name   = (String) map.get(lc_name);
+      string_value = null;
+
+      switch(lc_name) {
+        case "referurl" : {
+          string_value = sample.referer;
+          break;
+        }
+
+        case "texturl" : {
+          string_value = sample.caption;
+          break;
+        }
+
+        case "drmscheme" : {
+          string_value = sample.drm_scheme;
+          break;
+        }
+
+        case "drmurl" : {
+          string_value = sample.drm_license_server;
+          break;
+        }
+      }
+
+      if (!TextUtils.isEmpty(string_value)) {
+        // always include a String extra that can be read by ExoAirPlayer
+        intent.putExtra(name, (String) string_value);
+
+        // conditionally include a String extra, when the request provides a name
+        if (!TextUtils.isEmpty(alias_name)) {
+          intent.putExtra(alias_name, (String) string_value);
+        }
+      }
+    }
+
+    for (String name : hashmap_names) {
+      lc_name       = name.toLowerCase();
+      alias_name    = (String) map.get(lc_name);
+      hashmap_value = null;
+
+      switch(lc_name) {
+        case "reqheader" : {
+          hashmap_value = sample.reqHeadersMap;
+          break;
+        }
+
+        case "drmheader" : {
+          hashmap_value = sample.drmHeadersMap;
+          break;
+        }
+      }
+
+      if ((hashmap_value != null) && !hashmap_value.isEmpty()) {
+        // always include a String[] extra that can be read by ExoAirPlayer
+        array_value = StringUtils.toStringArray(hashmap_value);
+        intent.putExtra(name, (String[]) array_value);
+
+        // conditionally include a Bundle extra w/ String based key-value pairs, when the request provides a name
+        if (!TextUtils.isEmpty(alias_name)) {
+          bundle_value = StringUtils.toBundle(hashmap_value);
+          intent.putExtra(alias_name, (Bundle) bundle_value);
+        }
       }
     }
 

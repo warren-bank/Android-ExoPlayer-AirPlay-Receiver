@@ -500,6 +500,38 @@ __extended APIs:__
   - keys required to start an implicit Intent:
     * _action_
   - all other keys are optional
+* POST data sent in requests to `/share-video` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys are not case sensitive
+  - recognized keys include:
+    * _referUrl_
+    * _reqHeader_
+    * _textUrl_
+    * _drmScheme_
+    * _drmUrl_
+    * _drmHeader_
+  - the Intent to start a new Activity with values derived from the current video in the queue includes..
+    * data URI and type
+    * extras:
+      - (String)   referUrl
+      - (String)   textUrl
+      - (String)   drmScheme
+      - (String)   drmUrl
+      - (String[]) reqHeader
+      - (String[]) drmHeader
+  - POST data can map extras from the default names (above) to alias names
+  - extras having String[] values..
+    * format each String in the Array as "name: value"
+    * since this is a non-standard format,
+      when these extras are duplicated to an alias name,
+      the format is converted to a Bundle w/ String based key-value pairs
+  - POST data example:
+    ```text
+      referUrl:  Referer
+      reqHeader: android.media.intent.extra.HTTP_HEADERS
+    ```
 * POST data sent in requests to `/show-toast` API endpoint:
   - contains an arbitrary block of text
 

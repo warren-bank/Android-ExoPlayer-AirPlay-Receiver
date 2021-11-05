@@ -40,11 +40,9 @@ public class ToastUtils {
   }
 
   private static VideoSource getVideoSource(PlayerManager playerManager) {
-    if (playerManager == null) return null;
-
-    return playerManager.getItem(
-      playerManager.getCurrentItemIndex()
-    );
+    return (playerManager != null)
+      ? playerManager.getCurrentItem()
+      : null;
   }
 
   private static String interpolate_video_uri(Context context, PlayerManager playerManager, String text) {

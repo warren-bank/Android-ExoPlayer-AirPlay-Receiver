@@ -210,6 +210,8 @@ window.onload  = function() {
   var $intent_data             = document.querySelector('textarea#intent_data')
   var $load_video              = document.querySelector('button#load_video')
   var $send_intent             = document.querySelector('button#send_intent')
+  var $share_video_data        = document.querySelector('textarea#share_video_data')
+  var $share_video             = document.querySelector('button#share_video')
   var $delete_cache            = document.querySelector('button#delete_cache')
   var $exit_service            = document.querySelector('button#exit_service')
   var $sample_videos           = document.querySelector('select#sample_videos')
@@ -287,7 +289,7 @@ window.onload  = function() {
 
   var prepopulate_form_fields = function() {
     var airplay_host, airplay_port, airplay_tls
-    var base64_payload, payload, pattern, matches
+    var base64_payload, payload, pattern, matches, data
 
     airplay_host = get_cookie_value('airplay_host')
     airplay_port = get_cookie_value('airplay_port')
@@ -317,6 +319,15 @@ window.onload  = function() {
         $drm_license_server.value = matches[2]
       }
     }
+
+    data = []
+    data.push('referUrl:  Referer')
+    data.push('reqHeader: android.media.intent.extra.HTTP_HEADERS')
+    data.push('textUrl:   ')
+    data.push('drmScheme: ')
+    data.push('drmUrl:    ')
+    data.push('drmHeader: ')
+    $share_video_data.value = data.join("\n")
   }
 
   prepopulate_form_fields()
@@ -935,6 +946,16 @@ window.onload  = function() {
     send_message(path, data)
   }
 
+  $share_video.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/share-video'
+    var data = $share_video_data.value.trim()
+
+    send_message(path, data)
+  }
+
   $delete_cache.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -1347,7 +1368,7 @@ window.onload  = function() {
         <table align="center">
           <tr class="advanced_ui_mode">
             <td colspan=2 align="center" class="oneline">
-              <button><label for="image_file">Display Image File</label></button>
+              <button><label for="image_file">Display Image File&hellip;</label></button>
               <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
             </td>
           </tr>
@@ -1365,7 +1386,7 @@ window.onload  = function() {
 
     <div class="advanced_ui_mode section">
       <hr />
-      <h3>Start Activity:</h3>
+      <h3>Start New Activity:</h3>
       <div class="flex">
         <div>
           <textarea id="intent_data" rows="18"></textarea>
@@ -1373,6 +1394,19 @@ window.onload  = function() {
         <div>
           <div><button id="load_video">Load Video</button></div>
           <div><button id="send_intent">Send Intent</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="advanced_ui_mode section">
+      <hr />
+      <h3>Share Current Video in Queue with New Activity:</h3>
+      <div class="flex">
+        <div>
+          <textarea id="share_video_data" rows="6"></textarea>
+        </div>
+        <div>
+          <div><button id="share_video">Share Video</button></div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import java.net.URI;
@@ -167,7 +168,7 @@ public class StringUtils {
   }
 
   public static String toString(HashMap<String, String> map) {
-    if (map == null) return null;
+    if ((map == null) || map.isEmpty()) return null;
 
     String value = "";
     for (String key : map.keySet()) {
@@ -178,6 +179,32 @@ public class StringUtils {
     value = (value == "") ? null : value;
 
     return value;
+  }
+
+  public static String[] toStringArray(HashMap<String, String> map) {
+    if ((map == null) || map.isEmpty()) return null;
+
+    ArrayList<String> arrayList = new ArrayList<String>(map.size());
+
+    String value;
+    for (String key : map.keySet()) {
+      value = key + ": " + map.get(key);
+      arrayList.add(value);
+    }
+
+    return arrayList.toArray(new String[arrayList.size()]);
+  }
+
+  public static Bundle toBundle(HashMap<String, String> map) {
+    if ((map == null) || map.isEmpty()) return null;
+
+    Bundle bundle = new Bundle(map.size());
+
+    for (String key : map.keySet()) {
+      bundle.putString(key, map.get(key));
+    }
+
+    return bundle;
   }
 
   public static String normalizeBooleanString(String bool) {

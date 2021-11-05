@@ -800,6 +800,27 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
       }
+      else if (target.equals(Constant.Target.VIDEO_SHARE)) {
+        HashMap<String, String> map;
+
+        if (entityContent != null) {
+          String requestBody;
+          requestBody = new String(entityContent);
+          requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+
+          map = StringUtils.parseRequestBody(requestBody, /* normalize_lowercase_keys= */ true);
+        }
+        else {
+          map = new HashMap<String, String>();
+        }
+
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Video_Share;
+        msg.obj = map;
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.equals(Constant.Target.CACHE_DELETE)) {
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Delete_Cache;

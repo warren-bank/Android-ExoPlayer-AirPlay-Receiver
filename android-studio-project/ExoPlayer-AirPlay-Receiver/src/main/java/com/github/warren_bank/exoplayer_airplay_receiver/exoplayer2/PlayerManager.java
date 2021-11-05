@@ -595,6 +595,10 @@ public final class PlayerManager implements EventListener {
       : null;
   }
 
+  public VideoSource getCurrentItem() {
+    return getItem(getCurrentItemIndex());
+  }
+
   /**
    * Removes the item at the given index from the media queue.
    *
