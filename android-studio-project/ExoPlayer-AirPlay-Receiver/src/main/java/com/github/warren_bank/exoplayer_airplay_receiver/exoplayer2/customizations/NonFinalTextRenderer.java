@@ -1,19 +1,9 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
+
+/*
+ * based on:
+ *   https://github.com/google/ExoPlayer/blob/r2.16.0/library/core/src/main/java/com/google/android/exoplayer2/text/TextRenderer.java
+ */
 
 import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
 import static com.google.android.exoplayer2.util.Assertions.checkState;
@@ -65,9 +55,7 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
     REPLACEMENT_STATE_WAIT_END_OF_STREAM
   })
   private @interface ReplacementState {}
-  /**
-   * The decoder does not need to be replaced.
-   */
+  /** The decoder does not need to be replaced. */
   private static final int REPLACEMENT_STATE_NONE = 0;
   /**
    * The decoder needs to be replaced, but we haven't yet signaled an end of stream to the existing
@@ -143,7 +131,7 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
   public int supportsFormat(Format format) {
     if (decoderFactory.supportsFormat(format)) {
       return RendererCapabilities.create(
-          format.exoMediaCryptoType == null ? C.FORMAT_HANDLED : C.FORMAT_UNSUPPORTED_DRM);
+          format.cryptoType == C.CRYPTO_TYPE_NONE ? C.FORMAT_HANDLED : C.FORMAT_UNSUPPORTED_DRM);
     } else if (MimeTypes.isText(format.sampleMimeType)) {
       return RendererCapabilities.create(C.FORMAT_UNSUPPORTED_SUBTYPE);
     } else {

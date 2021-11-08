@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.15.1/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoDownloadService.java
+ *   https://github.com/google/ExoPlayer/blob/r2.16.0/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoDownloadService.java
  */
 
 import static com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.offline.Download;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.offline.DownloadService;
 import com.google.android.exoplayer2.scheduler.PlatformScheduler;
+import com.google.android.exoplayer2.scheduler.Requirements;
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
 import com.google.android.exoplayer2.util.NotificationUtil;
 import com.google.android.exoplayer2.util.Util;
@@ -62,14 +63,15 @@ public class MyDownloadService extends DownloadService {
 
   @Override
   @NonNull
-  protected Notification getForegroundNotification(@NonNull List<Download> downloads) {
+  protected Notification getForegroundNotification(List<Download> downloads, @Requirements.RequirementFlags int notMetRequirements) {
     return ExoPlayerUtils.getDownloadNotificationHelper(/* context= */ this)
         .buildProgressNotification(
             /* context= */ this,
             R.drawable.exoplayer_notification_icon_download_active,
             /* contentIntent= */ null,
             /* message= */ null,
-            downloads
+            downloads,
+            notMetRequirements
         );
   }
 

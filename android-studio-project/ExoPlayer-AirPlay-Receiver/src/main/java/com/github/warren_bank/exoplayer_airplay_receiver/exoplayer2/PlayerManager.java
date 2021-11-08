@@ -6,7 +6,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
@@ -24,19 +23,15 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Player.DiscontinuityReason;
-import com.google.android.exoplayer2.Player.EventListener;
-import com.google.android.exoplayer2.Player.TimelineChangeReason;
 import com.google.android.exoplayer2.RenderersFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsCollector;
-import com.google.android.exoplayer2.audio.AudioListener;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -51,7 +46,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
@@ -65,7 +59,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /** Manages ExoPlayer and an internal media queue */
-public final class PlayerManager implements EventListener {
+public final class PlayerManager implements Player.Listener {
 
   private static final String TAG = "PlayerManager";
 
@@ -90,14 +84,13 @@ public final class PlayerManager implements EventListener {
   private DataSource.Factory defaultDataSourceFactory;
   private CacheDataSource.Factory cacheDataSourceFactory;
   private DownloadTracker downloadTracker;
-  private SimpleExoPlayer exoPlayer;
+  private ExoPlayer exoPlayer;
   private float audioVolume;
   private int   audioVolumeMaxDbBoost;
-  private AudioListener audioListener;
-  private LoudnessEnhancer loudnessEnhancer;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
   private Handler handler;
+  private LoudnessEnhancer loudnessEnhancer;
 
   public DefaultTrackSelector trackSelector;
   public TextSynchronizer textSynchronizer;
@@ -133,11 +126,11 @@ public final class PlayerManager implements EventListener {
     this.cacheDataSourceFactory    = ExoPlayerUtils.getCacheDataSourceFactory(context);
     this.downloadTracker           = ExoPlayerUtils.getDownloadTracker(context);
 
-    this.exoPlayer = new SimpleExoPlayer.Builder(
+    this.exoPlayer = new ExoPlayer.Builder(
       context,
       (RenderersFactory) renderersFactory,
-      trackSelector,
       new DefaultMediaSourceFactory(cacheDataSourceFactory),
+      trackSelector,
       loadControl,
       DefaultBandwidthMeter.getSingletonInstance(context),
       analyticsCollector
@@ -145,39 +138,13 @@ public final class PlayerManager implements EventListener {
     this.exoPlayer.addListener(this);
     this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
 
-    this.audioVolume           = 1.0f;
-    this.audioVolumeMaxDbBoost = ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_DB_BOOST);
-
-    if (Build.VERSION.SDK_INT >= 19) {
-      this.audioListener = new AudioListener() {
-        @Override
-        public void onAudioSessionIdChanged(int audioSessionId) {
-          if (loudnessEnhancer != null) {
-            loudnessEnhancer.setEnabled(false);
-            loudnessEnhancer.release();
-            loudnessEnhancer = null;
-          }
-
-          if (audioSessionId != C.AUDIO_SESSION_ID_UNSET) {
-            try {
-              loudnessEnhancer = new LoudnessEnhancer(audioSessionId);
-
-              AirPlay_volume(audioVolume);
-            }
-            catch (Exception e) {}
-          }
-        }
-      };
-
-      this.exoPlayer.addAudioListener(this.audioListener);
-
-      this.audioListener.onAudioSessionIdChanged( this.exoPlayer.getAudioSessionId() );
-    }
-
+    this.audioVolume             = 1.0f;
+    this.audioVolumeMaxDbBoost   = ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_DB_BOOST);
     this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
     this.currentItemIndex        = C.INDEX_UNSET;
     this.handler                 = new Handler(Looper.getMainLooper());
 
+    this.onAudioSessionIdChanged( this.exoPlayer.getAudioSessionId() );
     this.downloadTracker.startDownloadService();
   }
 
@@ -676,7 +643,7 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_scrub(float positionSec) {
     if (exoPlayer == null) return;
 
-    if (exoPlayer.isCurrentWindowSeekable()) {
+    if (exoPlayer.isCurrentMediaItemSeekable()) {
       long positionMs = (long) (positionSec * 1000.0f);
       exoPlayer.seekTo(currentItemIndex, positionMs);
     }
@@ -690,7 +657,7 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_add_scrub_offset(long offsetMs) {
     if (exoPlayer == null) return;
 
-    if (exoPlayer.isCurrentWindowSeekable()) {
+    if (exoPlayer.isCurrentMediaItemSeekable()) {
       long positionMs = exoPlayer.getCurrentPosition();
       exoPlayer.seekTo(currentItemIndex, positionMs + offsetMs);
     }
@@ -771,8 +738,8 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_next() {
     if (exoPlayer == null) return;
 
-    if (exoPlayer.hasNextWindow()) {
-      exoPlayer.seekToNextWindow();
+    if (exoPlayer.hasNextMediaItem()) {
+      exoPlayer.seekToNextMediaItem();
     }
   }
 
@@ -782,8 +749,8 @@ public final class PlayerManager implements EventListener {
   public void AirPlay_previous() {
     if (exoPlayer == null) return;
 
-    if (exoPlayer.hasPreviousWindow()) {
-      exoPlayer.seekToPreviousWindow();
+    if (exoPlayer.hasPreviousMediaItem()) {
+      exoPlayer.seekToPreviousMediaItem();
     }
   }
 
@@ -1002,7 +969,7 @@ public final class PlayerManager implements EventListener {
       loadErrorHandlingPolicy  = null;
       currentItemIndex         = C.INDEX_UNSET;
     }
-    catch (Exception e){}
+    catch (Exception e) {}
   }
 
   /**
@@ -1014,12 +981,6 @@ public final class PlayerManager implements EventListener {
     if (exoPlayer != null) {
       try {
         exoPlayer.stop(true);
-
-        if (audioListener != null) {
-          exoPlayer.removeAudioListener(audioListener);
-          audioListener = null;
-        }
-
         exoPlayer.removeListener(this);
         exoPlayer.release();
       }
@@ -1037,26 +998,49 @@ public final class PlayerManager implements EventListener {
   }
 
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/common/src/main/java/com/google/android/exoplayer2/Player.java#L83
+  // https://github.com/google/ExoPlayer/blob/r2.16.0/library/common/src/main/java/com/google/android/exoplayer2/Player.java#L939
   // ===========================================================================
-  // Player.EventListener implementation.
+  // Player.Listener implementation.
   // ===========================================================================
 
   @Override
-  public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+  public void onPlaybackStateChanged(@Player.State int playbackState) {
     updateCurrentItemIndex();
   }
 
   @Override
-  public void onPositionDiscontinuity(@DiscontinuityReason int reason) {
+  public void onPlayWhenReadyChanged(boolean playWhenReady, @Player.PlayWhenReadyChangeReason int reason) {
     updateCurrentItemIndex();
   }
 
   @Override
-  public void onTimelineChanged(
-      Timeline timeline, @TimelineChangeReason int reason
-  ){
+  public void onPositionDiscontinuity(Player.PositionInfo oldPosition, Player.PositionInfo newPosition, @Player.DiscontinuityReason int reason) {
     updateCurrentItemIndex();
+  }
+
+  @Override
+  public void onTimelineChanged(Timeline timeline, @Player.TimelineChangeReason int reason) {
+    updateCurrentItemIndex();
+  }
+
+  @Override
+  public void onAudioSessionIdChanged(int audioSessionId) {
+    if (Build.VERSION.SDK_INT >= 19) {
+      if (loudnessEnhancer != null) {
+        loudnessEnhancer.setEnabled(false);
+        loudnessEnhancer.release();
+        loudnessEnhancer = null;
+      }
+
+      if (audioSessionId != C.AUDIO_SESSION_ID_UNSET) {
+        try {
+          loudnessEnhancer = new LoudnessEnhancer(audioSessionId);
+
+          AirPlay_volume(audioVolume);
+        }
+        catch (Exception e) {}
+      }
+    }
   }
 
   @Override
@@ -1094,7 +1078,7 @@ public final class PlayerManager implements EventListener {
       case PlaybackException.ERROR_CODE_DRM_PROVISIONING_FAILED :
       case PlaybackException.ERROR_CODE_DRM_CONTENT_ERROR :
       case PlaybackException.ERROR_CODE_DRM_LICENSE_ACQUISITION_FAILED : {
-        exoPlayer.seekToNextWindow();
+        exoPlayer.seekToNextMediaItem();
         break;
       }
     }
@@ -1133,7 +1117,7 @@ public final class PlayerManager implements EventListener {
     int playbackState = exoPlayer.getPlaybackState();
 
     int currentItemIndex = ((playbackState != Player.STATE_IDLE) && (playbackState != Player.STATE_ENDED))
-      ? exoPlayer.getCurrentWindowIndex()
+      ? exoPlayer.getCurrentMediaItemIndex()
       : C.INDEX_UNSET;
 
     maybeSetCurrentItemAndNotify(currentItemIndex);
@@ -1215,7 +1199,7 @@ public final class PlayerManager implements EventListener {
 
   private MediaSource buildMediaSource(VideoSource sample) {
     MediaSource            video    = buildUriMediaSource(sample);
-    ArrayList<MediaSource> captions = buildCaptionMediaSources(sample);
+    ArrayList<MediaSource> captions = buildCaptionMediaSources(video);
     MediaSource[] mediaSources;
 
     if ((captions == null) || captions.isEmpty()) {
@@ -1265,54 +1249,25 @@ public final class PlayerManager implements EventListener {
     }
   }
 
-  private ArrayList<MediaSource> buildCaptionMediaSources(VideoSource sample) {
+  private ArrayList<MediaSource> buildCaptionMediaSources(MediaSource video) {
     ArrayList<MediaSource> captions = new ArrayList<MediaSource>();
     DataSource.Factory factory;
-    Uri uri;
-    MediaItem.Subtitle mediaItem;
 
-    if (!TextUtils.isEmpty(sample.caption) && !TextUtils.isEmpty(sample.caption_mimeType)) {
-      factory = ExternalStorageUtils.isFileUri(sample.caption)
-        ? defaultDataSourceFactory
-        : httpDataSourceFactory;
-
-      if (factory == null)
-        return null;
-
-      uri       = Uri.parse(sample.caption);
-      mediaItem = new MediaItem.Subtitle(uri, sample.caption_mimeType, /* language= */ null, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT);
-
-      captions.add(
-        new SingleSampleMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem, C.TIME_UNSET)
-      );
-    }
-    else if (ExternalStorageUtils.isFileUri(sample.uri)) {
-      // loading media from external storage without any captions file explicitly specified.
-      // search within same directory as media file for external captions in a supported format.
-      // file naming convention: "${video_filename}.*.${supported_caption_extension}"
-
-      factory = defaultDataSourceFactory;
-
-      if (factory == null)
-        return null;
-
-      ArrayList<String> uriCaptions = ExternalStorageUtils.findMatchingSubtitles(sample.uri);
-
-      if ((uriCaptions == null) || uriCaptions.isEmpty())
-        return null;
-
-      for (String caption : uriCaptions) {
-        uri       = Uri.parse(caption);
-        mediaItem = new MediaItem.Subtitle(uri, MediaTypeUtils.get_caption_mimeType(caption), /* language= */ null, /* selectionFlags= */ C.SELECTION_FLAG_DEFAULT);
+    try {
+      for (MediaItem.SubtitleConfiguration subtitleConfiguration : video.getMediaItem().localConfiguration.subtitleConfigurations) {
+        factory = ExternalStorageUtils.isFileUri(subtitleConfiguration.uri.toString())
+          ? defaultDataSourceFactory
+          : httpDataSourceFactory;
 
         captions.add(
-          new SingleSampleMediaSource.Factory(factory).createMediaSource(mediaItem, C.TIME_UNSET)
+          new SingleSampleMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(subtitleConfiguration, C.TIME_UNSET)
         );
       }
     }
+    catch (Exception e) {}
 
     // normalize that non-null return value must include matches
-    if ((captions == null) || captions.isEmpty())
+    if (captions.isEmpty())
       captions = null;
 
     return captions;

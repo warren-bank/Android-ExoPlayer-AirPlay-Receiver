@@ -1,13 +1,16 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.util.Util;
 
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class VideoSource {
@@ -17,7 +20,6 @@ public final class VideoSource {
   public final String uri;
   public final String uri_mimeType;
   public       String caption;
-  public       String caption_mimeType;
   public final String referer;
   public final HashMap<String, String> reqHeadersMap;
   public       boolean useCache;
@@ -89,8 +91,7 @@ public final class VideoSource {
     if ((stopPosition >= 1f) && (stopPosition <= startPosition))
       stopPosition = -1f;
 
-    String uri_mimeType     = MediaTypeUtils.get_media_mimeType(uri);
-    String caption_mimeType = MediaTypeUtils.get_caption_mimeType(caption);
+    String uri_mimeType = MediaTypeUtils.get_media_mimeType(uri);
 
     if (reqHeadersMap == null)
       reqHeadersMap = new HashMap<String, String>();
@@ -122,7 +123,6 @@ public final class VideoSource {
     this.uri                = uri;
     this.uri_mimeType       = uri_mimeType;
     this.caption            = caption;
-    this.caption_mimeType   = caption_mimeType;
     this.referer            = referer;
     this.reqHeadersMap      = reqHeadersMap;
     this.useCache           = useCache;
@@ -141,14 +141,11 @@ public final class VideoSource {
   }
 
   public void updateCaption(String caption) {
-    String caption_mimeType = MediaTypeUtils.get_caption_mimeType(caption);
-
-    this.caption            = caption;
-    this.caption_mimeType   = caption_mimeType;
+    this.caption = caption;
   }
 
   public void updateUseCache(boolean useCache) {
-    this.useCache           = useCache;
+    this.useCache = useCache;
   }
 
   public MediaItem getMediaItem() {
@@ -185,6 +182,63 @@ public final class VideoSource {
       }
     }
 
+    setSubtitleConfigurations(builder, this);
+
     return builder.build();
   }
+
+  // static helper
+
+  private static void setSubtitleConfigurations(MediaItem.Builder builder, VideoSource sample) {
+    ArrayList<MediaItem.SubtitleConfiguration> subtitleConfigurations = new ArrayList<MediaItem.SubtitleConfiguration>();
+    ArrayList<String> uriCaptions = null;
+    Uri uri;
+    String mimeType;
+    String label;
+    MediaItem.SubtitleConfiguration.Builder scb;
+
+    if (!TextUtils.isEmpty(sample.caption)) {
+      uriCaptions = new ArrayList<String>(1);
+      uriCaptions.add(sample.caption);
+    }
+    else if (ExternalStorageUtils.isFileUri(sample.uri)) {
+      // loading media from external storage without any captions file explicitly specified.
+      // search within same directory as media file for external captions in a supported format.
+      // file naming convention: "${video_filename}.*.${supported_caption_extension}"
+
+      uriCaptions = ExternalStorageUtils.findMatchingSubtitles(sample.uri);
+    }
+
+    if ((uriCaptions != null) && !uriCaptions.isEmpty()) {
+      for (String caption : uriCaptions) {
+        uri      = Uri.parse(caption);
+        mimeType = MediaTypeUtils.get_caption_mimeType(caption);
+        label    = MediaTypeUtils.get_caption_label(caption);
+
+        if (!TextUtils.isEmpty(mimeType)) {
+          scb = new MediaItem.SubtitleConfiguration.Builder(uri);
+
+          scb
+            .setMimeType(mimeType)
+            .setRoleFlags(C.ROLE_FLAG_SUBTITLE)
+            .setSelectionFlags(C.SELECTION_FLAG_DEFAULT);
+
+          if (!TextUtils.isEmpty(label)) {
+            scb
+              .setLanguage(label)
+              .setLabel(label);
+          }
+
+          subtitleConfigurations.add(
+            scb.build()
+          );
+        }
+      }
+    }
+
+    if (!subtitleConfigurations.isEmpty()) {
+      builder.setSubtitleConfigurations(subtitleConfigurations);
+    }
+  }
+
 }

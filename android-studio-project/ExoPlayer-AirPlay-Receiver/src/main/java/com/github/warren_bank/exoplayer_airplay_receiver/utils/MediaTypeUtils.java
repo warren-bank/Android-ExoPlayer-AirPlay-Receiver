@@ -29,11 +29,15 @@ public class MediaTypeUtils {
   // URI path file extension
 
   private static String get_fileExtension(String uri, Pattern mediatype_regex) {
+    return get_fileExtension(uri, mediatype_regex, /* capture_group_index= */ 1);
+  }
+
+  private static String get_fileExtension(String uri, Pattern mediatype_regex, int capture_group_index) {
     if (uri == null) return null;
 
     Matcher matcher = mediatype_regex.matcher(uri.toLowerCase());
     String file_ext = matcher.find()
-      ? matcher.group(1)
+      ? matcher.group(capture_group_index)
       : null;
 
     return file_ext;
@@ -166,10 +170,14 @@ public class MediaTypeUtils {
   // ===================================
   // captions
 
-  private static Pattern caption_regex = Pattern.compile("\\.(srt|ttml|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
+  private static Pattern caption_regex = Pattern.compile("(?:\\.([^\\./]+))?\\.(srt|ttml|dfxp|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
+
+  public static String get_caption_label(String uri) {
+    return get_fileExtension(uri, caption_regex, /* capture_group_index= */ 1);
+  }
 
   public static String get_caption_fileExtension(String uri) {
-    return get_fileExtension(uri, caption_regex);
+    return get_fileExtension(uri, caption_regex, /* capture_group_index= */ 2);
   }
 
   public static boolean isCaptionFileUrl(String uri) {
@@ -187,6 +195,7 @@ public class MediaTypeUtils {
           mimeType = "application/x-subrip";
           break;
         case "ttml":
+        case "dfxp":
           mimeType = "application/ttml+xml";
           break;
         case "vtt":
