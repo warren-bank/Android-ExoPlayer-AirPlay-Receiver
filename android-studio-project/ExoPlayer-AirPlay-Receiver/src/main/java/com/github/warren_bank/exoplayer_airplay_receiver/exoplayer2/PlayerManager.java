@@ -32,6 +32,9 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsCollector;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -113,7 +116,13 @@ public final class PlayerManager implements Player.Listener {
     this.trackSelector = new DefaultTrackSelector(context);
     this.renderersFactory = new MyRenderersFactory(context);
     this.textSynchronizer = (TextSynchronizer) renderersFactory;
+
+    DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory()
+      .setTsExtractorFlags(DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS)
+      .setTsExtractorTimestampSearchBytes(1500 * TsExtractor.TS_PACKET_SIZE);
+
     DefaultLoadControl loadControl = getLoadControl(context);
+
     EventLogger exoLogger = new EventLogger(trackSelector);
     AnalyticsCollector analyticsCollector = new AnalyticsCollector(Clock.DEFAULT);
     analyticsCollector.addListener(exoLogger);
@@ -121,6 +130,7 @@ public final class PlayerManager implements Player.Listener {
     String userAgent               = context.getString(R.string.user_agent);
     VideoSource.DEFAULT_USER_AGENT = userAgent;
     ExoPlayerUtils.setUserAgent(userAgent);
+
     this.httpDataSourceFactory     = ExoPlayerUtils.getHttpDataSourceFactory(context);
     this.defaultDataSourceFactory  = ExoPlayerUtils.getDefaultDataSourceFactory(context);
     this.cacheDataSourceFactory    = ExoPlayerUtils.getCacheDataSourceFactory(context);
@@ -129,7 +139,7 @@ public final class PlayerManager implements Player.Listener {
     this.exoPlayer = new ExoPlayer.Builder(
       context,
       (RenderersFactory) renderersFactory,
-      new DefaultMediaSourceFactory(cacheDataSourceFactory),
+      new DefaultMediaSourceFactory(cacheDataSourceFactory, extractorsFactory),
       trackSelector,
       loadControl,
       DefaultBandwidthMeter.getSingletonInstance(context),
