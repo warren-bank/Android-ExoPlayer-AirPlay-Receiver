@@ -119,7 +119,7 @@ public final class PlayerManager implements Player.Listener {
 
     DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory()
       .setTsExtractorFlags(DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS)
-      .setTsExtractorTimestampSearchBytes(1500 * TsExtractor.TS_PACKET_SIZE);
+      .setTsExtractorTimestampSearchBytes((int) (2.5f * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES));
 
     DefaultLoadControl loadControl = getLoadControl(context);
 
