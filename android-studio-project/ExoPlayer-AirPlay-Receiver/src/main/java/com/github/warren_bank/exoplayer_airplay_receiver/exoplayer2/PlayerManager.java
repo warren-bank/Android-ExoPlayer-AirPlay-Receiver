@@ -105,23 +105,14 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   private PlayerManager(Context context) {
-    this.context = context;
-    this.playerView = null;
-    this.mediaQueue = new MyArrayList<>();
+    this.context                  = context;
+    this.playerView               = null;
+    this.mediaQueue               = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
-
-    this.trackSelector = new DefaultTrackSelector(context);
-    this.renderersFactory = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer());
-    this.textSynchronizer = (TextSynchronizer) renderersFactory;
-
-    trackSelector.setParameters(
-      trackSelector.buildUponParameters()
-        .setTunnelingEnabled(
-          PreferencesMgr.get_enable_tunneled_video_playback()
-        )
-    );
-
-    this.extractorsFactory = new DefaultExtractorsFactory();
+    this.renderersFactory         = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer());
+    this.extractorsFactory        = new DefaultExtractorsFactory();
+    this.trackSelector            = new DefaultTrackSelector(context);
+    this.textSynchronizer         = (TextSynchronizer) renderersFactory;
 
     extractorsFactory.setTsExtractorTimestampSearchBytes(
       (int) (PreferencesMgr.get_ts_extractor_timestamp_search_bytes_factor() * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES)
@@ -131,6 +122,13 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       PreferencesMgr.get_enable_hdmv_dts_audio_streams()
         ? DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS
         : 0
+    );
+
+    trackSelector.setParameters(
+      trackSelector.buildUponParameters()
+        .setTunnelingEnabled(
+          PreferencesMgr.get_enable_tunneled_video_playback()
+        )
     );
 
     DefaultLoadControl loadControl = getLoadControl(context);
@@ -1130,62 +1128,62 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
   @Override
   public void onPreferenceChange(int pref_key_id) {
-      switch(pref_key_id) {
-        case R.string.prefkey_default_user_agent : {
-          String userAgent               = PreferencesMgr.get_default_user_agent();
-          VideoSource.DEFAULT_USER_AGENT = userAgent;
-          ExoPlayerUtils.setUserAgent(userAgent);
-          break;
-        }
-
-        case R.string.prefkey_enable_tunneled_video_playback : {
-          trackSelector.setParameters(
-            trackSelector.buildUponParameters()
-              .setTunnelingEnabled(
-                PreferencesMgr.get_enable_tunneled_video_playback()
-              )
-          );
-          break;
-        }
-
-        case R.string.prefkey_ts_extractor_timestamp_search_bytes_factor : {
-          extractorsFactory.setTsExtractorTimestampSearchBytes(
-            (int) (PreferencesMgr.get_ts_extractor_timestamp_search_bytes_factor() * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES)
-          );
-          break;
-        }
-
-        case R.string.prefkey_enable_hdmv_dts_audio_streams : {
-          extractorsFactory.setTsExtractorFlags(
-            PreferencesMgr.get_enable_hdmv_dts_audio_streams()
-              ? DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS
-              : 0
-          );
-          break;
-        }
-
-        case R.string.prefkey_pause_on_change_to_audio_output_device : {
-          exoPlayer.setHandleAudioBecomingNoisy(
-            PreferencesMgr.get_pause_on_change_to_audio_output_device()
-          );
-          break;
-        }
-
-        case R.string.prefkey_max_audio_volume_boost_db       :
-        case R.string.prefkey_audio_volume_percent_increment  :
-        case R.string.prefkey_audio_volume_boost_db_increment : {
-          // nothing to do: value is requested when needed
-          break;
-        }
-
-        case R.string.prefkey_max_parallel_downloads    :
-        case R.string.prefkey_seek_back_ms_increment    :
-        case R.string.prefkey_seek_forward_ms_increment :
-        case R.string.prefkey_prefer_extension_renderer : {
-          // nothing to do: value will take effect when app is restarted
-          break;
-        }
+    switch(pref_key_id) {
+      case R.string.prefkey_default_user_agent : {
+        String userAgent               = PreferencesMgr.get_default_user_agent();
+        VideoSource.DEFAULT_USER_AGENT = userAgent;
+        ExoPlayerUtils.setUserAgent(userAgent);
+        break;
       }
+
+      case R.string.prefkey_ts_extractor_timestamp_search_bytes_factor : {
+        extractorsFactory.setTsExtractorTimestampSearchBytes(
+          (int) (PreferencesMgr.get_ts_extractor_timestamp_search_bytes_factor() * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES)
+        );
+        break;
+      }
+
+      case R.string.prefkey_enable_hdmv_dts_audio_streams : {
+        extractorsFactory.setTsExtractorFlags(
+          PreferencesMgr.get_enable_hdmv_dts_audio_streams()
+            ? DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS
+            : 0
+        );
+        break;
+      }
+
+      case R.string.prefkey_enable_tunneled_video_playback : {
+        trackSelector.setParameters(
+          trackSelector.buildUponParameters()
+            .setTunnelingEnabled(
+              PreferencesMgr.get_enable_tunneled_video_playback()
+            )
+        );
+        break;
+      }
+
+      case R.string.prefkey_pause_on_change_to_audio_output_device : {
+        exoPlayer.setHandleAudioBecomingNoisy(
+          PreferencesMgr.get_pause_on_change_to_audio_output_device()
+        );
+        break;
+      }
+
+      case R.string.prefkey_max_audio_volume_boost_db       :
+      case R.string.prefkey_audio_volume_percent_increment  :
+      case R.string.prefkey_audio_volume_boost_db_increment : {
+        // nothing to do: value is requested when needed
+        break;
+      }
+
+      case R.string.prefkey_max_parallel_downloads    :
+      case R.string.prefkey_seek_back_ms_increment    :
+      case R.string.prefkey_seek_forward_ms_increment :
+      case R.string.prefkey_prefer_extension_renderer : {
+        // nothing to do: value will take effect when app is restarted
+        break;
+      }
+    }
   }
 
   // Internal methods.

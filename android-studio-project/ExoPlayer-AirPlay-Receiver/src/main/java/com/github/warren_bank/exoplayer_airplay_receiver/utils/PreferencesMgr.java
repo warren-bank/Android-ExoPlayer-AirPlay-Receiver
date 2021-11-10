@@ -743,9 +743,9 @@ public class PreferencesMgr {
     lines.add("max-parallel-downloads: %d");
     lines.add("seek-back-ms-increment: %d");
     lines.add("seek-forward-ms-increment: %d");
-    lines.add("audio-volume-percent-increment: %f");
-    lines.add("audio-volume-boost-db-increment: %f");
-    lines.add("ts-extractor-timestamp-search-bytes-factor: %f");
+    lines.add("audio-volume-percent-increment: %.4f");
+    lines.add("audio-volume-boost-db-increment: %.4f");
+    lines.add("ts-extractor-timestamp-search-bytes-factor: %.4f");
     lines.add("enable-tunneled-video-playback: %b");
     lines.add("enable-hdmv-dts-audio-streams: %b");
     lines.add("pause-on-change-to-audio-output-device: %b");
