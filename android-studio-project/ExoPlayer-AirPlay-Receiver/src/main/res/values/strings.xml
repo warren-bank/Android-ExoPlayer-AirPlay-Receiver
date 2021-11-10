@@ -36,6 +36,7 @@
   <string translatable="false" name="toast_variable_date">{{date}}</string>
   <string translatable="false" name="toast_variable_time">{{time}}</string>
   <string translatable="false" name="toast_variable_version">{{version}}</string>
+  <string translatable="false" name="toast_variable_preferences">{{preferences}}</string>
   <string translatable="false" name="toast_variable_abi">{{abi}}</string>
   <string translatable="false" name="toast_variable_top_process">{{top-process}}</string>
   <string translatable="false" name="toast_variable_top_activity">{{top-activity}}</string>

@@ -6,6 +6,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -731,5 +732,40 @@ public class PreferencesMgr {
   }
 
   // ---------------------------------------------------------------------------
+
+  public static String serialize() {
+    initialize();
+
+    ArrayList<String> lines = new ArrayList<String>();
+
+    lines.add("default-user-agent: %s");
+    lines.add("max-audio-volume-boost-db: %d");
+    lines.add("max-parallel-downloads: %d");
+    lines.add("seek-back-ms-increment: %d");
+    lines.add("seek-forward-ms-increment: %d");
+    lines.add("audio-volume-percent-increment: %f");
+    lines.add("audio-volume-boost-db-increment: %f");
+    lines.add("ts-extractor-timestamp-search-bytes-factor: %f");
+    lines.add("enable-tunneled-video-playback: %b");
+    lines.add("enable-hdmv-dts-audio-streams: %b");
+    lines.add("pause-on-change-to-audio-output-device: %b");
+    lines.add("prefer-extension-renderer: %b");
+
+    return String.format(
+      TextUtils.join("\n", lines),
+      default_user_agent,
+      max_audio_volume_boost_db,
+      max_parallel_downloads,
+      seek_back_ms_increment,
+      seek_forward_ms_increment,
+      audio_volume_percent_increment,
+      audio_volume_boost_db_increment,
+      ts_extractor_timestamp_search_bytes_factor,
+      enable_tunneled_video_playback,
+      enable_hdmv_dts_audio_streams,
+      pause_on_change_to_audio_output_device,
+      prefer_extension_renderer
+    );
+  }
 
 }

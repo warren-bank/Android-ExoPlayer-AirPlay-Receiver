@@ -30,6 +30,7 @@ public class ToastUtils {
     text = ToastUtils.interpolate_date(context, text);
     text = ToastUtils.interpolate_time(context, text);
     text = ToastUtils.interpolate_version(context, text);
+    text = ToastUtils.interpolate_preferences(context, text);
     text = ToastUtils.interpolate_abi(context, text);
     text = ToastUtils.interpolate_top_process(context, text);
     text = ToastUtils.interpolate_top_activity(context, text);
@@ -210,6 +211,24 @@ public class ToastUtils {
       String version = appname + " " + BuildConfig.VERSION_NAME;
 
       return ToastUtils.interpolate_variable(text, variable_substring, version);
+    }
+    catch(Exception e) {
+      return ToastUtils.interpolate_variable(text, variable_substring, "");
+    }
+  }
+
+  private static String interpolate_preferences(Context context, String text) {
+    if (TextUtils.isEmpty(text)) return null;
+
+    String variable_substring = context.getString(R.string.toast_variable_preferences);
+
+    if (!text.contains(variable_substring))
+      return text;
+
+    try {
+      String preferences = PreferencesMgr.serialize();
+
+      return ToastUtils.interpolate_variable(text, variable_substring, preferences);
     }
     catch(Exception e) {
       return ToastUtils.interpolate_variable(text, variable_substring, "");
