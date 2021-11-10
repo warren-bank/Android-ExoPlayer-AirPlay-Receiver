@@ -13,6 +13,19 @@
   <string name="toast_downloadtracker_error_download_live_unsupported">Downloading live content is not supported</string>
   <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM content is not supported on API levels below 18</string>
 
+  <!-- foreground service notification -->
+  <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: service running</string>
+  <string name="notification_service_content_line1">ExoAirPlayer running at:</string>
+  <string name="notification_service_content_line3">Click to stop service.</string>
+
+  <!-- track selection dialog -->
+  <string name="track_selection_button">Select tracks</string>
+  <string name="track_selection_title">@string/track_selection_button</string>
+
+  <!-- text captions offset selection dialog -->
+  <string name="text_offset_selection_button">Sync captions</string>
+  <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+
   <!-- strings that are interpolated within "/show-toast" text -->
   <string translatable="false" name="toast_variable_video_uri">{{video-uri}}</string>
   <string translatable="false" name="toast_variable_video_caption">{{video-caption}}</string>
@@ -27,19 +40,21 @@
   <string translatable="false" name="toast_variable_top_process">{{top-process}}</string>
   <string translatable="false" name="toast_variable_top_activity">{{top-activity}}</string>
 
-  <!-- HTTP request header -->
-  <string translatable="false" name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36</string>
+  <!-- Preference keys -->
+  <string translatable="false" name="prefkey_default_user_agent">default_user_agent</string>
+  <string translatable="false" name="prefkey_max_audio_volume_boost_db">max_audio_volume_boost_db</string>
+  <string translatable="false" name="prefkey_max_parallel_downloads">max_parallel_downloads</string>
+  <string translatable="false" name="prefkey_audio_volume_percent_increment">audio_volume_percent_increment</string>
+  <string translatable="false" name="prefkey_audio_volume_boost_db_increment">audio_volume_boost_db_increment</string>
+  <string translatable="false" name="prefkey_seek_back_ms_increment">seek_back_ms_increment</string>
+  <string translatable="false" name="prefkey_seek_forward_ms_increment">seek_forward_ms_increment</string>
+  <string translatable="false" name="prefkey_ts_extractor_timestamp_search_bytes_factor">ts_extractor_timestamp_search_bytes_factor</string>
+  <string translatable="false" name="prefkey_enable_tunneled_video_playback">enable_tunneled_video_playback</string>
+  <string translatable="false" name="prefkey_enable_hdmv_dts_audio_streams">enable_hdmv_dts_audio_streams</string>
+  <string translatable="false" name="prefkey_pause_on_change_to_audio_output_device">pause_on_change_to_audio_output_device</string>
+  <string translatable="false" name="prefkey_prefer_extension_renderer">prefer_extension_renderer</string>
 
-  <!-- foreground service notification -->
-  <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: service running</string>
-  <string name="notification_service_content_line1">ExoAirPlayer running at:</string>
-  <string name="notification_service_content_line3">Click to stop service.</string>
+  <!-- Preference default values -->
+  <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36</string>
 
-  <!-- track selection dialog -->
-  <string name="track_selection_button">Select tracks</string>
-  <string name="track_selection_title">@string/track_selection_button</string>
-
-  <!-- text captions offset selection dialog -->
-  <string name="text_offset_selection_button">Sync captions</string>
-  <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
 </resources>

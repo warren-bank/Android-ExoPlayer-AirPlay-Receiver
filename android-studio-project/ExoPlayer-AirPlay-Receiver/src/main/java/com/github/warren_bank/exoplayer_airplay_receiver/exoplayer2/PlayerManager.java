@@ -6,7 +6,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
 import android.content.Context;
@@ -62,12 +62,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /** Manages ExoPlayer and an internal media queue */
-public final class PlayerManager implements Player.Listener {
+public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPreferenceChangeListener {
 
   private static final String TAG = "PlayerManager";
-
-  private static final float audioVolumePercentIncrement = 0.05f;  //  20 steps from 0.0 to  1.0
-  private static final float audioVolumeBoostIncrement   = 0.5f;   // 100 steps from 1.0 to 51.0 (though 2.0 ... 4.0 is a more typical range of values)
 
   private final class MyArrayList<E> extends ArrayList<E> {
     public void retainLast(int count) {
@@ -83,13 +80,13 @@ public final class PlayerManager implements Player.Listener {
   private MyArrayList<VideoSource> mediaQueue;
   private ConcatenatingMediaSource concatenatingMediaSource;
   private MyRenderersFactory renderersFactory;
+  private DefaultExtractorsFactory extractorsFactory;
   private DefaultHttpDataSource.Factory httpDataSourceFactory;
   private DataSource.Factory defaultDataSourceFactory;
   private CacheDataSource.Factory cacheDataSourceFactory;
   private DownloadTracker downloadTracker;
   private ExoPlayer exoPlayer;
   private float audioVolume;
-  private int   audioVolumeMaxDbBoost;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
   private Handler handler;
@@ -114,12 +111,27 @@ public final class PlayerManager implements Player.Listener {
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
 
     this.trackSelector = new DefaultTrackSelector(context);
-    this.renderersFactory = new MyRenderersFactory(context);
+    this.renderersFactory = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer());
     this.textSynchronizer = (TextSynchronizer) renderersFactory;
 
-    DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory()
-      .setTsExtractorFlags(DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS)
-      .setTsExtractorTimestampSearchBytes((int) (2.5f * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES));
+    trackSelector.setParameters(
+      trackSelector.buildUponParameters()
+        .setTunnelingEnabled(
+          PreferencesMgr.get_enable_tunneled_video_playback()
+        )
+    );
+
+    this.extractorsFactory = new DefaultExtractorsFactory();
+
+    extractorsFactory.setTsExtractorTimestampSearchBytes(
+      (int) (PreferencesMgr.get_ts_extractor_timestamp_search_bytes_factor() * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES)
+    );
+
+    extractorsFactory.setTsExtractorFlags(
+      PreferencesMgr.get_enable_hdmv_dts_audio_streams()
+        ? DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS
+        : 0
+    );
 
     DefaultLoadControl loadControl = getLoadControl(context);
 
@@ -127,7 +139,7 @@ public final class PlayerManager implements Player.Listener {
     AnalyticsCollector analyticsCollector = new AnalyticsCollector(Clock.DEFAULT);
     analyticsCollector.addListener(exoLogger);
 
-    String userAgent               = context.getString(R.string.user_agent);
+    String userAgent               = PreferencesMgr.get_default_user_agent();
     VideoSource.DEFAULT_USER_AGENT = userAgent;
     ExoPlayerUtils.setUserAgent(userAgent);
 
@@ -136,7 +148,7 @@ public final class PlayerManager implements Player.Listener {
     this.cacheDataSourceFactory    = ExoPlayerUtils.getCacheDataSourceFactory(context);
     this.downloadTracker           = ExoPlayerUtils.getDownloadTracker(context);
 
-    this.exoPlayer = new ExoPlayer.Builder(
+    ExoPlayer.Builder builder = new ExoPlayer.Builder(
       context,
       (RenderersFactory) renderersFactory,
       new DefaultMediaSourceFactory(cacheDataSourceFactory, extractorsFactory),
@@ -144,18 +156,33 @@ public final class PlayerManager implements Player.Listener {
       loadControl,
       DefaultBandwidthMeter.getSingletonInstance(context),
       analyticsCollector
-    ).build();
+    );
+
+    builder
+      .setSeekBackIncrementMs(
+        PreferencesMgr.get_seek_back_ms_increment()
+      )
+      .setSeekForwardIncrementMs(
+        PreferencesMgr.get_seek_forward_ms_increment()
+      )
+    ;
+
+    this.exoPlayer = builder.build();
     this.exoPlayer.addListener(this);
     this.exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+    this.exoPlayer.setHandleAudioBecomingNoisy(
+      PreferencesMgr.get_pause_on_change_to_audio_output_device()
+    );
 
     this.audioVolume             = 1.0f;
-    this.audioVolumeMaxDbBoost   = ResourceUtils.getInteger(context, R.integer.AUDIO_VOLUME_MAX_DB_BOOST);
     this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
     this.currentItemIndex        = C.INDEX_UNSET;
     this.handler                 = new Handler(Looper.getMainLooper());
 
     this.onAudioSessionIdChanged( this.exoPlayer.getAudioSessionId() );
     this.downloadTracker.startDownloadService();
+
+    PreferencesMgr.addOnPreferenceChangedListener(this);
   }
 
   private DefaultLoadControl getLoadControl(Context context) {
@@ -778,7 +805,7 @@ public final class PlayerManager implements Player.Listener {
       return;
 
     float maxVolume = (loudnessEnhancer != null)
-      ? (float) (audioVolumeMaxDbBoost + 1.0f)
+      ? (float) (PreferencesMgr.get_max_audio_volume_boost_db() + 1.0f)
       : 1.0f;
 
     if (Float.compare(newAudioVolume, 0.0f) < 0) // if (newAudioVolume < 0.0f)
@@ -912,7 +939,7 @@ public final class PlayerManager implements Player.Listener {
         case KeyEvent.KEYCODE_VOLUME_DOWN : {
           if (Float.compare(audioVolume, 1.0f) > 0) { // if (audioVolume > 1.0f)
             // decrease amplification
-            float newAudioVolume = audioVolume - audioVolumeBoostIncrement;
+            float newAudioVolume = audioVolume - PreferencesMgr.get_audio_volume_boost_db_increment();
             if (Float.compare(newAudioVolume, 1.0f) < 0) // if (newAudioVolume < 1.0f)
               newAudioVolume = 1.0f;
             AirPlay_volume(newAudioVolume);
@@ -924,7 +951,7 @@ public final class PlayerManager implements Player.Listener {
         case KeyEvent.KEYCODE_VOLUME_UP : {
           if (Float.compare(audioVolume, 1.0f) < 0) { // if (audioVolume < 1.0f)
             // increase volume
-            float newAudioVolume = audioVolume + audioVolumePercentIncrement;
+            float newAudioVolume = audioVolume + PreferencesMgr.get_audio_volume_percent_increment();
             if (Float.compare(newAudioVolume, 1.0f) > 0) // if (newAudioVolume > 1.0f)
               newAudioVolume = 1.0f;
             AirPlay_volume(newAudioVolume);
@@ -936,11 +963,11 @@ public final class PlayerManager implements Player.Listener {
             int systemVolumeMax         = systemAudioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
             if (systemVolume == systemVolumeMax) {
-              float maxVolume = (float) (audioVolumeMaxDbBoost + 1.0f);
+              float maxVolume = (float) (PreferencesMgr.get_max_audio_volume_boost_db() + 1.0f);
 
               if (Float.compare(audioVolume, maxVolume) < 0) { // if (audioVolume < maxVolume)
                 // increase amplification
-                AirPlay_volume(audioVolume + audioVolumeBoostIncrement);
+                AirPlay_volume(audioVolume + PreferencesMgr.get_audio_volume_boost_db_increment());
                 isHandled = true;
               }
             }
@@ -958,6 +985,8 @@ public final class PlayerManager implements Player.Listener {
    */
   public void release() {
     try {
+      PreferencesMgr.removeOnPreferenceChangedListener(this);
+
       release_exoPlayer();
 
       if (mediaQueue != null)
@@ -972,6 +1001,7 @@ public final class PlayerManager implements Player.Listener {
       mediaQueue               = null;
       concatenatingMediaSource = null;
       renderersFactory         = null;
+      extractorsFactory        = null;
       httpDataSourceFactory    = null;
       defaultDataSourceFactory = null;
       cacheDataSourceFactory   = null;
@@ -1092,6 +1122,70 @@ public final class PlayerManager implements Player.Listener {
         break;
       }
     }
+  }
+
+  // ===========================================================================
+  // PreferencesMgr.OnPreferenceChangeListener implementation.
+  // ===========================================================================
+
+  @Override
+  public void onPreferenceChange(int pref_key_id) {
+      switch(pref_key_id) {
+        case R.string.prefkey_default_user_agent : {
+          String userAgent               = PreferencesMgr.get_default_user_agent();
+          VideoSource.DEFAULT_USER_AGENT = userAgent;
+          ExoPlayerUtils.setUserAgent(userAgent);
+          break;
+        }
+
+        case R.string.prefkey_enable_tunneled_video_playback : {
+          trackSelector.setParameters(
+            trackSelector.buildUponParameters()
+              .setTunnelingEnabled(
+                PreferencesMgr.get_enable_tunneled_video_playback()
+              )
+          );
+          break;
+        }
+
+        case R.string.prefkey_ts_extractor_timestamp_search_bytes_factor : {
+          extractorsFactory.setTsExtractorTimestampSearchBytes(
+            (int) (PreferencesMgr.get_ts_extractor_timestamp_search_bytes_factor() * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES)
+          );
+          break;
+        }
+
+        case R.string.prefkey_enable_hdmv_dts_audio_streams : {
+          extractorsFactory.setTsExtractorFlags(
+            PreferencesMgr.get_enable_hdmv_dts_audio_streams()
+              ? DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS
+              : 0
+          );
+          break;
+        }
+
+        case R.string.prefkey_pause_on_change_to_audio_output_device : {
+          exoPlayer.setHandleAudioBecomingNoisy(
+            PreferencesMgr.get_pause_on_change_to_audio_output_device()
+          );
+          break;
+        }
+
+        case R.string.prefkey_max_audio_volume_boost_db       :
+        case R.string.prefkey_audio_volume_percent_increment  :
+        case R.string.prefkey_audio_volume_boost_db_increment : {
+          // nothing to do: value is requested when needed
+          break;
+        }
+
+        case R.string.prefkey_max_parallel_downloads    :
+        case R.string.prefkey_seek_back_ms_increment    :
+        case R.string.prefkey_seek_forward_ms_increment :
+        case R.string.prefkey_prefer_extension_renderer : {
+          // nothing to do: value will take effect when app is restarted
+          break;
+        }
+      }
   }
 
   // Internal methods.

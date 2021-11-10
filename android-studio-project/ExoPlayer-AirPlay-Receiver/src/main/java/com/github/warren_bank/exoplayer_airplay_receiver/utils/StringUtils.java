@@ -208,8 +208,8 @@ public class StringUtils {
   }
 
   public static String normalizeBooleanString(String bool) {
-    if (!TextUtils.isEmpty(bool))
-      bool = bool.toLowerCase();
+    if (bool != null)
+      bool = bool.toLowerCase().trim();
 
     return (
         TextUtils.isEmpty(bool)
@@ -218,6 +218,11 @@ public class StringUtils {
      || bool.equals("null")
      || bool.equals("undefined")
     ) ? "false" : "true";
+  }
+
+  // unlike TextUtils, trim leading/trailing whitespace before testing for 0-length
+  public static boolean isEmpty(String text) {
+    return (text == null) || text.trim().isEmpty();
   }
 
 }

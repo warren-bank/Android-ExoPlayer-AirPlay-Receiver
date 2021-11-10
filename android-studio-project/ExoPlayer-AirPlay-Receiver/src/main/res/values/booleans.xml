@@ -1,0 +1,8 @@
+<resources>
+  <!-- Preference default values -->
+  <bool name="prefval_enable_tunneled_video_playback">false</bool>
+  <bool name="prefval_enable_hdmv_dts_audio_streams">false</bool>
+  <bool name="prefval_pause_on_change_to_audio_output_device">false</bool>
+  <bool name="prefval_prefer_extension_renderer">false</bool>
+
+</resources>

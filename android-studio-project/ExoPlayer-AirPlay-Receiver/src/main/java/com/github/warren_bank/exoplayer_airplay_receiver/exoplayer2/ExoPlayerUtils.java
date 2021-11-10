@@ -7,7 +7,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 
 import android.content.Context;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -152,7 +152,7 @@ public final class ExoPlayerUtils {
       upgradeActionFile(context, DOWNLOAD_ACTION_FILE,         downloadIndex, /* addNewDownloadsAsCompleted= */ false);
       upgradeActionFile(context, DOWNLOAD_TRACKER_ACTION_FILE, downloadIndex, /* addNewDownloadsAsCompleted= */ true);
 
-      int threadPoolSize = ResourceUtils.getInteger(context, R.integer.MAX_PARALLEL_DOWNLOADS);
+      int threadPoolSize = PreferencesMgr.get_max_parallel_downloads();
 
       downloadManager = new DownloadManager(
           context,

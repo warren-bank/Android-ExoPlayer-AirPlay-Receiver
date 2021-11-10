@@ -7,6 +7,15 @@
 
   <integer name="PLATFORM_SCHEDULER_JOB_ID_EXOPLAYER_DOWNLOAD_SERVICE">1</integer>
 
-  <integer name="AUDIO_VOLUME_MAX_DB_BOOST">50</integer>
-  <integer name="MAX_PARALLEL_DOWNLOADS">6</integer>
+  <!-- Preference default values (integer) -->
+  <integer name="prefval_max_audio_volume_boost_db">50</integer>
+  <integer name="prefval_max_parallel_downloads">6</integer>
+  <integer name="prefval_seek_back_ms_increment">5000</integer>
+  <integer name="prefval_seek_forward_ms_increment">15000</integer>
+
+  <!-- Preference default values (float * 100f) -->
+  <integer name="prefval_audio_volume_percent_increment">5</integer>                <!-- 0.05f  //  20 steps from 0.0 to  1.0 -->
+  <integer name="prefval_audio_volume_boost_db_increment">50</integer>              <!-- 0.50f  // 100 steps from 1.0 to 51.0 -->
+  <integer name="prefval_ts_extractor_timestamp_search_bytes_factor">250</integer>  <!-- 2.50f                                -->
+
 </resources>

@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer {
   private MyTextRenderer textRenderer;
 
-  public MyRenderersFactory(Context context) {
+  public MyRenderersFactory(Context context, boolean preferExtensionRenderer) {
     super(
       context,
-      /* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(/* boolean preferExtensionRenderer= */ false)
+      /* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(preferExtensionRenderer)
     );
     textRenderer = null;
   }
