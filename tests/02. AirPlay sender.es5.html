@@ -64,11 +64,13 @@ body > div.contents > div.section textarea {
 }
 body > div.contents > div.section textarea#req_headers,
 body > div.contents > div.section textarea#drm_headers,
-body > div.contents > div.section textarea#intent_data {
+body > div.contents > div.section textarea#intent_data,
+body > div.contents > div.section textarea#preferences_data {
   white-space: nowrap;
 }
 
-body > div.contents > div.section select#toast_variables {
+body > div.contents > div.section select#toast_variables,
+body > div.contents > div.section select#preferences_values {
   width: 8em;
   padding: 4px;
 }
@@ -212,6 +214,9 @@ window.onload  = function() {
   var $send_intent             = document.querySelector('button#send_intent')
   var $share_video_data        = document.querySelector('textarea#share_video_data')
   var $share_video             = document.querySelector('button#share_video')
+  var $preferences_data        = document.querySelector('textarea#preferences_data')
+  var $preferences_values      = document.querySelector('select#preferences_values')
+  var $edit_preferences        = document.querySelector('button#edit_preferences')
   var $delete_cache            = document.querySelector('button#delete_cache')
   var $exit_service            = document.querySelector('button#exit_service')
   var $sample_videos           = document.querySelector('select#sample_videos')
@@ -328,6 +333,21 @@ window.onload  = function() {
     data.push('drmUrl:    ')
     data.push('drmHeader: ')
     $share_video_data.value = data.join("\n")
+
+    data = []
+    data.push('default-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36')
+    data.push('max-audio-volume-boost-db: 50')
+    data.push('max-parallel-downloads: 6')
+    data.push('seek-back-ms-increment: 5000')
+    data.push('seek-forward-ms-increment: 15000')
+    data.push('audio-volume-percent-increment: 0.05')
+    data.push('audio-volume-boost-db-increment: 0.50')
+    data.push('ts-extractor-timestamp-search-bytes-factor: 2.50')
+    data.push('enable-tunneled-video-playback: false')
+    data.push('enable-hdmv-dts-audio-streams: false')
+    data.push('pause-on-change-to-audio-output-device: false')
+    data.push('prefer-extension-renderer: false')
+    $preferences_data.value = data.join("\n")
   }
 
   prepopulate_form_fields()
@@ -956,6 +976,43 @@ window.onload  = function() {
     send_message(path, data)
   }
 
+  $preferences_values.addEventListener('change', function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var key = $preferences_values.value
+
+    if (key) {
+      var data  = $preferences_data.value.trim()
+      var regex = new RegExp('\\b(\\s*' + key + '\\s*:\\s*)[^\\r\\n]*\\b', 'ig')
+
+      switch(key) {
+        case 'default-user-agent':
+          if (regex.test(data))
+            data = data.replace(regex, '$1' + window.navigator.userAgent)
+          else
+            data += (data.length ? "\n" : '') + key + ': ' + window.navigator.userAgent
+          break
+      }
+
+      $preferences_data.value   = data
+      $preferences_values.value = ''
+    }
+  })
+
+  $edit_preferences.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/edit-preferences'
+    var data = $preferences_data.value.trim()
+
+    if (!data)
+      return
+
+    send_message(path, data)
+  }
+
   $delete_cache.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -1390,7 +1447,7 @@ window.onload  = function() {
       <h3>Start New Activity:</h3>
       <div class="flex">
         <div>
-          <textarea id="intent_data" rows="18"></textarea>
+          <textarea id="intent_data" rows="19"></textarea>
         </div>
         <div>
           <div><button id="load_video">Load Video</button></div>
@@ -1404,7 +1461,7 @@ window.onload  = function() {
       <h3>Share Current Video in Queue with New Activity:</h3>
       <div class="flex">
         <div>
-          <textarea id="share_video_data" rows="6"></textarea>
+          <textarea id="share_video_data" rows="7"></textarea>
         </div>
         <div>
           <div><button id="share_video">Share Video</button></div>
@@ -1415,6 +1472,20 @@ window.onload  = function() {
     <div class="advanced_ui_mode section">
       <hr />
       <h3>Program Management:</h3>
+      <div class="flex">
+        <div>
+          <textarea id="preferences_data" rows="13"></textarea>
+        </div>
+        <div>
+          <div>
+            <select id="preferences_values">
+              <option value="">Set Value:</option>
+              <option value="default-user-agent">User-Agent</option>
+            </select>
+          </div>
+          <div><button id="edit_preferences">Edit<br />Preferences</button></div>
+        </div>
+      </div>
       <div>
         <table align="center">
           <tr>

@@ -532,6 +532,71 @@ __extended APIs:__
       referUrl:  Referer
       reqHeader: android.media.intent.extra.HTTP_HEADERS
     ```
+* POST data sent in requests to `/edit-preferences` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys are not case sensitive
+  - recognized keys include:
+    * _default-user-agent_
+      - type: string
+      - description: default _User-Agent_ HTTP request header
+      - default: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36`
+    * _max-audio-volume-boost-db_
+      - type: integer
+      - description: maximum number of dB that the audio can be amplified
+      - default: `50`
+    * _max-parallel-downloads_
+      - type: integer
+      - description: maximum number of threads used to download each video in parallel
+      - default: `6`
+      - limitation: update does not take effect until the app is restarted
+    * _seek-back-ms-increment_
+      - type: integer
+      - description: number of milliseconds that the ![rewind](https://github.com/google/material-design-icons/raw/4.0.0/png/av/fast_rewind/materialicons/18dp/1x/baseline_fast_rewind_black_18dp.png) icon in the video controls overlay will rewind within the current video
+      - default: `5000` (ie: 5 seconds)
+      - limitation: update does not take effect until the app is restarted
+    * _seek-forward-ms-increment_
+      - type: integer
+      - description: number of milliseconds that the ![fast-forward](https://github.com/google/material-design-icons/raw/4.0.0/png/av/fast_forward/materialicons/18dp/1x/baseline_fast_forward_black_18dp.png) icon in the video controls overlay will fast-forward within the current video
+      - default: `15000` (ie: 15 seconds)
+      - limitation: update does not take effect until the app is restarted
+    * _audio-volume-percent-increment_
+      - type: float
+      - description: percent of full volume that is changed each time a hardware volume button is pressed
+      - context: applies when volume is &lt; 100%
+      - default: `0.05` (ie: 5%)
+    * _audio-volume-boost-db-increment_
+      - type: float
+      - description: number of dB that volume amplification is changed each time a hardware volume button is pressed
+      - context: applies when volume is &gt; 100%
+      - default: `0.50`
+    * _ts-extractor-timestamp-search-bytes-factor_
+      - type: float
+      - description: multiplication factor used to adjust the maximum number of bytes to search at the start/end of each media file to obtain its first and last Program Clock Reference (PCR) values to compute the duration
+        * [reference](https://github.com/google/ExoPlayer/issues/8571)
+      - default: `2.50`
+    * _enable-tunneled-video-playback_
+      - type: boolean
+      - description: enable tunneled video playback?
+        * [reference](https://medium.com/google-exoplayer/tunneled-video-playback-in-exoplayer-84f084a8094d)
+      - default: `false`
+    * _enable-hdmv-dts-audio-streams_
+      - type: boolean
+      - description: enable the handling of HDMV DTS audio streams?
+        * [reference](https://exoplayer.dev/doc/reference/com/google/android/exoplayer2/extractor/ts/DefaultTsPayloadReaderFactory.html#FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS)
+      - default: `false`
+    * _pause-on-change-to-audio-output-device_
+      - type: boolean
+      - description: pause automatically when audio is rerouted from a headset to device speakers?
+        * [reference](https://exoplayer.dev/doc/reference/com/google/android/exoplayer2/ExoPlayer.html#setHandleAudioBecomingNoisy(boolean))
+      - default: `false`
+    * _prefer-extension-renderer_
+      - type: boolean
+      - description: prefer to use an extension renderer to a core renderer?
+        * [reference](https://exoplayer.dev/doc/reference/com/google/android/exoplayer2/DefaultRenderersFactory.html#EXTENSION_RENDERER_MODE_PREFER)
+      - default: `false`
+      - limitation: update does not take effect until the app is restarted
 * POST data sent in requests to `/show-toast` API endpoint:
   - contains an arbitrary block of text
 

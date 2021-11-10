@@ -821,6 +821,23 @@ public class RequestListenerThread extends Thread {
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (
+        (entityContent != null) &&
+        target.equals(Constant.Target.PREFERENCES_EDIT)
+      ) {
+        String requestBody;
+        requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+
+        HashMap<String, String> map = StringUtils.parseRequestBody(requestBody, /* normalize_lowercase_keys= */ true);
+
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Preferences_Edit;
+        msg.obj = map;
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.equals(Constant.Target.CACHE_DELETE)) {
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Delete_Cache;

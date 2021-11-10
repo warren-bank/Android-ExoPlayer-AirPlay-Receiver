@@ -14,6 +14,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.ui.RuntimePermissionsRe
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ToastUtils;
 
@@ -148,6 +149,17 @@ final class MyMessageHandler extends Handler {
           service,
           playerManager.getCurrentItem(),
           /* map= */ (HashMap) msg.obj
+        );
+        break;
+      }
+
+      // =======================================================================
+      // Edit Preferences
+      // =======================================================================
+
+      case Constant.Msg.Msg_Preferences_Edit : {
+        PreferencesMgr.edit_preferences(
+          /* values= */ (HashMap) msg.obj
         );
         break;
       }
