@@ -9,11 +9,71 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ToastUtils {
+
+  // =========================================================================== show at vertical center
+
+  public static void showToastCenterShort(Context context, int resId) {
+    String text = context.getString(resId);
+    ToastUtils.showToastCenterShort(context, text);
+  }
+
+  public static void showToastCenterShort(Context context, String text) {
+    int duration = Toast.LENGTH_SHORT;
+    ToastUtils.showToastCenter(context, text, duration);
+  }
+
+  public static void showToastCenterLong(Context context, int resId) {
+    String text = context.getString(resId);
+    ToastUtils.showToastCenterLong(context, text);
+  }
+
+  public static void showToastCenterLong(Context context, String text) {
+    int duration = Toast.LENGTH_LONG;
+    ToastUtils.showToastCenter(context, text, duration);
+  }
+
+  public static void showToastCenter(Context context, String text, int duration) {
+    Toast toast = Toast.makeText(context, text, duration);
+    toast.setGravity(Gravity.CENTER, 0, 0);
+    toast.show();
+  }
+
+  // =========================================================================== show at vertical bottom
+
+  public static void showToastBottomShort(Context context, int resId) {
+    String text = context.getString(resId);
+    ToastUtils.showToastBottomShort(context, text);
+  }
+
+  public static void showToastBottomShort(Context context, String text) {
+    int duration = Toast.LENGTH_SHORT;
+    ToastUtils.showToastBottom(context, text, duration);
+  }
+
+  public static void showToastBottomLong(Context context, int resId) {
+    String text = context.getString(resId);
+    ToastUtils.showToastBottomLong(context, text);
+  }
+
+  public static void showToastBottomLong(Context context, String text) {
+    int duration = Toast.LENGTH_LONG;
+    ToastUtils.showToastBottom(context, text, duration);
+  }
+
+  public static void showToastBottom(Context context, String text, int duration) {
+    Toast toast = Toast.makeText(context, text, duration);
+    toast.setGravity(Gravity.BOTTOM, 0, 0);
+    toast.show();
+  }
+
+  // =========================================================================== interpolate variables
 
   public static String interpolate_variables(Context context, PlayerManager playerManager, String text) {
     if (TextUtils.isEmpty(text)) return null;

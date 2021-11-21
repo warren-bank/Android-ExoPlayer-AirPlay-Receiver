@@ -7,6 +7,10 @@
   <string name="toast_registration_failure">AirPlay registration failed</string>
 
   <!-- Toast error messages -->
+  <string name="toast_start_activity_error_activity_not_found">No Activity Found\n\nNo Intent Filters match the Intent</string>
+  <string name="toast_start_activity_error_security">Insufficient Permission\n\nExoAirPlayer cannot start the Activity</string>
+
+  <!-- Toast error messages -->
   <!--   based on: https://github.com/google/ExoPlayer/blob/r2.15.1/demos/main/src/main/res/values/strings.xml -->
   <string name="toast_downloadtracker_error_download_start">Failed to start download</string>
   <string name="toast_downloadtracker_error_download_start_offline_license">Failed to obtain offline license</string>

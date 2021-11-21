@@ -404,7 +404,7 @@ __extended APIs:__
       class:
       action: android.intent.action.VIEW
       data: http://example.com/video.m3u8
-      type: application/x-mpegURL
+      type: application/x-mpegurl
       category: android.intent.category.DEFAULT
       category: android.intent.category.BROWSABLE
       flag: 0x10000000
@@ -424,6 +424,8 @@ __extended APIs:__
 
       extra-drmHeader: Authorization: Bearer xxxxx
       extra-drmHeader: Cookie: token=xxxxx; sessionID=yyyyy
+
+      chooser-title: Open HLS video stream in:
     '
 
     curl --silent -X POST \
@@ -495,6 +497,9 @@ __extended APIs:__
       - name of extra matches the "*" glob
       - value of extra is either a String or String[]
         * depending on whether the fully qualified key had been used on multiple lines to declare more than one value
+    * _chooser-title_
+      - a non-empty value indicates that a chooser dialog should always be shown
+      - the value is the title to display in the chooser dialog
   - keys required to start an explicit Intent:
     * _package_ and _class_
   - keys required to start an implicit Intent:

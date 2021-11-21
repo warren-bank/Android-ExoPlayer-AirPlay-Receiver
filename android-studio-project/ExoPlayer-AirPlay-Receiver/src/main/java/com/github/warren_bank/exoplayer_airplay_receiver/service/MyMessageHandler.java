@@ -13,11 +13,13 @@ import com.github.warren_bank.exoplayer_airplay_receiver.ui.ImageViewerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.RuntimePermissionsRequestActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.IntentUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ToastUtils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,8 +29,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -86,17 +86,12 @@ final class MyMessageHandler extends Handler {
       // =======================================================================
 
       case Constant.Register.OK : {
-        Toast toast = Toast.makeText(service.getApplicationContext(), service.getString(R.string.toast_registration_success), Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        ToastUtils.showToastCenterShort(service.getApplicationContext(), R.string.toast_registration_success);
         break;
       }
 
       case Constant.Register.FAIL : {
-        Toast toast = Toast.makeText(service.getApplicationContext(), service.getString(R.string.toast_registration_failure), Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
+        ToastUtils.showToastCenterShort(service.getApplicationContext(), R.string.toast_registration_failure);
         service.stopSelf();
         break;
       }
@@ -123,7 +118,7 @@ final class MyMessageHandler extends Handler {
         text = ToastUtils.interpolate_variables(service.getApplicationContext(), playerManager, text);
 
         if (!TextUtils.isEmpty(text)) {
-          Toast.makeText(service.getApplicationContext(), text, Toast.LENGTH_LONG).show();
+          ToastUtils.showToastBottomLong(service.getApplicationContext(), text);
         }
         break;
       }
@@ -381,6 +376,11 @@ final class MyMessageHandler extends Handler {
         intent.setData(data);
       }
     }
+    else if (map.containsKey("type")) {
+      intent.setType(
+        (String) StringUtils.getLastListItem(map.get("type"))
+      );
+    }
 
     if (map.containsKey("category")) {
       for (String category : map.get("category")) {
@@ -408,11 +408,27 @@ final class MyMessageHandler extends Handler {
         if (values.size() > 1)
           intent.putExtra(name, (String[]) values.toArray(new String[values.size()]));
         else
-          intent.putExtra(name, (String) values.get(0));
+          IntentUtils.putExtra(intent, name, (String) values.get(0));
       }
     }
 
-    service.startActivity(intent);
+    if (map.containsKey("chooser-title")) {
+      String title = (String) StringUtils.getLastListItem(map.get("chooser-title"));
+      intent = Intent.createChooser(intent, title);
+    }
+
+    try {
+      service.startActivity(intent);
+    }
+    catch(ActivityNotFoundException e) {
+      ToastUtils.showToastBottomShort(service.getApplicationContext(), R.string.toast_start_activity_error_activity_not_found);
+    }
+    catch(SecurityException e) {
+      ToastUtils.showToastBottomShort(service.getApplicationContext(), R.string.toast_start_activity_error_security);
+    }
+    catch(Exception e) {
+      Log.e(tag, "startActivity", e);
+    }
   }
 
   private void shareVideo(NetworkingService service, VideoSource sample, HashMap<String, String> map) {
@@ -674,4 +690,5 @@ final class MyMessageHandler extends Handler {
 
     handler.post(runnable);
   }
+
 }

@@ -207,12 +207,19 @@ public class StringUtils {
     return bundle;
   }
 
+  // unlike TextUtils, trim leading/trailing whitespace before testing for 0-length
+  public static boolean isEmpty(String text) {
+    return (text == null) || text.trim().isEmpty();
+  }
+
+  // =========================================================================== normalize serialized data types
+
   public static String normalizeBooleanString(String bool) {
     if (bool != null)
       bool = bool.toLowerCase().trim();
 
     return (
-        TextUtils.isEmpty(bool)
+        StringUtils.isEmpty(bool)
      || bool.equals("false")
      || bool.equals("0")
      || bool.equals("null")
@@ -220,9 +227,44 @@ public class StringUtils {
     ) ? "false" : "true";
   }
 
-  // unlike TextUtils, trim leading/trailing whitespace before testing for 0-length
-  public static boolean isEmpty(String text) {
-    return (text == null) || text.trim().isEmpty();
+  // ===================================
+
+  private static String removeTrailingCaseInsensitiveSuffix(String value, char suffix) {
+    return removeTrailingCaseInsensitiveSuffix(value, suffix, /* default_value= */ "0");
+  }
+
+  private static String removeTrailingCaseInsensitiveSuffix(String value, char suffix, String default_value) {
+    suffix = Character.toLowerCase(suffix);
+
+    value = StringUtils.isEmpty(value)
+      ? default_value
+      : value.trim();
+
+    if (StringUtils.isEmpty(value))
+      return value;
+
+    int  tail_index = value.length() - 1;
+    char tail;
+    tail = value.charAt(tail_index);
+    tail = Character.toLowerCase(tail);
+
+    if (tail == suffix) {
+      value = value.substring(0, tail_index);
+    }
+
+    return value;
+  }
+
+  public static String normalizeLongString(String value) {
+    return removeTrailingCaseInsensitiveSuffix(value, /* suffix= */ 'L');
+  }
+
+  public static String normalizeFloatString(String value) {
+    return removeTrailingCaseInsensitiveSuffix(value, /* suffix= */ 'F');
+  }
+
+  public static String normalizeDoubleString(String value) {
+    return removeTrailingCaseInsensitiveSuffix(value, /* suffix= */ 'D');
   }
 
 }
