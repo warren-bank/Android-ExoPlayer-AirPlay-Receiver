@@ -179,19 +179,19 @@ public class NetworkingService extends Service {
 
   private void registerAirplay() throws IOException {
     Message msg = Message.obtain();
-    if (!getParams()) {
+    if (!getServiceInfoParams()) {
       msg.what = Constant.Register.FAIL;
       Log.d(tag, "Bonjour services NOT successfully registered");
     }
     else {
-      register();
+      registerServices();
       msg.what = Constant.Register.OK;
       Log.d(tag, "Bonjour services successfully registered");
     }
     MainApp.broadcastMessage(msg);
   }
 
-  private void register() throws IOException {
+  private void registerServices() throws IOException {
     Log.d(tag, "Beginning registration of Bonjour services..");
     registerTcpLocal();
     registerRaopLocal();
@@ -210,7 +210,7 @@ public class NetworkingService extends Service {
     jmdnsRaop.registerService(raopService);
   }
 
-  private boolean getParams() {
+  private boolean getServiceInfoParams() {
     String strMac = null;
 
     try {

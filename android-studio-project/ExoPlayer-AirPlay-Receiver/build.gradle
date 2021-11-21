@@ -65,26 +65,26 @@ android {
 }
 
 dependencies {
-    compileOnly         'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidX           // ( 27 KB) https://mvnrepository.com/artifact/androidx.annotation/annotation
-    annotationProcessor 'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidX
+    compileOnly         'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidxAnnotation          // ( 27 KB) https://mvnrepository.com/artifact/androidx.annotation/annotation
+    annotationProcessor 'androidx.annotation:annotation:'                         + project.ext.libVersionAndroidxAnnotation
 
-    implementation      'androidx.appcompat:appcompat:'                           + project.ext.libVersionAndroidX           // (1.0 MB) https://mvnrepository.com/artifact/androidx.appcompat/appcompat
-    implementation      'androidx.core:core:'                                     + project.ext.libVersionAndroidX           // (665 KB) https://mvnrepository.com/artifact/androidx.core/core
-    implementation      'androidx.media:media:'                                   + project.ext.libVersionAndroidX           // (307 KB) https://mvnrepository.com/artifact/androidx.media/media
+    implementation      'androidx.appcompat:appcompat:'                           + project.ext.libVersionAndroidxAppCompat           // (1.0 MB) https://mvnrepository.com/artifact/androidx.appcompat/appcompat
+    implementation      'androidx.core:core:'                                     + project.ext.libVersionAndroidxCore                // (665 KB) https://mvnrepository.com/artifact/androidx.core/core
+    implementation      'androidx.media:media:'                                   + project.ext.libVersionAndroidxMedia               // (307 KB) https://mvnrepository.com/artifact/androidx.media/media
 
-    implementation      'com.google.android.material:material:'                   + project.ext.libVersionMaterial           // (567 KB) https://mvnrepository.com/artifact/com.google.android.material/material
+    implementation      'com.google.android.material:material:'                   + project.ext.libVersionAndroidxMaterial            // (567 KB) https://mvnrepository.com/artifact/com.google.android.material/material
 
-    implementation      'com.google.android.exoplayer:exoplayer-core:'            + project.ext.libVersionExoPlayer          // (1.3 MB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-core?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-dash:'            + project.ext.libVersionExoPlayer          // (118 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-dash?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-hls:'             + project.ext.libVersionExoPlayer          // (146 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-hls?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-rtsp:'            + project.ext.libVersionExoPlayer          // (101 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-rtsp?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-smoothstreaming:' + project.ext.libVersionExoPlayer          // ( 44 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-smoothstreaming?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-ui:'              + project.ext.libVersionExoPlayer          // (433 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-ui?repo=scijava-public
-    implementation      'com.google.android.exoplayer:extension-mediasession:'    + project.ext.libVersionExoPlayer          // ( 80 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/extension-mediasession?repo=google
+    implementation      'com.google.android.exoplayer:exoplayer-core:'            + project.ext.libVersionExoPlayer                   // (1.3 MB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-core?repo=scijava-public
+    implementation      'com.google.android.exoplayer:exoplayer-dash:'            + project.ext.libVersionExoPlayer                   // (118 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-dash?repo=scijava-public
+    implementation      'com.google.android.exoplayer:exoplayer-hls:'             + project.ext.libVersionExoPlayer                   // (146 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-hls?repo=scijava-public
+    implementation      'com.google.android.exoplayer:exoplayer-rtsp:'            + project.ext.libVersionExoPlayer                   // (101 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-rtsp?repo=scijava-public
+    implementation      'com.google.android.exoplayer:exoplayer-smoothstreaming:' + project.ext.libVersionExoPlayer                   // ( 44 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-smoothstreaming?repo=scijava-public
+    implementation      'com.google.android.exoplayer:exoplayer-ui:'              + project.ext.libVersionExoPlayer                   // (433 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-ui?repo=scijava-public
+    implementation      'com.google.android.exoplayer:extension-mediasession:'    + project.ext.libVersionExoPlayer                   // ( 80 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/extension-mediasession?repo=google
 
-    implementation      'com.googlecode.plist:dd-plist:'                          + project.ext.libVersionDdPlist            // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
-    implementation      'org.apache.httpcomponents:httpcore:'                     + project.ext.libVersionHttpCore           // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
-    implementation      'org.jmdns:jmdns:'                                        + project.ext.libVersionJmDNS              // (209 KB) https://mvnrepository.com/artifact/org.jmdns/jmdns
+    implementation      'com.googlecode.plist:dd-plist:'                          + project.ext.libVersionDdPlist                     // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
+    implementation      'org.apache.httpcomponents:httpcore:'                     + project.ext.libVersionHttpCore                    // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+    implementation      'org.jmdns:jmdns:'                                        + project.ext.libVersionJmDNS                       // (209 KB) https://mvnrepository.com/artifact/org.jmdns/jmdns
 
     withDecoderExtensionsImplementation fileTree(dir: "libs/decoder_extensions", include: ["extension-*.aar"])
 }

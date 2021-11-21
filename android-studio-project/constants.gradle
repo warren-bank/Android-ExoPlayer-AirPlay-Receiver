@@ -4,13 +4,20 @@ project.ext {
     javaVersion         = JavaVersion.VERSION_1_8
     minSdkVersion       = 16
     targetSdkVersion    = 29
-    compileSdkVersion   = 30
-    buildToolsVersion   = '30.0.3'
+    compileSdkVersion   = 31
+    buildToolsVersion   = '31.0.0'
 
-    libVersionAndroidX  = '1.1.0'
-    libVersionMaterial  = '1.0.0'
-    libVersionExoPlayer = '2.16.0'
     libVersionDdPlist   = '1.23'
     libVersionHttpCore  = '4.4.13'
     libVersionJmDNS     = '3.5.5'
+    libVersionExoPlayer = '2.16.1'
+
+    // keep versions of AndroidX libraries in sync with those used by ExoPlayer:
+    //   https://github.com/google/ExoPlayer/blob/r2.16.1/constants.gradle#L37
+
+    libVersionAndroidxAnnotation = '1.3.0'
+    libVersionAndroidxAppCompat  = '1.3.1'
+    libVersionAndroidxCore       = '1.7.0'
+    libVersionAndroidxMedia      = '1.4.3'
+    libVersionAndroidxMaterial   = '1.4.0'
 }
