@@ -3,6 +3,12 @@
   <string name="toast_registration_started">दर्ता AirPlay सेवा...</string>
   <string name="toast_registration_success">AirPlay दर्ता सफलता</string>
   <string name="toast_registration_failure">AirPlay दर्ता असफल भयो</string>
+  <string name="toast_start_activity_error_activity_not_found">क्रियाकलाप फेला परेन\n\nकुनै इन्टेन्ट फिल्टरहरू इन्टेन्टसँग मेल खाँदैन</string>
+  <string name="toast_start_activity_error_security">अपर्याप्त अनुमति\n\nExoAirPlayer क्रियाकलाप सुरु गर्न सकिँदैन</string>
+  <string name="toast_downloadtracker_error_download_start">डाउनलोड सुरु गर्न असफल भयो</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">अफलाइन अनुमतिपत्र प्राप्त गर्न असफल</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">लाइभ सामग्री डाउनलोड गर्न समर्थित छैन</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM विषयवस्तु समर्थित छैन API 18 भन्दा तल स्तर</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay प्राप्ताङ्क: सेवा चलिरहेको</string>
   <string name="notification_service_content_line1">ExoAirPlayer चलिरहेको छ:</string>
   <string name="notification_service_content_line3">सेवा रोक्न क्लिक गर्नुहोस्.</string>

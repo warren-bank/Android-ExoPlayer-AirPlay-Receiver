@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Rekisteröinti AirPlay Palvelu...</string>
   <string name="toast_registration_success">AirPlay Rekisteröinnin onnistuminen</string>
   <string name="toast_registration_failure">AirPlay Rekisteröinti epäonnistui</string>
+  <string name="toast_start_activity_error_activity_not_found">Ei aktiviteettia\n\nIntent-suodattimet eivät vastaa toisiaan</string>
+  <string name="toast_start_activity_error_security">Riittämätön Permission\n\nExoAirPlayer Ei voi aloittaa aktiviteettia</string>
+  <string name="toast_downloadtracker_error_download_start">Kohteen lataus ei onnistunut</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Offline-lisenssien nouto epäonnistui</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Elävän sisällön lataus ei ole tuettu</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Sisältö ei ole tuettu API Alle 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Vastaanotin: palvelun käyttö</string>
   <string name="notification_service_content_line1">ExoAirPlayer Ajossa:</string>
   <string name="notification_service_content_line3">Lopeta palvelu napsauttamalla.</string>

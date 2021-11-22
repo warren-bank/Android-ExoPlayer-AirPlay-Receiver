@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Cofrestru AirPlay gwasanaeth...</string>
   <string name="toast_registration_success">AirPlay llwyddiant cofrestru</string>
   <string name="toast_registration_failure">AirPlay methodd cofrestru</string>
+  <string name="toast_start_activity_error_activity_not_found">Heb Ganfod Gweithgaredd\n\nNid Oes Unrhyw Fwriad Yn Hidlo</string>
+  <string name="toast_start_activity_error_security">Caniatâd Annigonol\n\nExoAirPlayer methu cychwyn y gweithgaredd</string>
+  <string name="toast_downloadtracker_error_download_start">Methu cychwyn llwytho i lawr</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Methu cael trwydded all-lein</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ni chynhelir llwytho i lawr cynnwys byw</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM nid yw cynnwys yn cael ei gefnogi API lefelau islaw 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Derbynnydd: gwasanaeth yn rhedeg</string>
   <string name="notification_service_content_line1">ExoAirPlayer rhedeg ar:</string>
   <string name="notification_service_content_line3">Cliciwch i atal y gwasanaeth.</string>

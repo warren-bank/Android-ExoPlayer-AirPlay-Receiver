@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Enregistrement AirPlay service...</string>
   <string name="toast_registration_success">AirPlay succès d\'enregistrement</string>
   <string name="toast_registration_failure">AirPlay échec d\'enregistrement</string>
+  <string name="toast_start_activity_error_activity_not_found">Aucune activité trouvée\n\nAucun filtre d\'intention ne correspond à l\'objectif</string>
+  <string name="toast_start_activity_error_security">Droits insuffisants\n\nExoAirPlayer impossible de démarrer l\'activité</string>
+  <string name="toast_downloadtracker_error_download_start">Echec du démarrage du téléchargement</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Impossible d\'obtenir une licence hors ligne</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Téléchargement du contenu en direct non pris en charge</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM contenu n\'est pas pris en charge API niveaux inférieurs à 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Récepteur: service actif</string>
   <string name="notification_service_content_line1">ExoAirPlayer exécution à:</string>
   <string name="notification_service_content_line3">Cliquez pour arrêter le service.</string>

@@ -3,6 +3,12 @@
   <string name="toast_registration_started">กำลังลงทะเบียน AirPlay เซอร์วิส...</string>
   <string name="toast_registration_success">AirPlay การลงทะเบียนสำเร็จ</string>
   <string name="toast_registration_failure">AirPlay การลงทะเบียนล้มเหลว</string>
+  <string name="toast_start_activity_error_activity_not_found">ไม่พบกิจกรรม\n\nไม่มีตัวกรองแบบเจาะจงที่ตรงกับจุดประสงค์</string>
+  <string name="toast_start_activity_error_security">สิทธิไม่เพียงพอ\n\nExoAirPlayer ไม่สามารถเริ่มกิจกรรม</string>
+  <string name="toast_downloadtracker_error_download_start">ล้มเหลวในการเริ่มต้นดาวน์โหลด</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">ล้มเหลวในการรับไลเซนส์ออฟไลน์</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">ไม่สนับสนุนการดาวน์โหลดเนื้อหาแบบ live</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM เนื้อหาไม่ได้รับการสนับสนุนบน API ระดับต่ำกว่า 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay ผู้รับ: เซอร์วิสที่รันอยู่</string>
   <string name="notification_service_content_line1">ExoAirPlayer การรันที่:</string>
   <string name="notification_service_content_line3">คลิกเพื่อหยุดบริการ.</string>

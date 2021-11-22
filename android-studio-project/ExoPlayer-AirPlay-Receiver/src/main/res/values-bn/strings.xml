@@ -3,6 +3,12 @@
   <string name="toast_registration_started">নিবন্ধন AirPlay সার্ভিস...</string>
   <string name="toast_registration_success">AirPlay নিবন্ধন সাফল্য</string>
   <string name="toast_registration_failure">AirPlay নিবন্ধন ব্যর্থ</string>
+  <string name="toast_start_activity_error_activity_not_found">কোন অ্যাক্টিভিটি পাওয়া যায়নি\n\nকোন ইনটেম ফিল্টার ইন্ডমেন্টকে মেলে না</string>
+  <string name="toast_start_activity_error_security">অপর্যাপ্ত অনুমতি\n\nExoAirPlayer অ্যাক্টিভিটি আরম্ভ করতে পারে না</string>
+  <string name="toast_downloadtracker_error_download_start">ডাউনলোড আরম্ভ করতে ব্যর্থ</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">অফ-লাইন লাইসেন্স পাওয়া যায়নি</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">লাইভ কন্টেন্ট ডাউনলোড করা হচ্ছে না</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM বিষয়বস্তু সমর্থিত নয় API ১৮ এর নিচে</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay রিসিভার: সার্ভিস চলছে</string>
   <string name="notification_service_content_line1">ExoAirPlayer চলমান:</string>
   <string name="notification_service_content_line3">সার্ভিস বন্ধ করতে ক্লিক করুন.</string>

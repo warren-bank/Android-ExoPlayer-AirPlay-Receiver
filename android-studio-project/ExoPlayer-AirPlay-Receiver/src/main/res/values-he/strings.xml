@@ -3,6 +3,12 @@
   <string name="toast_registration_started">רישום AirPlay שירות...</string>
   <string name="toast_registration_success">AirPlay הצלחת רישום</string>
   <string name="toast_registration_failure">AirPlay הרישום נכשל.</string>
+  <string name="toast_start_activity_error_activity_not_found">לא נמצאה פעילות\n\nאין מסננים פנימיים תואמים את Inהאוהל</string>
+  <string name="toast_start_activity_error_security">הרשאה לא מספיקה\n\nExoAirPlayer לא ניתן להפעיל את הפעילות.</string>
+  <string name="toast_downloadtracker_error_download_start">לא ניתן להתחיל את ההורדה</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">נכשל בקבלת רשיון לא מקוון</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">הורדת תוכן מקוון אינה נתמכת.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM התוכן אינו נתמך ב - API רמות מתחת ל-18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay קבלה: שירות רץ</string>
   <string name="notification_service_content_line1">ExoAirPlayer רץ ב:</string>
   <string name="notification_service_content_line3">לחצו כדי להפסיק את השירות.</string>

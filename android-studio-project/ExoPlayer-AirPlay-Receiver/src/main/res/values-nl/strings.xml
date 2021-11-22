@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Registreren AirPlay Service...</string>
   <string name="toast_registration_success">AirPlay registratie succes</string>
   <string name="toast_registration_failure">AirPlay registratie is mislukt</string>
+  <string name="toast_start_activity_error_activity_not_found">Geen activiteit gevonden\n\nGeen Intent Filters komen overeen met de Intent</string>
+  <string name="toast_start_activity_error_security">Onvoldoende machtiging\n\nExoAirPlayer kan de activiteit niet starten</string>
+  <string name="toast_downloadtracker_error_download_start">Downloaden van download is mislukt</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Verkrijgen van offline licentie is mislukt</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Het downloaden van live content wordt niet ondersteund</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM content wordt niet ondersteund op API niveaus lager dan 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Ontvanger: service wordt uitgevoerd</string>
   <string name="notification_service_content_line1">ExoAirPlayer uitvoeren op:</string>
   <string name="notification_service_content_line3">Klik om de service te stoppen.</string>

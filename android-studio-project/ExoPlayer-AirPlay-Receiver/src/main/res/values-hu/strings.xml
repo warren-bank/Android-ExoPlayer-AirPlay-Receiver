@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Regisztráció AirPlay Szolgáltatás...</string>
   <string name="toast_registration_success">AirPlay Forgalmi siker</string>
   <string name="toast_registration_failure">AirPlay Regisztráció sikertelen</string>
+  <string name="toast_start_activity_error_activity_not_found">Nem található tevékenység\n\nNincs Intent szűrő az Intent</string>
+  <string name="toast_start_activity_error_security">Elégtelen engedély\n\nExoAirPlayer Nem indíthatja el a tevékenységet</string>
+  <string name="toast_downloadtracker_error_download_start">A letöltés indítása meghiúsult</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Az offline licenc lekérése meghiúsult</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Élő tartalom letöltése nem támogatott</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Tartalom nem támogatott a rendszeren API 18 alatti szintek</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Fogadó: szolgáltatás fut</string>
   <string name="notification_service_content_line1">ExoAirPlayer Futás közben:</string>
   <string name="notification_service_content_line3">Kattintson ide a szolgáltatás leállításához.</string>

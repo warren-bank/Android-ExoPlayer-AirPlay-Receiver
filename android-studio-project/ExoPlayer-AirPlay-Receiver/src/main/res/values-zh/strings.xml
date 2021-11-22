@@ -3,6 +3,12 @@
   <string name="toast_registration_started">注册 AirPlay 服务...</string>
   <string name="toast_registration_success">AirPlay 注册成功</string>
   <string name="toast_registration_failure">AirPlay 注册失败</string>
+  <string name="toast_start_activity_error_activity_not_found">未找到活动\n\n无意向过滤器与 Intent 匹配</string>
+  <string name="toast_start_activity_error_security">许可权不足\n\nExoAirPlayer 无法启动活动</string>
+  <string name="toast_downloadtracker_error_download_start">无法启动下载</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">未能获取脱机许可证</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">不支持下载实时内容</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM 不支持内容 API 低于 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay 接收器: 服务正在运行</string>
   <string name="notification_service_content_line1">ExoAirPlayer 奔跑:</string>
   <string name="notification_service_content_line3">单击以停止服务.</string>

@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Clárathóir AirPlay seirbhís...</string>
   <string name="toast_registration_success">AirPlay Rath clárúcháin</string>
   <string name="toast_registration_failure">AirPlay theip ar chlárú</string>
+  <string name="toast_start_activity_error_activity_not_found">Níor Aimsíodh Aon Ghníomhaíocht\n\nNíl aon scagairí Intéireacha comhoiriúnach don intinn</string>
+  <string name="toast_start_activity_error_security">Níl go leor cead ann\n\nExoAirPlayer Ní féidir an Gníomh a thosú</string>
+  <string name="toast_downloadtracker_error_download_start">Theip ar íosluchtú a thosú</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Theip ar cheadúnas as líne a fháil</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ní thacaítear le híosluchtú ábhar beo</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM ábhar nach bhfuil tacaíocht ar API leibhéil faoi bhun 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Glacadóir: rith ag rith</string>
   <string name="notification_service_content_line1">ExoAirPlayer á rith ag:</string>
   <string name="notification_service_content_line3">Cliceáil chun seirbhís a stopadh.</string>

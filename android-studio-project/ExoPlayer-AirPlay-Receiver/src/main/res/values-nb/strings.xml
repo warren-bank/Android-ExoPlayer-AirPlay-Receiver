@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Registrerer AirPlay tjeneste...</string>
   <string name="toast_registration_success">AirPlay registrersuksess</string>
   <string name="toast_registration_failure">AirPlay Registrering mislyktes</string>
+  <string name="toast_start_activity_error_activity_not_found">Ingen aktivitet funnet\n\nIngen insteltfiltre samsvarer med Intet</string>
+  <string name="toast_start_activity_error_security">Utilstrekkelig tillatelse\n\nExoAirPlayer kan ikke starte aktiviteten</string>
+  <string name="toast_downloadtracker_error_download_start">Kunne ikke starte nedlasting</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Kunne ikke innhente offline-lisens</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Nedlasting av levende innhold støttes ikke</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM innhold støttes ikke på API nivåer under 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Mottaker: tjenestekjøring</string>
   <string name="notification_service_content_line1">ExoAirPlayer kjøre på:</string>
   <string name="notification_service_content_line3">Klikk for å stoppe tjeneste.</string>

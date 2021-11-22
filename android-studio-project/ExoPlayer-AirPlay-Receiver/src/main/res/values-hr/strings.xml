@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Registriranje AirPlay servis...</string>
   <string name="toast_registration_success">AirPlay uspjeh registracije</string>
   <string name="toast_registration_failure">AirPlay prijava nije uspjela</string>
+  <string name="toast_start_activity_error_activity_not_found">Nije Nađena Aktivnost\n\nNema Filtera Namjere koji se podudaraju s Inšatorom</string>
+  <string name="toast_start_activity_error_security">Nedovoljna dozvola\n\nExoAirPlayer ne može se pokrenuti Aktivnost</string>
+  <string name="toast_downloadtracker_error_download_start">Nije uspjelo pokretanje preuzimanja</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Neuspješno dobivanje offline licence</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Preuzimanje živog sadržaja nije podržano</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM sadržaj nije podržan na API razine ispod 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Primatelj: usluga u izvođenju</string>
   <string name="notification_service_content_line1">ExoAirPlayer izvođenje na:</string>
   <string name="notification_service_content_line3">Kliknite za zaustavljanje servisa.</string>

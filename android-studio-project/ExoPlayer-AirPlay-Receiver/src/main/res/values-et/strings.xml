@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Registreerimine AirPlay Teenus...</string>
   <string name="toast_registration_success">AirPlay Registreerimine edu</string>
   <string name="toast_registration_failure">AirPlay registreerimine nurjus</string>
+  <string name="toast_start_activity_error_activity_not_found">Aktiivsust ei leitud\n\nEi mingeid kavatsusi sobivaid filtreid</string>
+  <string name="toast_start_activity_error_security">Ebapiisav Luba\n\nExoAirPlayer ei saa alustada tegevust</string>
+  <string name="toast_downloadtracker_error_download_start">Allalaadimise alustamine nurjus</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Võrguühenduseta litsentsi hankimine nurjus</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Live-sisu allalaadimine pole toetatud</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Sisu ei ole toetatud API allapoole 18 taset</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Saaja: teenus töötab</string>
   <string name="notification_service_content_line1">ExoAirPlayer tööaeg:</string>
   <string name="notification_service_content_line3">Klõpsa teenuse peatamiseks.</string>

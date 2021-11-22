@@ -3,6 +3,12 @@
   <string name="toast_registration_started">登録中 AirPlay 送達...</string>
   <string name="toast_registration_success">AirPlay 登録成功</string>
   <string name="toast_registration_failure">AirPlay 登録の失敗</string>
+  <string name="toast_start_activity_error_activity_not_found">アクティビティーが見つからない\n\nインテント・フィルターがインテントに一致しません</string>
+  <string name="toast_start_activity_error_security">不十分な権限\n\nExoAirPlayer アクティビティーを開始できない</string>
+  <string name="toast_downloadtracker_error_download_start">ダウンロード開始に失敗しました</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">オフラインライセンス取得に失敗しました</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">ライブコンテンツのダウンロードはサポートされていませ</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM コンテンツはサポートされません API 18 未満のレベル</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay 受信側: サービス実行中</string>
   <string name="notification_service_content_line1">ExoAirPlayer 実行:</string>
   <string name="notification_service_content_line3">クリックしてサービスを停止.</string>

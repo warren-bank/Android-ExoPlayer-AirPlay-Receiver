@@ -3,6 +3,12 @@
   <string name="toast_registration_started">Регистрация AirPlay служба...</string>
   <string name="toast_registration_success">AirPlay регистрация успешно</string>
   <string name="toast_registration_failure">AirPlay регистрация завершилась неудачно</string>
+  <string name="toast_start_activity_error_activity_not_found">Операции не найдены\n\nФильтры намерений не соответствуют Intent</string>
+  <string name="toast_start_activity_error_security">Недостаточное разрешение\n\nExoAirPlayer невозможно запустить операцию</string>
+  <string name="toast_downloadtracker_error_download_start">Не удалось запустить загрузку</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Не удалось получить автономную лицензию</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Загрузка содержимого в прямом эфире не поддерживается</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM содержимое не поддерживается в API уровнях ниже 18</string>
   <string name="notification_service_ticker">ExoPlayer AirPlay Получатель: запуск службы</string>
   <string name="notification_service_content_line1">ExoAirPlayer запуск в:</string>
   <string name="notification_service_content_line3">Щелкните, чтобы остановить службу.</string>
