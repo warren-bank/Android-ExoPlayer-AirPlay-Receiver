@@ -10,6 +10,7 @@ public class IntentUtils {
   /*
    * supported explicit cast types:
    *   string
+   *   string[]
    *   bool
    *   bool[]
    *   boolean
@@ -38,6 +39,7 @@ public class IntentUtils {
    *   (string)    1.0F
    *   (string)    1.0D
    *   (string)    true
+   *   (string[])  length, of, String[], equals, 1
    *   (int)       1
    *   (long)      1
    *   (float)     1.0
@@ -48,7 +50,7 @@ public class IntentUtils {
    *   (char[])    h,e,l,l,o
    *   (char[])    hello
    */
-  private static Pattern explicit_type_cast_regex    = Pattern.compile("^\\(\\s*(string|bool|bool\\[\\]|boolean|boolean\\[\\]|byte|byte\\[\\]|char|char\\[\\]|double|double\\[\\]|float|float\\[\\]|int|int\\[\\]|integer|integer\\[\\]|long|long\\[\\]|short|short\\[\\])\\s*\\)\\s*(.+)$", Pattern.CASE_INSENSITIVE);
+  private static Pattern explicit_type_cast_regex    = Pattern.compile("^\\(\\s*(string|string\\[\\]|bool|bool\\[\\]|boolean|boolean\\[\\]|byte|byte\\[\\]|char|char\\[\\]|double|double\\[\\]|float|float\\[\\]|int|int\\[\\]|integer|integer\\[\\]|long|long\\[\\]|short|short\\[\\])\\s*\\)\\s*(.+)$", Pattern.CASE_INSENSITIVE);
   private static Pattern implicit_type_boolean_regex = Pattern.compile("^(?:true|false)$", Pattern.CASE_INSENSITIVE);
   private static Pattern implicit_type_integer_regex = Pattern.compile("^[+-]?\\d+$");
   private static Pattern implicit_type_long_regex    = Pattern.compile("^[+-]?\\d+[l|L]$");
@@ -115,7 +117,7 @@ public class IntentUtils {
       return;
     }
 
-    is_array = explicit_type.endsWith("[]");
+    is_array = explicit_type.endsWith("[]") && !explicit_type.equals("string[]");
 
     explicit_value_array = is_array
       ? explicit_value.split("\\s*[,]\\s*")
@@ -125,7 +127,12 @@ public class IntentUtils {
     switch(explicit_type) {
 
       case "string" : {
-        intent.putExtra(name, explicit_value);
+        intent.putExtra(name, (String) explicit_value);
+        break;
+      }
+
+      case "string[]" : {
+        intent.putExtra(name, (String[]) explicit_value_array);
         break;
       }
 
