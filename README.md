@@ -494,9 +494,61 @@ __extended APIs:__
       - use key on multiple lines to declare more than one value
       - format value in decimal (base 10), or hex (base 16) with "0x" prefix
     * _extra-*_
-      - name of extra matches the "*" glob
-      - value of extra is either a String or String[]
-        * depending on whether the fully qualified key had been used on multiple lines to declare more than one value
+      - where "*" is a glob pattern
+        * to indicate that the recognized key can contain any additional sequence of characters
+        * to capture the case sensitive name of an Intent extra
+      - the data type of the Intent extra is determined as follows:
+        * if a distinct key occurs on multiple lines
+          - `String[]`
+        * if the value begins with an explicit type cast
+          - matching any of the following case insensitive substrings:
+            * `(String)`
+            * `(String[])`
+            * `(bool)`
+            * `(bool[])`
+            * `(boolean)`
+            * `(boolean[])`
+            * `(byte)`
+            * `(byte[])`
+            * `(char)`
+            * `(char[])`
+            * `(double)`
+            * `(double[])`
+            * `(float)`
+            * `(float[])`
+            * `(int)`
+            * `(int[])`
+            * `(integer)`
+            * `(integer[])`
+            * `(long)`
+            * `(long[])`
+            * `(short)`
+            * `(short[])`
+          - notes:
+            * when a value is explicitly cast to an array..
+              - if the data type is: `String[]`
+                * the value is _not_ tokenized
+                * the array:
+                  - has length: 1
+                  - is equal to: `[value]`
+              - if the data type is: `char[]`
+                * the value is parsed as an ordered sequence of characters
+                * commas are removed
+              - for all other data types
+                * the value is parsed as an ordered comma-separated list
+        * if the value can be implicitly cast<br>(note: the following regex patterns are only descriptive)
+          - matches the regex pattern: `/(true|false)/i`
+            * `boolean`
+          - matches the regex pattern: `/[+-]?\d+/`
+            * `int`
+          - matches the regex pattern: `/[+-]?\d+L/i`
+            * `long`
+          - matches the regex pattern: `/[+-]?\d+(\.\d+)?F/i`
+            * `float`
+          - matches the regex pattern: `/[+-]?\d+(\.\d+)?D/i`
+            * `double`
+        * otherwise
+          - `String`
     * _chooser-title_
       - a non-empty value indicates that a chooser dialog should always be shown
       - the value is the title to display in the chooser dialog
