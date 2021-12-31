@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.Random;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -39,28 +40,39 @@ public class NetworkUtils {
   }
 
   public synchronized static String[] getMACAddress(InetAddress ia) throws Exception {
-    //Obtain the network interface object (that is, the network card), and get the mac address. The mac address exists in a byte array.
-    byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+    byte[] mac = null;
+    try {
+      //Obtain the network interface object (that is, the network card), and get the mac address. The mac address exists in a byte array.
+      mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
+
+      if ((mac == null) || (mac.length < 6))
+        throw new Exception("");
+    }
+    catch (Exception e) {
+      mac = new byte[6];
+      Random random = new Random();
+      random.nextBytes(mac);
+    }
 
     //The following code assembles the mac address into a String
     String[] str_array = new String[2];
-    StringBuffer sb1 = new StringBuffer();
-    StringBuffer sb2 = new StringBuffer();
+    StringBuffer sb = new StringBuffer();
+    String s;
 
     for (int i = 0; i < mac.length; i++) {
       if (i != 0) {
-        sb1.append(":");
+        sb.append(":");
       }
       //mac[i] & 0xFF ..to convert bytes into positive integers
-      String s = Integer.toHexString(mac[i] & 0xFF);
-      sb1.append(s.length() == 1 ? 0 + s : s);
-      sb2.append(s.length() == 1 ? 0 + s : s);
+      s = Integer.toHexString(mac[i] & 0xFF);
+      sb.append(s.length() == 1 ? "0" + s : s);
     }
-    //Change all lowercase letters of the string to regular mac addresses and return
-    str_array[0] = sb1.toString();
-    str_array[1] = sb2.toString();
+    //Change all lowercase letters of the string to regular mac addresses
+    s = sb.toString().toUpperCase();
+
+    str_array[0] = s;
+    str_array[1] = s.replace(":", "");
     return str_array;
-    //return sb1.toString().toUpperCase();
   }
 
   public static String getLocalIp(Context context) {
