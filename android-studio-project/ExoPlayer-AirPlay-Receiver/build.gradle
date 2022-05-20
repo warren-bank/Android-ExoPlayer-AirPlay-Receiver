@@ -74,13 +74,14 @@ dependencies {
 
     implementation      'com.google.android.material:material:'                   + project.ext.libVersionAndroidxMaterial            // (567 KB) https://mvnrepository.com/artifact/com.google.android.material/material
 
-    implementation      'com.google.android.exoplayer:exoplayer-core:'            + project.ext.libVersionExoPlayer                   // (1.3 MB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-core?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-dash:'            + project.ext.libVersionExoPlayer                   // (118 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-dash?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-hls:'             + project.ext.libVersionExoPlayer                   // (146 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-hls?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-rtsp:'            + project.ext.libVersionExoPlayer                   // (101 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-rtsp?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-smoothstreaming:' + project.ext.libVersionExoPlayer                   // ( 44 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-smoothstreaming?repo=scijava-public
-    implementation      'com.google.android.exoplayer:exoplayer-ui:'              + project.ext.libVersionExoPlayer                   // (433 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-ui?repo=scijava-public
+    implementation      'com.google.android.exoplayer:exoplayer-core:'            + project.ext.libVersionExoPlayer                   // (1.3 MB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-core?repo=google
+    implementation      'com.google.android.exoplayer:exoplayer-dash:'            + project.ext.libVersionExoPlayer                   // (118 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-dash?repo=google
+    implementation      'com.google.android.exoplayer:exoplayer-hls:'             + project.ext.libVersionExoPlayer                   // (146 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-hls?repo=google
+    implementation      'com.google.android.exoplayer:exoplayer-rtsp:'            + project.ext.libVersionExoPlayer                   // (101 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-rtsp?repo=google
+    implementation      'com.google.android.exoplayer:exoplayer-smoothstreaming:' + project.ext.libVersionExoPlayer                   // ( 44 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-smoothstreaming?repo=google
+    implementation      'com.google.android.exoplayer:exoplayer-ui:'              + project.ext.libVersionExoPlayer                   // (433 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer-ui?repo=google
     implementation      'com.google.android.exoplayer:extension-mediasession:'    + project.ext.libVersionExoPlayer                   // ( 80 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/extension-mediasession?repo=google
+    implementation      'com.google.android.exoplayer:extension-rtmp:'            + project.ext.libVersionExoPlayer                   // (  5 KB) https://mvnrepository.com/artifact/com.google.android.exoplayer/extension-rtmp?repo=google
 
     implementation      'com.googlecode.plist:dd-plist:'                          + project.ext.libVersionDdPlist                     // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
     implementation      'org.apache.httpcomponents:httpcore:'                     + project.ext.libVersionHttpCore                    // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore

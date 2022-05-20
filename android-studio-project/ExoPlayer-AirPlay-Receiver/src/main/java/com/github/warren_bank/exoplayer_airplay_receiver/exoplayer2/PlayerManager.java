@@ -32,6 +32,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.DefaultAnalyticsCollector;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
 import com.google.android.exoplayer2.extractor.ts.TsExtractor;
@@ -55,7 +56,6 @@ import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.util.Clock;
 import com.google.android.exoplayer2.util.EventLogger;
-import com.google.android.exoplayer2.util.MimeTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +84,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private DefaultHttpDataSource.Factory httpDataSourceFactory;
   private DataSource.Factory defaultDataSourceFactory;
   private CacheDataSource.Factory cacheDataSourceFactory;
+  private RtmpDataSource.Factory rtmpDataSourceFactory;
   private DownloadTracker downloadTracker;
   private ExoPlayer exoPlayer;
   private float audioVolume;
@@ -144,6 +145,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     this.httpDataSourceFactory     = ExoPlayerUtils.getHttpDataSourceFactory(context);
     this.defaultDataSourceFactory  = ExoPlayerUtils.getDefaultDataSourceFactory(context);
     this.cacheDataSourceFactory    = ExoPlayerUtils.getCacheDataSourceFactory(context);
+    this.rtmpDataSourceFactory     = ExoPlayerUtils.getRtmpDataSourceFactory();
     this.downloadTracker           = ExoPlayerUtils.getDownloadTracker(context);
 
     ExoPlayer.Builder builder = new ExoPlayer.Builder(
@@ -1338,14 +1340,18 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     MediaItem mediaItem = sample.getMediaItem();
 
     switch (sample.uri_mimeType) {
-      case MimeTypes.APPLICATION_M3U8:
+      case "application/x-mpegURL":
+      case "application/x-mpegurl":
         return new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
-      case MimeTypes.APPLICATION_MPD:
+      case "application/dash+xml":
         return new DashMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
-      case MimeTypes.APPLICATION_SS:
+      case "application/vnd.ms-sstr+xml":
         return new SsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
-      case MimeTypes.APPLICATION_RTSP:
+      case "application/x-rtsp":
         return new RtspMediaSource.Factory().createMediaSource(mediaItem);
+      case "application/x-rtmp":
+        factory = rtmpDataSourceFactory;
+        return new ProgressiveMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
       default:
         return new ProgressiveMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
     }

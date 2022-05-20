@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -42,6 +43,7 @@ public final class ExoPlayerUtils {
   private static DefaultHttpDataSource.Factory httpDataSourceFactory;
   private static DataSource.Factory defaultDataSourceFactory;
   private static CacheDataSource.Factory cacheDataSourceFactory;
+  private static RtmpDataSource.Factory rtmpDataSourceFactory;
   private static DatabaseProvider databaseProvider;
   private static File downloadDirectory;
   private static Cache downloadCache;
@@ -112,6 +114,14 @@ public final class ExoPlayerUtils {
       cacheDataSourceFactory = buildReadOnlyCacheDataSource(getDefaultDataSourceFactory(context), getDownloadCache(context));
     }
     return cacheDataSourceFactory;
+  }
+
+  /** Returns a {@link RtmpDataSource.Factory}. */
+  public static synchronized RtmpDataSource.Factory getRtmpDataSourceFactory() {
+    if (rtmpDataSourceFactory == null) {
+      rtmpDataSourceFactory = new RtmpDataSource.Factory();
+    }
+    return rtmpDataSourceFactory;
   }
 
   public static synchronized DownloadNotificationHelper getDownloadNotificationHelper(Context context) {

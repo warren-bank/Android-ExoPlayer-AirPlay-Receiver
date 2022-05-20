@@ -83,6 +83,7 @@
                 <data android:scheme="file"/>
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
+                <data android:scheme="rtmp"/>
                 <data android:scheme="rtsp"/>
 
                 <!-- audio/video -->
@@ -102,9 +103,10 @@
                 <data android:mimeType="application/x-extension-mp4"/>
                 <data android:mimeType="application/x-flac"/>
                 <data android:mimeType="application/x-matroska"/>
-                <data android:mimeType="application/x-mpegurl"/>
                 <data android:mimeType="application/x-mpegURL"/>
+                <data android:mimeType="application/x-mpegurl"/>
                 <data android:mimeType="application/x-ogg"/>
+                <data android:mimeType="application/x-rtmp"/>
                 <data android:mimeType="application/x-rtsp"/>
             </intent-filter>
             <intent-filter>

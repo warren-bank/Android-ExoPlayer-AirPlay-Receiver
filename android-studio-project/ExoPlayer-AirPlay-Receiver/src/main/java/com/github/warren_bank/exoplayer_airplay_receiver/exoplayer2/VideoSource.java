@@ -151,10 +151,16 @@ public final class VideoSource {
   public MediaItem getMediaItem() {
     MediaItem.Builder builder = new MediaItem.Builder();
 
-    builder
-      .setUri(uri)
-      .setMimeType(uri_mimeType)
-    ;
+    builder.setUri(uri);
+
+    // ignore undefined and non-standard mime-types
+    if (
+        !TextUtils.isEmpty(uri_mimeType)
+     && !uri_mimeType.equals("application/x-rtmp")
+     && !uri_mimeType.equals("application/x-rtsp")
+    ) {
+      builder.setMimeType(uri_mimeType);
+    }
 
     // only  clip the trailing end, when there is a stop position
     // never clip the leading  end, always seek to the start position

@@ -17,6 +17,10 @@ public class MediaTypeUtils {
     ;
   }
 
+  public static boolean is_protocol_rtmp(String uri) {
+    return is_protocol(uri, "rtmp");
+  }
+
   public static boolean is_protocol_rtsp(String uri) {
     return is_protocol(uri, "rtsp");
   }
@@ -54,13 +58,24 @@ public class MediaTypeUtils {
 
   public static boolean isVideoFileUrl(String uri) {
     String file_ext = get_video_fileExtension(uri);
-    return (file_ext != null);
+    return (
+        (file_ext != null)
+     || is_protocol_rtmp(uri)
+     || is_protocol_rtsp(uri)
+    );
   }
 
   public static String get_video_mimeType(String uri) {
     String mimeType = "";
     String file_ext = null;
 
+    // define a non-standard mime-type for the purpose of unique identification
+    if (mimeType.isEmpty()) {
+      if (is_protocol_rtmp(uri))
+        mimeType = "application/x-rtmp";
+    }
+
+    // define a non-standard mime-type for the purpose of unique identification
     if (mimeType.isEmpty()) {
       if (is_protocol_rtsp(uri))
         mimeType = "application/x-rtsp";
