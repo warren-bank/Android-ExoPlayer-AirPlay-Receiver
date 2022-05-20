@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.15.1/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoUtil.java
+ *   https://github.com/google/ExoPlayer/blob/r2.17.1/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoUtil.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
@@ -15,8 +15,6 @@ import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
-import com.google.android.exoplayer2.offline.ActionFileUpgradeUtil;
-import com.google.android.exoplayer2.offline.DefaultDownloadIndex;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -26,9 +24,7 @@ import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
-import com.google.android.exoplayer2.util.Log;
 import java.io.File;
-import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -40,8 +36,6 @@ public final class ExoPlayerUtils {
   public static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "download_channel";
 
   private static final String TAG = "ExoPlayerUtils";
-  private static final String DOWNLOAD_ACTION_FILE = "actions";
-  private static final String DOWNLOAD_TRACKER_ACTION_FILE = "tracked_actions";
   private static final String DOWNLOAD_CONTENT_DIRECTORY = "downloads";
 
   private static String USER_AGENT;
@@ -147,11 +141,6 @@ public final class ExoPlayerUtils {
 
   private static synchronized void ensureDownloadManagerInitialized(Context context) {
     if (downloadManager == null) {
-      DefaultDownloadIndex downloadIndex = new DefaultDownloadIndex(getDatabaseProvider(context));
-
-      upgradeActionFile(context, DOWNLOAD_ACTION_FILE,         downloadIndex, /* addNewDownloadsAsCompleted= */ false);
-      upgradeActionFile(context, DOWNLOAD_TRACKER_ACTION_FILE, downloadIndex, /* addNewDownloadsAsCompleted= */ true);
-
       int threadPoolSize = PreferencesMgr.get_max_parallel_downloads();
 
       downloadManager = new DownloadManager(
@@ -163,21 +152,6 @@ public final class ExoPlayerUtils {
       );
 
       downloadTracker = new DownloadTracker(context, getHttpDataSourceFactory(context), downloadManager);
-    }
-  }
-
-  private static synchronized void upgradeActionFile(Context context, String fileName, DefaultDownloadIndex downloadIndex, boolean addNewDownloadsAsCompleted) {
-    try {
-      ActionFileUpgradeUtil.upgradeAndDelete(
-          new File(getDownloadDirectory(context), fileName),
-          /* downloadIdProvider= */ null,
-          downloadIndex,
-          /* deleteOnFailure= */ true,
-          addNewDownloadsAsCompleted
-      );
-    }
-    catch (IOException e) {
-      Log.e(TAG, "Failed to upgrade action file: " + fileName, e);
     }
   }
 

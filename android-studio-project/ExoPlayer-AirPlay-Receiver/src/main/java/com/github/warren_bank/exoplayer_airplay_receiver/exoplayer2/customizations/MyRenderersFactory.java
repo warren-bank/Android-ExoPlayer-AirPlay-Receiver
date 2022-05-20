@@ -13,10 +13,8 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
   private MyTextRenderer textRenderer;
 
   public MyRenderersFactory(Context context, boolean preferExtensionRenderer) {
-    super(
-      context,
-      /* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(preferExtensionRenderer)
-    );
+    super(context);
+    setExtensionRendererMode(/* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(preferExtensionRenderer));
     textRenderer = null;
   }
 

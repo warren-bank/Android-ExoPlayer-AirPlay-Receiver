@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.analytics.AnalyticsCollector;
+import com.google.android.exoplayer2.analytics.DefaultAnalyticsCollector;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
 import com.google.android.exoplayer2.extractor.ts.TsExtractor;
@@ -134,7 +134,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     DefaultLoadControl loadControl = getLoadControl(context);
 
     EventLogger exoLogger = new EventLogger(trackSelector);
-    AnalyticsCollector analyticsCollector = new AnalyticsCollector(Clock.DEFAULT);
+    DefaultAnalyticsCollector analyticsCollector = new DefaultAnalyticsCollector(Clock.DEFAULT);
     analyticsCollector.addListener(exoLogger);
 
     String userAgent               = PreferencesMgr.get_default_user_agent();

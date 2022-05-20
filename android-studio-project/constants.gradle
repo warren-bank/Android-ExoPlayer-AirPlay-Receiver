@@ -1,6 +1,6 @@
 project.ext {
-    releaseVersionCode  = Integer.parseInt("002004216", 10)  //Integer.MAX_VALUE == 2147483647
-    releaseVersion      = '002.00.42-16API'
+    releaseVersionCode  = Integer.parseInt("002004316", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersion      = '002.00.43-16API'
     javaVersion         = JavaVersion.VERSION_1_8
     minSdkVersion       = 16
     targetSdkVersion    = 29
@@ -10,7 +10,7 @@ project.ext {
     libVersionDdPlist   = '1.23'
     libVersionHttpCore  = '4.4.13'
     libVersionJmDNS     = '3.5.5'
-    libVersionExoPlayer = '2.16.1'
+    libVersionExoPlayer = '2.17.1'
 
     // keep versions of AndroidX libraries in sync with those used by ExoPlayer:
     //   https://github.com/google/ExoPlayer/blob/r2.16.1/constants.gradle#L37

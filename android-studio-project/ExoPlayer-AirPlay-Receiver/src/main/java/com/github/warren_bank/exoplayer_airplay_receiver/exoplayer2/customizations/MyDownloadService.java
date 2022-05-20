@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.16.0/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoDownloadService.java
+ *   https://github.com/google/ExoPlayer/blob/r2.17.1/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoDownloadService.java
  */
 
 import static com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
