@@ -1,10 +1,10 @@
 #### origin for pre-built native extension binaries:
 
-* [Just Player](https://github.com/moneytoo/Player/tree/v0.104/app/libs)
-  - release: [v0.104](https://github.com/moneytoo/Player/releases/tag/v0.104) (using ExoPlayer 2.17.0)
+* [Just Player](https://github.com/moneytoo/Player/tree/v0.118/app/libs)
+  - release: [v0.118](https://github.com/moneytoo/Player/releases/tag/v0.118) (using [ExoPlayer 2.18.0](https://github.com/google/ExoPlayer/releases/tag/r2.18.0))
   - extensions:
-    * [_av1_](https://github.com/moneytoo/Player/raw/v0.104/app/libs/extension-av1-release.aar)
-    * [_ffmpeg_](https://github.com/moneytoo/Player/raw/v0.104/app/libs/extension-ffmpeg-release.aar)
+    * [_av1_](https://github.com/moneytoo/Player/raw/v0.118/app/libs/extension-av1-release.aar)
+    * [_ffmpeg_](https://github.com/moneytoo/Player/raw/v0.118/app/libs/extension-ffmpeg-release.aar)
   - ABIs:
     * armeabi-v7a
     * arm64-v8a

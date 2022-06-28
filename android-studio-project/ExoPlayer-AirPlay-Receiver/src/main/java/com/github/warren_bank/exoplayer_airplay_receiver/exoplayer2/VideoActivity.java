@@ -95,7 +95,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
 
     if (visibility == View.VISIBLE) {
       selectTracksButton.setEnabled(
-        (playerManager != null) && TrackSelectionDialog.willHaveContent(playerManager.trackSelector)
+        (playerManager != null) && (playerManager.exoPlayer != null) && TrackSelectionDialog.willHaveContent(playerManager.exoPlayer)
       );
     }
   }
@@ -106,11 +106,12 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     if (
          view == selectTracksButton
       && !isShowingTrackSelectionDialog
-      && TrackSelectionDialog.willHaveContent(playerManager.trackSelector)
+      && (playerManager.exoPlayer != null)
+      && TrackSelectionDialog.willHaveContent(playerManager.exoPlayer)
     ) {
       isShowingTrackSelectionDialog = true;
-      TrackSelectionDialog trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
-        playerManager.trackSelector,
+      TrackSelectionDialog trackSelectionDialog = TrackSelectionDialog.createForPlayer(
+        playerManager.exoPlayer,
         /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false
       );
       trackSelectionDialog.show(getSupportFragmentManager(), /* tag= */ null);

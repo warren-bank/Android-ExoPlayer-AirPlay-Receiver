@@ -1,5 +1,10 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
 
+/*
+ * references:
+ *   https://github.com/google/ExoPlayer/blob/r2.18.0/library/core/src/main/java/com/google/android/exoplayer2/DefaultRenderersFactory.java
+ */
+
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
 
 import android.content.Context;

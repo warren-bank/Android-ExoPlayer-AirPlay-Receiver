@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.17.1/library/core/src/main/java/com/google/android/exoplayer2/text/TextRenderer.java
+ *   https://github.com/google/ExoPlayer/blob/r2.18.0/library/core/src/main/java/com/google/android/exoplayer2/text/TextRenderer.java
  */
 
 import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
@@ -22,6 +22,7 @@ import com.google.android.exoplayer2.FormatHolder;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.source.SampleStream.ReadDataResult;
 import com.google.android.exoplayer2.text.Cue;
+import com.google.android.exoplayer2.text.CueGroup;
 import com.google.android.exoplayer2.text.SubtitleDecoder;
 import com.google.android.exoplayer2.text.SubtitleDecoderException;
 import com.google.android.exoplayer2.text.SubtitleDecoderFactory;
@@ -384,6 +385,7 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
 
   private void invokeUpdateOutputInternal(List<Cue> cues) {
     output.onCues(cues);
+    output.onCues(new CueGroup(cues));
   }
 
   /**

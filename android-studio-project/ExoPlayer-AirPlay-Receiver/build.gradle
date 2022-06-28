@@ -50,8 +50,9 @@ android {
             ]
         }
         debug {
-            debuggable    true
-            jniDebuggable true
+            debuggable      true
+            jniDebuggable   true
+            multiDexEnabled true
         }
     }
 
@@ -94,6 +95,8 @@ dependencies {
     implementation      'org.jmdns:jmdns:'                                        + project.ext.libVersionJmDNS                       // (209 KB) https://mvnrepository.com/artifact/org.jmdns/jmdns
 
     withDecoderExtensionsImplementation fileTree(dir: "libs/decoder_extensions", include: ["extension-*.aar"])
+
+    debugImplementation 'androidx.multidex:multidex:'                             + project.ext.libVersionAndroidxMultidex            // ( 26 KB) https://mvnrepository.com/artifact/androidx.multidex/multidex
 }
 
 apply plugin: 'com.google.android.gms.strict-version-matcher-plugin'

@@ -81,20 +81,20 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private ConcatenatingMediaSource concatenatingMediaSource;
   private MyRenderersFactory renderersFactory;
   private DefaultExtractorsFactory extractorsFactory;
+  private DefaultTrackSelector trackSelector;
   private DefaultHttpDataSource.Factory httpDataSourceFactory;
   private DataSource.Factory defaultDataSourceFactory;
   private CacheDataSource.Factory cacheDataSourceFactory;
   private RtmpDataSource.Factory rtmpDataSourceFactory;
   private DownloadTracker downloadTracker;
-  private ExoPlayer exoPlayer;
   private float audioVolume;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
   private Handler handler;
   private LoudnessEnhancer loudnessEnhancer;
 
-  public DefaultTrackSelector trackSelector;
   public TextSynchronizer textSynchronizer;
+  public ExoPlayer exoPlayer;
 
   /**
    * @param context A {@link Context}.
@@ -165,6 +165,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       .setSeekForwardIncrementMs(
         PreferencesMgr.get_seek_forward_ms_increment()
       )
+      .setUsePlatformDiagnostics(false)
     ;
 
     this.exoPlayer = builder.build();
@@ -856,7 +857,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     boolean isDisabled = !showCaptions;
 
-    DefaultTrackSelector.ParametersBuilder builder = trackSelector.getParameters().buildUpon();
+    DefaultTrackSelector.Parameters.Builder builder = trackSelector.getParameters().buildUpon();
 
     MappingTrackSelector.MappedTrackInfo info = trackSelector.getCurrentMappedTrackInfo();
     if (info == null) return;
