@@ -3,9 +3,10 @@
   "private": true,
   "license": "GPL-2.0",
   "devDependencies": {
-    "@warren-bank/translate-android-strings": "^1.6.0"
+    "@warren-bank/translate-android-strings": "^1.9.1"
   },
   "scripts": {
-    "translate": "node_modules/.bin/translate-android-strings -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/strings.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res\" -m --nc --nw -b \"ExoAirPlayer\" -b \"ExoPlayer\" -b \"AirPlay\" -b \"API\" -b \"DRM\""
+    "translate": "translate-android-strings -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/strings.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/withAllLanguageTranslations/res\" -m --nc --nw -b \"(?:ExoAirPlayer|ExoPlayer|AirPlay|API|DRM)\"",
+    "translate:debug": "npm run translate -- -o \"en\" --debug"
   }
 }

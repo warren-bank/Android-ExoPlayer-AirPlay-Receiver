@@ -21,9 +21,15 @@ android {
         archivesBaseName += "-$versionName"
     }
 
-    flavorDimensions "decoderExtensions"
+    flavorDimensions "languageResources", "decoderExtensions"
 
     productFlavors {
+        withAllLanguageTranslations {
+            dimension "languageResources"
+        }
+        english {
+            dimension "languageResources"
+        }
         noDecoderExtensions {
             dimension "decoderExtensions"
             buildConfigField "boolean", "USE_DECODER_EXTENSIONS", "false"
