@@ -172,6 +172,12 @@ public class NetworkingService extends Service {
   private void registerAirplay() throws IOException {
     Message msg = Message.obtain();
     try {
+      Thread.sleep(2 * 1000);
+    }
+    catch (InterruptedException e) {
+      Log.e(tag, "problem putting thread to sleep to allow HTTP server time to initialize prior to registering Bonjour services", e);
+    }
+    try {
       Log.d(tag, "Beginning registration of Bonjour services..");
 
       if (localAddress == null)
