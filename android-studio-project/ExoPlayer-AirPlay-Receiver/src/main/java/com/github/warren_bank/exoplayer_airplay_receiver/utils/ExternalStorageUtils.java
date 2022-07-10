@@ -43,6 +43,12 @@ public class ExternalStorageUtils {
     }
   }
 
+  public static boolean isContentUri(String uri) {
+    if (uri == null) return false;
+
+    return uri.toLowerCase().startsWith("content:");
+  }
+
   private static Pattern file_uri_regex = Pattern.compile("^(?:/|file:/)");
 
   public static boolean isFileUri(String uri) {

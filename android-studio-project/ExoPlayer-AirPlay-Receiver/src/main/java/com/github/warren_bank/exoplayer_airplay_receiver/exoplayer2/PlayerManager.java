@@ -1329,7 +1329,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
-    DataSource.Factory factory = ExternalStorageUtils.isFileUri(sample.uri)
+    DataSource.Factory factory = (ExternalStorageUtils.isFileUri(sample.uri) || ExternalStorageUtils.isContentUri(sample.uri))
       ? defaultDataSourceFactory
       : sample.useCache
           ? cacheDataSourceFactory
