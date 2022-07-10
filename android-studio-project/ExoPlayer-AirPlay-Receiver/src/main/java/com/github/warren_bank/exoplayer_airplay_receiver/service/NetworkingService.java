@@ -12,9 +12,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
 
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceInfo;
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -38,26 +35,19 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class NetworkingService extends Service {
+  private static final String tag          = NetworkingService.class.getSimpleName();
   private static final String ACTION_STOP  = "STOP";
   public  static final String ACTION_PLAY  = "PLAY";
-  private static final String airplayType  = "._airplay._tcp.local";
-  private static final String raopType     = "._raop._tcp.local";
-  private static final String tag          = NetworkingService.class.getSimpleName();
 
   private static PlayerManager playerManager = null;
 
   private PlayerNotificationManagerContainer playerNotificationManager;
   private MyPlaybackStatusMonitor playbackStatusMonitor;
   private String airplayName;
+  private InetAddress localAddress;
+  private AirPlayBonjour airPlayBonjour;
   private MyMessageHandler handler;
   private RequestListenerThread thread;
-  private InetAddress localAddress;
-  private JmDNS jmdnsAirplay;
-  private JmDNS jmdnsRaop;
-  private ServiceInfo airplayService;
-  private ServiceInfo raopService;
-  private HashMap<String, String> values;
-  private String preMac;
 
   @Override
   public void onCreate() {
@@ -68,6 +58,8 @@ public class NetworkingService extends Service {
     playerNotificationManager = new PlayerNotificationManagerContainer(/* context= */ NetworkingService.this, playerManager, /* pendingIntentActivityClass= */ VideoPlayerActivity.class);
     playbackStatusMonitor     = new MyPlaybackStatusMonitor();
     airplayName               = Build.MODEL + "@" + getString(R.string.app_name);
+    localAddress              = null;
+    airPlayBonjour            = null;
 
     WakeLockMgr.acquire(/* context= */ NetworkingService.this);
 
@@ -179,106 +171,38 @@ public class NetworkingService extends Service {
 
   private void registerAirplay() throws IOException {
     Message msg = Message.obtain();
-    if (!getServiceInfoParams()) {
-      msg.what = Constant.Register.FAIL;
-      Log.d(tag, "Bonjour services NOT successfully registered");
-    }
-    else {
-      registerServices();
+    try {
+      Log.d(tag, "Beginning registration of Bonjour services..");
+
+      if (localAddress == null)
+        localAddress = NetworkUtils.getLocalIpAddress();
+
+      if (localAddress == null) {
+        Log.d(tag, "No local IP address found for any network interface that supports multicast");
+        throw new Exception("");
+      }
+
+      if (airPlayBonjour == null) {
+        airPlayBonjour = new AirPlayBonjour(airplayName);
+        airPlayBonjour.start(localAddress, Constant.AIRPLAY_PORT, Constant.RAOP_PORT);
+      }
+
       msg.what = Constant.Register.OK;
       Log.d(tag, "Bonjour services successfully registered");
     }
+    catch(Exception e) {
+      msg.what = Constant.Register.FAIL;
+      Log.d(tag, "Bonjour services NOT successfully registered");
+    }
     MainApp.broadcastMessage(msg);
-  }
-
-  private void registerServices() throws IOException {
-    Log.d(tag, "Beginning registration of Bonjour services..");
-    registerTcpLocal();
-    registerRaopLocal();
-  }
-
-  private void registerTcpLocal() throws IOException {
-    airplayService = ServiceInfo.create(airplayName + airplayType, airplayName, Constant.AIRPLAY_PORT, 0, 0, values);
-    jmdnsAirplay = JmDNS.create(localAddress); //create must bind IP address (android 4.0+)
-    jmdnsAirplay.registerService(airplayService);
-  }
-
-  private void registerRaopLocal() throws IOException {
-    String raopName = preMac + "@" + airplayName;
-    raopService = ServiceInfo.create(raopName + raopType, raopName, Constant.RAOP_PORT, "tp=UDP sm=false sv=false ek=1 et=0,1 cn=0,1 ch=2 ss=16 sr=44100 pw=false vn=3 da=true md=0,1,2 vs=103.14 txtvers=1");
-    jmdnsRaop = JmDNS.create(localAddress);
-    jmdnsRaop.registerService(raopService);
-  }
-
-  private boolean getServiceInfoParams() {
-    String strMac = null;
-
-    try {
-      Thread.sleep(2 * 1000);
-    }
-    catch (InterruptedException e) {
-      Log.e(tag, "problem putting thread to sleep to allow HTTP server time to initialize prior to registering Bonjour services", e);
-    }
-
-    if (localAddress == null)
-      localAddress = NetworkUtils.getLocalIpAddress(); //Get local IP object
-
-    if (localAddress == null) {
-      Log.d(tag, "No local IP address found for any network interface that supports multicast");
-      return false;
-    }
-
-    String[] str_Array = new String[2];
-    try {
-      str_Array = NetworkUtils.getMACAddress(localAddress);
-      if (str_Array == null)
-        return false;
-
-      strMac = str_Array[0].toUpperCase(Locale.ENGLISH);
-      preMac = str_Array[1].toUpperCase(Locale.ENGLISH);
-    }
-    catch (Exception e) {
-      Log.e(tag, "problem determining MAC address of network interface", e);
-      return false;
-    }
-    Log.d(tag, "Registering Bonjour services to: IP address = " + localAddress.getHostAddress() + "; MAC address = " + strMac + "; preMac = " + preMac);
-
-    values = new HashMap<String, String>();
-    values.put("deviceid", strMac);
-    values.put("features", "0x297f");
-    values.put("model",    "AppleTV2,1");
-    values.put("srcvers",  "130.14");
-
-    return true;
   }
 
   private void unregisterAirplay() {
     Log.d(tag, "Unregistering Bonjour services");
 
-    if (jmdnsAirplay != null) {
-      try {
-        jmdnsAirplay.unregisterService(airplayService);
-        jmdnsAirplay.close();
-      }
-      catch (IOException e) {
-        Log.e(tag, "problem shutting down Bonjour service (AirPlay)", e);
-      }
-      finally {
-        jmdnsAirplay = null;
-      }
-    }
-
-    if (jmdnsRaop != null) {
-      try {
-        jmdnsRaop.unregisterService(raopService);
-        jmdnsRaop.close();
-      }
-      catch (IOException e) {
-        Log.e(tag, "problem shutting down Bonjour service (RAOP)", e);
-      }
-      finally {
-        jmdnsRaop = null;
-      }
+    if (airPlayBonjour != null) {
+      airPlayBonjour.stop();
+      airPlayBonjour = null;
     }
   }
 
@@ -375,7 +299,7 @@ public class NetworkingService extends Service {
 
   private String getNetworkAddress() {
     if (localAddress == null)
-      localAddress = NetworkUtils.getLocalIpAddress(); //Get local IP object
+      localAddress = NetworkUtils.getLocalIpAddress();
 
     return (localAddress == null)
       ? "[offline]"

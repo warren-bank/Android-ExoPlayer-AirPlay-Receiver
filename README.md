@@ -701,6 +701,13 @@ __extended APIs:__
     * casts the URL of the video to the receiver
     * serves the video file when requested by the receiver
 
+* [_Toaster Cast_ Android app](https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer) that can be used to:
+  - discover AirPlay receivers on the same LAN
+  - discover DLNA media servers on the same LAN
+    * optionally, runs a local DLNA media server
+    * browse media on all servers
+    * casts the URL of media hosted by a DLNA server to the receiver
+
 - - - -
 
 #### Credits:

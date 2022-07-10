@@ -56,7 +56,7 @@ public class RequestListenerThread extends Thread {
 
   public  static Map<String, byte[]> photoCacheMaps = Collections.synchronizedMap(new HashMap<String, byte[]>());
   private static Map<String, Socket> socketMaps     = Collections.synchronizedMap(new HashMap<String, Socket>());
-  private static String localMac = null;
+  private static String macAddress = null;
 
   private ServerSocket serversocket;
   private HttpParams params;
@@ -126,15 +126,9 @@ public class RequestListenerThread extends Thread {
       return;
     }
 
-    String[] str_Array = new String[2];
-    try {
-      str_Array = NetworkUtils.getMACAddress(localAddress);
-      String strMac = str_Array[0];
-      localMac = strMac.toUpperCase(Locale.ENGLISH);
-      Log.d(tag, "airplay local mac = " + localMac);
-    }
-    catch (Exception e) {
-      Log.e(tag, "problem determining MAC address of network interface", e);
+    if (macAddress == null) {
+      macAddress = NetworkUtils.getMACAddress(localAddress)[0];
+      Log.d(tag, "airplay local MAC address = " + macAddress);
     }
 
     serversocket = new ServerSocket(Constant.AIRPLAY_PORT, 2, localAddress);
@@ -357,7 +351,7 @@ public class RequestListenerThread extends Thread {
       else if (target.equals(Constant.Target.SERVER_INFO)) {
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
 
-        String responseStr = Constant.getServerInfoResponse(localMac);
+        String responseStr = Constant.getServerInfoResponse(macAddress);
         httpResponse.setEntity(new StringEntity(responseStr));
       }
       else if (target.equals(Constant.Target.STOP)) { //Stop message

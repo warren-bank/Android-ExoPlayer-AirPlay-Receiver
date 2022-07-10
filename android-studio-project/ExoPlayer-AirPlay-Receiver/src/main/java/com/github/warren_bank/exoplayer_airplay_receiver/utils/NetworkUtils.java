@@ -39,7 +39,7 @@ public class NetworkUtils {
     return null;
   }
 
-  public synchronized static String[] getMACAddress(InetAddress ia) throws Exception {
+  public synchronized static String[] getMACAddress(InetAddress ia) {
     byte[] mac = null;
     try {
       //Obtain the network interface object (that is, the network card), and get the mac address. The mac address exists in a byte array.
@@ -55,7 +55,7 @@ public class NetworkUtils {
     }
 
     //The following code assembles the mac address into a String
-    String[] str_array = new String[2];
+    String[] macAddress = new String[2];
     StringBuffer sb = new StringBuffer();
     String s;
 
@@ -70,9 +70,9 @@ public class NetworkUtils {
     //Change all lowercase letters of the string to regular mac addresses
     s = sb.toString().toUpperCase();
 
-    str_array[0] = s;
-    str_array[1] = s.replace(":", "");
-    return str_array;
+    macAddress[0] = s;
+    macAddress[1] = s.replace(":", "");
+    return macAddress;
   }
 
   public static String getLocalIp(Context context) {

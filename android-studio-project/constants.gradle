@@ -9,7 +9,7 @@ project.ext {
 
     libVersionDdPlist   = '1.23'
     libVersionHttpCore  = '4.4.13'
-    libVersionJmDNS     = '3.5.5'
+    libVersionJmDNS     = '3.5.8'
     libVersionExoPlayer = '2.18.0'
 
     // keep versions of AndroidX libraries in sync with those used by ExoPlayer:
