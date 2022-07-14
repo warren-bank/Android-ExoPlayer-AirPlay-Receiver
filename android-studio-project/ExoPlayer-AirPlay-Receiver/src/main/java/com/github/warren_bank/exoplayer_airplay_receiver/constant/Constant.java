@@ -236,6 +236,7 @@ public class Constant {
         public static final String DATA                         = "data";
         public static final String REQ_HEADERS                  = "req-header";
         public static final String DRM_HEADERS                  = "drm-header";
+        public static final String PLAYLIST_URLS                = "playlist-urls";
     }
 
 }

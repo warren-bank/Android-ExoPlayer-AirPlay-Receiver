@@ -20,5 +20,4 @@ project.ext {
     libVersionAndroidxCore       = '1.7.0'
     libVersionAndroidxMedia      = '1.4.3'
     libVersionAndroidxMaterial   = '1.4.0'
-    libVersionAndroidxMultidex   = '2.0.1'
 }

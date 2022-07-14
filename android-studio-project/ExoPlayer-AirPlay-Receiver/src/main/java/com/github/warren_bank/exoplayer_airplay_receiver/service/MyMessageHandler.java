@@ -68,14 +68,14 @@ final class MyMessageHandler extends Handler {
   }
 
   @Override
-  public void handleMessage(Message msg) {
+  public void handleMessage(final Message msg) {
     super.handleMessage(msg);
 
-    PlayerManager playerManager = NetworkingService.getPlayerManager();
+    final PlayerManager playerManager = NetworkingService.getPlayerManager();
     if (playerManager == null)
       return;
 
-    NetworkingService service = weakReference.get();
+    final NetworkingService service = weakReference.get();
     if (service == null)
       return;
 
@@ -185,71 +185,109 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Msg.Msg_Video_Play  :
       case Constant.Msg.Msg_Video_Queue : {
-        HashMap<String, HashMap<String, String>> map = (HashMap) msg.obj;
+        final HashMap<String, HashMap<String, String>> map = (HashMap) msg.obj;
 
-        HashMap<String, String> dataMap       = (HashMap) map.get(Constant.Video_Source_Map.DATA);
-        HashMap<String, String> reqHeadersMap = (HashMap) map.get(Constant.Video_Source_Map.REQ_HEADERS);
-        HashMap<String, String> drmHeadersMap = (HashMap) map.get(Constant.Video_Source_Map.DRM_HEADERS);
-
-        String playUrl   = dataMap.get(Constant.PlayURL);
-        String textUrl   = dataMap.get(Constant.CaptionURL);
-        String referUrl  = dataMap.get(Constant.RefererURL);
-        String useCache  = dataMap.get(Constant.UseCache);
-        String startPos  = dataMap.get(Constant.Start_Pos);
-        String stopPos   = dataMap.get(Constant.Stop_Pos);
-        String drmScheme = dataMap.get(Constant.DRM_Scheme);
-        String drmUrl    = dataMap.get(Constant.DRM_URL);
-
-        // normalize empty data fields to: null
-        if (TextUtils.isEmpty(playUrl))
-          playUrl = null;
-        if (TextUtils.isEmpty(textUrl))
-          textUrl = null;
-        if (TextUtils.isEmpty(referUrl))
-          referUrl = null;
-        if (TextUtils.isEmpty(startPos))
-          startPos = "-1";
-        if (TextUtils.isEmpty(stopPos))
-          stopPos = "-1";
-        if (TextUtils.isEmpty(drmScheme))
-          drmScheme = null;
-        if (TextUtils.isEmpty(drmUrl))
-          drmUrl = null;
-
-        // normalize boolean data fields to: ["true", "false"]
-        useCache = StringUtils.normalizeBooleanString(useCache);
-
-        // ignore bad requests
-        if (playUrl == null)
-          break;
-
-        Log.d(tag, ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
-
-        if (requiresExternalStoragePermission(service, msg, playUrl, textUrl))
-          break;
-
-        // normalize references to external storage by converting absolute filesystem paths to file: URIs
-        if (ExternalStorageUtils.isFileUri(playUrl))
-          playUrl = ExternalStorageUtils.normalizeFileUri(playUrl);
-        if (ExternalStorageUtils.isFileUri(textUrl))
-          textUrl = ExternalStorageUtils.normalizeFileUri(textUrl);
+        final HashMap<String, String> dataMap         = (HashMap) map.get(Constant.Video_Source_Map.DATA);
+        final HashMap<String, String> reqHeadersMap   = (HashMap) map.get(Constant.Video_Source_Map.REQ_HEADERS);
+        final HashMap<String, String> drmHeadersMap   = (HashMap) map.get(Constant.Video_Source_Map.DRM_HEADERS);
+        final HashMap<String, String> playlistUrlsMap = (HashMap) map.get(Constant.Video_Source_Map.PLAYLIST_URLS);
 
         // offload to a worker Thread
-        extractPlaylists(
-          playerManager,
-          service,
-          /* uri=                   */ playUrl,
-          /* caption=               */ textUrl,
-          /* referer=               */ referUrl,
-          /* reqHeadersMap=         */ reqHeadersMap,
-          /* useCache=              */ "true".equals(useCache),
-          /* startPosition=         */ Float.valueOf(startPos),
-          /* stopPosition=          */ Float.valueOf(stopPos),
-          /* drm_scheme=            */ drmScheme,
-          /* drm_license_server=    */ drmUrl,
-          /* drmHeadersMap=         */ drmHeadersMap,
-          /* remove_previous_items= */ (msg.what == Constant.Msg.Msg_Video_Play)
-        );
+        final Handler  handler  = new Handler(networkingHandlerThread.getLooper());
+        final Runnable runnable = new Runnable() {
+          @Override
+          public void run() {
+            String playUrl   = dataMap.get(Constant.PlayURL);
+            String textUrl   = dataMap.get(Constant.CaptionURL);
+            String referUrl  = dataMap.get(Constant.RefererURL);
+            String useCache  = dataMap.get(Constant.UseCache);
+            String startPos  = dataMap.get(Constant.Start_Pos);
+            String stopPos   = dataMap.get(Constant.Stop_Pos);
+            String drmScheme = dataMap.get(Constant.DRM_Scheme);
+            String drmUrl    = dataMap.get(Constant.DRM_URL);
+
+            // normalize empty data fields to: null
+            if (TextUtils.isEmpty(playUrl))
+              playUrl = null;
+            if (TextUtils.isEmpty(textUrl))
+              textUrl = null;
+            if (TextUtils.isEmpty(referUrl))
+              referUrl = null;
+            if (TextUtils.isEmpty(startPos))
+              startPos = "-1";
+            if (TextUtils.isEmpty(stopPos))
+              stopPos = "-1";
+            if (TextUtils.isEmpty(drmScheme))
+              drmScheme = null;
+            if (TextUtils.isEmpty(drmUrl))
+              drmUrl = null;
+
+            // normalize boolean data fields to: ["true", "false"]
+            useCache = StringUtils.normalizeBooleanString(useCache);
+
+            // ignore bad requests
+            if (playUrl == null)
+              return;
+
+            Log.d(tag, ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
+
+            if (requiresExternalStoragePermission(service, msg, playUrl, textUrl))
+              return;
+
+            // normalize references to external storage by converting absolute filesystem paths to file: URIs
+            if (ExternalStorageUtils.isFileUri(playUrl))
+              playUrl = ExternalStorageUtils.normalizeFileUri(playUrl);
+            if (ExternalStorageUtils.isFileUri(textUrl))
+              textUrl = ExternalStorageUtils.normalizeFileUri(textUrl);
+
+            ArrayList<String> matches = (playlistUrlsMap != null)
+              ? StringUtils.convertHashMapToArrayList(playlistUrlsMap)
+              : extractPlaylists(playUrl, null);
+
+            // check runtime permissions
+            if ((playlistUrlsMap == null) && (matches != null)) {
+              boolean requiresPermission = false;
+              String match;
+              for (int i=0; i < matches.size(); i++) {
+                match = matches.get(i);
+                if (ExternalStorageUtils.isFileUri(match)) {
+                  requiresPermission = true;
+                  match = ExternalStorageUtils.normalizeFileUri(match);
+                  matches.set(i, match);
+                }
+              }
+              if (requiresPermission && ExternalStorageUtils.has_permission(service))
+                requiresPermission = false;
+              if (requiresPermission) {
+                map.put(
+                  Constant.Video_Source_Map.PLAYLIST_URLS,
+                  StringUtils.convertArrayListToHashMap(matches)
+                );
+                requiresExternalStoragePermission(service, msg, "/", "/");
+                return;
+              }
+            }
+
+            addItems(
+              playerManager,
+              service,
+              matches,
+              /* uri=                   */ playUrl,
+              /* caption=               */ textUrl,
+              /* referer=               */ referUrl,
+              /* reqHeadersMap=         */ reqHeadersMap,
+              /* useCache=              */ "true".equals(useCache),
+              /* startPosition=         */ Float.valueOf(startPos),
+              /* stopPosition=          */ Float.valueOf(stopPos),
+              /* drm_scheme=            */ drmScheme,
+              /* drm_license_server=    */ drmUrl,
+              /* drmHeadersMap=         */ drmHeadersMap,
+              /* remove_previous_items= */ (msg.what == Constant.Msg.Msg_Video_Play)
+            );
+          }
+        };
+
+        handler.post(runnable);
         break;
       }
 
@@ -557,47 +595,55 @@ final class MyMessageHandler extends Handler {
   // Network Requests (in separate Thread to avoid NetworkOnMainThreadException)
   // ===========================================================================
 
-  private void extractPlaylists(
-    PlayerManager playerManager,
-    NetworkingService service,
-    String uri,
-    String caption,
-    String referer,
-    HashMap<String, String> reqHeadersMap,
-    boolean useCache,
-    float startPosition,
-    float stopPosition,
-    String drm_scheme,
-    String drm_license_server,
-    HashMap<String, String> drmHeadersMap,
-    boolean remove_previous_items
-  ) {
-    final Handler  handler  = new Handler(networkingHandlerThread.getLooper());
-    final Runnable runnable = new Runnable() {
-      @Override
-      public void run() {
-        ArrayList<String> matches = null;
+  private ArrayList<String> extractPlaylists(String uri, ArrayList<String> playlists) {
+    if (playlists == null)
+      playlists = new ArrayList<String>();
 
-        if (matches == null)
-          matches = httpM3uExtractor.expandPlaylist(uri); //8-bit ascii
+    ArrayList<String> matches = null;
 
-        if (matches == null)
-          matches = httpHtmlExtractor.expandPlaylist(uri, (String) null); //utf8
+    if (matches == null)
+      matches = httpM3uExtractor.expandPlaylist(uri); //8-bit ascii
 
-        if (matches == null)
-          matches = fileM3uExtractor.expandPlaylist(uri); //utf8
+    if (matches == null)
+      matches = httpHtmlExtractor.expandPlaylist(uri, (String) null); //utf8
 
-        if (matches == null)
-          matches = directoryExtractor.expandPlaylist(uri);
+    if (matches == null)
+      matches = fileM3uExtractor.expandPlaylist(uri); //utf8
 
-        if (matches == null)
-          matches = recursiveDirectoryExtractor.expandPlaylist(uri);
+    if (matches == null)
+      matches = directoryExtractor.expandPlaylist(uri);
 
-        addItems(playerManager, service, matches, uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
+    if (matches == null)
+      matches = recursiveDirectoryExtractor.expandPlaylist(uri);
+
+    if (matches != null) {
+      playlists.add(uri);
+
+      int index = 0;
+      ArrayList<String> nested;
+
+      while (index < matches.size()) {
+        uri = matches.get(index);
+        if (playlists.contains(uri)) {
+          // prevent infinite recursion by disallowing circular references
+          matches.remove(index);
+          continue;
+        }
+
+        nested = extractPlaylists(uri, playlists);
+        if (nested != null) {
+          // replace uri at position 'index' with nested playlist
+          matches.remove(index);
+          matches.addAll(index, nested);
+          continue;
+        }
+
+        // keep uri at position 'index' and advance to next uri in list
+        index++;
       }
-    };
+    }
 
-    handler.post(runnable);
+    return matches;
   }
 
   private void addItems(
@@ -629,22 +675,8 @@ final class MyMessageHandler extends Handler {
         }
         else {
           Log.d(tag, "count of URLs in playlist: " + matches.size());
-
-          String[] uris;
-          uris = new String[matches.size()];
-
-          for (int i=0; i < matches.size(); i++) {
-            playUrl = matches.get(i);
-
-            // normalize references to external storage by converting absolute filesystem paths to file: URIs
-            if (ExternalStorageUtils.isFileUri(playUrl))
-              playUrl = ExternalStorageUtils.normalizeFileUri(playUrl);
-
-            uris[i] = playUrl;
-          }
-
+          String[] uris = matches.toArray(new String[matches.size()]);
           playerManager.addItems(uris, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
-
           playUrl = uris[0];
         }
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class StringUtils {
 
@@ -265,6 +266,38 @@ public class StringUtils {
 
   public static String normalizeDoubleString(String value) {
     return removeTrailingCaseInsensitiveSuffix(value, /* suffix= */ 'D');
+  }
+
+  // ===================================
+
+  public static HashMap<String, String> convertArrayListToHashMap(ArrayList<String> list) {
+    if ((list == null) || list.isEmpty()) return null;
+
+    HashMap<String, String> map = new HashMap<String, String>();
+    String key, val;
+    for (int i=0; i < list.size(); i++) {
+      key = StringUtils.repeatString("a", (i+1));
+      val = list.get(i);
+      map.put(key, val);
+    }
+    return map;
+  }
+
+  public static ArrayList<String> convertHashMapToArrayList(HashMap<String, String> map) {
+    if ((map == null) || map.isEmpty()) return null;
+
+    TreeMap<String, String> sorted = new TreeMap<String, String>();
+    sorted.putAll(map);
+
+    return new ArrayList<String>(sorted.values());
+  }
+
+  // ===================================
+
+  public static String repeatString(String value, int count) {
+    return ((value != null) && (count > 0))
+      ? (new String(new char[count])).replace("\0", value)
+      : null;
   }
 
 }
