@@ -185,12 +185,13 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Msg.Msg_Video_Play  :
       case Constant.Msg.Msg_Video_Queue : {
-        final HashMap<String, HashMap<String, String>> map = (HashMap) msg.obj;
+        final int                                      msgWhat = (int)     msg.what;
+        final HashMap<String, HashMap<String, String>> msgMap  = (HashMap) msg.obj;
 
-        final HashMap<String, String> dataMap         = (HashMap) map.get(Constant.Video_Source_Map.DATA);
-        final HashMap<String, String> reqHeadersMap   = (HashMap) map.get(Constant.Video_Source_Map.REQ_HEADERS);
-        final HashMap<String, String> drmHeadersMap   = (HashMap) map.get(Constant.Video_Source_Map.DRM_HEADERS);
-        final HashMap<String, String> playlistUrlsMap = (HashMap) map.get(Constant.Video_Source_Map.PLAYLIST_URLS);
+        final HashMap<String, String> dataMap         = (HashMap) msgMap.get(Constant.Video_Source_Map.DATA);
+        final HashMap<String, String> reqHeadersMap   = (HashMap) msgMap.get(Constant.Video_Source_Map.REQ_HEADERS);
+        final HashMap<String, String> drmHeadersMap   = (HashMap) msgMap.get(Constant.Video_Source_Map.DRM_HEADERS);
+        final HashMap<String, String> playlistUrlsMap = (HashMap) msgMap.get(Constant.Video_Source_Map.PLAYLIST_URLS);
 
         // offload to a worker Thread
         final Handler  handler  = new Handler(networkingHandlerThread.getLooper());
@@ -229,7 +230,7 @@ final class MyMessageHandler extends Handler {
             if (playUrl == null)
               return;
 
-            Log.d(tag, ((msg.what == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
+            Log.d(tag, ((msgWhat == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
 
             if (requiresExternalStoragePermission(service, msg, playUrl, textUrl))
               return;
@@ -259,11 +260,15 @@ final class MyMessageHandler extends Handler {
               if (requiresPermission && ExternalStorageUtils.has_permission(service))
                 requiresPermission = false;
               if (requiresPermission) {
-                map.put(
+                msgMap.put(
                   Constant.Video_Source_Map.PLAYLIST_URLS,
                   StringUtils.convertArrayListToHashMap(matches)
                 );
-                requiresExternalStoragePermission(service, msg, "/", "/");
+
+                Message newMsg = Message.obtain();
+                newMsg.what = msgWhat;
+                newMsg.obj  = msgMap;
+                requiresExternalStoragePermission(service, newMsg, "/", "/");
                 return;
               }
             }
@@ -282,7 +287,7 @@ final class MyMessageHandler extends Handler {
               /* drm_scheme=            */ drmScheme,
               /* drm_license_server=    */ drmUrl,
               /* drmHeadersMap=         */ drmHeadersMap,
-              /* remove_previous_items= */ (msg.what == Constant.Msg.Msg_Video_Play)
+              /* remove_previous_items= */ (msgWhat == Constant.Msg.Msg_Video_Play)
             );
           }
         };
