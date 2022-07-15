@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 
 public class DirectoryIndexMediaPlaylistExtractor extends DirectoryIndexBasePlaylistExtractor {
 
-  private static Pattern playlist_media_regex = Pattern.compile("\\.(?:mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism[vc]?|mp3|m4a|ogg|wav|flac)$");
+  private static Pattern playlist_media_regex = Pattern.compile("\\.(?:m3u|mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism[vc]?|mp3|m4a|ogg|wav|flac)$");
 
   protected boolean isParserForDirectory(File directory) {
     return true;
