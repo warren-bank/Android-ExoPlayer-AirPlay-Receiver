@@ -66,12 +66,6 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
   }
 
   protected void parseLine(String line, URL context, ArrayList<String> matches) {
-    if (line == null) return;
-    line = line.trim();
-
-    // remove empty lines
-    if (line.isEmpty()) return;
-
     Matcher matcher = HttpHtmlPlaylistExtractor.linkhref_regex.matcher(line);
     String m1, m2, lm1, lm2, lo2;
     int po, pm;

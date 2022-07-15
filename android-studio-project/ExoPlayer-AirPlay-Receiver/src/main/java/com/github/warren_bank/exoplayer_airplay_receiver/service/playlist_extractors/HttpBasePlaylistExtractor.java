@@ -8,7 +8,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-public abstract class HttpBasePlaylistExtractor {
+public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
 
   private static boolean isHttpUrl(String strUrl) {
     return (strUrl == null)
@@ -23,6 +23,20 @@ public abstract class HttpBasePlaylistExtractor {
   protected void preParse(URL context) {}
 
   protected void postParse(URL context, ArrayList<String> matches) {}
+
+  protected String resolveM3uPlaylistItem(URL context, String relative) {
+    String uri = null;
+
+    uri = resolveM3uPlaylistItem(
+      ((context != null) ? context.toString() : ""),
+      StringUtils.decodeURL(relative)
+    );
+
+    if (uri != null)
+      uri = StringUtils.encodeURL(uri);
+
+    return uri;
+  }
 
   public ArrayList<String> expandPlaylist(String strUrl) {
     // https://developer.android.com/reference/java/nio/charset/Charset#standard-charsets
@@ -74,7 +88,9 @@ public abstract class HttpBasePlaylistExtractor {
 
       preParse(url);
       while ((line = in.readLine()) != null) {
-        // `line` is one line of text; readLine() strips the newline character(s)
+        line = normalizeLine(line);
+        if (line == null) continue;
+
         parseLine(line, url, matches);
       }
       postParse(url, matches);

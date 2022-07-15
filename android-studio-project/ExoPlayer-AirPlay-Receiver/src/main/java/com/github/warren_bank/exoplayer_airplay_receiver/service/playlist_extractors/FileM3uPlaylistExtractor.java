@@ -1,8 +1,5 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -20,25 +17,11 @@ public class FileM3uPlaylistExtractor extends FileBasePlaylistExtractor {
   }
 
   protected void parseLine(String line, File context, ArrayList<String> matches) {
-    // remove comments
-    if (line.charAt(0) == '#') return;
+    if (ignoreM3uLine(line)) return;
 
-    // remove ascii encoding
-    line = StringUtils.decodeURL(line);
-
-    // convert Windows path separators
-    line = line.replaceAll("[\\\\]", "/");
-
-    try {
-      // if `line` contains a  relative spec, then resolve it relative to context
-      // if `line` contains an absolute spec, then context is ignored
-      if (line.charAt(0) != '/') {
-        line = ExternalStorageUtils.joinFilePaths(context, line);
-      }
-
-      matches.add(line);
-    }
-    catch(Exception e) {}
+    String uri = resolveM3uPlaylistItem(context, line);
+    if (uri != null)
+      matches.add(uri);
   }
 
 }

@@ -8,13 +8,23 @@ public class MediaTypeUtils {
   // ===========================================================================
   // URI protocol
 
+  public static boolean is_protocol(String uri, String[] protocols) {
+    if ((uri == null) || uri.isEmpty() || (protocols == null) || (protocols.length == 0))
+      return false;
+
+    uri = uri.toLowerCase();
+
+    for (String protocol : protocols) {
+      if (protocol == null)
+        continue;
+      if (uri.startsWith(protocol.toLowerCase() + "://"))
+        return true;
+    }
+    return false;
+  }
+
   public static boolean is_protocol(String uri, String protocol) {
-    return ((uri == null) || (protocol == null))
-      ? false
-      : uri.toLowerCase().startsWith(
-          protocol.toLowerCase() + "://"
-        )
-    ;
+    return is_protocol(uri, new String[]{protocol});
   }
 
   public static boolean is_protocol_rtmp(String uri) {
@@ -27,6 +37,10 @@ public class MediaTypeUtils {
 
   public static boolean is_protocol_file(String uri) {
     return ExternalStorageUtils.isFileUri(uri);
+  }
+
+  public static boolean is_protocol_supported(String uri) {
+    return is_protocol(uri, new String[]{"http","https","rtmp","rtsp","file","content"}) || is_protocol_file(uri);
   }
 
   // ===========================================================================
@@ -57,6 +71,8 @@ public class MediaTypeUtils {
   }
 
   public static boolean isVideoFileUrl(String uri) {
+    if (!is_protocol_supported(uri)) return false;
+
     String file_ext = get_video_fileExtension(uri);
     return (
         (file_ext != null)
@@ -152,6 +168,8 @@ public class MediaTypeUtils {
   }
 
   public static boolean isAudioFileUrl(String uri) {
+    if (!is_protocol_supported(uri)) return false;
+
     String file_ext = get_audio_fileExtension(uri);
     return (file_ext != null);
   }
@@ -196,6 +214,8 @@ public class MediaTypeUtils {
   }
 
   public static boolean isCaptionFileUrl(String uri) {
+    if (!is_protocol_supported(uri)) return false;
+
     String file_ext = get_caption_fileExtension(uri);
     return (file_ext != null);
   }
@@ -234,6 +254,8 @@ public class MediaTypeUtils {
   }
 
   public static String get_media_mimeType(String uri, boolean include_captions) {
+    if (!is_protocol_supported(uri)) return "";
+
     if (isVideoFileUrl(uri))
       return get_video_mimeType(uri);
     if (isAudioFileUrl(uri))

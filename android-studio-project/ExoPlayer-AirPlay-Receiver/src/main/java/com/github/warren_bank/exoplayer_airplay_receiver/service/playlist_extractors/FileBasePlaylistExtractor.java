@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public abstract class FileBasePlaylistExtractor {
+public abstract class FileBasePlaylistExtractor extends BasePlaylistExtractor {
 
   protected abstract boolean isParserForFile(File file);
 
@@ -16,6 +16,13 @@ public abstract class FileBasePlaylistExtractor {
   protected void preParse(File context) {}
 
   protected void postParse(File context, ArrayList<String> matches) {}
+
+  protected String resolveM3uPlaylistItem(File context, String relative) {
+    return resolveM3uPlaylistItem(
+      ((context != null) ? context.getAbsolutePath() : ""),
+      relative
+    );
+  }
 
   public ArrayList<String> expandPlaylist(String strUrl) {
     if (!ExternalStorageUtils.isFileUri(strUrl))
@@ -49,17 +56,8 @@ public abstract class FileBasePlaylistExtractor {
 
       preParse(file);
       while ((line = in.readLine()) != null) {
-        // `line` is one line of text; readLine() strips the newline character(s)
+        line = normalizeLine(line);
         if (line == null) continue;
-
-        // remove utf-8 BOM
-        line = line.replace("\uFEFF", "");
-
-        // trim surrounding whitespace
-        line = line.trim();
-
-        // ignore empty lines
-        if (line.isEmpty()) continue;
 
         parseLine(line, file, matches);
       }
