@@ -226,6 +226,7 @@
                 <data android:scheme="file"/>
                 <data android:mimeType="application/octet-stream"/> <!-- Total Commander: "Open with.." -->
                 <data android:mimeType="resource/folder"/>
+                <data android:mimeType="vnd.android.document/directory"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 
 import java.io.File;
@@ -52,8 +53,24 @@ public class StartNetworkingServiceActivity extends Activity {
 
             switch(type) {
               case "application/octet-stream" :
-              case "resource/folder" : {
+              case "resource/folder" :
+              case "vnd.android.document/directory" : {
                 data = filterDirectory(data);
+
+                if (data == null) {
+                  // fallback
+                  String dirPath = oldIntent.getStringExtra("org.openintents.extra.ABSOLUTE_PATH");
+                  if ((dirPath != null) && ExternalStorageUtils.isFileUri(dirPath)) {
+                    dirPath = ExternalStorageUtils.normalizeFileUri(dirPath);
+                    data = Uri.parse(dirPath);
+                    data = filterDirectory(data);
+
+                    if (data != null) {
+                      // prevent propogation of extra to new Intent
+                      oldIntent.removeExtra("org.openintents.extra.ABSOLUTE_PATH");
+                    }
+                  }
+                }
                 break;
               }
             }
