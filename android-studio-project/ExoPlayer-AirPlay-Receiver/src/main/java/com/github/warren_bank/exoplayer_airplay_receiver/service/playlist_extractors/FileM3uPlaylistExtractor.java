@@ -2,18 +2,13 @@ package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extra
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class FileM3uPlaylistExtractor extends FileBasePlaylistExtractor {
 
-  private static Pattern playlist_regex = Pattern.compile("\\.(?:m3u)$");
-
   protected boolean isParserForFile(File file) {
-    if (file == null) return false;
-
-    Matcher matcher = FileM3uPlaylistExtractor.playlist_regex.matcher(file.getAbsolutePath().toLowerCase());
-    return matcher.find();
+    return (file != null)
+      ? isParserForM3uUri(file.getAbsolutePath())
+      : false;
   }
 
   protected void parseLine(String line, File context, ArrayList<String> matches) {

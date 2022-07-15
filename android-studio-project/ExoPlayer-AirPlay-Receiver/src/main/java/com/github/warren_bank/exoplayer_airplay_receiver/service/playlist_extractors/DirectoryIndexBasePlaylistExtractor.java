@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class DirectoryIndexBasePlaylistExtractor {
+public abstract class DirectoryIndexBasePlaylistExtractor extends BasePlaylistExtractor {
 
   protected abstract boolean isParserForDirectory(File directory);
 
@@ -17,6 +17,10 @@ public abstract class DirectoryIndexBasePlaylistExtractor {
   protected void preParse(File directory) {}
 
   protected void postParse(File directory, ArrayList<String> matches) {}
+
+  protected String resolvePlaylistItem(File file) {
+    return resolveM3uPlaylistItem("", file.getAbsolutePath());
+  }
 
   protected void appendFilesInDirectory(File directory, ArrayList<File> files) {
     if (!directory.isDirectory()) return;

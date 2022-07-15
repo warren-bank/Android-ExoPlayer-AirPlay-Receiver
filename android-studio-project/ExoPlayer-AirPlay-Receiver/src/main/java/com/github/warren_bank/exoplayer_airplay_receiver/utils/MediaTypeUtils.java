@@ -247,6 +247,30 @@ public class MediaTypeUtils {
   }
 
   // ===================================
+  // playlists
+
+  private static Pattern playlist_htm_regex = Pattern.compile("(?:\\/|\\.(?:s?html?))(?:[\\?#]|$)");
+  private static Pattern playlist_m3u_regex = Pattern.compile("\\.(?:m3u)(?:[\\?#]|$)");
+
+  public static boolean isPlaylistFileUrl(String uri) {
+    return isPlaylistHtmlUrl(uri) || isPlaylistM3uUrl(uri);
+  }
+
+  public static boolean isPlaylistHtmlUrl(String uri) {
+    if (!is_protocol_supported(uri)) return false;
+
+    Matcher matcher = playlist_htm_regex.matcher(uri);
+    return matcher.find();
+  }
+
+  public static boolean isPlaylistM3uUrl(String uri) {
+    if (!is_protocol_supported(uri)) return false;
+
+    Matcher matcher = playlist_m3u_regex.matcher(uri);
+    return matcher.find();
+  }
+
+  // ===================================
   // generic media
 
   public static String get_media_mimeType(String uri) {

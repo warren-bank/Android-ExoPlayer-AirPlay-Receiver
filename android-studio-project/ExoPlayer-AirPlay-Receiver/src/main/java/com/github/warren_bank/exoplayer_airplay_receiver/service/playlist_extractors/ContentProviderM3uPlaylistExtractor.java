@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class ContentProviderM3uPlaylistExtractor extends ContentProviderBasePlaylistExtractor {
 
@@ -13,13 +11,10 @@ public class ContentProviderM3uPlaylistExtractor extends ContentProviderBasePlay
     super(context);
   }
 
-  private static Pattern playlist_regex = Pattern.compile("\\.(?:m3u)$");
-
   protected boolean isParserForUri(Uri uri) {
-    if (uri == null) return false;
-
-    Matcher matcher = ContentProviderM3uPlaylistExtractor.playlist_regex.matcher(uri.toString().toLowerCase());
-    return matcher.find();
+    return (uri != null)
+      ? isParserForM3uUri(uri.toString())
+      : false;
   }
 
   protected void parseLine(String line, Uri context, ArrayList<String> matches) {

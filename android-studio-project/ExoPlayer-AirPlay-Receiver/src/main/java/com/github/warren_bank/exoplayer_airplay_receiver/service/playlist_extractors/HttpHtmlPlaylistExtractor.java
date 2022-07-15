@@ -1,6 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,12 +10,11 @@ import java.util.regex.Matcher;
 
 public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
 
-  private static Pattern playlist_regex = Pattern.compile("(?:\\/|\\.s?html?)(?:[\\?#]|$)");
-  private static Pattern linkhref_regex = Pattern.compile("href=\"([^\"]+\\.)(mp3|m4a|ogg|wav|flac)\"", Pattern.CASE_INSENSITIVE);
-  private static String format_priority = "|mp3|m4a|ogg|wav|flac|";
+  private static Pattern linkhref_regex = Pattern.compile("(?:href|src)\\s*=\\s*[\"]([^\"]+\\.)(mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism[vc]?|mp3|m4a|ogg|wav|flac)[\"]", Pattern.CASE_INSENSITIVE);
+  private static String format_priority = "|mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism|ismv|ismc|mp3|m4a|ogg|wav|flac|";
 
   private static int getFormatPriority(String format) {
-    return HttpHtmlPlaylistExtractor.format_priority.indexOf(format);
+    return HttpHtmlPlaylistExtractor.format_priority.indexOf("|" + format + "|");
   }
 
   private ArrayList<String> hash_keys;
@@ -32,23 +31,16 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
     String hash_key;
     String[] val;
     String href;
-    URL url;
+    String uri;
 
     for (int i=0; i < hash_keys.size(); i++) {
       hash_key = hash_keys.get(i);
       val      = url_chunks.get(hash_key);
       href     = val[0] + val[1];
+      uri      = resolveM3uPlaylistItem(context, href);
 
-      try {
-        // if `href` contains a  relative spec, then resolve it relative to context
-        // if `href` contains an absolute spec, then context is ignored
-        url = new URL(context, href);
-
-        matches.add(
-          StringUtils.encodeURL(url)
-        );
-      }
-      catch(Exception e) {}
+      if (uri != null)
+        matches.add(uri);
     }
 
     hash_keys.clear();
@@ -59,10 +51,9 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
   }
 
   protected boolean isParserForUrl(String strUrl) {
-    if (strUrl == null) return false;
-
-    Matcher matcher = HttpHtmlPlaylistExtractor.playlist_regex.matcher(strUrl.toLowerCase());
-    return matcher.find();
+    return (strUrl != null)
+      ? MediaTypeUtils.isPlaylistHtmlUrl(strUrl)
+      : false;
   }
 
   protected void parseLine(String line, URL context, ArrayList<String> matches) {
@@ -75,9 +66,6 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
     while (matcher.find()) {
       m1 = matcher.group(1);
       m2 = matcher.group(2);
-
-      // remove ascii encoding
-      m1 = StringUtils.decodeURL(m1);
 
       lm1 = m1.toLowerCase();
       lm2 = m2.toLowerCase();

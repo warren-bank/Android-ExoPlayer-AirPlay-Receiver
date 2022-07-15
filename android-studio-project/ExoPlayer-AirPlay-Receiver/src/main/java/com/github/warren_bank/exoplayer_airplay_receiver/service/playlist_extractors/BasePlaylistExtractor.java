@@ -20,6 +20,10 @@ public class BasePlaylistExtractor {
     return line;
   }
 
+  protected boolean isParserForM3uUri(String uri) {
+    return MediaTypeUtils.isPlaylistM3uUrl(uri);
+  }
+
   protected boolean ignoreM3uLine(String line) {
     return (line == null) || (line.charAt(0) == '#');
   }
@@ -41,8 +45,13 @@ public class BasePlaylistExtractor {
       }
     }
 
-    if ((uri != null) && ExternalStorageUtils.isFileUri(uri))
-      uri = ExternalStorageUtils.normalizeFileUri(uri);
+    if (uri != null) {
+      if (ExternalStorageUtils.isFileUri(uri))
+        uri = ExternalStorageUtils.normalizeFileUri(uri);
+
+      if (!MediaTypeUtils.isVideoFileUrl(uri) && !MediaTypeUtils.isAudioFileUrl(uri) && !MediaTypeUtils.isPlaylistFileUrl(uri))
+        uri = null;
+    }
 
     return uri;
   }
