@@ -708,6 +708,13 @@ __extended APIs:__
     * browse media on all servers
     * casts the URL of media hosted by a DLNA server to the receiver
 
+* [_airplay_ desktop app](https://github.com/zeppelsoftware/airplay) (for Java JRE) that can be used to:
+  - mirror the computer screen to an AirPlay receiver
+    ```bash
+      airplay_ip='192.168.1.100:8192'
+      java -jar "airplay.jar" -h "$airplay_ip" -d
+    ```
+
 - - - -
 
 #### Credits:
