@@ -1,0 +1,5 @@
+https://github.com/tutikka/DroidPlay
+https://github.com/tutikka/DroidPlay/raw/master/apk/droidplay-0.2.4.apk
+  package: com.tt.droidplay
+  version: 0.2.4 (7)
+  min SDK: 14 (Android 4.0 Ice Cream Sandwich)

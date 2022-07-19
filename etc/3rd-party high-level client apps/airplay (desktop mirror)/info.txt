@@ -1,0 +1,4 @@
+https://github.com/zeppelsoftware/airplay
+https://github.com/zeppelsoftware/airplay/releases/tag/1.0
+https://github.com/zeppelsoftware/airplay/releases/download/1.0/airplay.jar
+  version: 1.0

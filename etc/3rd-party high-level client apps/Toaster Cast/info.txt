@@ -1,0 +1,5 @@
+https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer
+https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer/download/61-APK
+  package: com.n7mobile.simpleupnpplayer
+  version: 1.0.15 (61)
+  min SDK: 9 (Android 2.3.2 Gingerbread)
