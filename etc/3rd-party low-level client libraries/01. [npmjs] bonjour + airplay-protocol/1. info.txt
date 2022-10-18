@@ -1,0 +1,50 @@
+--------------------------------------------------------------------------------
+
+https://github.com/watson/airplayer
+https://github.com/watson/bonjour
+https://github.com/watson/airplay-protocol
+
+https://github.com/webtorrent/webtorrent
+https://github.com/webtorrent/webtorrent-desktop
+
+--------------------------------------------------------------------------------
+
+https://github.com/webtorrent/webtorrent-desktop/blob/v0.24.0/src/renderer/lib/cast.js#L48
+    airplayer = require('airplayer')()
+
+https://github.com/watson/airplayer/blob/v2.0.0/index.js
+    var Bonjour = require('bonjour')
+    var AirPlay = require('airplay-protocol')
+
+    module.exports = function () {
+      var bonjour = new Bonjour()
+
+      bonjour.find({ type: 'airplay' }, function (service) {
+        var player = new AirPlay(service.host, service.port)
+        player.name = service.name
+      }
+    }
+
+--------------------------------------------------------------------------------
+
+https://github.com/webtorrent/webtorrent-desktop/blob/v0.24.0/src/renderer/lib/torrent-player.js#L21
+    function isVideo (file) {
+      return mediaExtensions.video.includes(getFileExtension(file))
+    }
+
+https://github.com/webtorrent/webtorrent-desktop/blob/v0.24.0/src/renderer/lib/media-extensions.js
+    const mediaExtensions = {
+      audio: [
+        '.aac', '.aif', '.aiff', '.asf', '.dff', '.dsf', '.flac', '.m2a',
+        '.m2a', '.m4a', '.mpc', '.m4b', '.mka', '.mp2', '.mp3', '.mpc', '.oga',
+        '.ogg', '.opus', '.spx', '.wma', '.wav', '.wv', '.wvp'],
+      video: [
+        '.avi', '.mp4', '.m4v', '.webm', '.mov', '.mkv', '.mpg', '.mpeg',
+        '.ogv', '.webm', '.wmv', '.m2ts'],
+      image: ['.gif', '.jpg', '.jpeg', '.png']
+    }
+
+notes:
+  * the video player integrated into "WebTorrent Desktop" does not support streaming video formats (m3u8, mpd)
+
+--------------------------------------------------------------------------------

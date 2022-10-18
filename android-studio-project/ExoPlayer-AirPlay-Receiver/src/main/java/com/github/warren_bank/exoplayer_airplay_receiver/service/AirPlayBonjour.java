@@ -4,6 +4,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
+import javax.jmdns.impl.MyJmDNSImpl;
 
 import android.util.Log;
 
@@ -43,8 +44,8 @@ public class AirPlayBonjour {
 
     String[] macAddress = NetworkUtils.getMACAddress(localAddress);
 
-    airPlayJmDNS  = JmDNS.create(localAddress, "localhost", 0l);
-    airTunesJmDNS = JmDNS.create(localAddress, "localhost", 0l);
+    airPlayJmDNS  = (JmDNS) new MyJmDNSImpl(localAddress, "localhost", 0l);
+    airTunesJmDNS = (JmDNS) new MyJmDNSImpl(localAddress, "localhost", 0l);
 
     airPlayService = ServiceInfo.create((serverName + AIRPLAY_SERVICE_TYPE), serverName, airPlayPort, 0, 0, airPlayMDNSProps(macAddress[0]));
     airPlayJmDNS.registerService(airPlayService);

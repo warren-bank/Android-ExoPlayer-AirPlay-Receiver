@@ -1,0 +1,12 @@
+{
+  "name": "test",
+  "private": true,
+  "scripts": {
+    "test":  "node test.js",
+    "start": "node test.js"
+  },
+  "dependencies": {
+    "airplay-protocol": "^2.0.2",
+    "bonjour": "^3.5.0"
+  }
+}

@@ -1,5 +1,6 @@
 # Node.js dev-dependencies
 node_modules/
+**/node_modules/
 
 # debug output from Android string translator
 android-studio-project/ExoPlayer-AirPlay-Receiver/src/withAllLanguageTranslations/res/debug.en.txt

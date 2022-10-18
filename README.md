@@ -692,6 +692,22 @@ __extended APIs:__
     * in other web browsers:
       - automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
 
+* [_Toaster Cast_ Android app](https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer) that can be used to:
+  - discover AirPlay receivers on the same LAN
+  - discover DLNA media servers on the same LAN
+    * optionally, runs a local DLNA media server
+    * browse media on all servers
+    * casts the URL of media hosted by a DLNA server to the receiver
+
+* [_WebTorrent Desktop_ app](https://github.com/webtorrent/webtorrent-desktop) (for Windows, Mac, Linux) that is open-source, and can be used to:
+  - download videos from a p2p network
+    * supports connections to peers using both BitTorrent (TCP) and WebTorrent (WebRTC)
+  - discover AirPlay receivers on the same LAN
+  - stream videos that are fully or partially downloaded
+    * runs a local web server
+    * casts the URL of the video to the receiver
+    * serves the video file when requested by the receiver
+
 * [_DroidPlay_ Android app](https://github.com/tutikka/DroidPlay) that is open-source, and can be used to:
   - discover AirPlay receivers on the same LAN
   - display images from the local file system
@@ -701,15 +717,12 @@ __extended APIs:__
     * casts the URL of the video to the receiver
     * serves the video file when requested by the receiver
 
-* [_Toaster Cast_ Android app](https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer) that can be used to:
-  - discover AirPlay receivers on the same LAN
-  - discover DLNA media servers on the same LAN
-    * optionally, runs a local DLNA media server
-    * browse media on all servers
-    * casts the URL of media hosted by a DLNA server to the receiver
+* [fork of: _DroidPlay_ Android app](https://github.com/warren-bank/Android-AirPlay-Client) that is open-source, and can additionally be used to:
+  - mirror the screen to an AirPlay receiver
+    * only available on Android 5.0 and higher
 
-* [_airplay_ desktop app](https://github.com/zeppelsoftware/airplay) (for Java JRE) that can be used to:
-  - mirror the computer screen to an AirPlay receiver
+* [_airplay_ desktop app](https://github.com/zeppelsoftware/airplay) (for Java JRE) that is open-source, and can be used to:
+  - mirror the screen to an AirPlay receiver
     ```bash
       airplay_ip='192.168.1.100:8192'
       java -jar "airplay.jar" -h "$airplay_ip" -d
@@ -723,12 +736,12 @@ __extended APIs:__
   - __brilliant__
   - what I like:
     * quality of code is excellent
-    * implements 90% of what I've described
+    * implements much of the foundation for what I've described
       - [media player](https://github.com/yixia/VitamioBundle) used to render video URLs
       - _HttpCore_ web server that implements all _AirPlay_ video APIs
       - _jmDNS_ Bonjour registration
   - what I dislike:
-    * all libraries are 5 years old
+    * all libraries are several years old
     * doesn't use _ExoPlayer_
     * the repo includes a lot of unused code
       - needs a little housekeeping

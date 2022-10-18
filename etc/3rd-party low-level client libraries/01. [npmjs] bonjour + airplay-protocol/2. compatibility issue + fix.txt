@@ -1,0 +1,364 @@
+--------------------------------------------------------------------------------
+
+test:
+=====
+    cd "./tests (detection and connection)/1. replicate WebTorrent Desktop"
+    npm install
+    npm test
+
+test output:
+============
+    {"host": "localhost.local", ...}
+
+compatibility issue:
+====================
+  * the "airplayer" module:
+    - uses the "bonjour" dependency to find discoverable mDNS services that match the type: "airplay"
+    - uses the "airplay-protocol" dependency to issue AirPlay (version 1) HTTP commands to one of the matching mDNS services
+  * the "service" objects returned by the "bonjour" dependency are expected to have a "host" attribute
+    that can be used in a URL to send commands to the AirPlay receiver
+    - "localhost.local" is not a useful hostname
+    - an IP address on the LAN is needed
+
+-------------------------------------------------------------------------------- code trace:
+
+https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/blob/v2.0.46/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/java/com/github/warren_bank/exoplayer_airplay_receiver/service/AirPlayBonjour.java#L49
+    airPlayJmDNS   = JmDNS.create(localAddress, "localhost", 0l);
+    airPlayService = ServiceInfo.create((serverName + AIRPLAY_SERVICE_TYPE), serverName, airPlayPort, 0, 0, airPlayMDNSProps(macAddress[0]));
+    airPlayJmDNS.registerService(airPlayService);
+
+https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/blob/v2.0.46/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/java/com/github/warren_bank/exoplayer_airplay_receiver/service/AirPlayBonjour.java#L54
+    airTunesJmDNS   = JmDNS.create(localAddress, "localhost", 0l);
+    airTunesService = ServiceInfo.create((airTunesServerName + AIRTUNES_SERVICE_TYPE), airTunesServerName, airTunesPort, 0, 0, airTunesMDNSProps());
+    airTunesJmDNS.registerService(airTunesService);
+
+----------------------------------------
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/JmDNS.java#L156
+    public static JmDNS create(final InetAddress addr, final String name, long threadSleepDurationMs) throws IOException {
+      return new JmDNSImpl(addr, name, threadSleepDurationMs);
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/JmDNSImpl.java#L426
+    public JmDNSImpl(InetAddress address, String name, long threadSleepDurationMs) throws IOException {
+      _localHost = HostInfo.newHostInfo(address, this, name);
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/HostInfo.java#L108
+    public static HostInfo newHostInfo(InetAddress address, JmDNSImpl dns, String jmdnsName) {
+      InetAddress addr = address;
+      String aName = (jmdnsName != null ? jmdnsName : "");
+      aName = aName.replaceAll("[:%\\.]", "-");
+      aName += ".local.";
+      localhost = new HostInfo(addr, aName, dns);
+      return localhost;
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/HostInfo.java#L125
+    private HostInfo(final InetAddress address, final String name, final JmDNSImpl dns) {
+      this._address = address;
+      this._name = name;
+    }
+
+----------------------------------------
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/ServiceInfo.java#L114
+    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final String text) {
+      return new ServiceInfoImpl(type, name, "", port, weight, priority, false, text);
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/ServiceInfo.java#L369
+    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final boolean persistent, final byte[] text) {
+      return new ServiceInfoImpl(type, name, subtype, port, weight, priority, persistent, text);
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/ServiceInfoImpl.java#L130
+    public ServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, String text) {
+      ...
+      _server = text;
+    }
+
+----------------------------------------
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/JmDNSImpl.java#L1034
+    public void registerService(ServiceInfo infoAbstract) throws IOException {
+      final ServiceInfoImpl info = (ServiceInfoImpl) infoAbstract;
+
+      info.setServer(_localHost.getName());
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/HostInfo.java#L135
+    public String getName() {
+      return _name;
+    }
+
+// EXTRA
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/HostInfo.java#L139
+    public InetAddress getInetAddress() {
+      return _address;
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/ServiceInfoImpl.java#L394
+    void setServer(String server) {
+      this._server = server;
+    }
+
+// EXTRA
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/ServiceInfoImpl.java#L378
+    public String getServer() {
+      return (_server != null ? _server : "");
+    }
+
+--------------------------------------------------------------------------------
+
+proposed fix #1:
+================
+
+1) add custom class:
+
+    package javax.jmdns.impl;
+
+    /*
+     * references:
+     *   https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/ServiceInfo.java
+     *   https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/ServiceInfoImpl.java
+     */
+
+    import javax.jmdns.impl.ServiceInfoImpl;
+
+    import java.net.InetAddress;
+    import java.util.Map;
+
+    public class MyServiceInfoImpl extends ServiceInfoImpl {
+      public MyServiceInfoImpl(String type, String name, String subtype, int port, int weight, int priority, boolean persistent, Map<String, ?> props) {
+        super(type, name, subtype, port, weight, priority, persistent, props);
+      }
+
+      @Override
+      void setServer(String server) {
+        boolean ignore = (server != null) && (server.endsWith(".local.") || server.endsWith(".local"));
+
+        if (!ignore) {
+          super.setServer(server);
+        }
+      }
+
+      public void setServer(InetAddress localAddress) {
+        this.setServer(localAddress.getHostAddress());
+      }
+    }
+
+2) use custom class:
+
+https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/blob/v2.0.46/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/java/com/github/warren_bank/exoplayer_airplay_receiver/service/AirPlayBonjour.java
+
+    import javax.jmdns.impl.MyServiceInfoImpl;
+
+    public void start(InetAddress localAddress, int airPlayPort, int airTunesPort) throws Exception {
+      stop();
+
+      String[] macAddress = NetworkUtils.getMACAddress(localAddress);
+
+      airPlayJmDNS  = JmDNS.create(localAddress, "localhost", 0l);
+      airTunesJmDNS = JmDNS.create(localAddress, "localhost", 0l);
+
+      MyServiceInfoImpl _airPlayService = new MyServiceInfoImpl(/* type */ (serverName + AIRPLAY_SERVICE_TYPE), /* name */ serverName, /* subtype */ "", /* port */ airPlayPort, /* weight */ 0, /* priority */ 0, /* persistent */ false, /* props */ airPlayMDNSProps(macAddress[0]));
+      _airPlayService.setServer(localAddress);
+      airPlayService = (ServiceInfo) _airPlayService;
+      airPlayJmDNS.registerService(airPlayService);
+      Log.d(tag, String.format("'%s' service is registered on port %s", serverName + AIRPLAY_SERVICE_TYPE, airPlayPort));
+
+      String airTunesServerName = macAddress[1] + "@" + serverName;
+      MyServiceInfoImpl _airTunesService = new MyServiceInfoImpl(/* type */ (airTunesServerName + AIRTUNES_SERVICE_TYPE), /* name */ airTunesServerName, /* subtype */ "", /* port */ airTunesPort, /* weight */ 0, /* priority */ 0, /* persistent */ false, /* props */ airTunesMDNSProps());
+      _airTunesService.setServer(localAddress);
+      airTunesService = (ServiceInfo) _airTunesService;
+      airTunesJmDNS.registerService(airTunesService);
+      Log.d(tag, String.format("'%s' service is registered on port %s", airTunesServerName + AIRTUNES_SERVICE_TYPE, airTunesPort));
+    }
+
+test output:
+============
+    {"host": "localhost.local", ...}
+
+--------------------------------------------------------------------------------
+
+proposed fix #2:
+================
+
+1) add custom class:
+
+    package javax.jmdns.impl;
+
+    /*
+     * references:
+     *   https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/JmDNS.java
+     *   https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/JmDNSImpl.java
+     */
+
+    import javax.jmdns.impl.JmDNSImpl;
+
+    import java.io.IOException;
+    import java.net.InetAddress;
+
+    public class MyJmDNSImpl extends JmDNSImpl {
+      private String hostname;
+
+      public MyJmDNSImpl(InetAddress address, String name, long threadSleepDurationMs) throws IOException {
+        super(address, name, threadSleepDurationMs);
+
+        hostname = (address != null) ? address.getHostAddress() : null;
+      }
+
+      @Override
+      public String getHostName() {
+        return (hostname != null) ? hostname : super.getHostName();
+      }
+    }
+
+2) use custom class:
+
+https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/blob/v2.0.46/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/java/com/github/warren_bank/exoplayer_airplay_receiver/service/AirPlayBonjour.java
+
+    import javax.jmdns.impl.MyJmDNSImpl;
+
+    public void start(InetAddress localAddress, int airPlayPort, int airTunesPort) throws Exception {
+      stop();
+
+      String[] macAddress = NetworkUtils.getMACAddress(localAddress);
+
+      airPlayJmDNS  = (JmDNS) new MyJmDNSImpl(localAddress, "localhost", 0l);
+      airTunesJmDNS = (JmDNS) new MyJmDNSImpl(localAddress, "localhost", 0l);
+
+      airPlayService = ServiceInfo.create((serverName + AIRPLAY_SERVICE_TYPE), serverName, airPlayPort, 0, 0, airPlayMDNSProps(macAddress[0]));
+      airPlayJmDNS.registerService(airPlayService);
+      Log.d(tag, String.format("'%s' service is registered on port %s", serverName + AIRPLAY_SERVICE_TYPE, airPlayPort));
+
+      String airTunesServerName = macAddress[1] + "@" + serverName;
+      airTunesService = ServiceInfo.create((airTunesServerName + AIRTUNES_SERVICE_TYPE), airTunesServerName, airTunesPort, 0, 0, airTunesMDNSProps());
+      airTunesJmDNS.registerService(airTunesService);
+      Log.d(tag, String.format("'%s' service is registered on port %s", airTunesServerName + AIRTUNES_SERVICE_TYPE, airTunesPort));
+    }
+
+test output:
+============
+    {"host": "localhost.local", ...}
+
+-------------------------------------------------------------------------------- code trace:
+
+https://github.com/watson/bonjour/blob/v3.5.0/lib/browser.js#L171
+    service.host = rr.data.target
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/DNSRecord.java#L692
+    public static class Service extends DNSRecord {
+      private final String  _server;
+
+      public Service(String name, DNSRecordClass recordClass, boolean unique, int ttl, int priority, int weight, int port, String server) {
+        this._server = server;
+      }
+
+      void write(MessageOutputStream out) {
+        out.writeShort(_priority);
+        out.writeShort(_weight);
+        out.writeShort(_port);
+        out.writeName(_server);
+      }
+    }
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/ServiceInfoImpl.java#L1181
+    public Collection<DNSRecord> answers(DNSRecordClass recordClass, boolean unique, int ttl, HostInfo localHost) {
+      new Service(this.getQualifiedName(), DNSRecordClass.CLASS_IN, unique, ttl, _priority, _weight, _port, localHost.getName())
+    }
+
+callers:
+========
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/DNSQuestion.java#L283
+    answers.addAll(info.answers(this.getRecordClass(), DNSRecordClass.UNIQUE, DNSConstants.DNS_TTL, jmDNSImpl.getLocalHost()));
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/tasks/state/Announcer.java#L115
+    for (DNSRecord answer : info.answers(DNSRecordClass.CLASS_ANY, DNSRecordClass.UNIQUE, this.getTTL(), this.getDns().getLocalHost())) {
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/tasks/state/Canceler.java#L115
+    for (DNSRecord answer : info.answers(DNSRecordClass.CLASS_ANY, DNSRecordClass.UNIQUE, this.getTTL(), this.getDns().getLocalHost())) {
+
+https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/tasks/state/Renewer.java#L113
+    for (DNSRecord answer : info.answers(DNSRecordClass.CLASS_ANY, DNSRecordClass.UNIQUE, this.getTTL(), this.getDns().getLocalHost())) {
+
+--------------------------------------------------------------------------------
+
+proposed fix #3:
+================
+
+1) add custom class:
+
+    package javax.jmdns.impl;
+
+    /*
+     * references:
+     *   https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/JmDNS.java
+     *   https://github.com/jmdns/jmdns/blob/3.5.8/src/main/java/javax/jmdns/impl/JmDNSImpl.java
+     */
+
+    import javax.jmdns.impl.HostInfo;
+    import javax.jmdns.impl.JmDNSImpl;
+
+    import java.io.IOException;
+    import java.net.InetAddress;
+
+    public class MyJmDNSImpl extends JmDNSImpl {
+      public MyJmDNSImpl(InetAddress address, String name, long threadSleepDurationMs) throws IOException {
+        super(address, name, threadSleepDurationMs);
+
+        if (address != null) {
+          HostInfo localHost = getLocalHost();
+          localHost._name = address.getHostAddress();
+        }
+      }
+    }
+
+2) use custom class:
+
+https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/blob/v2.0.46/android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/java/com/github/warren_bank/exoplayer_airplay_receiver/service/AirPlayBonjour.java
+
+    import javax.jmdns.impl.MyJmDNSImpl;
+
+    public void start(InetAddress localAddress, int airPlayPort, int airTunesPort) throws Exception {
+      stop();
+
+      String[] macAddress = NetworkUtils.getMACAddress(localAddress);
+
+      airPlayJmDNS  = (JmDNS) new MyJmDNSImpl(localAddress, "localhost", 0l);
+      airTunesJmDNS = (JmDNS) new MyJmDNSImpl(localAddress, "localhost", 0l);
+
+      airPlayService = ServiceInfo.create((serverName + AIRPLAY_SERVICE_TYPE), serverName, airPlayPort, 0, 0, airPlayMDNSProps(macAddress[0]));
+      airPlayJmDNS.registerService(airPlayService);
+      Log.d(tag, String.format("'%s' service is registered on port %s", serverName + AIRPLAY_SERVICE_TYPE, airPlayPort));
+
+      String airTunesServerName = macAddress[1] + "@" + serverName;
+      airTunesService = ServiceInfo.create((airTunesServerName + AIRTUNES_SERVICE_TYPE), airTunesServerName, airTunesPort, 0, 0, airTunesMDNSProps());
+      airTunesJmDNS.registerService(airTunesService);
+      Log.d(tag, String.format("'%s' service is registered on port %s", airTunesServerName + AIRTUNES_SERVICE_TYPE, airTunesPort));
+    }
+
+test output:
+============
+    {"host": "192.168.1.100", "port": 8192, "type": "airplay", ...}
+
+success:
+========
+  * the test video (CBS News live stream) was successfully "cast" to ExoAirPlayer,
+    which began playback
+
+  * "WebTorrent Desktop" works perfectly
+    - tested with:
+      * v0.24.0 for Windows
+          https://github.com/webtorrent/webtorrent-desktop/releases/tag/v0.24.0
+          https://github.com/webtorrent/webtorrent-desktop/releases/download/v0.24.0/WebTorrent-v0.24.0-win.zip
+    - ExoAirPlayer instances are all immediately discovered on the LAN (as they previously had been)
+    - "casting" of proxied videos to an instance of ExoAirPlayer while downloading from the p2p network was successful
+      * the proxied URL has the format:
+          "http://${IP_of_machine_running_WebTorrent_Desktop}:${high_random_port_number}/${index_of_selected_torrent_in_list}"
+        example:
+          "http://192.168.1.101:54321/0"
+
+--------------------------------------------------------------------------------
