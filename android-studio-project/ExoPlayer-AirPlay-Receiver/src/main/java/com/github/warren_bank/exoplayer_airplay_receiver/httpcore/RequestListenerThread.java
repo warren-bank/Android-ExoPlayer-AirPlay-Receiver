@@ -557,7 +557,7 @@ public class RequestListenerThread extends Thread {
 
           HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
 
-          playUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("content-location"));
+          playUrl   = (String) StringUtils.serializeURLs(  (ArrayList<String>) map.get("content-location"));
           textUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("caption-location"));
           referUrl  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("referer"));
           useCache  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("use-cache"));

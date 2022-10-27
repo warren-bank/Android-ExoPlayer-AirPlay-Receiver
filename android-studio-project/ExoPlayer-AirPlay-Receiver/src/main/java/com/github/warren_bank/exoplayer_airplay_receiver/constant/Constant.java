@@ -239,4 +239,9 @@ public class Constant {
         public static final String PLAYLIST_URLS                = "playlist-urls";
     }
 
+    public interface Delimiter {
+        public static final String DEFAULT                      = "\n";
+        public static final String PLAYLIST_URLS                = "{{<<|^|>>}}";
+    }
+
 }

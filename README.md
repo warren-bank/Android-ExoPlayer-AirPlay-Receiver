@@ -229,6 +229,13 @@ __extended APIs:__
       --data-binary "Content-Location: ${video_url_3}\nCaption-Location: ${caption_url_3}\nReferer: ${videos_page}\nStart-Position: 30" \
       "http://${airplay_ip}/queue"
   ```
+* play video #1 and add videos #2 and #3 to end of queue (set 'Referer' request header):
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Content-Location: ${video_url_1}\nContent-Location: ${video_url_2}\nContent-Location: ${video_url_3}\nReferer: ${videos_page}" \
+      "http://${airplay_ip}/play"
+  ```
 * play DRM video #1 (seek to 10 seconds, end playback at 30 seconds):
   ```bash
     curl --silent -X POST \
@@ -449,6 +456,7 @@ __extended APIs:__
   - keys are not case sensitive
   - recognized keys include:
     * _content-location_
+      - use key on multiple lines to declare more than one value
     * _caption-location_
     * _referer_
     * _req-header_

@@ -1,5 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -8,9 +10,11 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 
@@ -128,7 +132,7 @@ public class StringUtils {
   public static HashMap<String, String> parseDuplicateKeyValues(List<String> list, boolean normalize_lowercase_keys) {
     if ((list == null) || list.isEmpty()) return null;
 
-    String requestBody = TextUtils.join("\n", list);
+    String requestBody = StringUtils.convertListToString(list, "\n");
 
     return StringUtils.parseRequestBody(requestBody, normalize_lowercase_keys);
   }
@@ -166,6 +170,14 @@ public class StringUtils {
     catch(Exception e) {
       return url.toExternalForm();
     }
+  }
+
+  public static String serializeURLs(ArrayList<String> list) {
+    return StringUtils.convertArrayListToString(list, Constant.Delimiter.PLAYLIST_URLS);
+  }
+
+  public static ArrayList<String> deserializeURLs(String text) {
+    return StringUtils.convertStringToArrayList(text, Pattern.quote(Constant.Delimiter.PLAYLIST_URLS));
   }
 
   public static String toString(HashMap<String, String> map) {
@@ -290,6 +302,39 @@ public class StringUtils {
     sorted.putAll(map);
 
     return new ArrayList<String>(sorted.values());
+  }
+
+  // ===================================
+
+  public static String convertArrayListToString(ArrayList<String> list, String delimiter_token) {
+    return StringUtils.convertListToString((List<String>) list, delimiter_token);
+  }
+
+  public static String convertListToString(List<String> list, String delimiter_token) {
+    if ((list == null) || list.isEmpty()) return null;
+
+    if (delimiter_token == null)
+      delimiter_token = Constant.Delimiter.DEFAULT;
+
+    return TextUtils.join(delimiter_token, list);
+  }
+
+  public static ArrayList<String> convertStringToArrayList(String text, String delimiter_token) {
+    List<String> list = StringUtils.convertStringToList(text, delimiter_token);
+
+    return new ArrayList<String>(list);
+  }
+
+  public static List<String> convertStringToList(String text, String delimiter_token) {
+    if (TextUtils.isEmpty(text)) return Collections.emptyList();
+
+    if (delimiter_token == null)
+      delimiter_token = Pattern.quote(Constant.Delimiter.DEFAULT);
+
+    String[] strArray = TextUtils.split(text, delimiter_token);
+    List<String> list = (List<String>) Arrays.asList(strArray);
+
+    return list;
   }
 
   // ===================================

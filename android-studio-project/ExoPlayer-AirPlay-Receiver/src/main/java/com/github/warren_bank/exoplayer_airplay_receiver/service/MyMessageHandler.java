@@ -10,6 +10,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extrac
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.FileM3uPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HttpHtmlPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.HttpM3uPlaylistExtractor;
+import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors.SerializedPlaylistExtractor;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.ImageViewerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.RuntimePermissionsRequestActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
@@ -44,6 +45,7 @@ final class MyMessageHandler extends Handler {
   private ArrayList<Message>                            externalStorageMessages;
 
   private HandlerThread                                 networkingHandlerThread;
+  private SerializedPlaylistExtractor                   serializedExtractor;
   private HttpM3uPlaylistExtractor                      httpM3uExtractor;
   private HttpHtmlPlaylistExtractor                     httpHtmlExtractor;
   private ContentProviderM3uPlaylistExtractor           contentM3uExtractor;
@@ -62,6 +64,7 @@ final class MyMessageHandler extends Handler {
     networkingHandlerThread = new HandlerThread("MyNetworkingThread");
     networkingHandlerThread.start();
 
+    serializedExtractor         = new SerializedPlaylistExtractor();
     httpM3uExtractor            = new HttpM3uPlaylistExtractor();
     httpHtmlExtractor           = new HttpHtmlPlaylistExtractor();
     contentM3uExtractor         = new ContentProviderM3uPlaylistExtractor(service.getApplicationContext());
@@ -608,6 +611,9 @@ final class MyMessageHandler extends Handler {
       playlists = new ArrayList<String>();
 
     ArrayList<String> matches = null;
+
+    if (matches == null)
+      matches = serializedExtractor.expandPlaylist(uri);
 
     if (matches == null)
       matches = httpM3uExtractor.expandPlaylist(uri); //8-bit ascii
