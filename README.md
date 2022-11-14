@@ -736,6 +736,12 @@ __extended APIs:__
       java -jar "airplay.jar" -h "$airplay_ip" -d
     ```
 
+* [_exoairtube_ desktop app](https://github.com/warren-bank/node-ExoAirPlayer-YouTube-sender) (for Node.js) that is open-source, and can be used to:
+  - discover AirPlay receivers on the same LAN
+  - stream videos hosted by YouTube
+    * supports YouTube playlists
+    * casts the URL of the highest quality video format available to the receiver
+
 - - - -
 
 #### Credits:
