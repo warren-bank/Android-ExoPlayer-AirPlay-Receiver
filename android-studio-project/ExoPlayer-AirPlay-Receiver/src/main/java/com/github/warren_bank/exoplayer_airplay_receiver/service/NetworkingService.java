@@ -34,7 +34,7 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class NetworkingService extends Service {
+public class NetworkingService extends Service implements RequestListenerThread.Callback {
   private static final String tag          = NetworkingService.class.getSimpleName();
   private static final String ACTION_STOP  = "STOP";
   public  static final String ACTION_PLAY  = "PLAY";
@@ -77,7 +77,7 @@ public class NetworkingService extends Service {
     new Thread() {
       public void run() {
         try {
-          thread = new RequestListenerThread();
+          thread = new RequestListenerThread(/* context= */ NetworkingService.this, /* RequestListenerThread.Callback */ NetworkingService.this);
           thread.setDaemon(false);
           thread.start();
 
@@ -181,7 +181,7 @@ public class NetworkingService extends Service {
       Log.d(tag, "Beginning registration of Bonjour services..");
 
       if (localAddress == null)
-        localAddress = NetworkUtils.getLocalIpAddress();
+        localAddress = NetworkUtils.getLocalIpAddress(NetworkingService.this);
 
       if (localAddress == null) {
         Log.d(tag, "No local IP address found for any network interface that supports multicast");
@@ -305,7 +305,7 @@ public class NetworkingService extends Service {
 
   private String getNetworkAddress() {
     if (localAddress == null)
-      localAddress = NetworkUtils.getLocalIpAddress();
+      localAddress = NetworkUtils.getLocalIpAddress(NetworkingService.this);
 
     return (localAddress == null)
       ? "[offline]"
@@ -379,6 +379,13 @@ public class NetworkingService extends Service {
 
   public static PlayerManager getPlayerManager() {
     return playerManager;
+  }
+
+  // -------------------------------------------------------------------------
+  // implement interface: RequestListenerThread.Callback
+
+  public void onNewIpAddress() {
+    showNotification();
   }
 
 }

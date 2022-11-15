@@ -32,6 +32,7 @@ import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.util.EntityUtils;
 
+import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,18 +53,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RequestListenerThread extends Thread {
+  public static interface Callback {
+    public void onNewIpAddress();
+  }
+
   private static final String tag = RequestListenerThread.class.getSimpleName();
 
   public  static Map<String, byte[]> photoCacheMaps = Collections.synchronizedMap(new HashMap<String, byte[]>());
   private static Map<String, Socket> socketMaps     = Collections.synchronizedMap(new HashMap<String, Socket>());
   private static String macAddress = null;
 
+  private Context context;
+  private Callback callback;
   private ServerSocket serversocket;
   private HttpParams params;
   private InetAddress localAddress;
   private MyHttpService httpService;
 
-  public RequestListenerThread() {
+  public RequestListenerThread(Context context, Callback callback) {
+    this.context  = context;
+    this.callback = callback;
   }
 
   public void run() {
@@ -81,7 +90,7 @@ public class RequestListenerThread extends Thread {
 
     while (!Thread.interrupted()) {
       try {
-        if (serversocket == null)
+        if (this.serversocket == null)
           break;
 
         Socket socket = this.serversocket.accept();
@@ -94,9 +103,54 @@ public class RequestListenerThread extends Thread {
         thread.setDaemon(true);
         exec.execute(thread);
       }
-      catch (IOException e) {
-        Log.e(tag, "problem accepting inbound HTTP connection", e);
-        break;
+      catch(Exception e) {
+        int wifi_connection_status = get_wifi_connection_status();
+
+        if ((e instanceof IOException) && (wifi_connection_status == 0)) {
+          while (wifi_connection_status == 0) {
+            // Socket closed due to temporary disconnection from WiFi network.
+            // Check every 15 seconds for reconnection.
+            try {
+              Thread.sleep(15 * 1000);
+              wifi_connection_status = get_wifi_connection_status();
+            }
+            catch (InterruptedException e2) {
+              break;
+            }
+          }
+          if (wifi_connection_status == 0) {
+            // Thread was interrupted
+            break;
+          }
+          if ((this.serversocket != null) && !this.serversocket.isClosed()) {
+            // Close the previous socket
+            try {
+              this.serversocket.close();
+            }
+            catch (IOException e2) {
+              this.serversocket = null;
+            }
+          }
+          if ((this.serversocket == null) || this.serversocket.isClosed()) {
+            // Open a new socket
+            try {
+              initHttpServer();
+
+              if ((wifi_connection_status == 2) && (this.callback != null)) {
+                this.callback.onNewIpAddress();
+              }
+            }
+            catch (IOException e2) {
+              Log.e(tag, "problem reinitializing HTTP server", e);
+              this.serversocket = null;
+            }
+          }
+        }
+        else {
+          // all other errors are fatal to the HTTP server
+          Log.e(tag, "problem accepting inbound HTTP connection", e);
+          break;
+        }
       }
     }
     exec.shutdown();
@@ -116,22 +170,38 @@ public class RequestListenerThread extends Thread {
     }
   }
 
+  /*
+   * return values:
+   *   0 = disconnected
+   *   1 = connected to same local address
+   *   2 = connected to new  local address
+   */
+  private int get_wifi_connection_status() {
+    InetAddress currentLocalAddress = NetworkUtils.getLocalIpAddress(this.context);
+
+    return (currentLocalAddress == null)
+      ? 0
+      : currentLocalAddress.equals(this.localAddress)
+        ? 1
+        : 2;
+  }
+
   private void initHttpServer() throws IOException {
     Log.d(tag, "airplay init http server");
 
-    localAddress = NetworkUtils.getLocalIpAddress();
+    this.localAddress = NetworkUtils.getLocalIpAddress(this.context);
 
-    if (localAddress == null) {
+    if (this.localAddress == null) {
       Thread.interrupted();
       return;
     }
 
     if (macAddress == null) {
-      macAddress = NetworkUtils.getMACAddress(localAddress)[0];
+      macAddress = NetworkUtils.getMACAddress(this.localAddress)[0];
       Log.d(tag, "airplay local MAC address = " + macAddress);
     }
 
-    serversocket = new ServerSocket(Constant.AIRPLAY_PORT, 2, localAddress);
+    serversocket = new ServerSocket(Constant.AIRPLAY_PORT, 2, this.localAddress);
     serversocket.setReuseAddress(true);
 
     params = new BasicHttpParams();

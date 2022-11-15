@@ -15,8 +15,37 @@ import android.net.wifi.WifiManager;
 
 public class NetworkUtils {
 
-  public synchronized static Inet4Address getLocalIpAddress() {
+  public static boolean isWifiConnected(Context context) {
     try {
+      ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+      //Get status
+      NetworkInfo.State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+
+      //Determine the conditions of wifi connection
+      if (wifi != NetworkInfo.State.CONNECTED)
+        throw new Exception("not connected");
+
+      return true;
+    }
+    catch(Exception e) {
+      return false;
+    }
+  }
+
+  public static String getLocalIp(Context context) {
+    int ip = getWifiIpAddress(context);
+    return (ip > 0)
+      ? formatIpAddress(ip)
+      : null;
+  }
+
+  public synchronized static Inet4Address getLocalIpAddress(Context context) {
+    try {
+      int ip = getWifiIpAddress(context);
+      byte[] address = convertIpAddress(ip);
+      if (address == null) throw new Exception("no IP is assigned for WiFi network");
+
       for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
         NetworkInterface intf = en.nextElement();
 
@@ -28,13 +57,17 @@ public class NetworkUtils {
 
           if (!inetAddress.isLoopbackAddress()) {
             if (inetAddress instanceof Inet4Address) {
-              return ((Inet4Address) inetAddress);
+              if (sameIpAddress(address, (Inet4Address) inetAddress)) {
+                return ((Inet4Address) inetAddress);
+              }
             }
           }
         }
       }
     }
     catch (SocketException ex) {
+    }
+    catch (Exception ex) {
     }
     return null;
   }
@@ -75,33 +108,60 @@ public class NetworkUtils {
     return macAddress;
   }
 
-  public static String getLocalIp(Context context) {
-    //Get wifi service
-    WifiManager wifiManager = (WifiManager) context
-        .getSystemService(Context.WIFI_SERVICE);
-    //Determine if wifi is on
-    if (!wifiManager.isWifiEnabled()) {
-      wifiManager.setWifiEnabled(true);
+  private static int getWifiIpAddress(Context context) {
+    try {
+      //Get wifi service
+      WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+      //Determine if wifi is on
+      if (!wifiManager.isWifiEnabled()) {
+        wifiManager.setWifiEnabled(true);
+      }
+
+      WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+      int ip = wifiInfo.getIpAddress();
+      return ip;
     }
-    WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-    int ipAddress = wifiInfo.getIpAddress();
-    String ip = intToIp(ipAddress);
-
-    return ip;
+    catch(Exception e) {
+      return 0;
+    }
   }
 
-  public static boolean isWifiConnected(Context context) {
-    ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    //Get status
-    NetworkInfo.State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-    //Determine the conditions of wifi connection
-    if (wifi == NetworkInfo.State.CONNECTED)
-      return true;
-    else
-      return false;
+  private static String formatIpAddress(int ip) {
+    if (ip <= 0) return null;
+
+    byte[] address = convertIpAddress(ip);
+
+    return (address[0] & 0xFF) + "." +
+           (address[1] & 0xFF) + "." +
+           (address[2] & 0xFF) + "." +
+           (address[3] & 0xFF);
   }
 
-  private static String intToIp(int i) {
-    return (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + ((i >> 16) & 0xFF) + "." + (i >> 24 & 0xFF);
+  private static byte[] convertIpAddress(int ip) {
+    if (ip <= 0) return null;
+
+    byte[] address = new byte[4];
+    address[0] = Integer.valueOf((ip      ) & 0xFF).byteValue();
+    address[1] = Integer.valueOf((ip >>  8) & 0xFF).byteValue();
+    address[2] = Integer.valueOf((ip >> 16) & 0xFF).byteValue();
+    address[3] = Integer.valueOf((ip >> 24) & 0xFF).byteValue();
+    return address;
+  }
+
+  private static boolean sameIpAddress(byte[] a, Inet4Address b) {
+    return (b != null) && sameIpAddress(a, b.getAddress());
+  }
+
+  private static boolean sameIpAddress(byte[] a, byte[] b) {
+    return
+      (a != null)     &&
+      (b != null)     &&
+      (a.length == 4) &&
+      (b.length == 4) &&
+      (a[0] == b[0])  &&
+      (a[1] == b[1])  &&
+      (a[2] == b[2])  &&
+      (a[3] == b[3]);
   }
 }
