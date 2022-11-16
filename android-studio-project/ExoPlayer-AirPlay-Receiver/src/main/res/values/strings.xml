@@ -23,12 +23,16 @@
   <string name="notification_service_content_line3">Click to stop service.</string>
 
   <!-- track selection dialog -->
-  <string name="track_selection_button">Select tracks</string>
+  <string name="track_selection_button">Select\nTracks</string>
   <string name="track_selection_title">@string/track_selection_button</string>
 
   <!-- text captions offset selection dialog -->
-  <string name="text_offset_selection_button">Sync captions</string>
+  <string name="text_offset_selection_button">Sync\nCaptions</string>
   <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+
+  <!-- toggle download to offline cache -->
+  <string name="toggle_download_button_start">Start\nDownload</string>
+  <string name="toggle_download_button_stop">Stop\nDownload</string>
 
   <!-- strings that are interpolated within "/show-toast" text -->
   <string translatable="false" name="toast_variable_video_uri">{{video-uri}}</string>

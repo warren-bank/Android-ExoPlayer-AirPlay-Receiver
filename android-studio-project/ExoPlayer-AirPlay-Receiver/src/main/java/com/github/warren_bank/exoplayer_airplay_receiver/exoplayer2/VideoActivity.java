@@ -23,6 +23,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   private PlayerView    playerView;
   private Button        selectTracksButton;
   private Button        selectTextOffsetButton;
+  private Button        toggleDownloadButton;
   private boolean       isShowingTrackSelectionDialog;
   private boolean       isShowingTextOffsetSelectionDialog;
 
@@ -53,6 +54,8 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     selectTracksButton.setOnClickListener(this);
     selectTextOffsetButton = (Button) findViewById(R.id.select_text_offset_button);
     selectTextOffsetButton.setOnClickListener(this);
+    toggleDownloadButton = (Button) findViewById(R.id.toggle_download_button);
+    toggleDownloadButton.setOnClickListener(this);
     isShowingTrackSelectionDialog      = false;
     isShowingTextOffsetSelectionDialog = false;
   }
@@ -90,14 +93,12 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
   // PlayerControlView.VisibilityListener
   @Override
   public void onVisibilityChange(int visibility) {
+    if (visibility == View.VISIBLE)
+      updateButtons(/* textOnly= */ false);
+
     selectTracksButton.setVisibility(visibility);
     selectTextOffsetButton.setVisibility(visibility);
-
-    if (visibility == View.VISIBLE) {
-      selectTracksButton.setEnabled(
-        (playerManager != null) && (playerManager.exoPlayer != null) && TrackSelectionDialog.willHaveContent(playerManager.exoPlayer)
-      );
-    }
+    toggleDownloadButton.setVisibility(visibility);
   }
 
   // View.OnClickListener
@@ -106,6 +107,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     if (
          view == selectTracksButton
       && !isShowingTrackSelectionDialog
+      && (playerManager != null)
       && (playerManager.exoPlayer != null)
       && TrackSelectionDialog.willHaveContent(playerManager.exoPlayer)
     ) {
@@ -120,6 +122,8 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
     if (
          view == selectTextOffsetButton
       && !isShowingTextOffsetSelectionDialog
+      && (playerManager != null)
+      && (playerManager.textSynchronizer != null)
     ) {
       isShowingTextOffsetSelectionDialog = true;
       MultiFieldTimePickerDialogContainer.show(
@@ -128,6 +132,35 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
         /* onDismissListener= */ dismissedDialog -> isShowingTextOffsetSelectionDialog = false
       );
     }
+
+    if (
+         view == toggleDownloadButton
+      && (playerManager != null)
+      && (playerManager.getCurrentItem() != null)
+    ) {
+      playerManager.toggleCurrentItemUseCache();
+      updateButtons(/* textOnly= */ true);
+    }
+  }
+
+  private void updateButtons(boolean textOnly) {
+    if (!textOnly) {
+      selectTracksButton.setEnabled(
+        (playerManager != null) && (playerManager.exoPlayer != null) && TrackSelectionDialog.willHaveContent(playerManager.exoPlayer)
+      );
+      selectTextOffsetButton.setEnabled(
+        (playerManager != null) && (playerManager.textSynchronizer != null)
+      );
+      toggleDownloadButton.setEnabled(
+        (playerManager != null) && (playerManager.getCurrentItem() != null)
+      );
+    }
+
+    toggleDownloadButton.setText(
+      ((playerManager != null) && playerManager.doesCurrentItemUseCache())
+        ? R.string.toggle_download_button_stop
+        : R.string.toggle_download_button_start
+    );
   }
 
 }

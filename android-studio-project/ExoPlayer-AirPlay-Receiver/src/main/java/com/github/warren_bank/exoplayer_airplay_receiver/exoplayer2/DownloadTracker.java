@@ -87,7 +87,21 @@ public class DownloadTracker {
   }
 
   public boolean isDownloaded(MediaItem mediaItem) {
-    @Nullable Download download = downloads.get(checkNotNull(mediaItem.playbackProperties).uri);
+    Uri uri = checkNotNull(mediaItem.playbackProperties).uri;
+    return isDownloaded(uri);
+  }
+
+  public boolean isDownloaded(String uri) {
+    try {
+      return isDownloaded(Uri.parse(uri));
+    }
+    catch(Exception e) {
+      return false;
+    }
+  }
+
+  public boolean isDownloaded(Uri uri) {
+    @Nullable Download download = downloads.get(uri);
     return download != null && download.state != Download.STATE_FAILED;
   }
 

@@ -505,6 +505,16 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       exoPlayer.retry();
     }
 
+    for (VideoSource sample : samples) {
+      if (
+           !sample.useCache
+        && !TextUtils.isEmpty(sample.uri)
+        && downloadTracker.isDownloaded(sample.uri)
+      ) {
+        sample.updateUseCache(true);
+      }
+    }
+
     mediaQueue.addAll(
       Arrays.asList(samples)
     );
@@ -588,6 +598,21 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     return mediaQueue.size();
   }
 
+  private MediaItem getCurrentMediaItem() {
+    VideoSource sample = getCurrentItem();
+    return getMediaItem(sample);
+  }
+
+  private MediaItem getMediaItem(VideoSource sample) {
+    return (sample != null)
+      ? sample.getMediaItem()
+      : null;
+  }
+
+  public VideoSource getCurrentItem() {
+    return getItem(getCurrentItemIndex());
+  }
+
   /**
    * Returns the item at the given index in the media queue.
    *
@@ -598,10 +623,6 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     return ((position >= 0) && (getMediaQueueSize() > position))
       ? mediaQueue.get(position)
       : null;
-  }
-
-  public VideoSource getCurrentItem() {
-    return getItem(getCurrentItemIndex());
   }
 
   /**
@@ -650,6 +671,29 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     }
 
     return true;
+  }
+
+  // Offline cache manipulation methods.
+
+  private boolean isCurrentItemDownloaded() {
+    MediaItem mediaItem = getCurrentMediaItem();
+    return ((mediaItem != null) && downloadTracker.isDownloaded(mediaItem));
+  }
+
+  public boolean doesCurrentItemUseCache() {
+    VideoSource sample = getCurrentItem();
+    return ((sample != null) && sample.useCache);
+  }
+
+  public void toggleCurrentItemUseCache() {
+    VideoSource sample = getCurrentItem();
+    if (sample == null) return;
+
+    MediaItem mediaItem = getMediaItem(sample);
+    if (mediaItem == null) return;
+
+    sample.updateUseCache(!sample.useCache);
+    downloadTracker.toggleDownload(mediaItem, renderersFactory);
   }
 
   // AirPlay functionality (exposed by HTTP endpoints)
@@ -1331,9 +1375,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private MediaSource buildUriMediaSource(VideoSource sample) {
     DataSource.Factory factory = (ExternalStorageUtils.isFileUri(sample.uri) || ExternalStorageUtils.isContentUri(sample.uri))
       ? defaultDataSourceFactory
-      : sample.useCache
-          ? cacheDataSourceFactory
-          : httpDataSourceFactory;
+      : cacheDataSourceFactory;
 
     if (factory == null)
       return null;
