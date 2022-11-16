@@ -3,7 +3,7 @@
   "private": true,
   "license": "GPL-2.0",
   "devDependencies": {
-    "@warren-bank/translate-android-strings": "^1.9.1"
+    "@warren-bank/translate-android-strings": "^1.9.2"
   },
   "scripts": {
     "translate": "translate-android-strings -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/strings.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/withAllLanguageTranslations/res\" -m --nc --nw -b \"(?:ExoAirPlayer|ExoPlayer|AirPlay|API|DRM)\"",

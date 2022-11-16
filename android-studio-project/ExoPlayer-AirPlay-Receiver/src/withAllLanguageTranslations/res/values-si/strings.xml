@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: service running</string>
   <string name="notification_service_content_line1">ExoAirPlayer ක්රියාත්මක කරන්න:</string>
   <string name="notification_service_content_line3">සේවාව නවත්වන්න ක්ලික් කරන්න.</string>
-  <string name="track_selection_button">සලකුණු තෝරන්න</string>
-  <string name="text_offset_selection_button">Sync captions</string>
+  <string name="track_selection_button">තෝරාගන්න\nසලකුණු</string>
+  <string name="text_offset_selection_button">සමමුහුර්ත\nධාරාවන්</string>
   <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+  <string name="toggle_download_button_start">ආරම්භ කරන්න\nඩවුන්ලෝඩ් කරන්න</string>
+  <string name="toggle_download_button_stop">නවත්වන්න\nඩවුන්ලෝඩ් කරන්න</string>
 </resources>

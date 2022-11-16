@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay 受信側: サービス実行中</string>
   <string name="notification_service_content_line1">ExoAirPlayer 実行:</string>
   <string name="notification_service_content_line3">クリックしてサービスを停止.</string>
-  <string name="track_selection_button">トラックの選択</string>
-  <string name="text_offset_selection_button">同期のキャプション</string>
+  <string name="track_selection_button">選択\nトラック</string>
+  <string name="text_offset_selection_button">同期\nキャプション</string>
   <string name="text_offset_selection_title">テキスト・キャプションの拡張/遅延時間のオフセット</string>
+  <string name="toggle_download_button_start">開始\nダウンロード</string>
+  <string name="toggle_download_button_stop">停止\nダウンロード</string>
 </resources>

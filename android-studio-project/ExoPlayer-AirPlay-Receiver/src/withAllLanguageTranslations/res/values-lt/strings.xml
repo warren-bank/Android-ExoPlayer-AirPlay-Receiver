@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Imtuvas: paslaugos teikimas</string>
   <string name="notification_service_content_line1">ExoAirPlayer Veikia:</string>
   <string name="notification_service_content_line3">Spragtelkite norėdami sustabdyti paslaugą.</string>
-  <string name="track_selection_button">Pažymėti takelius</string>
-  <string name="text_offset_selection_button">Sinchronizuoti antrašcijas</string>
+  <string name="track_selection_button">Pasirinkite\nTakeliai</string>
+  <string name="text_offset_selection_button">sinchronizuoti\nkaimai</string>
   <string name="text_offset_selection_title">Teksto captions avansas/uždelsimas laiko poslinkis</string>
+  <string name="toggle_download_button_start">Pradžia\nparsisiųsti</string>
+  <string name="toggle_download_button_stop">sustabdyti\nparsisiųsti</string>
 </resources>

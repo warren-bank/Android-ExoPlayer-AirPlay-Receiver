@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Empfänger: Service läuft</string>
   <string name="notification_service_content_line1">ExoAirPlayer Ausführen unter:</string>
   <string name="notification_service_content_line3">Zum Stoppen des Service klicken.</string>
-  <string name="track_selection_button">Tracks auswählen</string>
-  <string name="text_offset_selection_button">Synchrone Beschriftungen</string>
+  <string name="track_selection_button">Auswählen\nTracks</string>
+  <string name="text_offset_selection_button">Synchronisieren\nUntertitel</string>
   <string name="text_offset_selection_title">Textuntertitel Vorlauf/Verzögerungszeit Offset</string>
+  <string name="toggle_download_button_start">Start\nHerunterladen</string>
+  <string name="toggle_download_button_stop">Stoppen\nHerunterladen</string>
 </resources>

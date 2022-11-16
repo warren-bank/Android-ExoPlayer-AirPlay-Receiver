@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay রিসিভার: সার্ভিস চলছে</string>
   <string name="notification_service_content_line1">ExoAirPlayer চলমান:</string>
   <string name="notification_service_content_line3">সার্ভিস বন্ধ করতে ক্লিক করুন.</string>
-  <string name="track_selection_button">ট্র্যাক নির্বাচন করুন</string>
-  <string name="text_offset_selection_button">Sync ক্যাপশন</string>
+  <string name="track_selection_button">নির্বাচন করুন\nট্র্যাক</string>
+  <string name="text_offset_selection_button">সমার্থক\nক্যাপশন</string>
   <string name="text_offset_selection_title">টেক্সট ক্যাপশন অ্যাডভান্স/ডেল টাইম অফসেট</string>
+  <string name="toggle_download_button_start">শুরু করো\nডাউনলোড</string>
+  <string name="toggle_download_button_stop">থামাও\nডাউনলোড</string>
 </resources>

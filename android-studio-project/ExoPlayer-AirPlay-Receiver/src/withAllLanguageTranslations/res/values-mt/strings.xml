@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Riċevitur: tħaddim tas-servizz</string>
   <string name="notification_service_content_line1">ExoAirPlayer taħdem f \':</string>
   <string name="notification_service_content_line3">Ikklikkja biex tieqaf servizz.</string>
-  <string name="track_selection_button">Agħżel binarji</string>
-  <string name="text_offset_selection_button">Il-kapzjonijiet sinkronizzat</string>
+  <string name="track_selection_button">tagħżel\nbinarji</string>
+  <string name="text_offset_selection_button">sinkronizza\ncaptions</string>
   <string name="text_offset_selection_title">Test Captions Avvanz/Dewmien Ħin Offset</string>
+  <string name="toggle_download_button_start">bidu\nniżżel</string>
+  <string name="toggle_download_button_stop">tieqaf\nniżżel</string>
 </resources>

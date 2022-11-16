@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Mottaker: tjenestekjøring</string>
   <string name="notification_service_content_line1">ExoAirPlayer kjøre på:</string>
   <string name="notification_service_content_line3">Klikk for å stoppe tjeneste.</string>
-  <string name="track_selection_button">Velg spor</string>
-  <string name="text_offset_selection_button">Synkroniseringstitler</string>
+  <string name="track_selection_button">velg\nspor</string>
+  <string name="text_offset_selection_button">synkroniser\nkapsler</string>
   <string name="text_offset_selection_title">Tekst Captions Forhåndsutsettelse / Forsinkelsestid</string>
+  <string name="toggle_download_button_start">start\nnedlasting</string>
+  <string name="toggle_download_button_stop">stopp\nnedlasting</string>
 </resources>

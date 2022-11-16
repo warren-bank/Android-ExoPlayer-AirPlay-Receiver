@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Penerima: perkhidmatan berjalan</string>
   <string name="notification_service_content_line1">ExoAirPlayer berjalan pada:</string>
   <string name="notification_service_content_line3">Klik untuk henti perkhidmatan.</string>
-  <string name="track_selection_button">Pilih trek</string>
-  <string name="text_offset_selection_button">Penyegerakan segerak</string>
+  <string name="track_selection_button">pilih\ntrek</string>
+  <string name="text_offset_selection_button">Segerakkan\nKapsyen</string>
   <string name="text_offset_selection_title">Kapsyen Teks Lanjutan/Lengahan Masa</string>
+  <string name="toggle_download_button_start">mula\nmuat turun</string>
+  <string name="toggle_download_button_stop">henti\nmuat turun</string>
 </resources>

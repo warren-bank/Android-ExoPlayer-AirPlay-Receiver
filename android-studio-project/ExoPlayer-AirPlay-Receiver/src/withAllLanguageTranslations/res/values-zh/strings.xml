@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay 接收器: 服务正在运行</string>
   <string name="notification_service_content_line1">ExoAirPlayer 奔跑:</string>
   <string name="notification_service_content_line3">单击以停止服务.</string>
-  <string name="track_selection_button">选择跟踪</string>
-  <string name="text_offset_selection_button">同步文字说明</string>
+  <string name="track_selection_button">选\n赛道</string>
+  <string name="text_offset_selection_button">同步\n文字说明</string>
   <string name="text_offset_selection_title">文字文字说明提前/延迟时间偏移</string>
+  <string name="toggle_download_button_start">开始\n下载</string>
+  <string name="toggle_download_button_stop">停\n下载</string>
 </resources>

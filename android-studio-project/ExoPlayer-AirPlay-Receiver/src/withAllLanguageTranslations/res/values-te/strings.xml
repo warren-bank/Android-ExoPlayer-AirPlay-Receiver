@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Receiver: సేవ నడుస్తోంది</string>
   <string name="notification_service_content_line1">ExoAirPlayer నడుస్తోంది:</string>
   <string name="notification_service_content_line3">సేవను ఆపడానికి క్లిక్ చేయుము.</string>
-  <string name="track_selection_button">ట్రాక్స్ యెంపికచేయుము</string>
-  <string name="text_offset_selection_button">(S) సంకేతపు పట్టాలు</string>
+  <string name="track_selection_button">ఎంపిక\nట్రాక్లు</string>
+  <string name="text_offset_selection_button">సింక్రోనజ్\nపట్టీలు</string>
   <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+  <string name="toggle_download_button_start">ప్రారంభం\nడౌన్లోడ్</string>
+  <string name="toggle_download_button_stop">ఆపు\nడౌన్లోడ్</string>
 </resources>

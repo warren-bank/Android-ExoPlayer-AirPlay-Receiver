@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Vastaanotin: palvelun käyttö</string>
   <string name="notification_service_content_line1">ExoAirPlayer Ajossa:</string>
   <string name="notification_service_content_line3">Lopeta palvelu napsauttamalla.</string>
-  <string name="track_selection_button">Valitse kappaleet</string>
-  <string name="text_offset_selection_button">Synkronoinnit</string>
+  <string name="track_selection_button">Valitse\nKappaleet</string>
+  <string name="text_offset_selection_button">Synkronoi\nVangit</string>
   <string name="text_offset_selection_title">Tekstin Captions Advance/Delay</string>
+  <string name="toggle_download_button_start">Alku\nLataus</string>
+  <string name="toggle_download_button_stop">Stop\nLataus</string>
 </resources>

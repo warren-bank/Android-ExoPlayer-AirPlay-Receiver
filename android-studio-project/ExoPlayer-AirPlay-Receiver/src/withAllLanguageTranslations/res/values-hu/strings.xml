@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Fogadó: szolgáltatás fut</string>
   <string name="notification_service_content_line1">ExoAirPlayer Futás közben:</string>
   <string name="notification_service_content_line3">Kattintson ide a szolgáltatás leállításához.</string>
-  <string name="track_selection_button">Jelek kiválasztása</string>
-  <string name="text_offset_selection_button">Szinkronizálás</string>
+  <string name="track_selection_button">Kiválasztás\nNyomok</string>
+  <string name="text_offset_selection_button">Szinkronizálás\nFogások</string>
   <string name="text_offset_selection_title">Szöveges bejegyzések előzetes/késleltetési idő eltolás</string>
+  <string name="toggle_download_button_start">Indítás\nLetöltés</string>
+  <string name="toggle_download_button_stop">állj\nLetöltés</string>
 </resources>

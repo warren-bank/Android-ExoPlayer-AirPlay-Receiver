@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Glacadóir: rith ag rith</string>
   <string name="notification_service_content_line1">ExoAirPlayer á rith ag:</string>
   <string name="notification_service_content_line3">Cliceáil chun seirbhís a stopadh.</string>
-  <string name="track_selection_button">Roghnaigh lorgairí</string>
-  <string name="text_offset_selection_button">Sioncrónaigh</string>
+  <string name="track_selection_button">roghnaigh\nrianta</string>
+  <string name="text_offset_selection_button">sioncrónaigh\nfotheidil</string>
   <string name="text_offset_selection_title">Réamhshocrú Téacs/Am Ama A Fhritháireamh I</string>
+  <string name="toggle_download_button_start">Tosaigh\níoslódáil</string>
+  <string name="toggle_download_button_stop">stad\níoslódáil</string>
 </resources>

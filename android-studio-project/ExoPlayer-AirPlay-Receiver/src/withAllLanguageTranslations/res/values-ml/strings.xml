@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay ലഭിച്ചവര്: സേവനം നടത്തുന്നു</string>
   <string name="notification_service_content_line1">ExoAirPlayer പ്രവര്ത്തിപ്പിക്കുന്നു:</string>
   <string name="notification_service_content_line3">സേവനം നിര്ത്താന് ഞൊട്ടുക.</string>
-  <string name="track_selection_button">ട്രാക്കുകള് തെരഞ്ഞെടുക്കുക</string>
-  <string name="text_offset_selection_button">സിന്ക് ക്യാപ്ഷനുകള്</string>
+  <string name="track_selection_button">തെരഞ്ഞെടുക്കുക\nട്രാക്കുകള്</string>
+  <string name="text_offset_selection_button">സിന്ക്രൊണൈസ്\nക്യാപ്ഷന്</string>
   <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+  <string name="toggle_download_button_start">തുടങ്ങുക\nഡൗൺലോഡ്</string>
+  <string name="toggle_download_button_stop">നിര്ത്തുക\nഡൗൺലോഡ്</string>
 </resources>

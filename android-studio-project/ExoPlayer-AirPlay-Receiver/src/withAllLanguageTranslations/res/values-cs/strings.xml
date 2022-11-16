@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay Příjemce: služba běží</string>
   <string name="notification_service_content_line1">ExoAirPlayer spuštění v:</string>
   <string name="notification_service_content_line3">Klepnutím zastavíte službu.</string>
-  <string name="track_selection_button">Vybrat stopy</string>
-  <string name="text_offset_selection_button">Popisky synchronizace</string>
+  <string name="track_selection_button">výběr\nsledování</string>
+  <string name="text_offset_selection_button">synchronizovat\npopisky</string>
   <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+  <string name="toggle_download_button_start">začátek\nstáhnout</string>
+  <string name="toggle_download_button_stop">zastavit\nstáhnout</string>
 </resources>

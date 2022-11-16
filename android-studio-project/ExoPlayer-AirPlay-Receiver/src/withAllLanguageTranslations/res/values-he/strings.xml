@@ -12,7 +12,9 @@
   <string name="notification_service_ticker">ExoPlayer AirPlay קבלה: שירות רץ</string>
   <string name="notification_service_content_line1">ExoAirPlayer רץ ב:</string>
   <string name="notification_service_content_line3">לחצו כדי להפסיק את השירות.</string>
-  <string name="track_selection_button">בחירת מסלולים</string>
-  <string name="text_offset_selection_button">כיתובים לסינכרון</string>
+  <string name="track_selection_button">בחירה\nמסלולים</string>
+  <string name="text_offset_selection_button">סינכרון\nכיתובים</string>
   <string name="text_offset_selection_title">היסט זמן של ניהול תמליל/היסט זמן</string>
+  <string name="toggle_download_button_start">התחלה\nהורדה</string>
+  <string name="toggle_download_button_stop">עצירה\nהורדה</string>
 </resources>
