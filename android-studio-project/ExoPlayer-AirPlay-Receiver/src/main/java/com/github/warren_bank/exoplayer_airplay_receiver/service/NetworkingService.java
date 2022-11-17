@@ -19,11 +19,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Process;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.RemoteViews;
@@ -118,41 +116,29 @@ public class NetworkingService extends Service implements RequestListenerThread.
   private void shutdown() {
     if (playerManager == null) return;
 
-    hide_player();
-
     playbackStatusMonitor.stop();
     playerNotificationManager.release();
-    playerManager.release();
-    playerManager = null;
-
-    WakeLockMgr.release();
-
     MainApp.unregisterHandler(NetworkingService.class.getName());
+    hide_player();
     hideNotification();
+    WakeLockMgr.release();
 
     new Thread() {
       public void run() {
         try {
+          unregisterAirplay();
+
           if (thread != null) {
             thread.destroy();
             thread = null;
           }
-
-          unregisterAirplay();
         }
         catch (Exception e) {
           Log.e(tag, "problem shutting down HTTP server and Bonjour services", e);
         }
         finally {
-          // wait a few moments to allow cleanup to complete, then quit the program by forcefully killing the process.
-          // the only cleanup that may occur is the deletion of all downloaded files from the cache directory.
-          final Handler handler = new Handler(Looper.getMainLooper());
-          handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              Process.killProcess(Process.myPid());
-            }
-          }, 7500);
+          playerManager.release(/* shutdown= */ true, /* delay_ms= */ 250l);
+          playerManager = null;
         }
       }
     }.start();

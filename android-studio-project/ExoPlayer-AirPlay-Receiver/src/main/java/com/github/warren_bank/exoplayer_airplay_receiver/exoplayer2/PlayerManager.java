@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -1025,10 +1026,14 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     return isHandled;
   }
 
+  public void release() {
+    release(false, 0l);
+  }
+
   /**
    * Releases the manager and instance of ExoPlayer that it holds.
    */
-  public void release() {
+  public void release(boolean shutdown, long delay_ms) {
     try {
       PreferencesMgr.removeOnPreferenceChangedListener(this);
 
@@ -1042,6 +1047,12 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
       if (downloadTracker != null)
         downloadTracker.removeAllDownloads();
+    }
+    catch (Exception e) {}
+    finally {
+      if (shutdown) {
+        shutdownAfterAllDownloadsRemoved(downloadTracker, (delay_ms > 0l) ? delay_ms : 0l);
+      }
 
       mediaQueue               = null;
       concatenatingMediaSource = null;
@@ -1054,7 +1065,25 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       loadErrorHandlingPolicy  = null;
       currentItemIndex         = C.INDEX_UNSET;
     }
-    catch (Exception e) {}
+  }
+
+  private void shutdownAfterAllDownloadsRemoved(final DownloadTracker downloadTracker, final long delay_ms) {
+    if (downloadTracker != null) {
+      handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          downloadTracker.addAllDownloadsRemovedCallback(new DownloadTracker.AllDownloadsRemovedCallback() {
+            @Override
+            public void onAllDownloadsRemoved() {
+              Process.killProcess(Process.myPid());
+            }
+          });
+        }
+      }, delay_ms);
+    }
+    else {
+      Process.killProcess(Process.myPid());
+    }
   }
 
   /**

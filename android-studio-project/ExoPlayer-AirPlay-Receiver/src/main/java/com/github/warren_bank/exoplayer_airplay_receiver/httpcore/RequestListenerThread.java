@@ -53,8 +53,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RequestListenerThread extends Thread {
-  public static interface Callback {
-    public void onNewIpAddress();
+  public interface Callback {
+    void onNewIpAddress();
   }
 
   private static final String tag = RequestListenerThread.class.getSimpleName();

@@ -53,10 +53,15 @@ public class DownloadTracker {
     void onDownloadsChanged();
   }
 
+  public interface AllDownloadsRemovedCallback {
+    void onAllDownloadsRemoved();
+  }
+
   private static final String TAG = "DownloadTracker";
 
   private final Context context;
   private final HttpDataSource.Factory httpDataSourceFactory;
+  private final DownloadManager downloadManager;
   private final CopyOnWriteArraySet<Listener> listeners;
   private final HashMap<Uri, Download> downloads;
   private final DownloadIndex downloadIndex;
@@ -70,6 +75,7 @@ public class DownloadTracker {
   ) {
     this.context = context.getApplicationContext();
     this.httpDataSourceFactory = httpDataSourceFactory;
+    this.downloadManager = downloadManager;
     listeners = new CopyOnWriteArraySet<>();
     downloads = new HashMap<>();
     downloadIndex = downloadManager.getDownloadIndex();
@@ -84,6 +90,22 @@ public class DownloadTracker {
 
   public void removeListener(Listener listener) {
     listeners.remove(listener);
+  }
+
+  public void addAllDownloadsRemovedCallback(AllDownloadsRemovedCallback callback) {
+    checkNotNull(callback);
+    if (downloadManager.isIdle()) {
+      callback.onAllDownloadsRemoved();
+    }
+    else {
+      downloadManager.addListener(new DownloadManager.Listener() {
+        @Override
+        public void onIdle(DownloadManager dm) {
+          downloadManager.removeListener(this);
+          callback.onAllDownloadsRemoved();
+        }
+      });
+    }
   }
 
   public boolean isDownloaded(MediaItem mediaItem) {

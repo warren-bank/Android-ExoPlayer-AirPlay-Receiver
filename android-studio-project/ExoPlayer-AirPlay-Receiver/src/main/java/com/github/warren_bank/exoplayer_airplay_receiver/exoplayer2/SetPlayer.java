@@ -5,7 +5,5 @@ import com.google.android.exoplayer2.Player;
 import androidx.annotation.Nullable;
 
 public interface SetPlayer {
-
-  public void setPlayer(@Nullable Player player);
-
+  void setPlayer(@Nullable Player player);
 }
