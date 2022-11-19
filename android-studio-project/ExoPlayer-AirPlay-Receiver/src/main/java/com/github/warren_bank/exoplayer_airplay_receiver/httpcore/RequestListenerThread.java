@@ -59,6 +59,7 @@ public class RequestListenerThread extends Thread {
     boolean isPlaybackFinished();
     long getCurrentPosition();  // units: milliseconds
     long getDuration();         // units: milliseconds
+    String getMediaItemJson();
   }
 
   public interface Callback {
@@ -561,6 +562,11 @@ public class RequestListenerThread extends Thread {
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.equals("/fp-setup")) {
+        Log.d(tag, "airplay setup content = " + new String(entityContent, "UTF-8"));
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       //IOS 8.4.1 Never send this command (Youku does not send, Tencent video sends)
       else if (target.equalsIgnoreCase(Constant.Target.PLAYBACK_INFO)) {
         Log.d(tag, "airplay received playback_info request");
@@ -600,14 +606,23 @@ public class RequestListenerThread extends Thread {
         httpResponse.setHeader("Content-Type", "text/x-apple-plist+xml");
         httpResponse.setEntity(new StringEntity(playback_info));
       }
-      else if (target.equals("/fp-setup")) {
-        Log.d(tag, "airplay setup content = " + new String(entityContent, "UTF-8"));
-
-        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
-      }
       // =======================================================================
       // non-standard extended API methods:
       // =======================================================================
+      else if (target.equalsIgnoreCase(Constant.Target.MEDIA_ITEM_INFO)) {
+        String media_item_info = "{}";
+
+        if ((playbackInfoSource != null) && playbackInfoSource.refresh()) {
+          if (!playbackInfoSource.isPlaybackFinished()) {
+            media_item_info = playbackInfoSource.getMediaItemJson();
+          }
+          playbackInfoSource.release();
+        }
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        httpResponse.setHeader("Content-Type", "application/json; charset=utf-8");
+        httpResponse.setEntity(new StringEntity(media_item_info));
+      }
       else if (
         (entityContent != null) && (
           target.equals(Constant.Target.PLAY)  ||  //Clear queue and add new video

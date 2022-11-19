@@ -205,6 +205,7 @@ public class Constant {
         public static final String RATE                         = "/rate";
         public static final String PLAYBACK_INFO                = "/playback-info";
 
+        public static final String MEDIA_ITEM_INFO              = "/media-item-info";
         public static final String SCRUB_OFFSET                 = "/add-scrub-offset";
         public static final String QUEUE                        = "/queue";
         public static final String NEXT                         = "/next";

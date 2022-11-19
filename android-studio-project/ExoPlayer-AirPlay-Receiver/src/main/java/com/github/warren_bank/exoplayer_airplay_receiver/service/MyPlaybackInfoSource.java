@@ -112,4 +112,16 @@ public class MyPlaybackInfoSource implements RequestListenerThread.PlaybackInfoS
     }
   }
 
+  public String getMediaItemJson() {
+    synchronized (monitor) {
+      try {
+        if (!isPlayerReady()) throw new Exception("player is not ready");
+        return info.toString(/* indentSpaces= */ 2);
+      }
+      catch(Exception e) {
+        return "{}";
+      }
+    }
+  }
+
 }

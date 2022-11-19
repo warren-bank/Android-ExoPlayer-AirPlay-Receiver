@@ -311,8 +311,21 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   public String getCurrentItemJson() {
-    JSONObject json = getCurrentItemJSONObject();
-    return (json == null) ? null : json.toString();
+    return getCurrentItemJson(/* indentSpaces= */ 0);
+  }
+
+  public String getCurrentItemJson(int indentSpaces) {
+    try {
+      JSONObject json = getCurrentItemJSONObject();
+      return (json == null)
+        ? null
+        : (indentSpaces <= 0)
+          ? json.toString()
+          : json.toString(indentSpaces);
+    }
+    catch(Exception e) {
+      return null;
+    }
   }
 
   public JSONObject getCurrentItemJSONObject() {
