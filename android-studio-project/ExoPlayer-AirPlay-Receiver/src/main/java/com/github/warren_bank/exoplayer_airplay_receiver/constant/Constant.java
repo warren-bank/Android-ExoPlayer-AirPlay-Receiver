@@ -244,4 +244,22 @@ public class Constant {
         public static final String PLAYLIST_URLS                = "{{<<|^|>>}}";
     }
 
+    public interface MediaItemInfo {
+        public static final String IS_PLAYER_READY              = "is_player_ready";
+        public static final String IS_PLAYER_PAUSED             = "is_player_paused";
+        public static final String MEDIA_URL                    = "media_url";
+        public static final String MEDIA_TYPE                   = "media_type";
+        public static final String CAPTION_URL                  = "caption_url";
+        public static final String REFERER_URL                  = "referer_url";
+        public static final String REQUEST_HEADERS              = "request_headers";
+        public static final String USE_OFFLINE_CACHE            = "use_offline_cache";
+        public static final String START_POSITION               = "start_position";
+        public static final String STOP_POSITION                = "stop_position";
+        public static final String CURRENT_POSITION             = "current_position";
+        public static final String DURATION                     = "duration";
+        public static final String DRM_SCHEME                   = "drm_scheme";
+        public static final String DRM_LICENSE_SERVER_URL       = "drm_license_server_url";
+        public static final String DRM_REQUEST_HEADERS          = "drm_request_headers";
+    }
+
 }

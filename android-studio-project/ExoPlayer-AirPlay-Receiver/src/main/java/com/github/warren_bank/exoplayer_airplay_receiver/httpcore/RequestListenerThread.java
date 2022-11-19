@@ -53,6 +53,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RequestListenerThread extends Thread {
+  public interface PlaybackInfoSource {
+    boolean refresh();
+    boolean release();
+    boolean isPlaybackFinished();
+    long getCurrentPosition();  // units: milliseconds
+    long getDuration();         // units: milliseconds
+  }
+
   public interface Callback {
     void onNewIpAddress();
   }
@@ -64,15 +72,17 @@ public class RequestListenerThread extends Thread {
   private static String macAddress = null;
 
   private Context context;
+  private PlaybackInfoSource playbackInfoSource;
   private Callback callback;
   private ServerSocket serversocket;
   private HttpParams params;
   private InetAddress localAddress;
   private MyHttpService httpService;
 
-  public RequestListenerThread(Context context, Callback callback) {
-    this.context  = context;
-    this.callback = callback;
+  public RequestListenerThread(Context context, PlaybackInfoSource playbackInfoSource, Callback callback) {
+    this.context            = context;
+    this.playbackInfoSource = playbackInfoSource;
+    this.callback           = callback;
   }
 
   public void run() {
@@ -221,7 +231,7 @@ public class RequestListenerThread extends Thread {
     HttpRequestHandlerRegistry registry = new HttpRequestHandlerRegistry();
 
     //http request handler, HttpFileHandler inherits from HttpRequestHandler
-    registry.register("*", new WebServiceHandler());
+    registry.register("*", new WebServiceHandler(playbackInfoSource));
 
     httpService = new MyHttpService(
       httpProcessor,
@@ -328,8 +338,11 @@ public class RequestListenerThread extends Thread {
   private static class WebServiceHandler implements HttpRequestHandler {
     private static final String tag = WebServiceHandler.class.getSimpleName();
 
-    public WebServiceHandler() {
+    private final RequestListenerThread.PlaybackInfoSource playbackInfoSource;
+
+    public WebServiceHandler(RequestListenerThread.PlaybackInfoSource playbackInfoSource) {
       super();
+      this.playbackInfoSource = playbackInfoSource;
     }
 
     //in this method, we can process the requested business logic
@@ -499,11 +512,13 @@ public class RequestListenerThread extends Thread {
           long duration = 0;
           long curPos = 0;
 
-          if (!PlaybackStatusMonitor.isPlaybackFinished()) {
-            duration = PlaybackStatusMonitor.getDuration();
-            curPos = PlaybackStatusMonitor.getCurrentPosition();
-            duration = duration < 0 ? 0 : duration;
-            curPos = curPos < 0 ? 0 : curPos;
+          if ((playbackInfoSource != null) && playbackInfoSource.refresh() && !playbackInfoSource.isPlaybackFinished()) {
+            duration = playbackInfoSource.getDuration();
+            curPos   = playbackInfoSource.getCurrentPosition();
+            playbackInfoSource.release();
+
+            duration = (duration < 0) ? 0 : duration;
+            curPos   = (curPos   < 0) ? 0 : curPos;
             Log.d(tag, "airplay get method scrub: duration = " + duration + "; position = " + curPos);
 
             //Milliseconds need to be converted to seconds
@@ -549,24 +564,18 @@ public class RequestListenerThread extends Thread {
       //IOS 8.4.1 Never send this command (Youku does not send, Tencent video sends)
       else if (target.equalsIgnoreCase(Constant.Target.PLAYBACK_INFO)) {
         Log.d(tag, "airplay received playback_info request");
+        long curPos          = 0;
+        long duration        = 0;
+        long cacheDuration   = 0;
+        String status        = Constant.Status.Status_stop;
         String playback_info = "";
-        long duration = 0;
-        long cacheDuration = 0;
-        long curPos = 0;
 
-        String status = Constant.Status.Status_stop;
-
-        if (PlaybackStatusMonitor.isPlaybackFinished()) {
-          Log.d(tag, " airplay video activity is finished");
-          status = Constant.Status.Status_stop;
-
-          httpContext.setAttribute(Constant.Need_sendReverse, status);
-          httpContext.setAttribute(Constant.ReverseMsg, Constant.getStopEventMsg(1, sessionId, status));
-        }
-        else {
-          curPos = PlaybackStatusMonitor.getCurrentPosition();
-          duration = PlaybackStatusMonitor.getDuration();
+        if ((playbackInfoSource != null) && playbackInfoSource.refresh() && !playbackInfoSource.isPlaybackFinished()) {
+          curPos        = playbackInfoSource.getCurrentPosition();
+          duration      = playbackInfoSource.getDuration();
           cacheDuration = curPos;
+          playbackInfoSource.release();
+
           if (curPos == -1 || duration == -1 || cacheDuration == -1) {
             status = Constant.Status.Status_load;
             playback_info = Constant.getPlaybackInfo(0, 0, 0, 0);
@@ -578,6 +587,13 @@ public class RequestListenerThread extends Thread {
 
           httpContext.setAttribute(Constant.Need_sendReverse, status);
           httpContext.setAttribute(Constant.ReverseMsg, Constant.getVideoEventMsg(sessionId, status));
+        }
+        else {
+          Log.d(tag, " airplay video activity is finished");
+          status = Constant.Status.Status_stop;
+
+          httpContext.setAttribute(Constant.Need_sendReverse, status);
+          httpContext.setAttribute(Constant.ReverseMsg, Constant.getStopEventMsg(1, sessionId, status));
         }
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);

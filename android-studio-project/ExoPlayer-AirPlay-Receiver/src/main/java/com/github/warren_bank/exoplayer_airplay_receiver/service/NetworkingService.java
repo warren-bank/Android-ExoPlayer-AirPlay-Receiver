@@ -40,7 +40,7 @@ public class NetworkingService extends Service implements RequestListenerThread.
   private static PlayerManager playerManager = null;
 
   private PlayerNotificationManagerContainer playerNotificationManager;
-  private MyPlaybackStatusMonitor playbackStatusMonitor;
+  private MyPlaybackInfoSource playbackInfoSource;
   private String airplayName;
   private InetAddress localAddress;
   private AirPlayBonjour airPlayBonjour;
@@ -54,7 +54,7 @@ public class NetworkingService extends Service implements RequestListenerThread.
 
     playerManager             = PlayerManager.createPlayerManager(     /* context= */ NetworkingService.this);
     playerNotificationManager = new PlayerNotificationManagerContainer(/* context= */ NetworkingService.this, playerManager, /* pendingIntentActivityClass= */ VideoPlayerActivity.class);
-    playbackStatusMonitor     = new MyPlaybackStatusMonitor();
+    playbackInfoSource        = new MyPlaybackInfoSource(playerManager);
     airplayName               = Build.MODEL + "@" + getString(R.string.app_name);
     localAddress              = null;
     airPlayBonjour            = null;
@@ -75,7 +75,7 @@ public class NetworkingService extends Service implements RequestListenerThread.
     new Thread() {
       public void run() {
         try {
-          thread = new RequestListenerThread(/* context= */ NetworkingService.this, /* RequestListenerThread.Callback */ NetworkingService.this);
+          thread = new RequestListenerThread(/* context= */ NetworkingService.this, /* RequestListenerThread.PlaybackInfoSource */ playbackInfoSource, /* RequestListenerThread.Callback */ NetworkingService.this);
           thread.setDaemon(false);
           thread.start();
 
@@ -90,8 +90,6 @@ public class NetworkingService extends Service implements RequestListenerThread.
         }
       }
     }.start();
-
-    playbackStatusMonitor.start();
   }
 
   @Override
@@ -116,11 +114,10 @@ public class NetworkingService extends Service implements RequestListenerThread.
   private void shutdown() {
     if (playerManager == null) return;
 
-    playbackStatusMonitor.stop();
-    playerNotificationManager.release();
     MainApp.unregisterHandler(NetworkingService.class.getName());
     hide_player();
     hideNotification();
+    playerNotificationManager.release();
     WakeLockMgr.release();
 
     new Thread() {

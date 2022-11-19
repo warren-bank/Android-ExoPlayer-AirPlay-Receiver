@@ -1,6 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyLoadErrorHandlingPolicy;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
@@ -58,9 +59,12 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.util.Clock;
 import com.google.android.exoplayer2.util.EventLogger;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 /** Manages ExoPlayer and an internal media queue */
 public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPreferenceChangeListener {
@@ -262,6 +266,17 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   /**
+   * @return The position of the current video in milliseconds.
+   */
+  public long getCurrentVideoPosition() {
+    if (exoPlayer == null)
+      return 0l;
+
+    long positionMs = exoPlayer.getCurrentPosition();
+    return positionMs;
+  }
+
+  /**
    * @return The duration of the current video in milliseconds, or -1 if the duration is not known.
    */
   public long getCurrentVideoDuration() {
@@ -271,17 +286,6 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     long durationMs = exoPlayer.getDuration();
     if (durationMs == C.TIME_UNSET) durationMs = -1l;
     return durationMs;
-  }
-
-  /**
-   * @return The position of the current video in milliseconds.
-   */
-  public long getCurrentVideoPosition() {
-    if (exoPlayer == null)
-      return 0l;
-
-    long positionMs = exoPlayer.getCurrentPosition();
-    return positionMs;
   }
 
   public String getCurrentVideoMimeType() {
@@ -304,6 +308,54 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       return null;
 
     return format.sampleMimeType;
+  }
+
+  public String getCurrentItemJson() {
+    JSONObject json = getCurrentItemJSONObject();
+    return (json == null) ? null : json.toString();
+  }
+
+  public JSONObject getCurrentItemJSONObject() {
+    try {
+      VideoSource sample = getCurrentItem();
+
+      JSONObject json        = new JSONObject();
+      JSONObject req_headers = new JSONObject();
+      JSONObject drm_headers = new JSONObject();
+
+      if ((sample != null) && (sample.reqHeadersMap != null) && !sample.reqHeadersMap.isEmpty()) {
+        for (Map.Entry<String,String> header : sample.reqHeadersMap.entrySet()) {
+          req_headers.put(header.getKey(), header.getValue());
+        }
+      }
+
+      if ((sample != null) && (sample.drmHeadersMap != null) && !sample.drmHeadersMap.isEmpty()) {
+        for (Map.Entry<String,String> header : sample.drmHeadersMap.entrySet()) {
+          drm_headers.put(header.getKey(), header.getValue());
+        }
+      }
+
+      json.put(Constant.MediaItemInfo.IS_PLAYER_READY,        isPlayerReady());
+      json.put(Constant.MediaItemInfo.IS_PLAYER_PAUSED,       isPlayerPaused());
+      json.put(Constant.MediaItemInfo.MEDIA_URL,              (sample == null) ? null : sample.uri);
+      json.put(Constant.MediaItemInfo.MEDIA_TYPE,             (sample == null) ? null : sample.uri_mimeType);
+      json.put(Constant.MediaItemInfo.CAPTION_URL,            (sample == null) ? null : sample.caption);
+      json.put(Constant.MediaItemInfo.REFERER_URL,            (sample == null) ? null : sample.referer);
+      json.put(Constant.MediaItemInfo.REQUEST_HEADERS,        req_headers);
+      json.put(Constant.MediaItemInfo.USE_OFFLINE_CACHE,      (sample == null) ? null : sample.useCache);
+      json.put(Constant.MediaItemInfo.START_POSITION,         (sample == null) ? null : sample.startPosition);
+      json.put(Constant.MediaItemInfo.STOP_POSITION,          (sample == null) ? null : sample.stopPosition);
+      json.put(Constant.MediaItemInfo.CURRENT_POSITION,       (sample == null) ? null : getCurrentVideoPosition());
+      json.put(Constant.MediaItemInfo.DURATION,               (sample == null) ? null : getCurrentVideoDuration());
+      json.put(Constant.MediaItemInfo.DRM_SCHEME,             (sample == null) ? null : sample.drm_scheme);
+      json.put(Constant.MediaItemInfo.DRM_LICENSE_SERVER_URL, (sample == null) ? null : sample.drm_license_server);
+      json.put(Constant.MediaItemInfo.DRM_REQUEST_HEADERS,    drm_headers);
+
+      return json;
+    }
+    catch(Exception e) {
+      return null;
+    }
   }
 
   // Queue manipulation methods.
