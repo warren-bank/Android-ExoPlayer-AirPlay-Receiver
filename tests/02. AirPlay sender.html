@@ -57,7 +57,7 @@ body > div.contents > button#ui_mode {
   font-size: 0.75em;
 }
 
-body > div.contents[x-ui-mode="basic"] .advanced_ui_mode {
+body > div.contents.basic-ui-mode .advanced_ui_mode {
   display: none !important;
 }
 
@@ -921,18 +921,19 @@ window.onload  = () => {
     event.stopPropagation()
 
     const button        = event.target
-    const basic_ui_mode = ($contents.getAttribute('x-ui-mode') === 'basic')
+    const classes       = $contents.classList
+    const basic_ui_mode = classes.contains('basic-ui-mode')
 
     if (basic_ui_mode) {
       // switch from basic to advanced
 
-      $contents.setAttribute('x-ui-mode', 'advanced')
+      classes.remove('basic-ui-mode')
       button.innerText = 'show basic mode'
     }
     else {
       // switch from advanced to basic
 
-      $contents.setAttribute('x-ui-mode', 'basic')
+      classes.add('basic-ui-mode')
       button.innerText = 'show advanced mode'
     }
   }
@@ -1695,7 +1696,7 @@ window.onload  = () => {
   </script>
 </head>
 <body>
-  <div class="contents" x-ui-mode="basic">
+ <div class="contents basic-ui-mode">
     <button id="ui_mode">show advanced mode</button>
 
     <div class="section">

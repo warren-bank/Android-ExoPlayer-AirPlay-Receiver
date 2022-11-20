@@ -35,7 +35,7 @@ body > div.contents > button#ui_mode {
   font-size: 0.75em;
 }
 
-body > div.contents[x-ui-mode="basic"] .advanced_ui_mode {
+body > div.contents.basic-ui-mode .advanced_ui_mode {
   display: none !important;
 }
 
@@ -101,6 +101,7 @@ body > div.contents > div.section .right {
   text-align: right;
 }
 
+/*
 body > div.contents > div.section div.flex {
   display: flex;
   flex-direction: row;
@@ -113,6 +114,24 @@ body > div.contents > div.section div.flex > div {
 body > div.contents > div.section div.flex > div:first-child {
   flex-grow: 1;
   padding: 0 1em;
+}
+*/
+
+body > div.contents > div.section div.flex {
+  display: block;
+  white-space: nowrap;
+}
+body > div.contents > div.section div.flex > div {
+  display: inline-block;
+  vertical-align: top;
+}
+body > div.contents > div.section div.flex > div:first-child {
+  width: 80%;
+  text-align: left;
+}
+body > div.contents > div.section div.flex > div:last-child {
+  width: 20%;
+  text-align: right;
 }
 
 input, button {
@@ -212,7 +231,9 @@ window.onload  = function() {
   var $show_player             = document.querySelector('button#show_player')
   var $intent_data             = document.querySelector('textarea#intent_data')
   var $predefined_intent_data  = document.querySelector('select#predefined_intent_data')
-  var $load_video              = document.querySelector('button#load_video')
+  var $load_video_from_server  = document.querySelector('button#load_video_from_server')
+  var $load_video_from_form    = document.querySelector('button#load_video_from_form')
+  var $copy_video_to_form      = document.querySelector('button#copy_video_to_form')
   var $send_intent             = document.querySelector('button#send_intent')
   var $share_video_data        = document.querySelector('textarea#share_video_data')
   var $share_video             = document.querySelector('button#share_video')
@@ -222,6 +243,43 @@ window.onload  = function() {
   var $delete_cache            = document.querySelector('button#delete_cache')
   var $exit_service            = document.querySelector('button#exit_service')
   var $sample_videos           = document.querySelector('select#sample_videos')
+
+  // ===============================================================================================
+  // reset form fields for video media
+
+  var reset_video_form_fields = function() {
+    var text_fields = [
+      $video_url, $caption_url, $referer_url, $req_headers,
+      $start_position_hours, $start_position_minutes, $start_position_seconds,
+      $stop_position_hours,  $stop_position_minutes,  $stop_position_seconds,
+      $drm_license_server, $drm_headers
+    ]
+
+    var select_fields = [
+      $drm_license_scheme
+    ]
+
+    var check_fields = [
+      $use_cache
+    ]
+
+    var i, field
+
+    for (i=0; i < text_fields.length; i++) {
+      field = text_fields[i]
+      field.value = ''
+    }
+
+    for (i=0; i < select_fields.length; i++) {
+      field = select_fields[i]
+      field.value = ''
+    }
+
+    for (i=0; i < check_fields.length; i++) {
+      field = check_fields[i]
+      field.checked = false
+    }
+  }
 
   // ===============================================================================================
   // extract data from URL #hash
@@ -357,7 +415,7 @@ window.onload  = function() {
   // ===============================================================================================
   // XHR helper
 
-  var send_message = function(path, data) {
+  var send_message = function(path, data, callback) {
     var host = $airplay_host.value.trim()
     var port = $airplay_port.value.trim() || '8192'
     var tls  = $airplay_tls.checked
@@ -373,6 +431,16 @@ window.onload  = function() {
     }
 
     var xhr = new XMLHttpRequest()
+
+    if (callback) {
+      xhr.onload = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            callback(xhr.responseText)
+          }
+        }
+      }
+    }
 
     if (data) {
       xhr.open("POST", url, true, null, null)
@@ -634,18 +702,19 @@ window.onload  = function() {
     event.stopPropagation()
 
     var button        = event.target
-    var basic_ui_mode = ($contents.getAttribute('x-ui-mode') === 'basic')
+    var classes       = $contents.classList
+    var basic_ui_mode = classes.contains('basic-ui-mode')
 
     if (basic_ui_mode) {
       // switch from basic to advanced
 
-      $contents.setAttribute('x-ui-mode', 'advanced')
+      classes.remove('basic-ui-mode')
       button.innerText = 'show basic mode'
     }
     else {
       // switch from advanced to basic
 
-      $contents.setAttribute('x-ui-mode', 'basic')
+      classes.add('basic-ui-mode')
       button.innerText = 'show advanced mode'
     }
   }
@@ -1026,7 +1095,7 @@ window.onload  = function() {
           break
       }
 
-      if (Array.isArray(intent_data))
+      if (intent_data && (intent_data instanceof Array))
         intent_data = intent_data.join("\n")
 
       if (intent_data)
@@ -1036,7 +1105,84 @@ window.onload  = function() {
     }
   })
 
-  $load_video.onclick = function(event) {
+  $load_video_from_server.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/media-item-info'
+    var data = null
+
+    var callback = function(responseText) {
+      var json, start_offset, stop_offset
+      var intent_data_lines, intent_data
+      var header_groups, header_group, headers, header_keys, header_key, header_val, counter
+
+      try {
+        json = JSON.parse(responseText)
+
+        // convert milliseconds to seconds
+        start_offset = (json.start_position && (json.start_position > 0)) ? Math.floor(json.start_position / 1000) : ''
+        stop_offset  = (json.stop_position  && (json.stop_position  > 0)) ? Math.floor(json.stop_position  / 1000) : ''
+      }
+      catch(e) {}
+      if (!json || (typeof json !== 'object')) {
+        json = {}
+      }
+
+      intent_data_lines = [
+        'package:',
+        'class:',
+        'action: android.intent.action.VIEW',
+        'data: ' + (json.media_url  || ''),
+        'type: ' + (json.media_type || ''),
+        'category: android.intent.category.DEFAULT',
+        'category: android.intent.category.BROWSABLE',
+        'flag: 0x10000000',
+        'flag: 0x00008000',
+        'chooser-title:   Open video in:',
+        'extra-referUrl:  ' + (json.referer_url || ''),
+        'extra-textUrl:   ' + (json.caption_url || ''),
+        'extra-useCache:  ' + (json.use_offline_cache ? 'true' : 'false'),
+        'extra-startPos:  ' + (start_offset || ''),
+        'extra-stopPos:   ' + (stop_offset  || ''),
+        'extra-drmScheme: ' + (json.drm_scheme             || ''),
+        'extra-drmUrl:    ' + (json.drm_license_server_url || '')
+      ]
+
+      header_groups = [
+        {JSON: 'request_headers',     EXTRA: 'reqHeader'},
+        {JSON: 'drm_request_headers', EXTRA: 'drmHeader'}
+      ]
+      for (var i1=0; i1 < header_groups.length; i1++) {
+        header_group = header_groups[i1]
+        headers      = json[header_group.JSON]
+        counter      = 0
+
+        if (headers && (typeof headers === 'object')) {
+          header_keys = Object.keys(headers)
+
+          for (var i2=0; i2 < header_keys.length; i2++) {
+            header_key = header_keys[i2]
+            header_val = headers[header_key]
+            intent_data_lines.push('extra-' + header_group.EXTRA + ': ' + header_key + ': ' + header_val)
+            counter++
+          }
+        }
+
+        if (!counter) {
+          intent_data_lines.push('extra-' + header_group.EXTRA + ':')
+        }
+      }
+
+      intent_data = intent_data_lines.join("\n")
+
+      $intent_data.value = intent_data
+    }
+
+    send_message(path, data, callback)
+  }
+
+  $load_video_from_form.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
@@ -1096,6 +1242,113 @@ window.onload  = function() {
     }
 
     $intent_data.value = intent_data
+  }
+
+  $copy_video_to_form.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var intent_data_lines, set_time_offset, regexs
+    var req_headers, drm_headers, line, matches, key, val
+
+    reset_video_form_fields()
+
+    intent_data_lines = $intent_data.value.trim().split("\n")
+    if (
+      intent_data_lines && (intent_data_lines instanceof Array) && intent_data_lines.length &&
+      ((intent_data_lines.length > 1) || intent_data_lines[0])
+    ) {
+      set_time_offset = function(when, val) {
+        var seconds, hrs, min, sec
+
+        seconds = parseInt(val, 10)
+        if (!seconds || isNaN(seconds)) return
+
+        hrs = Math.floor(seconds / 3600)
+        seconds %= 3600
+
+        min = Math.floor(seconds / 60)
+        seconds %= 60
+
+        sec = seconds
+
+        switch (when) {
+          case 'start':
+            $start_position_hours.value   = (hrs) ? hrs : ''
+            $start_position_minutes.value = (min) ? min : ''
+            $start_position_seconds.value = (sec) ? sec : ''
+            break
+          case 'stop':
+            $stop_position_hours.value   = (hrs) ? hrs : ''
+            $stop_position_minutes.value = (min) ? min : ''
+            $stop_position_seconds.value = (sec) ? sec : ''
+            break
+        }
+      }
+
+      regexs = {
+        line_parser: /^\s*(data|extra-(?:referUrl|textUrl|useCache|startPos|stopPos|drmScheme|drmUrl|reqHeader|drmHeader))\s*[:=]\s*(.*)$/
+      }
+
+      req_headers = []
+      drm_headers = []
+
+      for (var i=0; i < intent_data_lines.length; i++) {
+        line    = intent_data_lines[i]
+        matches = regexs.line_parser.exec(line)
+
+        if (matches && (matches.length >= 3)) {
+          key = matches[1]
+          val = matches[2].trim()
+
+          if (val) {
+            switch(key) {
+              case 'data':
+                $video_url.value = val
+                break
+              case 'extra-referUrl':
+                $referer_url.value = val
+                break
+              case 'extra-textUrl':
+                $caption_url.value = val
+                break
+              case 'extra-useCache':
+                $use_cache.checked = (val.toLowerCase() === 'true')
+                break
+              case 'extra-startPos':
+                set_time_offset('start', val)
+                break
+              case 'extra-stopPos':
+                set_time_offset('stop', val)
+                break
+              case 'extra-drmScheme':
+                val = val.toLowerCase()
+                if ((['widevine','clearkey','playready']).indexOf(val) >= 0) {
+                  $drm_license_scheme.value = val
+                }
+                break
+              case 'extra-drmUrl':
+                $drm_license_server.value = val
+                break
+              case 'extra-reqHeader':
+                req_headers.push(val)
+                break
+              case 'extra-drmHeader':
+                drm_headers.push(val)
+                break
+            }
+          }
+        }
+      }
+
+      if (req_headers.length) {
+        $req_headers.value = req_headers.join("\n")
+      }
+
+      if (drm_headers.length) {
+        $drm_headers.value = drm_headers.join("\n")
+      }
+    }
   }
 
   $send_intent.onclick = function(event) {
@@ -1215,7 +1468,23 @@ window.onload  = function() {
       }
     }
 
-    var item = $sample_videos.selectedOptions[0]
+    var item
+    if (!item) {
+      try {
+        item = $sample_videos.selectedOptions[0]
+      }
+      catch(e) {}
+    }
+    if (!item) {
+      try {
+        item = $sample_videos.options[ $sample_videos.selectedIndex ]
+      }
+      catch(e) {}
+    }
+    if (!item) {
+      return
+    }
+
     var url  = item.getAttribute('x-video-url')
     var txt  = item.getAttribute('x-caption-url')
     var ref  = item.getAttribute('x-referer-url')
@@ -1242,7 +1511,7 @@ window.onload  = function() {
   </script>
 </head>
 <body>
-  <div class="contents" x-ui-mode="basic">
+  <div class="contents basic-ui-mode">
     <button id="ui_mode">show advanced mode</button>
 
     <div class="section">
@@ -1614,7 +1883,9 @@ window.onload  = function() {
               <option value="android-settings-app-info-exoairplayer">Android Settings &gt; App Info &gt; ExoAirPlayer</option>
             </select>
           </div>
-          <div><button id="load_video">Load Video</button></div>
+          <div><button id="load_video_from_server">Load Video<br />from Server</button></div>
+          <div><button id="load_video_from_form">Load Video<br />from Form</button></div>
+          <div><button id="copy_video_to_form">Copy Video<br />to Form</button></div>
           <div><button id="send_intent">Send Intent</button></div>
         </div>
       </div>
