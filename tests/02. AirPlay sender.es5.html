@@ -219,6 +219,9 @@ window.onload  = function() {
   var $add_txt_offset_seconds  = document.querySelector('input#add_txt_offset_seconds')
   var $add_txt_offset_ms       = document.querySelector('input#add_txt_offset_ms')
   var $add_txt_offset          = document.querySelector('button#add_txt_offset')
+  var $font_size               = document.querySelector('input#font_size')
+  var $apply_embedded          = document.querySelector('select#apply_embedded')
+  var $set_captions_style      = document.querySelector('button#set_captions_style')
   var $rate_factor             = document.querySelector('input#rate_factor')
   var $rate                    = document.querySelector('button#rate')
   var $volume_factor           = document.querySelector('input#volume_factor')
@@ -868,6 +871,33 @@ window.onload  = function() {
       var data = null
 
       send_message(path, data)
+    }
+    catch(e){}
+  }
+
+  $set_captions_style.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      var font_size, apply_embedded
+
+      font_size      = $font_size.value
+      apply_embedded = $apply_embedded.value
+      if (!font_size && !apply_embedded) return
+
+      var path = '/set-captions-style'
+      var data = []
+
+      if (font_size) {
+        font_size = get_value($font_size, 0)
+        data.push(`Font-Size: ${font_size}`)
+      }
+      if (apply_embedded) {
+        data.push(`Apply-Embedded: ${apply_embedded}`)
+      }
+
+      send_message(path, data.join("\n"))
     }
     catch(e){}
   }
@@ -1783,6 +1813,21 @@ window.onload  = function() {
             </td>
             <td class="oneline fullwidth">
               <button id="add_txt_offset">Add CC Offset</button>
+            </td>
+          </tr>
+        </table>
+        <table align="center">
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="font_size" type="number" x-type="range" x-min="0" x-max="50" x-step="1" min="0" max="50" step="1" size="3" placeholder="size: 20 (sp)" />
+              <select id="apply_embedded">
+                <option value="">Apply Embedded</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="set_captions_style">Set CC Style</button>
             </td>
           </tr>
         </table>
