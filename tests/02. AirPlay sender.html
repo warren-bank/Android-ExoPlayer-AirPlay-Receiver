@@ -11,10 +11,16 @@
     (function(){
       var supports_es6 = function() {
         "use strict";
+        var const_async_arrow_function
 
-        try { eval("const foo = (x)=>x+1"); }
-        catch (e) { return false; }
-        return true;
+        try {
+          const_async_arrow_function = eval("const foo = async (x) => x+1; foo")
+          if (typeof const_async_arrow_function !== 'function') throw new Error("not supported: const async arrow function")
+
+          return true
+        }
+        catch (e) {}
+        return false
       }
 
       var redirect_to_es5 = function() {
