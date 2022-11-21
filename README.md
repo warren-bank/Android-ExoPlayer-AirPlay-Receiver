@@ -299,6 +299,20 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/show-captions?toggle=1"
   ```
+* set font style and size options for text captions to custom values:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Apply-Embedded: false\nFont-Size: 20" \
+      "http://${airplay_ip}/set-captions-style"
+  ```
+* set font style and size options for text captions to default values:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Apply-Embedded: true\nFont-Size: 0" \
+      "http://${airplay_ip}/set-captions-style"
+  ```
 * set time offset for text captions (1 second = 1e6 microseconds):
   ```bash
     curl --silent -X GET \
@@ -481,6 +495,17 @@ __extended APIs:__
   - keys are not case sensitive
   - recognized keys include:
     * _caption-location_
+* POST data sent in requests to `/set-captions-style` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys are not case sensitive
+  - recognized keys include:
+    * _apply-embedded_
+      - apply styles and sizes embedded in the text captions?
+    * _font-size_
+      - unit: _sp_
+      - note: value `0` is special and used to revert to default
 * POST data sent in requests to `/start-activity` API endpoint:
   - contains one _key:value_ pair per line of text
   - lines of text containing unrecognized keys are ignored

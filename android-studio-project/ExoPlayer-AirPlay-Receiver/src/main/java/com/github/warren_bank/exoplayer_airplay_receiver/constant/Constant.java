@@ -1,8 +1,9 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.constant;
 
 public class Constant {
-    public static final int AIRPLAY_PORT = 8192;
-    public static final int RAOP_PORT    = 5000;
+    public static final int AIRPLAY_PORT        = 8192;
+    public static final int RAOP_PORT           = 5000;
+    public static final int MAX_FONT_SIZE_SP    = 50;
 
     public static final String Need_sendReverse = "SendReverse";
     public static final String ReverseMsg       = "ReverseMsg";
@@ -16,6 +17,8 @@ public class Constant {
     public static final String DRM_Scheme       = "drmScheme";
     public static final String DRM_URL          = "drmUrl";
     public static final String DRM_Header       = "drmHeader";
+    public static final String ApplyEmbedded    = "applyEmbedded";
+    public static final String FontSize         = "fontSize";
 
     public static String getServerInfoResponse(String mac) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
@@ -180,19 +183,20 @@ public class Constant {
         public static final int Msg_Audio_Volume                = 10;
         public static final int Msg_Text_Load                   = 11;
         public static final int Msg_Text_Show                   = 12;
-        public static final int Msg_Text_Set_Time               = 13;
-        public static final int Msg_Text_Add_Time               = 14;
+        public static final int Msg_Text_Set_Style              = 13;
+        public static final int Msg_Text_Set_Time               = 14;
+        public static final int Msg_Text_Add_Time               = 15;
 
-        public static final int Msg_Show_Toast                  = 15;
-        public static final int Msg_Show_Player                 = 16;
-        public static final int Msg_Hide_Player                 = 17;
-        public static final int Msg_Start_Activity              = 18;
-        public static final int Msg_Video_Share                 = 19;
-        public static final int Msg_Preferences_Edit            = 20;
-        public static final int Msg_Delete_Cache                = 21;
-        public static final int Msg_Exit_Service                = 22;
+        public static final int Msg_Show_Toast                  = 16;
+        public static final int Msg_Show_Player                 = 17;
+        public static final int Msg_Hide_Player                 = 18;
+        public static final int Msg_Start_Activity              = 19;
+        public static final int Msg_Video_Share                 = 20;
+        public static final int Msg_Preferences_Edit            = 21;
+        public static final int Msg_Delete_Cache                = 22;
+        public static final int Msg_Exit_Service                = 23;
 
-        public static final int Msg_Runtime_Permissions_Granted = 23;
+        public static final int Msg_Runtime_Permissions_Granted = 24;
     }
 
     public interface Target {
@@ -213,6 +217,7 @@ public class Constant {
         public static final String VOLUME                       = "/volume";
         public static final String TXT_LOAD                     = "/load-captions";
         public static final String TXT_SHOW                     = "/show-captions";
+        public static final String TXT_SET_STYLE                = "/set-captions-style";
         public static final String TXT_SET_OFFSET               = "/set-captions-offset";
         public static final String TXT_ADD_OFFSET               = "/add-captions-offset";
 

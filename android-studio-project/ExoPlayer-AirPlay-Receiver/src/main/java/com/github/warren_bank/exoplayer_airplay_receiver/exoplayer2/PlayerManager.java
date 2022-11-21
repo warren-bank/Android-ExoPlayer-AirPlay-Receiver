@@ -51,6 +51,7 @@ import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.SubtitleView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -984,6 +985,41 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     if (modified_count > 0)
       trackSelector.setParameters(builder.build());
+  }
+
+  /**
+   * Set font style and size for text captions.
+   *
+   * @param applyEmbedded Apply styles and sizes embedded in the text captions?
+   * @param fontSize      Measured in "sp" units
+   */
+  public void AirPlay_set_captions_style(Boolean applyEmbedded, Integer fontSize) {
+    if (
+      (playerView == null) ||
+      ((applyEmbedded == null) && (fontSize == null))
+    ) return;
+
+    SubtitleView subtitleView = playerView.getSubtitleView();
+    if (subtitleView == null) return;
+
+    if (applyEmbedded != null) {
+      boolean valApplyEmbedded = applyEmbedded.booleanValue();
+
+      subtitleView.setApplyEmbeddedStyles(   valApplyEmbedded);
+      subtitleView.setApplyEmbeddedFontSizes(valApplyEmbedded);
+    }
+
+    if (fontSize != null) {
+      int valFontSize = fontSize.intValue();
+
+      if (valFontSize == 0) {
+        subtitleView.setFractionalTextSize​(SubtitleView.DEFAULT_TEXT_SIZE_FRACTION);
+        subtitleView.setUserDefaultTextSize();
+      }
+      else if ((valFontSize > 0) && (valFontSize <= Constant.MAX_FONT_SIZE_SP)) {
+        subtitleView.setFixedTextSize​(android.util.TypedValue.COMPLEX_UNIT_SP, fontSize.floatValue());
+      }
+    }
   }
 
   /**

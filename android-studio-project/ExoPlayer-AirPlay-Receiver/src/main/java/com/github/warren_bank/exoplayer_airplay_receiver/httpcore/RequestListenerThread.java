@@ -809,6 +809,45 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if ((entityContent != null) && target.equals(Constant.Target.TXT_SET_STYLE)) {
+        String requestBody;
+        requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+        Log.d(tag, " airplay style caption request content = " + requestBody);
+
+        HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
+        String applyEmbedded = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("apply-embedded"));
+        String fontSize      = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("font-size"));
+
+        try {
+          if (TextUtils.isEmpty(applyEmbedded) && TextUtils.isEmpty(fontSize))
+            throw new Exception("no input");
+
+          Boolean parsedApplyEmbedded = TextUtils.isEmpty(applyEmbedded)
+            ? null
+            : Boolean.parseBoolean(applyEmbedded);
+
+          Integer parsedFontSize = TextUtils.isEmpty(fontSize)
+            ? null
+            : Integer.parseInt(fontSize);
+
+          HashMap<String, Object> msgMap = new HashMap<String, Object>();
+          msgMap.put(Constant.ApplyEmbedded, parsedApplyEmbedded);
+          msgMap.put(Constant.FontSize,      parsedFontSize);
+
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Text_Set_Style;
+          msg.obj = msgMap;
+          MainApp.broadcastMessage(msg);
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        }
+        catch(Exception e) {
+          Log.d(tag, "airplay caption style is invalid");
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+        }
+      }
       else if (
         target.startsWith(Constant.Target.TXT_SET_OFFSET) ||
         target.startsWith(Constant.Target.TXT_ADD_OFFSET)
