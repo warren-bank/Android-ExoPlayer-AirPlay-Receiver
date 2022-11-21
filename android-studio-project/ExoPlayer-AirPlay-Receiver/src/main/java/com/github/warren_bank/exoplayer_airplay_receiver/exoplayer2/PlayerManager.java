@@ -990,24 +990,19 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   /**
    * Set font style and size for text captions.
    *
-   * @param applyEmbedded Apply styles and sizes embedded in the text captions?
    * @param fontSize      Measured in "sp" units
+   * @param applyEmbedded Apply styles and sizes embedded in the text captions?
    */
-  public void AirPlay_set_captions_style(Boolean applyEmbedded, Integer fontSize) {
+  public void AirPlay_set_captions_style(Integer fontSize, Boolean applyEmbedded) {
     if (
       (playerView == null) ||
-      ((applyEmbedded == null) && (fontSize == null))
+      ((fontSize == null) && (applyEmbedded == null))
     ) return;
 
     SubtitleView subtitleView = playerView.getSubtitleView();
     if (subtitleView == null) return;
 
-    if (applyEmbedded != null) {
-      boolean valApplyEmbedded = applyEmbedded.booleanValue();
-
-      subtitleView.setApplyEmbeddedStyles(   valApplyEmbedded);
-      subtitleView.setApplyEmbeddedFontSizes(valApplyEmbedded);
-    }
+    boolean isCustomFontSize = false;
 
     if (fontSize != null) {
       int valFontSize = fontSize.intValue();
@@ -1017,8 +1012,19 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
         subtitleView.setUserDefaultTextSize();
       }
       else if ((valFontSize > 0) && (valFontSize <= Constant.MAX_FONT_SIZE_SP)) {
+        isCustomFontSize = true;
         subtitleView.setFixedTextSize​(android.util.TypedValue.COMPLEX_UNIT_SP, fontSize.floatValue());
       }
+    }
+
+    if (applyEmbedded != null) {
+      boolean valApplyEmbedded = applyEmbedded.booleanValue();
+
+      subtitleView.setApplyEmbeddedStyles(   valApplyEmbedded);
+      subtitleView.setApplyEmbeddedFontSizes(valApplyEmbedded && !isCustomFontSize);
+    }
+    else if (isCustomFontSize) {
+      subtitleView.setApplyEmbeddedFontSizes(false);
     }
   }
 

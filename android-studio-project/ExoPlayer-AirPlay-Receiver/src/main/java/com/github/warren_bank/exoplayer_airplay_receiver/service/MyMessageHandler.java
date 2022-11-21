@@ -368,10 +368,10 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Msg.Msg_Text_Set_Style : {
         final HashMap<String, Object> msgMap = (HashMap) msg.obj;
-        Boolean applyEmbedded = (Boolean) msgMap.get(Constant.ApplyEmbedded);
         Integer fontSize      = (Integer) msgMap.get(Constant.FontSize);
+        Boolean applyEmbedded = (Boolean) msgMap.get(Constant.ApplyEmbedded);
 
-        playerManager.AirPlay_set_captions_style(applyEmbedded, fontSize);
+        playerManager.AirPlay_set_captions_style(fontSize, applyEmbedded);
         break;
       }
 

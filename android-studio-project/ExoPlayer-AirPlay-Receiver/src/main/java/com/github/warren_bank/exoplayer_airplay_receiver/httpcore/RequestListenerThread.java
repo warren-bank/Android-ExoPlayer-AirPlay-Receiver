@@ -816,24 +816,24 @@ public class RequestListenerThread extends Thread {
         Log.d(tag, " airplay style caption request content = " + requestBody);
 
         HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
-        String applyEmbedded = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("apply-embedded"));
         String fontSize      = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("font-size"));
+        String applyEmbedded = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("apply-embedded"));
 
         try {
-          if (TextUtils.isEmpty(applyEmbedded) && TextUtils.isEmpty(fontSize))
+          if (TextUtils.isEmpty(fontSize) && TextUtils.isEmpty(applyEmbedded))
             throw new Exception("no input");
-
-          Boolean parsedApplyEmbedded = TextUtils.isEmpty(applyEmbedded)
-            ? null
-            : Boolean.parseBoolean(applyEmbedded);
 
           Integer parsedFontSize = TextUtils.isEmpty(fontSize)
             ? null
             : Integer.parseInt(fontSize);
 
+          Boolean parsedApplyEmbedded = TextUtils.isEmpty(applyEmbedded)
+            ? null
+            : Boolean.parseBoolean(applyEmbedded);
+
           HashMap<String, Object> msgMap = new HashMap<String, Object>();
-          msgMap.put(Constant.ApplyEmbedded, parsedApplyEmbedded);
-          msgMap.put(Constant.FontSize,      parsedFontSize);
+          msgMap.put(Constant.FontSize,      (Object) parsedFontSize);
+          msgMap.put(Constant.ApplyEmbedded, (Object) parsedApplyEmbedded);
 
           Message msg = Message.obtain();
           msg.what = Constant.Msg.Msg_Text_Set_Style;
