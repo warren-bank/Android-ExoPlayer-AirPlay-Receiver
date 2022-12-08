@@ -2,6 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
@@ -79,6 +80,14 @@ public final class VideoSource {
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
+    // enforce that URLs are encoded and RFC 2396-compliant
+    if (!TextUtils.isEmpty(uri))
+      uri = StringUtils.encodeURL(uri);
+    if (!TextUtils.isEmpty(caption))
+      caption = StringUtils.encodeURL(caption);
+    if (!TextUtils.isEmpty(referer))
+      referer = StringUtils.encodeURL(referer);
+
     if (uri == null)
       uri = "";
 

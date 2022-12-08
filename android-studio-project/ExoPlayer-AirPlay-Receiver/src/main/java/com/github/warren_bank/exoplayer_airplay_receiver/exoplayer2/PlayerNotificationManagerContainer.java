@@ -131,6 +131,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
     if (sample == null) return null;
 
     try {
+      // "sample.uri" is always encoded; no need to re-encode with: "UriUtils.parseURI(sample.uri)"
       URI uri = new URI(sample.uri);
       return uri;
     }

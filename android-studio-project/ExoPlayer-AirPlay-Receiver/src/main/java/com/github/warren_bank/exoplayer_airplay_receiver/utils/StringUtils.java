@@ -152,7 +152,7 @@ public class StringUtils {
 
   public static String encodeURL(String strUrl) {
     try {
-      URL url = new URL(strUrl);
+      URL url = new URL(StringUtils.decodeURL(strUrl));
 
       return StringUtils.encodeURL(url);
     }
