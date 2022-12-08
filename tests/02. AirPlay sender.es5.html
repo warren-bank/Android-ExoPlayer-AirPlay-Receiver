@@ -183,6 +183,7 @@ window.onload  = function() {
   var $caption_url             = document.querySelector('input#caption_url')
   var $referer_url             = document.querySelector('input#referer_url')
   var $req_headers             = document.querySelector('textarea#req_headers')
+  var $encode_urls             = document.querySelector('input#encode_urls')
   var $use_cache               = document.querySelector('input#use_cache')
   var $start_position_hours    = document.querySelector('input#start_position_hours')
   var $start_position_minutes  = document.querySelector('input#start_position_minutes')
@@ -263,7 +264,8 @@ window.onload  = function() {
     ]
 
     var check_fields = [
-      $use_cache
+      [$encode_urls, true],
+      [$use_cache,   false]
     ]
 
     var i, field
@@ -280,7 +282,7 @@ window.onload  = function() {
 
     for (i=0; i < check_fields.length; i++) {
       field = check_fields[i]
-      field.checked = false
+      field[0].checked = field[1]
     }
   }
 
@@ -526,6 +528,21 @@ window.onload  = function() {
   // ===============================================================================================
   // form field data collection helper
 
+  var get_url_value = function(field) {
+    var url = field.value.trim()
+    return ($encode_urls.checked)
+      ? encode_url(url)
+      : url
+  }
+
+  var encode_url = function(url) {
+    if (url && (typeof url === 'string')) {
+      url = decodeURI(url)
+      url = encodeURI(url)
+    }
+    return url
+  }
+
   var get_time_offset = function(when) {
     var hrs, min, sec
 
@@ -573,11 +590,11 @@ window.onload  = function() {
 
   var get_video_POST_data = function(url) {
     if (!url)
-          url = $video_url.value.trim()
-    var txt = $caption_url.value.trim()
-    var ref = $referer_url.value.trim()
+        url = get_url_value($video_url)
+    var txt = get_url_value($caption_url)
+    var ref = get_url_value($referer_url)
 
-    var use_cache = $use_cache.checked ? 'true' : 'false'
+    var use_cache = $use_cache.checked
 
     var start_offset = get_time_offset('start')
     var stop_offset  = get_time_offset('stop')
@@ -607,7 +624,7 @@ window.onload  = function() {
       data += req_headers
     }
     if (use_cache) {
-      data += "\n" + 'Use-Cache: ' + use_cache
+      data += "\n" + 'Use-Cache: true'
     }
     if (start_offset > 0) {
       data += "\n" + 'Start-Position: ' + start_offset
@@ -743,7 +760,7 @@ window.onload  = function() {
     event.stopPropagation()
 
     var path = '/load-captions'
-    var txt  = $caption_url.value.trim()
+    var txt  = get_url_value($caption_url)
     var data = 'Caption-Location: ' + txt
 
     if (txt)
@@ -891,10 +908,10 @@ window.onload  = function() {
 
       if (font_size) {
         font_size = get_value($font_size, 0)
-        data.push(`Font-Size: ${font_size}`)
+        data.push('Font-Size: ' + font_size)
       }
       if (apply_embedded) {
-        data.push(`Apply-Embedded: ${apply_embedded}`)
+        data.push('Apply-Embedded: ' + apply_embedded)
       }
 
       send_message(path, data.join("\n"))
@@ -1228,7 +1245,7 @@ window.onload  = function() {
     }
     catch(e){}
 
-    video_url  = $video_url.value.trim()
+    video_url  = get_url_value($video_url)
     video_type = get_video_mimeType(video_url).toLowerCase()
 
     data = [
@@ -1242,8 +1259,8 @@ window.onload  = function() {
       'flag: 0x10000000',
       'flag: 0x00008000',
       'chooser-title:   Open video in:',
-      'extra-referUrl:  ' + $referer_url.value.trim(),
-      'extra-textUrl:   ' + $caption_url.value.trim(),
+      'extra-referUrl:  ' + get_url_value($referer_url),
+      'extra-textUrl:   ' + get_url_value($caption_url),
       'extra-useCache:  ' + ($use_cache.checked ? 'true' : 'false'),
       'extra-startPos:  ' + (start_offset ? start_offset : ''),
       'extra-stopPos:   ' + (stop_offset  ? stop_offset  : ''),
@@ -1611,6 +1628,25 @@ window.onload  = function() {
             </td>
             <td class="oneline left">
               <textarea id="req_headers" rows="5"></textarea>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode" valign="top">
+            <td class="right">
+              <label for="encode_urls">Encode URLs:</label>
+            </td>
+            <td class="left">
+              <table align="left">
+                <tr valign="top">
+                  <td>
+                    <input id="encode_urls" type="checkbox" checked="true" />
+                  </td>
+                  <td>
+                    <ul>
+                      <li>enforce that URLs are encoded and RFC 2396-compliant</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <tr class="advanced_ui_mode" valign="top">
