@@ -192,7 +192,6 @@ window.onload  = () => {
   const $caption_url             = document.querySelector('input#caption_url')
   const $referer_url             = document.querySelector('input#referer_url')
   const $req_headers             = document.querySelector('textarea#req_headers')
-  const $encode_urls             = document.querySelector('input#encode_urls')
   const $use_cache               = document.querySelector('input#use_cache')
   const $start_position_hours    = document.querySelector('input#start_position_hours')
   const $start_position_minutes  = document.querySelector('input#start_position_minutes')
@@ -273,8 +272,7 @@ window.onload  = () => {
     ]
 
     const check_fields = [
-      [$encode_urls, true],
-      [$use_cache,   false]
+      [$use_cache, false]
     ]
 
     text_fields.forEach(field => {
@@ -704,21 +702,6 @@ window.onload  = () => {
  * =================================================================================================
  */
 
-  const get_url_value = (field) => {
-    const url = field.value.trim()
-    return ($encode_urls.checked)
-      ? encode_url(url)
-      : url
-  }
-
-  const encode_url = (url) => {
-    if (url && (typeof url === 'string')) {
-      url = decodeURI(url)
-      url = encodeURI(url)
-    }
-    return url
-  }
-
   const get_time_offset = (when) => {
     let hrs, min, sec
 
@@ -766,9 +749,9 @@ window.onload  = () => {
 
   const get_video_POST_data = (url) => {
     if (!url)
-          url = get_url_value($video_url)
-    const txt = get_url_value($caption_url)
-    const ref = get_url_value($referer_url)
+          url = $video_url.value.trim()
+    const txt = $caption_url.value.trim()
+    const ref = $referer_url.value.trim()
 
     const use_cache = $use_cache.checked
 
@@ -985,7 +968,7 @@ window.onload  = () => {
     event.stopPropagation()
 
     const path = '/load-captions'
-    const txt  = get_url_value($caption_url)
+    const txt  = $caption_url.value.trim()
     const data = `Caption-Location: ${txt}`
 
     if (txt)
@@ -1460,7 +1443,7 @@ window.onload  = () => {
     }
     catch(e){}
 
-    const video_url  = get_url_value($video_url)
+    const video_url  = $video_url.value.trim()
     const video_type = get_video_mimeType(video_url).toLowerCase()
 
     const data = [
@@ -1474,8 +1457,8 @@ window.onload  = () => {
       'flag: 0x10000000',
       'flag: 0x00008000',
       'chooser-title:   Open video in:',
-      `extra-referUrl:  ${get_url_value($referer_url)}`,
-      `extra-textUrl:   ${get_url_value($caption_url)}`,
+      `extra-referUrl:  ${$referer_url.value.trim()}`,
+      `extra-textUrl:   ${$caption_url.value.trim()}`,
       `extra-useCache:  ${$use_cache.checked ? 'true' : 'false'}`,
       `extra-startPos:  ${start_offset ? start_offset : ''}`,
       `extra-stopPos:   ${stop_offset  ? stop_offset  : ''}`,
@@ -1819,25 +1802,6 @@ window.onload  = () => {
             </td>
             <td class="oneline left">
               <textarea id="req_headers" rows="5"></textarea>
-            </td>
-          </tr>
-          <tr class="advanced_ui_mode" valign="top">
-            <td class="right">
-              <label for="encode_urls">Encode URLs:</label>
-            </td>
-            <td class="left">
-              <table align="left">
-                <tr valign="top">
-                  <td>
-                    <input id="encode_urls" type="checkbox" checked="true" />
-                  </td>
-                  <td>
-                    <ul>
-                      <li>enforce that URLs are encoded and RFC 2396-compliant</li>
-                    </ul>
-                  </td>
-                </tr>
-              </table>
             </td>
           </tr>
           <tr class="advanced_ui_mode" valign="top">

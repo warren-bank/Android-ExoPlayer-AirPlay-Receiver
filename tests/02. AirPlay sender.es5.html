@@ -183,7 +183,6 @@ window.onload  = function() {
   var $caption_url             = document.querySelector('input#caption_url')
   var $referer_url             = document.querySelector('input#referer_url')
   var $req_headers             = document.querySelector('textarea#req_headers')
-  var $encode_urls             = document.querySelector('input#encode_urls')
   var $use_cache               = document.querySelector('input#use_cache')
   var $start_position_hours    = document.querySelector('input#start_position_hours')
   var $start_position_minutes  = document.querySelector('input#start_position_minutes')
@@ -264,8 +263,7 @@ window.onload  = function() {
     ]
 
     var check_fields = [
-      [$encode_urls, true],
-      [$use_cache,   false]
+      [$use_cache, false]
     ]
 
     var i, field
@@ -528,21 +526,6 @@ window.onload  = function() {
   // ===============================================================================================
   // form field data collection helper
 
-  var get_url_value = function(field) {
-    var url = field.value.trim()
-    return ($encode_urls.checked)
-      ? encode_url(url)
-      : url
-  }
-
-  var encode_url = function(url) {
-    if (url && (typeof url === 'string')) {
-      url = decodeURI(url)
-      url = encodeURI(url)
-    }
-    return url
-  }
-
   var get_time_offset = function(when) {
     var hrs, min, sec
 
@@ -590,9 +573,9 @@ window.onload  = function() {
 
   var get_video_POST_data = function(url) {
     if (!url)
-        url = get_url_value($video_url)
-    var txt = get_url_value($caption_url)
-    var ref = get_url_value($referer_url)
+          url = $video_url.value.trim()
+    var txt = $caption_url.value.trim()
+    var ref = $referer_url.value.trim()
 
     var use_cache = $use_cache.checked
 
@@ -760,7 +743,7 @@ window.onload  = function() {
     event.stopPropagation()
 
     var path = '/load-captions'
-    var txt  = get_url_value($caption_url)
+    var txt  = $caption_url.value.trim()
     var data = 'Caption-Location: ' + txt
 
     if (txt)
@@ -1245,7 +1228,7 @@ window.onload  = function() {
     }
     catch(e){}
 
-    video_url  = get_url_value($video_url)
+    video_url  = $video_url.value.trim()
     video_type = get_video_mimeType(video_url).toLowerCase()
 
     data = [
@@ -1259,8 +1242,8 @@ window.onload  = function() {
       'flag: 0x10000000',
       'flag: 0x00008000',
       'chooser-title:   Open video in:',
-      'extra-referUrl:  ' + get_url_value($referer_url),
-      'extra-textUrl:   ' + get_url_value($caption_url),
+      'extra-referUrl:  ' + $referer_url.value.trim(),
+      'extra-textUrl:   ' + $caption_url.value.trim(),
       'extra-useCache:  ' + ($use_cache.checked ? 'true' : 'false'),
       'extra-startPos:  ' + (start_offset ? start_offset : ''),
       'extra-stopPos:   ' + (stop_offset  ? stop_offset  : ''),
@@ -1628,25 +1611,6 @@ window.onload  = function() {
             </td>
             <td class="oneline left">
               <textarea id="req_headers" rows="5"></textarea>
-            </td>
-          </tr>
-          <tr class="advanced_ui_mode" valign="top">
-            <td class="right">
-              <label for="encode_urls">Encode URLs:</label>
-            </td>
-            <td class="left">
-              <table align="left">
-                <tr valign="top">
-                  <td>
-                    <input id="encode_urls" type="checkbox" checked="true" />
-                  </td>
-                  <td>
-                    <ul>
-                      <li>enforce that URLs are encoded and RFC 2396-compliant</li>
-                    </ul>
-                  </td>
-                </tr>
-              </table>
             </td>
           </tr>
           <tr class="advanced_ui_mode" valign="top">
