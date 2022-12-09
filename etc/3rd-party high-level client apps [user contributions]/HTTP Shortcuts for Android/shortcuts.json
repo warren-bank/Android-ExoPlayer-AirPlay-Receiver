@@ -1,0 +1,472 @@
+{
+  "categories": [
+    {
+      "id": "341cbf22-d92c-4e63-ace0-b8e7c52f415d",
+      "layoutType": "dense_grid",
+      "name": "Remote",
+      "shortcuts": [
+        {
+          "iconName": "bitsies_shutdown",
+          "id": "47d6d398-b7b6-48e5-a1ec-6da264dbc819",
+          "name": "Exit",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/exit-service"
+        },
+        {
+          "codeOnSuccess": "var rsp \u003d JSON.parse(response.body)\nvar murl \u003d rsp.media_url\nvar rurl \u003d rsp.referer_url\nvar pos  \u003d rsp.current_position\nsetVariable(/*[variable]*/\"00bebb89-a27d-49df-a8e7-7cbedb01ad87\"/*[/variable]*/, murl)\nsetVariable(/*[variable]*/\"915000b1-90bb-45ec-870c-563b8e6bb837\"/*[/variable]*/, rurl)\nsetVariable(/*[variable]*/\"b835dd18-eec9-4dae-89a3-8c5d4bfd1829\"/*[/variable]*/, (pos/1000));",
+          "iconName": "bitsies_info",
+          "id": "bd5e8dc8-327d-40c3-9c92-345c3d627262",
+          "name": "Save info",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/media-item-info"
+        },
+        {
+          "codeOnPrepare": "var tg \u003d getVariable(/*[variable]*/\"f7b7b9b7-5c78-4c04-b90b-eb5f8662cc9a\"/*[/variable]*/)\nif (tg \u003d\u003d \"hide-player\") {\n    renameShortcut(\"\", \"Show\")\n    changeIcon(\"\", \"bitsies_visible\");\n} else {\n    renameShortcut(\"\", \"Hide\");\n    changeIcon(\"\", \"bitsies_invisible\");\n}",
+          "iconName": "bitsies_visible",
+          "id": "a2c40355-2720-4639-9669-1e5907afe980",
+          "name": "Show",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/{{f7b7b9b7-5c78-4c04-b90b-eb5f8662cc9a}}"
+        },
+        {
+          "bodyContent": "Connected",
+          "codeOnSuccess": "setVariable(/*[variable]*/\"1e21f1d4-222c-4802-93f9-c747dbf27509\"/*[/variable]*/, getVariable(/*[variable]*/\"ef58fb26-1860-4ef6-ab49-448f7bdecaa7\"/*[/variable]*/));",
+          "contentType": "text/plain",
+          "iconName": "bitsies_mobile",
+          "id": "b545c402-4db1-4619-b9e6-392e1da89339",
+          "method": "POST",
+          "name": "Host",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 1000,
+          "url": "http://{{ef58fb26-1860-4ef6-ab49-448f7bdecaa7}}/show-toast"
+        },
+        {
+          "iconName": "bitsies_mute",
+          "id": "0bba364f-1e8c-4967-bd59-a66ad085d551",
+          "name": "Mute",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/volume?value\u003d0.0"
+        },
+        {
+          "iconName": "bitsies_volume",
+          "id": "887c27a0-c889-425a-89a1-942fab719bbe",
+          "name": "Volume",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/volume?value\u003d{{00ed5a30-5809-4951-bf16-eb169a990cb3}}"
+        },
+        {
+          "iconName": "bitsies_cancel",
+          "id": "be9faa4c-2414-4a6a-ad07-61f40ff94b1b",
+          "name": "Stop",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/stop"
+        },
+        {
+          "codeOnPrepare": "var tg \u003d getVariable(/*[variable]*/\"13e8f015-78a8-400d-a5d6-dea625e3fced\"/*[/variable]*/)\nif (tg\u003d\u003d0) {\n    renameShortcut(\"\", \"cc Off\");\n} else {\n    renameShortcut(\"\", \"cc On\");\n}",
+          "iconName": "bitsies_message",
+          "id": "10e856cb-42cb-4d92-aa25-3122ea2b8ad3",
+          "name": "cc On",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/show-captions?toggle\u003d{{13e8f015-78a8-400d-a5d6-dea625e3fced}}"
+        },
+        {
+          "iconName": "white_media_fast_forward",
+          "id": "7356f32c-67bd-4001-b276-c61530943cee",
+          "name": "Next",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/next"
+        },
+        {
+          "iconName": "white_swap_left",
+          "id": "deccbf07-9001-4a03-ac1e-4e1249a18ae3",
+          "name": "-15 s",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/add-scrub-offset?value\u003d-15000"
+        },
+        {
+          "codeOnPrepare": "var tg \u003d getVariable(/*[variable]*/\"2e98cc79-d974-4497-8c85-de9a9ec097cc\"/*[/variable]*/)\nif (tg \u003d\u003d 0.0) {\n    renameShortcut(\"\", \"Play\");\n    changeIcon(\"\", \"white_media_play\");\n} else {\n    renameShortcut(\"\", \"Pause\");\n    changeIcon(\"\", \"white_media_pause\");\n}",
+          "iconName": "white_media_play",
+          "id": "a72e6d9d-4e70-4bd9-ac8c-b914f808432f",
+          "name": "Play",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 1000,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/rate?value\u003d{{2e98cc79-d974-4497-8c85-de9a9ec097cc}}"
+        },
+        {
+          "iconName": "white_swap_right",
+          "id": "7fa60b18-f4a7-4650-8197-65e37d68f303",
+          "name": "+15 s",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/add-scrub-offset?value\u003d15000"
+        },
+        {
+          "codeOnPrepare": "const off \u003d getVariable(/*[variable]*/\"324a8d83-f78e-4e87-a6b8-07608934f94f\"/*[/variable]*/)\nsetVariable(/*[variable]*/\"324a8d83-f78e-4e87-a6b8-07608934f94f\"/*[/variable]*/, (off*1000000));",
+          "iconName": "bitsies_controls",
+          "id": "d6192d00-1dc0-4c19-a2d5-a59a7b99a661",
+          "name": "Offset",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/set-captions-offset?value\u003d{{324a8d83-f78e-4e87-a6b8-07608934f94f}}"
+        },
+        {
+          "bodyContent": "Apply-Embedded: true\n\\nFont-Size: {{c2d518a3-d21e-492b-a089-c68775ffa0ad}}",
+          "contentType": "text/parameters",
+          "iconName": "bitsies_character",
+          "id": "6f0bd18e-ce52-4d9b-87ad-79b23e60c639",
+          "method": "POST",
+          "name": "Size",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none",
+            "uiType": "dialog"
+          },
+          "timeout": 500,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/set-captions-style"
+        },
+        {
+          "bodyContent": "Caption-Location: {{94a1bbef-2cd3-47f7-b209-0fc1504ff9ee}}",
+          "contentType": "text/parameters",
+          "iconName": "bitsies_quote",
+          "id": "57fd5267-f700-49e9-a5d2-5f9615fbba1e",
+          "method": "POST",
+          "name": "Captions",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none",
+            "uiType": "dialog"
+          },
+          "timeout": 500,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/load-captions"
+        },
+        {
+          "codeOnPrepare": "const min \u003d getVariable(/*[variable]*/\"bfb9d20e-bdd9-4db6-a6af-96f140f1962d\"/*[/variable]*/)\nconst sec \u003d getVariable(/*[variable]*/\"fa848ac7-7b85-4f04-97f3-4946fe98599e\"/*[/variable]*/)\nsetVariable(/*[variable]*/\"b835dd18-eec9-4dae-89a3-8c5d4bfd1829\"/*[/variable]*/, ((min * 3600) + (sec * 60)))",
+          "iconName": "bitsies_dashboard",
+          "id": "eca6e2eb-3352-4ec4-bb27-89f1ec7df548",
+          "name": "Position",
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "failureOutput": "simple",
+            "successOutput": "none"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/scrub?position\u003d{{b835dd18-eec9-4dae-89a3-8c5d4bfd1829}}"
+        },
+        {
+          "bodyContent": "Content-Location: {{00516c07-9547-40d2-977c-bd7f2280d3d7}}",
+          "contentType": "text/parameters",
+          "iconName": "bitsies_computer",
+          "id": "1ac180bb-db05-438b-ab92-40f8a0fc5faf",
+          "method": "POST",
+          "name": "Channels",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none",
+            "uiType": "dialog"
+          },
+          "timeout": 500,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/play"
+        },
+        {
+          "bodyContent": "Content-Location: {{fad883ed-ce63-4686-a020-fa5ace133884}}\n\\nStart-Position: 0",
+          "contentType": "text/parameters",
+          "iconName": "bitsies_attach",
+          "id": "9d893fb3-f9d9-44d9-aa5f-249c3aa0684c",
+          "method": "POST",
+          "name": "Paste",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none",
+            "uiType": "dialog"
+          },
+          "timeout": 500,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/play"
+        },
+        {
+          "bodyContent": "Content-Location: {{fce890ca-8fa5-4b3d-ad7e-36941165be98}}\n\\nReferer: {{54bd92c6-af2e-42df-85eb-caa27e5bc3ba}}\n\\nStart-Position: 0",
+          "codeOnSuccess": "setVariable(/*[variable]*/\"00bebb89-a27d-49df-a8e7-7cbedb01ad87\"/*[/variable]*/, getVariable(/*[variable]*/\"fce890ca-8fa5-4b3d-ad7e-36941165be98\"/*[/variable]*/))\nsetVariable(/*[variable]*/\"915000b1-90bb-45ec-870c-563b8e6bb837\"/*[/variable]*/, getVariable(/*[variable]*/\"54bd92c6-af2e-42df-85eb-caa27e5bc3ba\"/*[/variable]*/))",
+          "contentType": "text/parameters",
+          "iconName": "bitsies_earth",
+          "id": "61e73e29-f833-4eba-958d-546f432c20b2",
+          "method": "POST",
+          "name": "Urls",
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none",
+            "uiType": "dialog"
+          },
+          "timeout": 1000,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/{{2c150ffd-511f-4425-8c48-8250fedb890c}}"
+        },
+        {
+          "bodyContent": "Content-Location: {{00bebb89-a27d-49df-a8e7-7cbedb01ad87}}\n\\nReferer: {{915000b1-90bb-45ec-870c-563b8e6bb837}}\n\\nStart-Position: {{b835dd18-eec9-4dae-89a3-8c5d4bfd1829}}",
+          "contentType": "text/parameters",
+          "iconName": "bitsies_clock",
+          "id": "feb91155-871f-4413-bb3e-90c411895c52",
+          "launcherShortcut": true,
+          "method": "POST",
+          "name": "Resume",
+          "quickSettingsTileShortcut": true,
+          "responseHandling": {
+            "failureOutput": "none",
+            "successOutput": "none",
+            "uiType": "dialog"
+          },
+          "timeout": 0,
+          "url": "http://{{1e21f1d4-222c-4802-93f9-c747dbf27509}}/play"
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "data": "{\"slider\":{\"max\":\"10.0\",\"min\":\"-10.0\",\"step\":\"1.0\",\"prefix\":\"\",\"suffix\":\" s\"}}",
+      "id": "324a8d83-f78e-4e87-a6b8-07608934f94f",
+      "key": "Caption_Offset",
+      "title": "Offset",
+      "type": "slider",
+      "value": "-8000000"
+    },
+    {
+      "id": "94a1bbef-2cd3-47f7-b209-0fc1504ff9ee",
+      "key": "Captions_Link",
+      "rememberValue": true,
+      "title": "Subtitle ",
+      "type": "text",
+      "value": "https://www.opensubtitles.com/download/7BE43D64C9724CBD394929D80E664F39D8C1FFA6F2F921BF5EC2E069E0AA299DCD355622A2892F95DEA124D81DFD19F6D58819B1511093AE0A8993F140F507A7D180FC82576E83E53D207C0AE20FE0F09DBD9E10687DB45FD01D96E9025FC3DD08CBDCC7E059593F0F2643F9BD706A58FDB8D6A2972174FF3CBF32054C057BCD2EFC5253404BDCDBF75F3CDE88BAD16088D308679989B0F54A5D41726D4BD818E33D5360DAC77B80536FEE8BE849E5CAA45B92F8EBFC03B6C76046079A107C45F61B75280BC5D0E6691B9DA65A3B48C183F897F088240FA7C22ED983F365FB3D3FE0AE57D6179179A2631C41A7E494B04C540B127FFD3F58C7147DEF6749467FDA81768E5D89A3A04AA14AD60429C9B7B8269CC1883C1303DA0C33CE9748F10B/subfile/Scrooge.A.Christmas.Carol.2022.1080p.NF.WEB-DL.DDP5.1.H.264-SMURF.srt"
+    },
+    {
+      "id": "00516c07-9547-40d2-977c-bd7f2280d3d7",
+      "key": "Channels",
+      "options": [
+        {
+          "id": "851e17b7-e701-4a1c-9f3e-169eafc9b9f3",
+          "label": "Channel-7",
+          "value": "https://foreveralive1-a.akamaihd.net/db889d68019848c5b303610afdae3190/ap-southeast-1/6057949479001/profile_2/chunklist.m3u8"
+        },
+        {
+          "id": "4fc82226-50ea-49f4-a4b5-6f2adde83f2c",
+          "label": "Channel K",
+          "value": "https://l1-xl1.myanmarnet.com/relay/channelk/ch1/stream_hi/index.m3u8"
+        },
+        {
+          "id": "10167f07-0a40-403a-864c-b7eb08e09e3a",
+          "label": "Mahar",
+          "value": "https://tv.mahar.live/mahar/website.stream/mahar/website1/chunks.m3u8"
+        },
+        {
+          "id": "30d537ed-09ec-429b-928c-154e8cdb35c2",
+          "label": "mntv",
+          "value": "http://l1-xl1.myanmarnet.com/relay/mntv/ch1/stream.m3u8"
+        },
+        {
+          "id": "12bae34a-f6da-45c9-945f-514789118536",
+          "label": "MRTV-4",
+          "value": "https://foreveralive1-a.akamaihd.net/7cbf965de49a4f308eb64b980e690a38/ap-southeast-1/6057949479001/profile_2/chunklist.m3u8"
+        }
+      ],
+      "type": "select"
+    },
+    {
+      "flags": 1,
+      "id": "fad883ed-ce63-4686-a020-fa5ace133884",
+      "key": "Clipboard",
+      "type": "clipboard"
+    },
+    {
+      "id": "f7b7b9b7-5c78-4c04-b90b-eb5f8662cc9a",
+      "key": "Hide_Show",
+      "options": [
+        {
+          "id": "5bbb4829-5e5a-4b5b-941d-33388ed33785",
+          "value": "hide-player"
+        },
+        {
+          "id": "dcc5cb27-eaa7-4da3-9730-0a0ce187ee67",
+          "value": "show-player"
+        }
+      ],
+      "type": "toggle",
+      "value": "0"
+    },
+    {
+      "id": "ef58fb26-1860-4ef6-ab49-448f7bdecaa7",
+      "key": "Host_IP",
+      "rememberValue": true,
+      "type": "text",
+      "value": "192.168.1.24:8192"
+    },
+    {
+      "id": "bfb9d20e-bdd9-4db6-a6af-96f140f1962d",
+      "key": "Hour",
+      "title": "Hour",
+      "type": "number"
+    },
+    {
+      "id": "fa848ac7-7b85-4f04-97f3-4946fe98599e",
+      "key": "Min",
+      "title": "Minutes",
+      "type": "number",
+      "value": "sec"
+    },
+    {
+      "id": "fce890ca-8fa5-4b3d-ad7e-36941165be98",
+      "key": "Play_Link",
+      "title": "Play URL",
+      "type": "text",
+      "value": "https://cdn-4.sportfacts.net/live/abr-stream-1/playlist.m3u8?wmsAuthSign\u003dc2VydmVyX3RpbWU9MTEvMjcvMjAyMiAxMDo0MTo0MiBBTSZoYXNoX3ZhbHVlPW1ZSHJNMUhJaWNwVlhEbFl3R1dRTFE9PSZ2YWxpZG1pbnV0ZXM9MjQwJmlkPTM3LjExMS40My4yNSZzdHJtX2xlbj01"
+    },
+    {
+      "id": "2c150ffd-511f-4425-8c48-8250fedb890c",
+      "key": "Play_Mode",
+      "options": [
+        {
+          "id": "9ff5e7f5-6ca0-4ea4-969f-0ef099f51050",
+          "label": "Play",
+          "value": "play"
+        },
+        {
+          "id": "7bc218e8-a507-46d2-b799-ca4bad14511a",
+          "label": "Queue",
+          "value": "queue"
+        }
+      ],
+      "type": "select"
+    },
+    {
+      "id": "2e98cc79-d974-4497-8c85-de9a9ec097cc",
+      "key": "Play_Pause",
+      "options": [
+        {
+          "id": "a1ba050b-81f2-4310-9f07-a119257978b7",
+          "value": "1.0"
+        },
+        {
+          "id": "0dc59213-3ed7-48e7-a9be-36b04154c76b",
+          "value": "0.0"
+        }
+      ],
+      "type": "toggle",
+      "value": "1"
+    },
+    {
+      "id": "00bebb89-a27d-49df-a8e7-7cbedb01ad87",
+      "key": "play_static"
+    },
+    {
+      "id": "1e21f1d4-222c-4802-93f9-c747dbf27509",
+      "key": "player_host",
+      "value": "192.168.1.24:8192"
+    },
+    {
+      "id": "b835dd18-eec9-4dae-89a3-8c5d4bfd1829",
+      "key": "Position",
+      "value": "0.9"
+    },
+    {
+      "id": "915000b1-90bb-45ec-870c-563b8e6bb837",
+      "key": "refer_static"
+    },
+    {
+      "id": "54bd92c6-af2e-42df-85eb-caa27e5bc3ba",
+      "key": "Referer_Link",
+      "title": "Referer URL",
+      "type": "text",
+      "value": "https://www.sportfacts.net/total/sports/2022/world-cup-qatar-japan-vs-costa-rica-s1/"
+    },
+    {
+      "data": "{\"slider\":{\"max\":\"36.0\",\"min\":\"20.0\",\"step\":\"2.0\",\"prefix\":\"\",\"suffix\":\"\"}}",
+      "id": "c2d518a3-d21e-492b-a089-c68775ffa0ad",
+      "key": "Text_Size",
+      "rememberValue": true,
+      "title": "Text Size",
+      "type": "slider",
+      "value": "30"
+    },
+    {
+      "data": "{\"slider\":{\"max\":\"1.0\",\"min\":\"0.0\",\"step\":\"0.05\",\"prefix\":\"\",\"suffix\":\"\"}}",
+      "id": "00ed5a30-5809-4951-bf16-eb169a990cb3",
+      "key": "Volume_Slider",
+      "rememberValue": true,
+      "title": "Volume",
+      "type": "slider",
+      "value": "1.0"
+    },
+    {
+      "id": "13e8f015-78a8-400d-a5d6-dea625e3fced",
+      "key": "CaptionOn_Off",
+      "options": [
+        {
+          "id": "ed130da9-ecc4-42ca-b5f0-c5dcee58a405",
+          "value": "0"
+        },
+        {
+          "id": "abfb7731-d2e0-4ceb-817f-2aaed36fefea",
+          "value": "1"
+        }
+      ],
+      "type": "toggle",
+      "value": "1"
+    }
+  ],
+  "version": 52
+}

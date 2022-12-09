@@ -1,0 +1,31 @@
+https://github.com/Waboodoo/HTTP-Shortcuts
+https://github.com/Waboodoo/HTTP-Shortcuts/releases
+
+https://github.com/Waboodoo/HTTP-Shortcuts/releases/tag/v2.26.0
+https://github.com/Waboodoo/HTTP-Shortcuts/releases/download/v2.26.0/app-arm64-v8a-release.apk
+https://github.com/Waboodoo/HTTP-Shortcuts/releases/download/v2.26.0/app-armeabi-v7a-release.apk
+  package: ch.rmy.android.http_shortcuts
+  version: 2.26.0 (1102260001)
+  min SDK: 21 (Android 5.0 Lollipop)
+
+----------------------------------------
+
+contribution
+  from:    https://github.com/heinnovator
+  summary: JSON backup/restore configuration data file,
+           which adds HTTP Shortcuts to easily access
+           ExoAirPlayer HTTP API endpoints
+
+commentary
+ * I quickly inspected the contents of this JSON file,
+   and didn't observe anything nefarious, though
+   - it does contain some stream URLs and other data values
+     that are a historical snapshot from previous usage
+   - the included data and settings are unnormalized
+ * I can't comment on how well this works,
+   as I've neither tried the app,
+   nor imported the JSON file
+ * I do appreciate the contribution,
+   and any follow-up that either adds additional functionality,
+   or santizes the included data and settings
+   will gladly be accepted and used to update the JSON file
