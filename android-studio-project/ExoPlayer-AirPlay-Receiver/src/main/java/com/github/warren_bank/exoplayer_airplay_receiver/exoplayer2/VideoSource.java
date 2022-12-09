@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.UriUtils;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
@@ -82,11 +82,11 @@ public final class VideoSource {
   ) {
     // enforce that URLs are encoded and RFC 2396-compliant
     if (!TextUtils.isEmpty(uri))
-      uri = StringUtils.encodeURL(uri);
+      uri = UriUtils.encodeURI(uri);
     if (!TextUtils.isEmpty(caption))
-      caption = StringUtils.encodeURL(caption);
+      caption = UriUtils.encodeURI(caption);
     if (!TextUtils.isEmpty(referer))
-      referer = StringUtils.encodeURL(referer);
+      referer = UriUtils.encodeURI(referer);
 
     if (uri == null)
       uri = "";

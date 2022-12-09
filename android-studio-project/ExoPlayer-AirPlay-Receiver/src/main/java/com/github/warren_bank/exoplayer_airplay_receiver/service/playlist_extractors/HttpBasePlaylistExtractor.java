@@ -1,6 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.UrlUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,11 +29,11 @@ public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
 
     uri = resolveM3uPlaylistItem(
       ((context != null) ? context.toString() : ""),
-      StringUtils.decodeURL(relative)
+      UrlUtils.decodeURL(relative)
     );
 
     if (uri != null)
-      uri = StringUtils.encodeURL(uri);
+      uri = UrlUtils.encodeURL(uri);
 
     return uri;
   }
@@ -84,7 +84,7 @@ public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
       in = new BufferedReader(new InputStreamReader(url.openStream(), cs));
 
       // remove ascii encoding
-      url = new URL(StringUtils.decodeURL(strUrl));
+      url = new URL(UrlUtils.decodeURL(strUrl));
 
       preParse(url);
       while ((line = in.readLine()) != null) {

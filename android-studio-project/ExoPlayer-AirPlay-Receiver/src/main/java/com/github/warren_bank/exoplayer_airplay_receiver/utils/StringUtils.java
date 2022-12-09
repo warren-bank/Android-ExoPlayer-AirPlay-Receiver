@@ -5,9 +5,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -139,37 +136,6 @@ public class StringUtils {
 
   public static String convertEscapedLinefeeds(String requestBody) {
     return requestBody.replaceAll("\\\\n", "\n");
-  }
-
-  public static String decodeURL(String strUrl) {
-    try {
-      return URLDecoder.decode(strUrl, "UTF-8");
-    }
-    catch(Exception e) {
-      return strUrl;
-    }
-  }
-
-  public static String encodeURL(String strUrl) {
-    try {
-      URL url = new URL(StringUtils.decodeURL(strUrl));
-
-      return StringUtils.encodeURL(url);
-    }
-    catch(Exception e) {
-      return strUrl;
-    }
-  }
-
-  public static String encodeURL(URL url) {
-    try {
-      URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-
-      return uri.toASCIIString();
-    }
-    catch(Exception e) {
-      return url.toExternalForm();
-    }
   }
 
   public static String serializeURLs(ArrayList<String> list) {

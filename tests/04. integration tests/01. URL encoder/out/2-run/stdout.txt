@@ -1,0 +1,10 @@
+
+----------------------------------------
+
+[subject] url: http://a%3Ab:pass@example.com:80/foo[bar].baz?hash=%26%2f#skip
+[test_001] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+
+----------------------------------------
+
+[subject] url: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_001] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip

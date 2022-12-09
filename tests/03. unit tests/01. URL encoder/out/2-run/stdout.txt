@@ -1,0 +1,78 @@
+
+----------------------------------------
+
+[subject] url: http://a%3Ab:pass@example.com:80/foo[bar].baz?hash=%26%2f#skip
+[test_001] encoded: http%3A%2F%2Fa%253Ab%3Apass%40example.com%3A80%2Ffoo%5Bbar%5D.baz%3Fhash%3D%2526%252f%23skip
+[test_002] encoded: http://a%3Ab:pass@example.com:80/foo[bar].baz?hash=%26%2f#skip
+[test_003a] decoded:
+  http
+  a:b:pass
+  example.com
+  80
+  /foo[bar].baz
+  hash=&/
+  skip
+[test_003a] encoded:
+  http
+  a%3Ab:pass
+  example.com
+  80
+  /foo[bar].baz
+  hash=%26%2f
+  skip
+[test_003b] decoded:
+  http
+  a%3Ab:pass
+  example.com
+  80
+  /foo[bar].baz
+  hash=%26%2f
+  skip
+[test_004a] encoded: http://a%253Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%2526%252f#skip
+[test_004b] encoded: http://a:b:pass@example.com:80/foo%5Bbar%5D.baz?hash=&/#skip
+[test_004c] encoded: http://a:b:pass@example.com:80/foo%5Bbar%5D.baz?hash=&/#skip
+[test_004d] encoded: http://a%253Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%2526%252f#skip
+[test_005a] encoded: http://a%3Ab:pass@example.com:80/foo[bar].baz?hash=%26%2f#skip
+[test_005b] encoded: http://a%3Ab%3Apass@example.com:80%2Ffoo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005c] encoded: http://a:b:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005d] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005e] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+
+----------------------------------------
+
+[subject] url: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_001] encoded: http%3A%2F%2Fa%253Ab%3Apass%40example.com%3A80%2Ffoo%255Bbar%255D.baz%3Fhash%3D%2526%252f%23skip
+[test_002] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_003a] decoded:
+  http
+  a:b:pass
+  example.com
+  80
+  /foo[bar].baz
+  hash=&/
+  skip
+[test_003a] encoded:
+  http
+  a%3Ab:pass
+  example.com
+  80
+  /foo%5Bbar%5D.baz
+  hash=%26%2f
+  skip
+[test_003b] decoded:
+  http
+  a%3Ab:pass
+  example.com
+  80
+  /foo%5Bbar%5D.baz
+  hash=%26%2f
+  skip
+[test_004a] encoded: http://a%253Ab:pass@example.com:80/foo%255Bbar%255D.baz?hash=%2526%252f#skip
+[test_004b] encoded: http://a:b:pass@example.com:80/foo%5Bbar%5D.baz?hash=&/#skip
+[test_004c] encoded: http://a:b:pass@example.com:80/foo%5Bbar%5D.baz?hash=&/#skip
+[test_004d] encoded: http://a%253Ab:pass@example.com:80/foo%255Bbar%255D.baz?hash=%2526%252f#skip
+[test_005a] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005b] encoded: http://a%3Ab%3Apass@example.com:80%2Ffoo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005c] encoded: http://a:b:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005d] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
+[test_005e] encoded: http://a%3Ab:pass@example.com:80/foo%5Bbar%5D.baz?hash=%26%2f#skip
