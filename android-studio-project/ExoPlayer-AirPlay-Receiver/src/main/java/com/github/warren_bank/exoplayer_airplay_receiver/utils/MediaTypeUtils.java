@@ -17,7 +17,7 @@ public class MediaTypeUtils {
     for (String protocol : protocols) {
       if (protocol == null)
         continue;
-      if (uri.startsWith(protocol.toLowerCase() + "://"))
+      if (uri.startsWith(protocol.toLowerCase() + ":"))
         return true;
     }
     return false;
