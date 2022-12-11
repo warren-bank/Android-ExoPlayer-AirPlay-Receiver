@@ -291,8 +291,7 @@
       "key": "Captions_Link",
       "rememberValue": true,
       "title": "Subtitle ",
-      "type": "text",
-      "value": "https://www.opensubtitles.com/download/7BE43D64C9724CBD394929D80E664F39D8C1FFA6F2F921BF5EC2E069E0AA299DCD355622A2892F95DEA124D81DFD19F6D58819B1511093AE0A8993F140F507A7D180FC82576E83E53D207C0AE20FE0F09DBD9E10687DB45FD01D96E9025FC3DD08CBDCC7E059593F0F2643F9BD706A58FDB8D6A2972174FF3CBF32054C057BCD2EFC5253404BDCDBF75F3CDE88BAD16088D308679989B0F54A5D41726D4BD818E33D5360DAC77B80536FEE8BE849E5CAA45B92F8EBFC03B6C76046079A107C45F61B75280BC5D0E6691B9DA65A3B48C183F897F088240FA7C22ED983F365FB3D3FE0AE57D6179179A2631C41A7E494B04C540B127FFD3F58C7147DEF6749467FDA81768E5D89A3A04AA14AD60429C9B7B8269CC1883C1303DA0C33CE9748F10B/subfile/Scrooge.A.Christmas.Carol.2022.1080p.NF.WEB-DL.DDP5.1.H.264-SMURF.srt"
+      "type": "text"
     },
     {
       "id": "00516c07-9547-40d2-977c-bd7f2280d3d7",
@@ -373,7 +372,7 @@
       "key": "Play_Link",
       "title": "Play URL",
       "type": "text",
-      "value": "https://cdn-4.sportfacts.net/live/abr-stream-1/playlist.m3u8?wmsAuthSign\u003dc2VydmVyX3RpbWU9MTEvMjcvMjAyMiAxMDo0MTo0MiBBTSZoYXNoX3ZhbHVlPW1ZSHJNMUhJaWNwVlhEbFl3R1dRTFE9PSZ2YWxpZG1pbnV0ZXM9MjQwJmlkPTM3LjExMS40My4yNSZzdHJtX2xlbj01"
+      "value": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
     },
     {
       "id": "2c150ffd-511f-4425-8c48-8250fedb890c",
@@ -410,7 +409,8 @@
     },
     {
       "id": "00bebb89-a27d-49df-a8e7-7cbedb01ad87",
-      "key": "play_static"
+      "key": "play_static",
+      "value": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
     },
     {
       "id": "1e21f1d4-222c-4802-93f9-c747dbf27509",
@@ -420,18 +420,19 @@
     {
       "id": "b835dd18-eec9-4dae-89a3-8c5d4bfd1829",
       "key": "Position",
-      "value": "0.9"
+      "value": "3.711"
     },
     {
       "id": "915000b1-90bb-45ec-870c-563b8e6bb837",
-      "key": "refer_static"
+      "key": "refer_static",
+      "value": "https://test-streams.mux.dev/x36xhzz/"
     },
     {
       "id": "54bd92c6-af2e-42df-85eb-caa27e5bc3ba",
       "key": "Referer_Link",
       "title": "Referer URL",
       "type": "text",
-      "value": "https://www.sportfacts.net/total/sports/2022/world-cup-qatar-japan-vs-costa-rica-s1/"
+      "value": "https://test-streams.mux.dev/x36xhzz/"
     },
     {
       "data": "{\"slider\":{\"max\":\"36.0\",\"min\":\"20.0\",\"step\":\"2.0\",\"prefix\":\"\",\"suffix\":\"\"}}",
