@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.17.1/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoDownloadService.java
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/demos/main/src/main/java/androidx/media3/demo/main/DemoDownloadService.java
  */
 
 import static com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
@@ -15,14 +15,15 @@ import android.app.Notification;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.exoplayer2.offline.Download;
-import com.google.android.exoplayer2.offline.DownloadManager;
-import com.google.android.exoplayer2.offline.DownloadService;
-import com.google.android.exoplayer2.scheduler.PlatformScheduler;
-import com.google.android.exoplayer2.scheduler.Requirements;
-import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
-import com.google.android.exoplayer2.util.NotificationUtil;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.util.NotificationUtil;
+import androidx.media3.common.util.Util;
+import androidx.media3.exoplayer.offline.Download;
+import androidx.media3.exoplayer.offline.DownloadManager;
+import androidx.media3.exoplayer.offline.DownloadNotificationHelper;
+import androidx.media3.exoplayer.offline.DownloadService;
+import androidx.media3.exoplayer.scheduler.PlatformScheduler;
+import androidx.media3.exoplayer.scheduler.Requirements;
+import androidx.media3.exoplayer.scheduler.Scheduler;
 import java.util.List;
 
 /** A service for downloading media. */
@@ -33,7 +34,7 @@ public class MyDownloadService extends DownloadService {
         ResourceUtils.getInteger(R.integer.NOTIFICATION_ID_EXOPLAYER_DOWNLOADS),
         DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
         DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-        R.string.exo_download_notification_channel_name,  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/res/values/strings.xml#L85
+        R.string.exo_download_notification_channel_name,  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/res/values/strings.xml#L20
         /* channelDescriptionResourceId= */ 0
     );
   }
@@ -55,7 +56,7 @@ public class MyDownloadService extends DownloadService {
   }
 
   @Override
-  protected PlatformScheduler getScheduler() {
+  protected Scheduler getScheduler() {
     return Util.SDK_INT >= 21
         ? new PlatformScheduler(this, ResourceUtils.getInteger(/* context= */ this, R.integer.PLATFORM_SCHEDULER_JOB_ID_EXOPLAYER_DOWNLOAD_SERVICE))
         : null;

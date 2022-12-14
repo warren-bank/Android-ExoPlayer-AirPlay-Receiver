@@ -1,13 +1,18 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
+/*
+ * based on:
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/demos/main/src/main/java/androidx/media3/demo/main/PlayerActivity.java
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/demos/main/src/main/res/layout/player_activity.xml
+ */
+
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.exoplayer2.ui.PlayerControlView;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.util.RepeatModeUtil;
+import androidx.media3.common.util.RepeatModeUtil;
+import androidx.media3.ui.PlayerView;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -16,7 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-public class VideoActivity extends AppCompatActivity implements PlayerControlView.VisibilityListener, View.OnClickListener {
+public class VideoActivity extends AppCompatActivity implements PlayerView.ControllerVisibilityListener, View.OnClickListener {
   public static boolean isVisible = false;
 
   private PlayerManager playerManager;
@@ -90,9 +95,9 @@ public class VideoActivity extends AppCompatActivity implements PlayerControlVie
 
   // Event handler interfaces.
 
-  // PlayerControlView.VisibilityListener
+  // PlayerView.ControllerVisibilityListener
   @Override
-  public void onVisibilityChange(int visibility) {
+  public void onVisibilityChanged(int visibility) {
     if (visibility == View.VISIBLE)
       updateButtons(/* textOnly= */ false);
 

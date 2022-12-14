@@ -2,8 +2,8 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 import android.os.Looper;
 import androidx.annotation.Nullable;
-import com.google.android.exoplayer2.text.SubtitleDecoderFactory;
-import com.google.android.exoplayer2.text.TextOutput;
+import androidx.media3.exoplayer.text.SubtitleDecoderFactory;
+import androidx.media3.exoplayer.text.TextOutput;
 
 public class MyTextRenderer extends NonFinalTextRenderer implements TextSynchronizer {
   private long offsetPositionUs;

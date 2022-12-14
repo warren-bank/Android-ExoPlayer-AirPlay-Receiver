@@ -3,10 +3,10 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoSource;
 
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager.MediaDescriptionAdapter;
-import com.google.android.exoplayer2.util.NotificationUtil;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.NotificationUtil;
+import androidx.media3.ui.PlayerNotificationManager;
+import androidx.media3.ui.PlayerNotificationManager.MediaDescriptionAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -23,8 +23,8 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L1171
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L1215
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1159
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1204
   // ===========================================================================
   // * startOrUpdateNotification(...)
   //   - calls createNotification(...)
@@ -52,9 +52,9 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L308
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L351
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L557
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L309
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L354
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L560
   // ===========================================================================
   // * class Builder{...}
   // ===========================================================================
@@ -96,7 +96,7 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/ui/src/main/java/com/google/android/exoplayer2/ui/PlayerNotificationManager.java#L710
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L714
   // ===========================================================================
   // * PlayerNotificationManager(...)
   //   - constructor

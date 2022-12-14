@@ -5,37 +5,29 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
-import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager.BitmapCallback;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager.MediaDescriptionAdapter;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager.NotificationListener;
-
-import android.support.v4.media.MediaDescriptionCompat;
-import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import androidx.media3.common.Player;
+import androidx.media3.session.MediaSession;
+import androidx.media3.ui.PlayerNotificationManager;
+import androidx.media3.ui.PlayerNotificationManager.BitmapCallback;
+import androidx.media3.ui.PlayerNotificationManager.MediaDescriptionAdapter;
+
 import androidx.annotation.Nullable;
-import androidx.media.session.MediaButtonReceiver;
 
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 
 import java.net.URI;
 
-public class PlayerNotificationManagerContainer implements SetPlayer {
+public class PlayerNotificationManagerContainer {
   private Context context;
   private PlayerManager playerManager;
   private Class<?> pendingIntentActivityClass;
 
   private MyPlayerNotificationManager playerNotificationManager;
-  private MediaSessionCompat mediaSession;
-  private MediaSessionConnector mediaSessionConnector;
+  private MediaSession mediaSession;
 
   public PlayerNotificationManagerContainer(Context context, PlayerManager playerManager, @Nullable Class<?> pendingIntentActivityClass) {
     this.context                    = context;
@@ -85,28 +77,18 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
       }
     );
 
-    ComponentName mbrComponent = new ComponentName(context, MediaButtonReceiver.class);
-    mediaSession = new MediaSessionCompat(context, /* tag= */ context.getPackageName(), mbrComponent, /* mbrIntent= */ (PendingIntent) null);
-    mediaSession.setActive(true);
-    playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
+    Player player = playerManager.exoPlayer;
 
-    mediaSessionConnector = new MediaSessionConnector(mediaSession);
-    mediaSessionConnector.setQueueNavigator(new TimelineQueueNavigator(mediaSession) {
-      @Override
-      public MediaDescriptionCompat getMediaDescription(Player player, int windowIndex) {
-        int currentItemIndex = player.getCurrentWindowIndex();
-        return getMediaDesc(currentItemIndex);
-      }
-    });
+    // =========================================================================
+    // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/session/src/main/java/androidx/media3/session/MediaSession.java#L236
+    // =========================================================================
 
-    // triggers a callback that passes the singleton instance of SimpleExoPlayer
-    playerManager.setPlayer((SetPlayer) this);
-  }
+    mediaSession = new MediaSession.Builder(context, player)
+      .setId(context.getPackageName())
+      .build();
 
-  @Override
-  public void setPlayer(@Nullable Player player) {
+    playerNotificationManager.setMediaSessionToken((MediaSessionCompat.Token) mediaSession.getSessionCompatToken());
     playerNotificationManager.setPlayer(player);
-    mediaSessionConnector.setPlayer(player);
   }
 
   // ===========================================================================
@@ -118,7 +100,7 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
   }
 
   public void release() {
-    setPlayer(null);
+    playerNotificationManager.setPlayer(null);
     mediaSession.release();
   }
 
@@ -268,32 +250,6 @@ public class PlayerNotificationManagerContainer implements SetPlayer {
       : R.drawable.exoplayer_notification_icon_video;    // https://material.io/resources/icons/?icon=ondemand_video
 
     return ResourceUtils.getBitmap(context, id);
-  }
-
-  // ===========================================================================
-
-  private MediaDescriptionCompat getMediaDesc(int currentItemIndex) {
-    URI uri = getMediaItemUri(currentItemIndex);
-    if (uri == null) return null;
-
-    boolean isAudio = MediaTypeUtils.isAudioFileUrl(uri.toString());
-
-    String mediaId     = uri.toString();                                    // URL
-    String title       = getMediaItemTitle(currentItemIndex, uri, isAudio); // [index/total] mime-type
-    String description = getMediaItemDescription(uri, isAudio);             // hostname (stream) or dirname/filename (non-stream)
-    Bitmap bitmap      = getMediaItemBitmap(uri, isAudio);                  // material icon to indicate audio or video
-
-    Bundle extras = new Bundle();
-    extras.putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,    bitmap);
-    extras.putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, bitmap);
-
-    return new MediaDescriptionCompat.Builder()
-      .setMediaId(mediaId)
-      .setTitle(title)
-      .setDescription(description)
-      .setIconBitmap(bitmap)
-      .setExtras(extras)
-      .build();
   }
 
 }

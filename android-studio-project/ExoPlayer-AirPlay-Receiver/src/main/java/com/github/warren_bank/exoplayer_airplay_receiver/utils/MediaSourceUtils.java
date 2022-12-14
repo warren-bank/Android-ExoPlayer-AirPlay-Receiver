@@ -1,9 +1,9 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.source.ClippingMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
+import androidx.media3.exoplayer.source.ClippingMediaSource;
+import androidx.media3.exoplayer.source.MediaSource;
 
 public class MediaSourceUtils {
 

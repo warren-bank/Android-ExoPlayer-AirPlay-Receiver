@@ -4,9 +4,9 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUt
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.UriUtils;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.Util;
 
 import android.net.Uri;
 import android.text.TextUtils;

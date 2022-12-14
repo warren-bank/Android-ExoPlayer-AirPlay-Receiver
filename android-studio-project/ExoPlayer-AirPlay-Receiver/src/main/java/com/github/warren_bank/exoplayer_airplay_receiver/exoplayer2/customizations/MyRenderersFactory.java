@@ -2,16 +2,16 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * references:
- *   https://github.com/google/ExoPlayer/blob/r2.18.0/library/core/src/main/java/com/google/android/exoplayer2/DefaultRenderersFactory.java
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/DefaultRenderersFactory.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
 
 import android.content.Context;
 import android.os.Looper;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.Renderer;
-import com.google.android.exoplayer2.text.TextOutput;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
+import androidx.media3.exoplayer.Renderer;
+import androidx.media3.exoplayer.text.TextOutput;
 import java.util.ArrayList;
 
 public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer {

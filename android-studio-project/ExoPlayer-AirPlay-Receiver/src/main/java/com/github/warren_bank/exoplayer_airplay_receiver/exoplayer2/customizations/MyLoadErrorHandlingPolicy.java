@@ -2,10 +2,10 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 import android.util.Log;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.upstream.DefaultLoadErrorHandlingPolicy;
-import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException;
-import com.google.android.exoplayer2.upstream.LoadErrorHandlingPolicy;
+import androidx.media3.common.C;
+import androidx.media3.datasource.HttpDataSource.HttpDataSourceException;
+import androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy;
+import androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy;
 
 import java.io.IOException;
 
@@ -39,10 +39,10 @@ public class MyLoadErrorHandlingPolicy extends DefaultLoadErrorHandlingPolicy {
   }
 
   // ===========================================================================
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/upstream/DefaultLoadErrorHandlingPolicy.java#L108
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/upstream/LoadErrorHandlingPolicy.java#L70
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/source/LoadEventInfo.java
-  // https://github.com/google/ExoPlayer/blob/r2.15.1/library/core/src/main/java/com/google/android/exoplayer2/source/MediaLoadData.java
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/upstream/DefaultLoadErrorHandlingPolicy.java#L114
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/upstream/LoadErrorHandlingPolicy.java#L75
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/LoadEventInfo.java
+  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/MediaLoadData.java
   // ===========================================================================
 
   @Override

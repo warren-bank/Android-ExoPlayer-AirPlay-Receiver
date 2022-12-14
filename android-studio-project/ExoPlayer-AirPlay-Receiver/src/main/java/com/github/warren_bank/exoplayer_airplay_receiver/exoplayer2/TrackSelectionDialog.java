@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.18.0/demos/main/src/main/java/com/google/android/exoplayer2/demo/TrackSelectionDialog.java
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/demos/main/src/main/java/androidx/media3/demo/main/TrackSelectionDialog.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
@@ -22,14 +22,14 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.media3.common.C;
+import androidx.media3.common.Player;
+import androidx.media3.common.TrackGroup;
+import androidx.media3.common.TrackSelectionOverride;
+import androidx.media3.common.TrackSelectionParameters;
+import androidx.media3.common.Tracks;
+import androidx.media3.ui.TrackSelectionView;
 import androidx.viewpager.widget.ViewPager;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Tracks;
-import com.google.android.exoplayer2.source.TrackGroup;
-import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
-import com.google.android.exoplayer2.trackselection.TrackSelectionParameters;
-import com.google.android.exoplayer2.ui.TrackSelectionView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;

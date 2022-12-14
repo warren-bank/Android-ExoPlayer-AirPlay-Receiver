@@ -1,10 +1,10 @@
 -keepattributes InnerClasses
 -keep class com.github.warren_bank.exoplayer_airplay_receiver.** { *; }
 
--keepnames class com.google.android.exoplayer2.** { *; }
+-keepnames class androidx.media3.exoplayer.** { *; }
 -keepnames class javax.jmdns.** { *; }
 
--dontwarn com.google.android.exoplayer2.**
+-dontwarn androidx.media3.exoplayer.**
 -dontwarn javax.jmdns.test.**
 -dontwarn org.apache.**
 -dontwarn org.slf4j.**

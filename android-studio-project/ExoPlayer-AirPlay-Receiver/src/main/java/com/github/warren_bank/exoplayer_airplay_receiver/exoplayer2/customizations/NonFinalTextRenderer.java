@@ -2,11 +2,11 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.18.2/library/core/src/main/java/com/google/android/exoplayer2/text/TextRenderer.java
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/text/TextRenderer.java
  */
 
-import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
-import static com.google.android.exoplayer2.util.Assertions.checkState;
+import static androidx.media3.common.util.Assertions.checkNotNull;
+import static androidx.media3.common.util.Assertions.checkState;
 import static java.lang.annotation.ElementType.TYPE_USE;
 
 import android.os.Handler;
@@ -15,23 +15,24 @@ import android.os.Looper;
 import android.os.Message;
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
-import com.google.android.exoplayer2.BaseRenderer;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.FormatHolder;
-import com.google.android.exoplayer2.RendererCapabilities;
-import com.google.android.exoplayer2.source.SampleStream.ReadDataResult;
-import com.google.android.exoplayer2.text.Cue;
-import com.google.android.exoplayer2.text.CueGroup;
-import com.google.android.exoplayer2.text.SubtitleDecoder;
-import com.google.android.exoplayer2.text.SubtitleDecoderException;
-import com.google.android.exoplayer2.text.SubtitleDecoderFactory;
-import com.google.android.exoplayer2.text.SubtitleInputBuffer;
-import com.google.android.exoplayer2.text.SubtitleOutputBuffer;
-import com.google.android.exoplayer2.text.TextOutput;
-import com.google.android.exoplayer2.util.Log;
-import com.google.android.exoplayer2.util.MimeTypes;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.C;
+import androidx.media3.common.Format;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.common.text.Cue;
+import androidx.media3.common.text.CueGroup;
+import androidx.media3.common.util.Log;
+import androidx.media3.common.util.Util;
+import androidx.media3.exoplayer.BaseRenderer;
+import androidx.media3.exoplayer.FormatHolder;
+import androidx.media3.exoplayer.RendererCapabilities;
+import androidx.media3.exoplayer.source.SampleStream.ReadDataResult;
+import androidx.media3.exoplayer.text.SubtitleDecoderFactory;
+import androidx.media3.exoplayer.text.TextOutput;
+import androidx.media3.extractor.text.Subtitle;
+import androidx.media3.extractor.text.SubtitleDecoder;
+import androidx.media3.extractor.text.SubtitleDecoderException;
+import androidx.media3.extractor.text.SubtitleInputBuffer;
+import androidx.media3.extractor.text.SubtitleOutputBuffer;
 import com.google.common.collect.ImmutableList;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

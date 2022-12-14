@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 /*
  * based on:
- *   https://github.com/google/ExoPlayer/blob/r2.17.1/demos/main/src/main/java/com/google/android/exoplayer2/demo/DemoUtil.java
+ *   https://github.com/androidx/media/blob/1.0.0-beta03/demos/main/src/main/java/androidx/media3/demo/main/DemoUtil.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
@@ -10,21 +10,21 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 
 import android.content.Context;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
-import com.google.android.exoplayer2.RenderersFactory;
-import com.google.android.exoplayer2.database.DatabaseProvider;
-import com.google.android.exoplayer2.database.ExoDatabaseProvider;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
-import com.google.android.exoplayer2.offline.DownloadManager;
-import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.cache.Cache;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
-import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import androidx.media3.database.DatabaseProvider;
+import androidx.media3.database.StandaloneDatabaseProvider;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.cache.Cache;
+import androidx.media3.datasource.cache.CacheDataSource;
+import androidx.media3.datasource.cache.NoOpCacheEvictor;
+import androidx.media3.datasource.cache.SimpleCache;
+import androidx.media3.datasource.rtmp.RtmpDataSource;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
+import androidx.media3.exoplayer.RenderersFactory;
+import androidx.media3.exoplayer.offline.DownloadManager;
+import androidx.media3.exoplayer.offline.DownloadNotificationHelper;
+
 import java.io.File;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -102,7 +102,7 @@ public final class ExoPlayerUtils {
   public static synchronized DataSource.Factory getDefaultDataSourceFactory(Context context) {
     if (defaultDataSourceFactory == null) {
       context = context.getApplicationContext();
-      defaultDataSourceFactory = new DefaultDataSourceFactory(context, getHttpDataSourceFactory(context));
+      defaultDataSourceFactory = new DefaultDataSource.Factory(context, getHttpDataSourceFactory(context));
     }
     return defaultDataSourceFactory;
   }
@@ -167,7 +167,7 @@ public final class ExoPlayerUtils {
 
   private static synchronized DatabaseProvider getDatabaseProvider(Context context) {
     if (databaseProvider == null) {
-      databaseProvider = new ExoDatabaseProvider(context);
+      databaseProvider = new StandaloneDatabaseProvider(context);
     }
     return databaseProvider;
   }

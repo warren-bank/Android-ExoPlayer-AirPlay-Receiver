@@ -1,19 +1,19 @@
 project.ext {
-    releaseVersionCode  = Integer.parseInt("002005816", 10)  //Integer.MAX_VALUE == 2147483647
-    releaseVersion      = '002.00.58-16API'
-    javaVersion         = JavaVersion.VERSION_1_8
-    minSdkVersion       = 16
-    targetSdkVersion    = 29
-    compileSdkVersion   = 33
-    buildToolsVersion   = '33.0.1'
+    releaseVersionCode = Integer.parseInt("003000016", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersion     = '003.00.00-16API-beta01'
+    javaVersion        = JavaVersion.VERSION_1_8
+    minSdkVersion      = 16
+    targetSdkVersion   = 29
+    compileSdkVersion  = 33
+    buildToolsVersion  = '33.0.1'
 
-    libVersionDdPlist   = '1.23'
-    libVersionHttpCore  = '4.4.13'
-    libVersionJmDNS     = '3.5.8'
-    libVersionExoPlayer = '2.18.2'
+    libVersionDdPlist        = '1.23'
+    libVersionHttpCore       = '4.4.13'
+    libVersionJmDNS          = '3.5.8'
+    libVersionAndroidxMedia3 = '1.0.0-beta03'
 
-    // keep versions of AndroidX libraries in sync with those used by ExoPlayer:
-    //   https://github.com/google/ExoPlayer/blob/r2.18.2/constants.gradle#L40
+    // keep versions of AndroidX libraries in sync with those used by AndroidX Media3:
+    //   https://github.com/androidx/media/blob/1.0.0-beta03/constants.gradle#L39
 
     libVersionAndroidxAnnotation = '1.3.0'
     libVersionAndroidxAppCompat  = '1.3.1'
