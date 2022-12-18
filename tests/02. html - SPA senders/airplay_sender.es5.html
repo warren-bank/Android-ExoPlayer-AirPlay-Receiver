@@ -222,6 +222,10 @@ window.onload  = function() {
   var $font_size               = document.querySelector('input#font_size')
   var $apply_embedded          = document.querySelector('select#apply_embedded')
   var $set_captions_style      = document.querySelector('button#set_captions_style')
+  var $repeat_mode             = document.querySelector('select#repeat_mode')
+  var $set_repeat_mode         = document.querySelector('button#set_repeat_mode')
+  var $resize_mode             = document.querySelector('select#resize_mode')
+  var $set_resize_mode         = document.querySelector('button#set_resize_mode')
   var $rate_factor             = document.querySelector('input#rate_factor')
   var $rate                    = document.querySelector('button#rate')
   var $volume_factor           = document.querySelector('input#volume_factor')
@@ -899,6 +903,38 @@ window.onload  = function() {
       }
 
       send_message(path, data.join("\n"))
+    }
+    catch(e){}
+  }
+
+  $set_repeat_mode.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      var repeat_mode = $repeat_mode.value
+      if (!repeat_mode) return
+
+      var path = '/repeat-mode?value=' + repeat_mode
+      var data = null
+
+      send_message(path, data)
+    }
+    catch(e){}
+  }
+
+  $set_resize_mode.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      var resize_mode = $resize_mode.value
+      if (!resize_mode) return
+
+      var path = '/resize-mode?value=' + resize_mode
+      var data = null
+
+      send_message(path, data)
     }
     catch(e){}
   }
@@ -1839,6 +1875,36 @@ window.onload  = function() {
             </td>
             <td class="oneline fullwidth">
               <button id="set_captions_style">Set CC Style</button>
+            </td>
+          </tr>
+        </table>
+        <table align="center">
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <select id="repeat_mode">
+                <option value="">Repeat Mode</option>
+                <option value="off">Off</option>
+                <option value="one">One</option>
+                <option value="all">All</option>
+              </select>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="set_repeat_mode">Set Repeat Mode</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <select id="resize_mode">
+                <option value="">Resize Mode</option>
+                <option value="fit">Fit</option>
+                <option value="width">Width</option>
+                <option value="height">Height</option>
+                <option value="fill">Fill</option>
+                <option value="zoom">Zoom</option>
+              </select>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="set_resize_mode">Set Resize Mode</button>
             </td>
           </tr>
         </table>
