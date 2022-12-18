@@ -139,8 +139,6 @@ public class NetworkUtils {
   }
 
   private static byte[] convertIpAddress(int ip) {
-    if (ip <= 0) return null;
-
     byte[] address = new byte[4];
     address[0] = Integer.valueOf((ip      ) & 0xFF).byteValue();
     address[1] = Integer.valueOf((ip >>  8) & 0xFF).byteValue();
