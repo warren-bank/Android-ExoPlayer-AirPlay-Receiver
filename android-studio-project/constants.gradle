@@ -3,6 +3,10 @@ project.ext {
     releaseVersion     = '003.00.00-16API'
     javaVersion        = JavaVersion.VERSION_1_8
     minSdkVersion      = 16
+
+    // [Android 11+] if (targetSdkVersion >= 30), error: NetworkUtils.getMACAddress()
+    //   see: https://developer.android.com/training/articles/user-data-ids#mac-11-plus
+
     targetSdkVersion   = 29
     compileSdkVersion  = 33
     buildToolsVersion  = '33.0.1'

@@ -1,19 +1,20 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.RuntimePermissionsMgr;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 
 import java.io.File;
 
-public class StartNetworkingServiceActivity extends Activity {
+public class StartNetworkingServiceActivity extends RuntimePermissionsListenerActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -24,7 +25,7 @@ public class StartNetworkingServiceActivity extends Activity {
     }
 
     startNetworkingService();
-    finish();
+    RuntimePermissionsMgr.onPermissionsGranted(StartNetworkingServiceActivity.this);
   }
 
   private void startNetworkingService() {
@@ -127,5 +128,30 @@ public class StartNetworkingServiceActivity extends Activity {
     }
 
     return filtered;
+  }
+
+  /* ---------------------------------------------
+   * implementation:
+   *   RuntimePermissionsListenerActivity
+   *
+   * Android 10+
+   *   SYSTEM_ALERT_WINDOW permission is needed to start Activities from the foreground Service.
+   *   see: https://developer.android.com/guide/components/activities/background-starts
+   * ---------------------------------------------
+   */
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    RuntimePermissionsMgr.onActivityResult(StartNetworkingServiceActivity.this, requestCode, resultCode, data);
+  }
+
+  @Override
+  public void onPermissionsGranted() {
+    finish();
+  }
+
+  @Override
+  public void onPermissionsDenied(String[] permissions) {
+    finish();
   }
 }
