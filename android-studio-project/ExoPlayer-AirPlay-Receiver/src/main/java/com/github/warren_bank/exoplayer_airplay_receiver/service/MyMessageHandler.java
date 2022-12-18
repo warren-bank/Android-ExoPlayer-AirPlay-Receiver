@@ -303,7 +303,10 @@ final class MyMessageHandler extends Handler {
       }
 
       case Constant.Msg.Msg_Show_Player : {
-        startVideoPlayerActivity(service);
+        boolean enterPipMode = ((msg.obj != null) && (msg.obj instanceof Boolean))
+          ? ((Boolean) msg.obj).booleanValue()
+          : false;
+        startVideoPlayerActivity(service, enterPipMode);
         break;
       }
 
@@ -592,14 +595,19 @@ final class MyMessageHandler extends Handler {
   private void startImageViewerActivity(NetworkingService service, byte[] pic) {
     Log.d(tag, "starting ImageViewerActivity");
     Intent intent = new Intent(service, ImageViewerActivity.class);
-    intent.putExtra("picture", pic);
+    intent.putExtra(Constant.Extra.RAW_IMAGE_DATA, pic);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     service.startActivity(intent);
   }
 
   private void startVideoPlayerActivity(NetworkingService service) {
-    Log.d(tag, "starting VideoPlayerActivity");
+    startVideoPlayerActivity(service, /* enterPipMode */ false);
+  }
+
+  private void startVideoPlayerActivity(NetworkingService service, boolean enterPipMode) {
+    Log.d(tag, "starting VideoPlayerActivity" + (enterPipMode ? " in PiP mode" : ""));
     Intent intent = new Intent(service, VideoPlayerActivity.class);
+    intent.putExtra(Constant.Extra.ENTER_PIP_MODE, enterPipMode);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     service.startActivity(intent);
   }

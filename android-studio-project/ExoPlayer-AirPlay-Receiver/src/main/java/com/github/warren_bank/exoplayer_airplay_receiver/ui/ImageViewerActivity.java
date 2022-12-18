@@ -1,5 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui;
 
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
@@ -42,7 +44,7 @@ public class ImageViewerActivity extends Activity {
     iv = (ImageView) findViewById(R.id.image_view);
     Intent intent = getIntent();
     if (intent != null) {
-      byte[] pic = intent.getByteArrayExtra("picture");
+      byte[] pic = intent.getByteArrayExtra(Constant.Extra.RAW_IMAGE_DATA);
       this.showImage(pic);
     }
   }
@@ -51,7 +53,7 @@ public class ImageViewerActivity extends Activity {
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
     if (intent != null) {
-      byte[] pic = intent.getByteArrayExtra("picture");
+      byte[] pic = intent.getByteArrayExtra(Constant.Extra.RAW_IMAGE_DATA);
       this.showImage(pic);
     }
   }

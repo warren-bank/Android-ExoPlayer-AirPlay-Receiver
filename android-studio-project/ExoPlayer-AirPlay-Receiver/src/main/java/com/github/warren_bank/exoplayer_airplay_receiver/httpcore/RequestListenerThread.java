@@ -896,6 +896,15 @@ public class RequestListenerThread extends Thread {
       else if (target.equals(Constant.Target.PLAYER_SHOW)) {
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Show_Player;
+        msg.obj = Boolean.FALSE; //enterPipMode
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (target.equals(Constant.Target.PLAYER_SHOW_PIP)) {
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Show_Player;
+        msg.obj = Boolean.TRUE; //enterPipMode
         MainApp.broadcastMessage(msg);
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);

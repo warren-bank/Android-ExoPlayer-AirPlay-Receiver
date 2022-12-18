@@ -405,7 +405,13 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/show-player"
   ```
-* hide the video player so it is no-longer the top-most foreground Activity:
+* show the video player in picture-in-picture (PiP) mode:
+  ```bash
+    # note: PiP mode is only available on Android TV 7.0 or Android 8.0 and higher
+    curl --silent -X GET \
+      "http://${airplay_ip}/show-player-pip"
+  ```
+* hide the video player so it is neither the top-most foreground Activity nor in PiP mode:
   ```bash
     # note: audio playback will continue in the background
     curl --silent -X GET \

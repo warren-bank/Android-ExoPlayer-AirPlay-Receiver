@@ -223,6 +223,7 @@ public class Constant {
 
         public static final String TOAST_SHOW                   = "/show-toast";
         public static final String PLAYER_SHOW                  = "/show-player";
+        public static final String PLAYER_SHOW_PIP              = "/show-player-pip";
         public static final String PLAYER_HIDE                  = "/hide-player";
         public static final String ACTIVITY_START               = "/start-activity";
         public static final String VIDEO_SHARE                  = "/share-video";
@@ -266,6 +267,14 @@ public class Constant {
         public static final String DRM_SCHEME                   = "drm_scheme";
         public static final String DRM_LICENSE_SERVER_URL       = "drm_license_server_url";
         public static final String DRM_REQUEST_HEADERS          = "drm_request_headers";
+    }
+
+    public interface Extra {
+        // .ui.ImageViewerActivity
+        public static final String RAW_IMAGE_DATA               = "picture";
+
+        // .ui.VideoPlayerActivity
+        public static final String ENTER_PIP_MODE               = "enterPipMode";
     }
 
 }

@@ -3,14 +3,20 @@ package com.github.warren_bank.exoplayer_airplay_receiver.ui;
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoActivity;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PipUtils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import androidx.annotation.RequiresApi;
 
 import java.lang.ref.WeakReference;
 
 public class VideoPlayerActivity extends VideoActivity {
+  private boolean isPipMode;
+  private boolean enterPipMode;
+
   private Handler handler;
 
   @Override
@@ -19,6 +25,24 @@ public class VideoPlayerActivity extends VideoActivity {
 
     handler = new VideoHandler(this);
     MainApp.registerHandler(VideoPlayerActivity.class.getName(), handler);
+
+    isPipMode = false;
+    processIntent(getIntent());
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    updatePictureInPictureMode(null);
+  }
+
+  @Override
+  public void onNewIntent (Intent intent) {
+    super.onNewIntent(intent);
+
+    processIntent(intent);
+    updatePictureInPictureMode(intent);
   }
 
   @Override
@@ -26,6 +50,28 @@ public class VideoPlayerActivity extends VideoActivity {
     super.onDestroy();
 
     MainApp.unregisterHandler(VideoPlayerActivity.class.getName());
+  }
+
+  @Override
+  @RequiresApi(24)
+  public void onPictureInPictureModeChanged (boolean isInPictureInPictureMode) {
+    super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+
+    isPipMode = isInPictureInPictureMode;
+  }
+
+  private void processIntent(Intent intent) {
+    enterPipMode = intent.getBooleanExtra(Constant.Extra.ENTER_PIP_MODE, false);
+  }
+
+  private void updatePictureInPictureMode(Intent intent) {
+    if (!isPipMode && enterPipMode) {
+      enterPipMode = false;
+      PipUtils.enterPictureInPictureMode(VideoPlayerActivity.this);
+    }
+    else if (isPipMode && !enterPipMode && (intent != null)) {
+      PipUtils.exitPictureInPictureMode(VideoPlayerActivity.this, intent);
+    }
   }
 
   private static class VideoHandler extends Handler {
