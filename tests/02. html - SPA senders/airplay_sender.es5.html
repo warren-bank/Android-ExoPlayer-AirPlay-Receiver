@@ -230,8 +230,9 @@ window.onload  = function() {
   var $toast_variables         = document.querySelector('select#toast_variables')
   var $show_toast              = document.querySelector('button#show_toast')
   var $image_file              = document.querySelector('input#image_file')
-  var $hide_player             = document.querySelector('button#hide_player')
   var $show_player             = document.querySelector('button#show_player')
+  var $show_player_pip         = document.querySelector('button#show_player_pip')
+  var $hide_player             = document.querySelector('button#hide_player')
   var $intent_data             = document.querySelector('textarea#intent_data')
   var $predefined_intent_data  = document.querySelector('select#predefined_intent_data')
   var $load_video_from_server  = document.querySelector('button#load_video_from_server')
@@ -973,21 +974,31 @@ window.onload  = function() {
     $image_file.value = null
   }
 
-  $hide_player.onclick = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-
-    var path = '/hide-player'
-    var data = null
-
-    send_message(path, data)
-  }
-
   $show_player.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
     var path = '/show-player'
+    var data = null
+
+    send_message(path, data)
+  }
+
+  $show_player_pip.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/show-player-pip'
+    var data = null
+
+    send_message(path, data)
+  }
+
+  $hide_player.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/hide-player'
     var data = null
 
     send_message(path, data)
@@ -1884,17 +1895,20 @@ window.onload  = function() {
       <div>
         <table align="center">
           <tr class="advanced_ui_mode">
-            <td colspan=2 align="center" class="oneline">
+            <td colspan=3 align="center" class="oneline">
               <button><label for="image_file">Display Image File&hellip;</label></button>
               <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
             </td>
           </tr>
           <tr>
             <td class="oneline fullwidth">
-              <button id="hide_player">Hide Player</button>
+              <button id="show_player">Show Player</button>
             </td>
             <td class="oneline fullwidth">
-              <button id="show_player">Show Player</button>
+              <button id="show_player_pip">Show PiP</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="hide_player">Hide Player</button>
             </td>
           </tr>
         </table>
