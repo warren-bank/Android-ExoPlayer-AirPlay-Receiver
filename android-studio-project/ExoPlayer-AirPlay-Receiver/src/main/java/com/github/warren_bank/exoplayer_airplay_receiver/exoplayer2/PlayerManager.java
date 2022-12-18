@@ -604,6 +604,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @param caption The URL to a file containing text captions (srt or vtt).
    */
   public void loadCaptions(String caption) {
+    if (exoPlayer == null)
+      return;
     if ((mediaQueue == null) || (concatenatingMediaSource == null))
       return;
     if (currentItemIndex == C.INDEX_UNSET)
@@ -1035,6 +1037,30 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    */
   public void AirPlay_add_captions_offset(long offset) {
     textSynchronizer.addTextOffset(offset);
+  }
+
+  /**
+   * Set the repeat mode of the ExoPlayer Player.
+   *
+   * @param repeatMode Integer constant:
+   *                   https://developer.android.com/reference/androidx/media3/common/Player.RepeatMode
+   */
+  public void AirPlay_repeat_mode(int repeatMode) {
+    if (exoPlayer == null) return;
+
+    exoPlayer.setRepeatMode(repeatMode);
+  }
+
+  /**
+   * Set the resize mode of the ExoPlayer PlayerView.
+   *
+   * @param resizeMode Integer constant:
+   *                   https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout.ResizeMode
+   */
+  public void AirPlay_resize_mode(int resizeMode) {
+    if (playerView == null) return;
+
+    playerView.setResizeMode(resizeMode);
   }
 
   /**

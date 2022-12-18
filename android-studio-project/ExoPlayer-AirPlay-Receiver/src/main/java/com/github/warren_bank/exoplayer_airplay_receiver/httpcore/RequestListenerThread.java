@@ -870,6 +870,104 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.startsWith(Constant.Target.REPEAT_MODE)) { //update repeat mode of media player
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!TextUtils.isEmpty(value)) {
+          try {
+            int repeatMode = -1;
+
+            // map from input value to the value of a supported integer constant
+            //   https://developer.android.com/reference/androidx/media3/common/Player#setRepeatMode(int)
+            //   https://developer.android.com/reference/androidx/media3/common/Player.RepeatMode
+
+            switch(value.toLowerCase()) {
+              case "off": {
+                // https://developer.android.com/reference/androidx/media3/common/Player#REPEAT_MODE_OFF()
+                repeatMode = 0;
+                break;
+              }
+              case "one": {
+                // https://developer.android.com/reference/androidx/media3/common/Player#REPEAT_MODE_ONE()
+                repeatMode = 1;
+                break;
+              }
+              case "all": {
+                // https://developer.android.com/reference/androidx/media3/common/Player#REPEAT_MODE_ALL()
+                repeatMode = 2;
+                break;
+              }
+            }
+
+            if (repeatMode != -1) {
+              Log.d(tag, "airplay repeat mode = " + repeatMode);
+
+              Message msg = Message.obtain();
+              msg.what = Constant.Msg.Msg_Repeat_Mode;
+              msg.obj = repeatMode;
+              MainApp.broadcastMessage(msg);
+            }
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (target.startsWith(Constant.Target.RESIZE_MODE)) { //update resize mode of video surface
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!TextUtils.isEmpty(value)) {
+          try {
+            int resizeMode = -1;
+
+            // map from input value to the value of a supported integer constant
+            //   https://developer.android.com/reference/androidx/media3/ui/PlayerView#setResizeMode(int)
+            //   https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout.ResizeMode
+
+            switch(value.toLowerCase()) {
+              case "fit": {
+                // https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout#RESIZE_MODE_FIT()
+                resizeMode = 0;
+                break;
+              }
+              case "width": {
+                // https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout#RESIZE_MODE_FIXED_WIDTH()
+                resizeMode = 1;
+                break;
+              }
+              case "height": {
+                // https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout#RESIZE_MODE_FIXED_HEIGHT()
+                resizeMode = 2;
+                break;
+              }
+              case "fill": {
+                // https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout#RESIZE_MODE_FILL()
+                resizeMode = 3;
+                break;
+              }
+              case "zoom": {
+                // https://developer.android.com/reference/androidx/media3/ui/AspectRatioFrameLayout#RESIZE_MODE_ZOOM()
+                resizeMode = 4;
+                break;
+              }
+            }
+
+            if (resizeMode != -1) {
+              Log.d(tag, "airplay resize mode = " + resizeMode);
+
+              Message msg = Message.obtain();
+              msg.what = Constant.Msg.Msg_Resize_Mode;
+              msg.obj = resizeMode;
+              MainApp.broadcastMessage(msg);
+            }
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (
         (entityContent != null) &&
         target.equals(Constant.Target.TOAST_SHOW)

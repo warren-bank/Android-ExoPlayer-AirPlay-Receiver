@@ -390,6 +390,18 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_Repeat_Mode : {
+        int repeatMode = (int) msg.obj;
+        playerManager.AirPlay_repeat_mode(repeatMode);
+        break;
+      }
+
+      case Constant.Msg.Msg_Resize_Mode : {
+        int resizeMode = (int) msg.obj;
+        playerManager.AirPlay_resize_mode(resizeMode);
+        break;
+      }
+
       // =======================================================================
       // Runtime Permissions:
       // =======================================================================

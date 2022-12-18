@@ -328,6 +328,18 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/set-captions-offset?value=0"
   ```
+* set repeat mode:
+  ```bash
+    # note: supported values: [off,one,all]. default: all
+    curl --silent -X GET \
+      "http://${airplay_ip}/repeat-mode?value=all"
+  ```
+* set resize mode:
+  ```bash
+    # note: supported values: [fit,width,height,fill,zoom]. default: fit
+    curl --silent -X GET \
+      "http://${airplay_ip}/resize-mode?value=fit"
+  ```
 * play audio .flac file (set 'Referer' request header, seek to 50%):
   ```bash
     # note: position < 1 is a percent of the total track length

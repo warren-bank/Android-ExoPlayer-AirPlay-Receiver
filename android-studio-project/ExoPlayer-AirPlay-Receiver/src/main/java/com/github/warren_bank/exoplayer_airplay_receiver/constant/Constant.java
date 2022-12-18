@@ -186,17 +186,19 @@ public class Constant {
         public static final int Msg_Text_Set_Style              = 13;
         public static final int Msg_Text_Set_Time               = 14;
         public static final int Msg_Text_Add_Time               = 15;
+        public static final int Msg_Repeat_Mode                 = 16;
+        public static final int Msg_Resize_Mode                 = 17;
 
-        public static final int Msg_Show_Toast                  = 16;
-        public static final int Msg_Show_Player                 = 17;
-        public static final int Msg_Hide_Player                 = 18;
-        public static final int Msg_Start_Activity              = 19;
-        public static final int Msg_Video_Share                 = 20;
-        public static final int Msg_Preferences_Edit            = 21;
-        public static final int Msg_Delete_Cache                = 22;
-        public static final int Msg_Exit_Service                = 23;
+        public static final int Msg_Show_Toast                  = 18;
+        public static final int Msg_Show_Player                 = 19;
+        public static final int Msg_Hide_Player                 = 20;
+        public static final int Msg_Start_Activity              = 21;
+        public static final int Msg_Video_Share                 = 22;
+        public static final int Msg_Preferences_Edit            = 23;
+        public static final int Msg_Delete_Cache                = 24;
+        public static final int Msg_Exit_Service                = 25;
 
-        public static final int Msg_Runtime_Permissions_Granted = 24;
+        public static final int Msg_Runtime_Permissions_Granted = 26;
     }
 
     public interface Target {
@@ -220,6 +222,8 @@ public class Constant {
         public static final String TXT_SET_STYLE                = "/set-captions-style";
         public static final String TXT_SET_OFFSET               = "/set-captions-offset";
         public static final String TXT_ADD_OFFSET               = "/add-captions-offset";
+        public static final String REPEAT_MODE                  = "/repeat-mode";
+        public static final String RESIZE_MODE                  = "/resize-mode";
 
         public static final String TOAST_SHOW                   = "/show-toast";
         public static final String PLAYER_SHOW                  = "/show-player";
