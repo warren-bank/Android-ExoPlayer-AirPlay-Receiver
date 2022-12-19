@@ -785,6 +785,14 @@ __extended APIs:__
     * supports YouTube playlists
     * casts the URL of the highest quality video format available to the receiver
 
+#### Other Tools (high level):
+
+* [_HTTP Shortcuts_ Android app](https://github.com/Waboodoo/HTTP-Shortcuts) that is open-source, and can be used to:
+  - configure shortcuts to make HTTP requests that target _ExoAirPlayer_ API endpoints
+
+* [_Sleep Timer_ Android app](https://play.google.com/store/apps/details?id=ch.pboos.android.SleepTimer) that is closed-source (requires purchase to remove ads), and can be used to:
+  - configure a timer that broadcasts an Intent to either pause or stop playback of _ExoAirPlayer_ (running on the same device) at the desired time
+
 - - - -
 
 #### Credits:
