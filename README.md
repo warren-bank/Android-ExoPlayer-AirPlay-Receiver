@@ -789,9 +789,13 @@ __extended APIs:__
 
 * [_HTTP Shortcuts_ Android app](https://github.com/Waboodoo/HTTP-Shortcuts) that is open-source, and can be used to:
   - configure shortcuts to make HTTP requests that target _ExoAirPlayer_ API endpoints
+  - user contribution:
+    * [configuration data file](./etc/3rd-party%20high-level%20client%20apps%20%5Buser%20contributions%5D/HTTP%20Shortcuts%20for%20Android/shortcuts.json) by [heinnovator](https://github.com/heinnovator)
 
 * [_Sleep Timer_ Android app](https://play.google.com/store/apps/details?id=ch.pboos.android.SleepTimer) that is closed-source (requires purchase to remove ads), and can be used to:
   - configure a timer that broadcasts an Intent to either pause or stop playback of _ExoAirPlayer_ (running on the same device) at the desired time
+  - pro tip:
+    * On sleep: Go to home screen, Send Stop Broadcast
 
 - - - -
 
