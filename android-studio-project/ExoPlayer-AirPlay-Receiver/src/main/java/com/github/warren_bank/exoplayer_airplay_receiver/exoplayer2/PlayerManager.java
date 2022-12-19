@@ -1096,6 +1096,23 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       // apply custom handler(s)
 
       switch(event.getKeyCode()) {
+
+        case KeyEvent.KEYCODE_MEDIA_PLAY : {
+          if (isPlayerReady() && !exoPlayer.getPlayWhenReady()) {
+            exoPlayer.setPlayWhenReady(true);
+            isHandled = true;
+          }
+          break;
+        }
+
+        case KeyEvent.KEYCODE_MEDIA_PAUSE : {
+          if (isPlayerReady() && exoPlayer.getPlayWhenReady()) {
+            exoPlayer.setPlayWhenReady(false);
+            isHandled = true;
+          }
+          break;
+        }
+
         case KeyEvent.KEYCODE_SPACE :
         case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE : {
           if (isPlayerReady()) {
@@ -1103,6 +1120,38 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
             exoPlayer.setPlayWhenReady( !exoPlayer.getPlayWhenReady() );
             isHandled = true;
           }
+          break;
+        }
+
+        case KeyEvent.KEYCODE_MEDIA_STOP : {
+          AirPlay_stop();
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_MEDIA_PREVIOUS : {
+          AirPlay_previous();
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_MEDIA_NEXT : {
+          AirPlay_next();
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_MEDIA_REWIND : {
+          long offsetMs = -5000l; // -5 seconds
+          AirPlay_add_scrub_offset(offsetMs);
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD : {
+          long offsetMs = 15000l; // +15 seconds
+          AirPlay_add_scrub_offset(offsetMs);
+          isHandled = true;
           break;
         }
 

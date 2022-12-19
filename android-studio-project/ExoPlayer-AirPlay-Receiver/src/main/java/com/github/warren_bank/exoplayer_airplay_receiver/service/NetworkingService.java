@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -337,6 +338,26 @@ public class NetworkingService extends Service implements RequestListenerThread.
           msg.obj  = map;
 
           handler.handleMessage(msg);
+        }
+        break;
+      }
+      case Intent.ACTION_MEDIA_BUTTON : {
+        if (intent.hasExtra(Intent.EXTRA_KEY_EVENT)) {
+          try {
+            KeyEvent keyEvent = (KeyEvent) intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+
+            if (keyEvent == null) {
+              int code = intent.getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
+              if (code >= 0) {
+                keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, code);
+              }
+            }
+
+            if ((keyEvent != null) && (playerManager != null)) {
+              playerManager.dispatchKeyEvent(keyEvent);
+            }
+          }
+          catch(Exception e) {}
         }
         break;
       }
