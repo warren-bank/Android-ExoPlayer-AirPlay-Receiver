@@ -94,6 +94,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private RtmpDataSource.Factory rtmpDataSourceFactory;
   private DownloadTracker downloadTracker;
   private float audioVolume;
+  private boolean captionsDisabled;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
   private Handler handler;
@@ -182,6 +183,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     );
 
     this.audioVolume             = 1.0f;
+    this.captionsDisabled        = false;
     this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
     this.currentItemIndex        = C.INDEX_UNSET;
     this.handler                 = new Handler(Looper.getMainLooper());
@@ -959,7 +961,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_show_captions(boolean showCaptions) {
     if (exoPlayer == null) return;
 
-    boolean isDisabled = !showCaptions;
+    captionsDisabled = !showCaptions;
 
     DefaultTrackSelector.Parameters.Builder builder = trackSelector.getParameters().buildUpon();
 
@@ -971,13 +973,17 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     for (int i = 0; i < renderer_count; i++) {
       if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_TEXT) {
         builder.clearSelectionOverrides(/* rendererIndex= */ i);
-        builder.setRendererDisabled(/* rendererIndex= */ i, isDisabled);
+        builder.setRendererDisabled(/* rendererIndex= */ i, captionsDisabled);
         modified_count++;
       }
     }
 
     if (modified_count > 0)
       trackSelector.setParameters(builder.build());
+  }
+
+  public void AirPlay_toggle_captions() {
+    AirPlay_show_captions(/* showCaptions= */ captionsDisabled);
   }
 
   /**
@@ -1063,6 +1069,17 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     playerView.setResizeMode(resizeMode);
   }
 
+  public void AirPlay_toggle_resize_mode() {
+    if (playerView == null) return;
+
+    int resizeMode = playerView.getResizeMode();
+
+    // 0=fit,1=width,2=height,3=fill,4=zoom
+    resizeMode = (resizeMode + 1) % 5;
+
+    playerView.setResizeMode(resizeMode);
+  }
+
   /**
    * Delete files on internal storage used to temporarily cache video data.
    * Cancel all active and pending cache download operations.
@@ -1114,6 +1131,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
         }
 
         case KeyEvent.KEYCODE_SPACE :
+        case KeyEvent.KEYCODE_HEADSETHOOK :
         case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE : {
           if (isPlayerReady()) {
             // toggle pause
@@ -1151,6 +1169,18 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD : {
           long offsetMs = 15000l; // +15 seconds
           AirPlay_add_scrub_offset(offsetMs);
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_CAPTIONS : {
+          AirPlay_toggle_captions();
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_TV_ZOOM_MODE : {
+          AirPlay_toggle_resize_mode();
           isHandled = true;
           break;
         }

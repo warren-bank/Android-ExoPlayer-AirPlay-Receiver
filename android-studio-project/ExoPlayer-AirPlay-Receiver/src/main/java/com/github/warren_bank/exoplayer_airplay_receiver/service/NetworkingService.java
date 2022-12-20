@@ -353,8 +353,39 @@ public class NetworkingService extends Service implements RequestListenerThread.
               }
             }
 
-            if ((keyEvent != null) && (playerManager != null)) {
-              playerManager.dispatchKeyEvent(keyEvent);
+            if (keyEvent != null) {
+              boolean isHandled = false;
+
+              if (!isHandled && (playerManager != null))
+                isHandled = playerManager.dispatchKeyEvent(keyEvent);
+
+              if (!isHandled) {
+                switch(keyEvent.getKeyCode()) {
+
+                  case KeyEvent.KEYCODE_TV_POWER : {
+                    Message msg = Message.obtain();
+                    msg.what = Constant.Msg.Msg_Exit_Service;
+                    MainApp.broadcastMessage(msg);
+                    isHandled = true;
+                    break;
+                  }
+
+                  case KeyEvent.KEYCODE_WINDOW : {
+                    if (VideoPlayerActivity.isVisible) {
+                      boolean enterPipMode = !VideoPlayerActivity.isPipMode;
+                      Log.d(tag, "restarting VideoPlayerActivity" + (enterPipMode ? " in PiP mode" : ""));
+
+                      Intent intent2 = new Intent(NetworkingService.this, VideoPlayerActivity.class);
+                      intent2.putExtra(Constant.Extra.ENTER_PIP_MODE, enterPipMode);
+                      intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                      startActivity(intent2);
+                      isHandled = true;
+                    }
+                    break;
+                  }
+
+                }
+              }
             }
           }
           catch(Exception e) {}

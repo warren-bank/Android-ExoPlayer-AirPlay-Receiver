@@ -14,7 +14,8 @@ import androidx.annotation.RequiresApi;
 import java.lang.ref.WeakReference;
 
 public class VideoPlayerActivity extends VideoActivity {
-  private boolean isPipMode;
+  public static boolean isPipMode = false;
+
   private boolean enterPipMode;
 
   private Handler handler;
@@ -26,7 +27,6 @@ public class VideoPlayerActivity extends VideoActivity {
     handler = new VideoHandler(this);
     MainApp.registerHandler(VideoPlayerActivity.class.getName(), handler);
 
-    isPipMode = false;
     processIntent(getIntent());
   }
 
