@@ -1,7 +1,7 @@
 #### [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
 ##### (less formally named: _"ExoAirPlayer"_)
 
-Android app to run on a set-top box and play video URLs "cast" to it with a stateless HTTP API (based on AirPlay).
+Android app to run on a set-top box and play video URLs "cast" to it with a stateless HTTP API (based on AirPlay v1).
 
 - - - -
 
@@ -69,7 +69,7 @@ Nested extension(s) can optionally be used to distinguish between [different lan
 * the goal is __not__ to provide an app that is recognized on the LAN as a virtual Chromecast device
   - [CheapCast](https://github.com/mauimauer/cheapcast) accomplished this in 2013
     * Google quickly [changed its protocol](https://blog.oakbits.com/google-cast-protocol-discovery-and-connection.html)
-* AirPlay uses a very simple stateless [HTTP API](http://nto.github.io/AirPlay.html#video)
+* AirPlay v1 uses a very simple stateless [HTTP API](http://nto.github.io/AirPlay.html#video)
   - this is a great starting point
     * it supports: play, pause, seek, stop
   - I'd like to extend this API (for a custom sender)
@@ -84,13 +84,13 @@ Nested extension(s) can optionally be used to distinguish between [different lan
 * [HttpCore](http://hc.apache.org/httpcomponents-core-ga/)
   - low level HTTP transport components used to build a custom HTTP service
 * [jmDNS](https://github.com/jmdns/jmdns)
-  - multi-cast DNS service registration used to make AirPlay-compatible HTTP service discoverable on LAN
+  - multi-cast DNS service registration used to make the AirPlay v1 compatible HTTP service discoverable on LAN
 
 - - - -
 
 #### Usage (low level):
 
-__AirPlay APIs:__
+__AirPlay v1 compatible APIs:__
 
 ```bash
   # network address for running instance of 'ExoPlayer AirPlay Receiver'
@@ -744,7 +744,7 @@ __extended APIs:__
       - automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
 
 * [_Toaster Cast_ Android app](https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer) that can be used to:
-  - discover AirPlay receivers on the same LAN
+  - discover AirPlay v1 receivers on the same LAN
   - discover DLNA media servers on the same LAN
     * optionally, runs a local DLNA media server
     * browse media on all servers
@@ -753,14 +753,14 @@ __extended APIs:__
 * [_WebTorrent Desktop_ app](https://github.com/webtorrent/webtorrent-desktop) (for Windows, Mac, Linux) that is open-source, and can be used to:
   - download videos from a p2p network
     * supports connections to peers using both BitTorrent (TCP) and WebTorrent (WebRTC)
-  - discover AirPlay receivers on the same LAN
+  - discover AirPlay v1 receivers on the same LAN
   - stream videos that are fully or partially downloaded
     * runs a local web server
     * casts the URL of the video to the receiver
     * serves the video file when requested by the receiver
 
 * [_DroidPlay_ Android app](https://github.com/tutikka/DroidPlay) that is open-source, and can be used to:
-  - discover AirPlay receivers on the same LAN
+  - discover AirPlay v1 receivers on the same LAN
   - display images from the local file system
     * sends the entire file in POST data to the receiver
   - stream videos from the local file system
@@ -769,18 +769,18 @@ __extended APIs:__
     * serves the video file when requested by the receiver
 
 * [fork of: _DroidPlay_ Android app](https://github.com/warren-bank/Android-AirPlay-Client) that is open-source, and can additionally be used to:
-  - mirror the screen to an AirPlay receiver
+  - mirror the screen to an AirPlay v1 receiver
     * only available on Android 5.0 and higher
 
 * [_airplay_ desktop app](https://github.com/zeppelsoftware/airplay) (for Java JRE) that is open-source, and can be used to:
-  - mirror the screen to an AirPlay receiver
+  - mirror the screen to an AirPlay v1 receiver
     ```bash
       airplay_ip='192.168.1.100:8192'
       java -jar "airplay.jar" -h "$airplay_ip" -d
     ```
 
 * [_exoairtube_ desktop app](https://github.com/warren-bank/node-ExoAirPlayer-YouTube-sender) (for Node.js) that is open-source, and can be used to:
-  - discover AirPlay receivers on the same LAN
+  - discover AirPlay v1 receivers on the same LAN
   - stream videos hosted by YouTube
     * supports YouTube playlists
     * casts the URL of the highest quality video format available to the receiver
@@ -792,10 +792,23 @@ __extended APIs:__
   - user contribution:
     * [configuration data file](./etc/3rd-party%20high-level%20client%20apps%20%5Buser%20contributions%5D/HTTP%20Shortcuts%20for%20Android/shortcuts.json) by [heinnovator](https://github.com/heinnovator)
 
-* [_Sleep Timer_ Android app](https://play.google.com/store/apps/details?id=ch.pboos.android.SleepTimer) that is closed-source (requires purchase to remove ads), and can be used to:
-  - configure a timer that broadcasts an Intent to either pause or stop playback of _ExoAirPlayer_ (running on the same device) at the desired time
-  - pro tip:
-    * On sleep: Go to home screen, Send Stop Broadcast
+* [_Bookmarks_ Android app](https://github.com/warren-bank/Android-Bookmarks) that is open-source, and can be used to:
+  - configure [_Intents_](https://developer.android.com/reference/android/content/Intent) that broadcast [media key events](https://developer.android.com/reference/android/view/KeyEvent) to _ExoAirPlayer_&hellip; running on the same device
+    * example: _stop_
+      - action = `android.intent.action.MEDIA_BUTTON`
+      - extra:
+        * name = `android.intent.extra.KEY_EVENT`
+        * type = `int`
+        * value = [`86`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_MEDIA_STOP)
+  - broadcast any such bookmarked _Intent_ by either:
+    * triggering manually
+      - long click on the chosen _Intent_ to open its context menu
+      - select: _Perform&hellip;_ &gt; _Send Broadcast_
+    * scheduling an alarm
+      - long click on the chosen _Intent_ to open its context menu
+      - select: _Schedule&hellip;_
+        * Perform = _Send Broadcast_
+        * configure other settings: date, time, interval, precision, etc&hellip;
 
 - - - -
 
