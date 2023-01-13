@@ -407,7 +407,13 @@ final class MyMessageHandler extends Handler {
       // =======================================================================
 
       case Constant.Msg.Msg_Runtime_Permissions_Granted : {
-        handleExternalStorageMessages();
+        int requestCode = (int) msg.obj;
+        switch(requestCode) {
+          case Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE : {
+            handleExternalStorageMessages();
+            break;
+          }
+        }
         break;
       }
 
@@ -624,9 +630,10 @@ final class MyMessageHandler extends Handler {
     service.startActivity(intent);
   }
 
-  private void startRuntimePermissionsRequestActivity(NetworkingService service) {
+  private void startRuntimePermissionsRequestActivity(NetworkingService service, int requestCode) {
     Log.d(tag, "starting RuntimePermissionsRequestActivity");
     Intent intent = new Intent(service, RuntimePermissionsRequestActivity.class);
+    intent.putExtra(Constant.Extra.PERMISSION_REQUEST_CODE, requestCode);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     service.startActivity(intent);
   }
@@ -747,7 +754,7 @@ final class MyMessageHandler extends Handler {
 
     if (requiresPermission) {
       externalStorageMessages.add(msg);
-      startRuntimePermissionsRequestActivity(service);
+      startRuntimePermissionsRequestActivity(service, Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE);
     }
     return requiresPermission;
   }

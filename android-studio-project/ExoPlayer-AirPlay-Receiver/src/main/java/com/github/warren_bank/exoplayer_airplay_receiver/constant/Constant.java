@@ -279,6 +279,16 @@ public class Constant {
 
         // .ui.VideoPlayerActivity
         public static final String ENTER_PIP_MODE               = "enterPipMode";
+
+        // .ui.RuntimePermissionsRequestActivity
+        public static final String PERMISSION_REQUEST_CODE      = "requestCode";
+    }
+
+    public interface PermissionRequestCode {
+        public static final int POST_NOTIFICATIONS              = 1;
+        public static final int READ_EXTERNAL_STORAGE           = 2;
+        public static final int MANAGE_EXTERNAL_STORAGE         = 3;
+        public static final int DRAW_OVERLAY                    = 4;
     }
 
 }

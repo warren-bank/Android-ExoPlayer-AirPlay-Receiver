@@ -12,7 +12,12 @@
     <!-- GET_TASKS: used to interpolate "{{top-activity}}" in "/show-toast" text, which is only supported by Android < 5.0 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <!-- SYSTEM_ALERT_WINDOW: required by Android >= 10 to start an Activity from the foreground Service. see: https://developer.android.com/guide/components/activities/background-starts -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -27,7 +32,9 @@
         android:allowBackup="false"
         android:supportsRtl="false">
 
-        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -35,6 +42,7 @@
 
         <service
             android:name=".service.NetworkingService"
+            android:foregroundServiceType="dataSync|mediaPlayback"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -44,6 +52,7 @@
 
         <service
             android:name=".exoplayer2.customizations.MyDownloadService"
+            android:foregroundServiceType="dataSync"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -55,6 +64,7 @@
         <service
             android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
             android:permission="android.permission.BIND_JOB_SERVICE"
+            android:foregroundServiceType="dataSync"
             android:enabled="true"
             android:exported="true" />
 

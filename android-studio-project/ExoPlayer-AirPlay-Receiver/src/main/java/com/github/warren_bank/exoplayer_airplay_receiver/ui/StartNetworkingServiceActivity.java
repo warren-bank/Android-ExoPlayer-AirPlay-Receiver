@@ -5,8 +5,9 @@ import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.RuntimePermissionsMgr;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.RuntimePermissionUtils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -14,25 +15,73 @@ import android.os.Bundle;
 
 import java.io.File;
 
-public class StartNetworkingServiceActivity extends RuntimePermissionsListenerActivity {
+public class StartNetworkingServiceActivity extends Activity implements RuntimePermissionUtils.RuntimePermissionListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (!NetworkUtils.isWifiConnected(MainApp.getInstance())) {
-      finish();
-      return;
-    }
+    if (NetworkUtils.isWifiConnected(MainApp.getInstance()))
+      requestPermissions();
 
-    startNetworkingService();
-    RuntimePermissionsMgr.onPermissionsGranted(StartNetworkingServiceActivity.this);
+    finish();
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    RuntimePermissionUtils.onRequestPermissionsResult(StartNetworkingServiceActivity.this, requestCode, permissions, grantResults);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    RuntimePermissionUtils.onActivityResult(StartNetworkingServiceActivity.this, requestCode, resultCode, data);
+  }
+
+  // ---------------------------------------------------------------------------
+  // implementation: RuntimePermissionUtils.RuntimePermissionListener
+
+  public void onRequestPermissionsGranted(int requestCode, Object passthrough) {
+    switch(requestCode) {
+      case Constant.PermissionRequestCode.POST_NOTIFICATIONS : {
+        startNetworkingService();
+        break;
+      }
+    }
+  }
+
+  public void onRequestPermissionsDenied(int requestCode, Object passthrough, String[] missingPermissions) {
+    switch(requestCode) {
+      case Constant.PermissionRequestCode.POST_NOTIFICATIONS : {
+        // though not recommended, a foreground service can be started with a hidden notification
+        startNetworkingService();
+        break;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // internal
+
+  private void requestPermissions() {
+    int requestCode;
+
+    requestCode = Constant.PermissionRequestCode.POST_NOTIFICATIONS;
+    RuntimePermissionUtils.requestPermissions(StartNetworkingServiceActivity.this, StartNetworkingServiceActivity.this, requestCode);
+
+    requestCode = Constant.PermissionRequestCode.DRAW_OVERLAY;
+    if (RuntimePermissionUtils.hasDrawOverlayPermissions(StartNetworkingServiceActivity.this))
+      onRequestPermissionsGranted(requestCode, null);
+    else
+      RuntimePermissionUtils.showDrawOverlayPermissions(StartNetworkingServiceActivity.this, requestCode);
   }
 
   private void startNetworkingService() {
     Intent intent = new Intent(getApplicationContext(), NetworkingService.class);
     forwardMedia(intent);
     MainApp.getInstance().startService(intent);
-    finish();
   }
 
   private void forwardMedia(Intent newIntent) {
@@ -128,30 +177,5 @@ public class StartNetworkingServiceActivity extends RuntimePermissionsListenerAc
     }
 
     return filtered;
-  }
-
-  /* ---------------------------------------------
-   * implementation:
-   *   RuntimePermissionsListenerActivity
-   *
-   * Android 10+
-   *   SYSTEM_ALERT_WINDOW permission is needed to start Activities from the foreground Service.
-   *   see: https://developer.android.com/guide/components/activities/background-starts
-   * ---------------------------------------------
-   */
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    RuntimePermissionsMgr.onActivityResult(StartNetworkingServiceActivity.this, requestCode, resultCode, data);
-  }
-
-  @Override
-  public void onPermissionsGranted() {
-    finish();
-  }
-
-  @Override
-  public void onPermissionsDenied(String[] permissions) {
-    finish();
   }
 }

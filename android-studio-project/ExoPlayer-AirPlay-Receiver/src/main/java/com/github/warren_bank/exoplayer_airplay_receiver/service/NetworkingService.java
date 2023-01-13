@@ -284,7 +284,11 @@ public class NetworkingService extends Service implements RequestListenerThread.
     Intent intent = new Intent(NetworkingService.this, NetworkingService.class);
     intent.setAction(ACTION_STOP);
 
-    return PendingIntent.getService(NetworkingService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+    if (Build.VERSION.SDK_INT >= 23)
+      flags |= PendingIntent.FLAG_IMMUTABLE;
+
+    return PendingIntent.getService(NetworkingService.this, 0, intent, flags);
   }
 
   private String getNetworkAddress() {

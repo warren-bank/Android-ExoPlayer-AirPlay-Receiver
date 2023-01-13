@@ -1,6 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 
 import android.Manifest;
 import android.app.Activity;
@@ -129,32 +129,9 @@ public class ExternalStorageUtils {
     }
   }
 
+  // convenience method
   public static boolean has_permission(Context context) {
-    if (Build.VERSION.SDK_INT < 23) {
-      return true;
-    } else {
-      String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-
-      return (context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
-    }
-  }
-
-  private static int get_request_code(Context context) {
-    return ResourceUtils.getInteger(context, R.integer.PERMISSION_REQUEST_CODE_READ_EXTERNAL_STORAGE);
-  }
-
-  public static void request_permission(Activity activity) {
-    String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-
-    activity.requestPermissions(new String[]{permission}, get_request_code(activity));
-  }
-
-  public static boolean is_permission_granted(Activity activity, int requestCode, int[] grantResults) {
-    return (
-         (requestCode == get_request_code(activity))
-      && (grantResults.length == 1)
-      && (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-    );
+    return RuntimePermissionUtils.hasAllPermissions(context, Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE);
   }
 
 }

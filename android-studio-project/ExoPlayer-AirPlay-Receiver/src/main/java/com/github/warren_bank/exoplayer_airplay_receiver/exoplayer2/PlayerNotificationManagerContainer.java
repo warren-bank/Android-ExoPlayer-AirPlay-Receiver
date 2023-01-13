@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 
 import java.net.URI;
 
@@ -51,7 +52,8 @@ public class PlayerNotificationManagerContainer {
           Intent intent = new Intent(context, pendingIntentActivityClass);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-          PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+          int flags = (Build.VERSION.SDK_INT >= 23) ? PendingIntent.FLAG_IMMUTABLE : 0;
+          PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, flags);
           return pendingIntent;
         }
 
