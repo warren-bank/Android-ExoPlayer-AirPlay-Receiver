@@ -6,13 +6,12 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
 import android.support.v4.media.session.MediaSessionCompat;
+import androidx.annotation.Nullable;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaSession;
 import androidx.media3.ui.PlayerNotificationManager;
 import androidx.media3.ui.PlayerNotificationManager.BitmapCallback;
 import androidx.media3.ui.PlayerNotificationManager.MediaDescriptionAdapter;
-
-import androidx.annotation.Nullable;
 
 import android.app.PendingIntent;
 import android.content.Context;

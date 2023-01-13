@@ -1,11 +1,11 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
 
-import android.util.Log;
-
 import androidx.media3.common.C;
 import androidx.media3.datasource.HttpDataSource.HttpDataSourceException;
 import androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy;
 import androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy;
+
+import android.util.Log;
 
 import java.io.IOException;
 

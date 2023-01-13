@@ -3,14 +3,13 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoSource;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.app.NotificationCompat;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.NotificationUtil;
 import androidx.media3.ui.PlayerNotificationManager;
 import androidx.media3.ui.PlayerNotificationManager.MediaDescriptionAdapter;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.core.app.NotificationCompat;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -9,7 +9,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 
-import android.content.Context;
 import androidx.media3.database.DatabaseProvider;
 import androidx.media3.database.StandaloneDatabaseProvider;
 import androidx.media3.datasource.DataSource;
@@ -24,6 +23,8 @@ import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.RenderersFactory;
 import androidx.media3.exoplayer.offline.DownloadManager;
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper;
+
+import android.content.Context;
 
 import java.io.File;
 import java.net.CookieHandler;

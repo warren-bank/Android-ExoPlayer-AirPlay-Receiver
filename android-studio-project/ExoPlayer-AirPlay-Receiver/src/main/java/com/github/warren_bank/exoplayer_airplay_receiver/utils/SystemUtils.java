@@ -1,13 +1,11 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
-import android.content.Context;
-import android.os.Build;
-
-import android.os.PowerManager;
-import android.hardware.display.DisplayManager;
-import android.view.Display;
-
 import android.app.ActivityManager;
+import android.content.Context;
+import android.hardware.display.DisplayManager;
+import android.os.Build;
+import android.os.PowerManager;
+import android.view.Display;
 
 public class SystemUtils {
 

@@ -11,10 +11,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import static androidx.media3.common.util.Assertions.checkNotNull;
 import static androidx.media3.common.util.Assertions.checkStateNotNull;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -39,6 +35,12 @@ import androidx.media3.exoplayer.offline.DownloadRequest;
 import androidx.media3.exoplayer.offline.DownloadService;
 import androidx.media3.exoplayer.source.TrackGroupArray;
 import androidx.media3.exoplayer.trackselection.MappingTrackSelector.MappedTrackInfo;
+
+import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArraySet;

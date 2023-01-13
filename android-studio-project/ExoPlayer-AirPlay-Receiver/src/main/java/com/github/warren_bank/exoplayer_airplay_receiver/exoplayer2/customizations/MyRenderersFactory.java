@@ -7,11 +7,13 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
 
-import android.content.Context;
-import android.os.Looper;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.Renderer;
 import androidx.media3.exoplayer.text.TextOutput;
+
+import android.content.Context;
+import android.os.Looper;
+
 import java.util.ArrayList;
 
 public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer {

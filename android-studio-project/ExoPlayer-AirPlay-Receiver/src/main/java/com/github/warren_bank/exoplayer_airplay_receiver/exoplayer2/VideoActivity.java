@@ -10,7 +10,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.media3.common.util.RepeatModeUtil;
 import androidx.media3.ui.PlayerView;
 

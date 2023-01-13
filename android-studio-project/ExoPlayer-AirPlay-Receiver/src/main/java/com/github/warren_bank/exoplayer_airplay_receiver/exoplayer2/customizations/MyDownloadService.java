@@ -11,8 +11,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
-import android.app.Notification;
-import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media3.common.util.NotificationUtil;
@@ -24,6 +22,10 @@ import androidx.media3.exoplayer.offline.DownloadService;
 import androidx.media3.exoplayer.scheduler.PlatformScheduler;
 import androidx.media3.exoplayer.scheduler.Requirements;
 import androidx.media3.exoplayer.scheduler.Scheduler;
+
+import android.app.Notification;
+import android.content.Context;
+
 import java.util.List;
 
 /** A service for downloading media. */

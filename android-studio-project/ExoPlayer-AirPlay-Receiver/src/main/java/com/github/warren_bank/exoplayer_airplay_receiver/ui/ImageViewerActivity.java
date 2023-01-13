@@ -1,8 +1,9 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.ui;
 
+import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
-
-import java.lang.ref.WeakReference;
+import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,10 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.R;
-import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
-import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
-import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
+import java.lang.ref.WeakReference;
 
 public class ImageViewerActivity extends Activity {
   private static final String tag = ImageViewerActivity.class.getSimpleName();

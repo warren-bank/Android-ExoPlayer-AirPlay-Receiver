@@ -1,7 +1,5 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
-import java.net.Socket;
-
 import org.apache.http.HttpRequestFactory;
 import org.apache.http.impl.DefaultHttpServerConnection;
 import org.apache.http.impl.io.HttpRequestParser;
@@ -10,6 +8,8 @@ import org.apache.http.io.SessionInputBuffer;
 import org.apache.http.params.HttpParams;
 
 import android.util.Log;
+
+import java.net.Socket;
 
 public class MyHttpServerConnection extends DefaultHttpServerConnection {
 

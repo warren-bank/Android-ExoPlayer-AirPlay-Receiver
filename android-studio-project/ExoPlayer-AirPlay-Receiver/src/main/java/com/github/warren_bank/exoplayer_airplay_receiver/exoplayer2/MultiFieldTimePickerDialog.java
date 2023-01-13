@@ -1,8 +1,15 @@
+package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
+
+/*
+ * Based on:
+ *   https://github.com/chromium/chromium/raw/80.0.3987.137/content/public/android/java/src/org/chromium/content/browser/picker/MultiFieldTimePickerDialog.java
+ *   https://github.com/chromium/chromium/raw/80.0.3987.137/content/public/android/java/src/org/chromium/content/browser/picker/InputDialogContainer.java
+ *   https://github.com/chromium/chromium/raw/80.0.3987.137/content/public/android/java/res/layout/multi_field_time_picker_dialog.xml
+ */
+
 // Copyright 2013 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 

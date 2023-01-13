@@ -10,19 +10,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 
-import android.content.Context;
-import android.media.audiofx.LoudnessEnhancer;
-import android.media.AudioManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Process;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import androidx.annotation.Nullable;
-
 import androidx.media3.common.C;
 import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
@@ -59,6 +47,18 @@ import androidx.media3.extractor.ts.DefaultTsPayloadReaderFactory;
 import androidx.media3.extractor.ts.TsExtractor;
 import androidx.media3.ui.PlayerView;
 import androidx.media3.ui.SubtitleView;
+
+import android.content.Context;
+import android.media.audiofx.LoudnessEnhancer;
+import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Process;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import org.json.JSONObject;
 

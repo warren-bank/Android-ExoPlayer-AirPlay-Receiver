@@ -1,14 +1,14 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
-import java.util.HashMap;
-
-import android.util.Log;
-
 import com.dd.plist.NSDictionary;
 import com.dd.plist.NSNumber;
 import com.dd.plist.NSObject;
 import com.dd.plist.NSString;
 import com.dd.plist.PropertyListParser;
+
+import android.util.Log;
+
+import java.util.HashMap;
 
 public class BplistParser {
   private static final String tag = BplistParser.class.getSimpleName();

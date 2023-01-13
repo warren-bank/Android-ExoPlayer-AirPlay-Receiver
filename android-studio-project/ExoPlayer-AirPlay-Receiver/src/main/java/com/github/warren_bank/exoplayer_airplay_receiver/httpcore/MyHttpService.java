@@ -1,7 +1,5 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
-import java.io.IOException;
-
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -28,6 +26,8 @@ import org.apache.http.protocol.HttpRequestHandlerResolver;
 import org.apache.http.util.EncodingUtils;
 
 import android.util.Log;
+
+import java.io.IOException;
 
 public class MyHttpService {
   private static final String tag = MyHttpService.class.getSimpleName();
