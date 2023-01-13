@@ -24,6 +24,8 @@ public class VideoPlayerActivity extends VideoActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    isPipMode = false;
+
     handler = new VideoHandler(this);
     MainApp.registerHandler(VideoPlayerActivity.class.getName(), handler);
 
@@ -49,6 +51,8 @@ public class VideoPlayerActivity extends VideoActivity {
   protected void onDestroy() {
     super.onDestroy();
 
+    isPipMode = false;
+
     MainApp.unregisterHandler(VideoPlayerActivity.class.getName());
   }
 
@@ -70,6 +74,7 @@ public class VideoPlayerActivity extends VideoActivity {
       PipUtils.enterPictureInPictureMode(VideoPlayerActivity.this);
     }
     else if (isPipMode && !enterPipMode && (intent != null)) {
+      isPipMode = false;
       PipUtils.exitPictureInPictureMode(VideoPlayerActivity.this, intent);
     }
   }
