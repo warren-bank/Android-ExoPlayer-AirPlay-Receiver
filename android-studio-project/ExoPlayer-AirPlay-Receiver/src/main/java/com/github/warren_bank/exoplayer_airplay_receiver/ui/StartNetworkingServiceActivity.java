@@ -16,14 +16,16 @@ import android.os.Bundle;
 import java.io.File;
 
 public class StartNetworkingServiceActivity extends Activity implements RuntimePermissionUtils.RuntimePermissionListener {
+  private int requestCount;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     if (NetworkUtils.isWifiConnected(MainApp.getInstance()))
       requestPermissions();
-
-    finish();
+    else
+      finish();
   }
 
   @Override
@@ -44,15 +46,22 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   // implementation: RuntimePermissionUtils.RuntimePermissionListener
 
   public void onRequestPermissionsGranted(int requestCode, Object passthrough) {
+    requestCount--;
+
     switch(requestCode) {
       case Constant.PermissionRequestCode.POST_NOTIFICATIONS : {
         startNetworkingService();
         break;
       }
     }
+
+    if (requestCount <= 0)
+      finish();
   }
 
   public void onRequestPermissionsDenied(int requestCode, Object passthrough, String[] missingPermissions) {
+    requestCount--;
+
     switch(requestCode) {
       case Constant.PermissionRequestCode.POST_NOTIFICATIONS : {
         // though not recommended, a foreground service can be started with a hidden notification
@@ -60,6 +69,9 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
         break;
       }
     }
+
+    if (requestCount <= 0)
+      finish();
   }
 
   // ---------------------------------------------------------------------------
@@ -68,9 +80,13 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   private void requestPermissions() {
     int requestCode;
 
+    requestCount = 0;
+
+    requestCount++;
     requestCode = Constant.PermissionRequestCode.POST_NOTIFICATIONS;
     RuntimePermissionUtils.requestPermissions(StartNetworkingServiceActivity.this, StartNetworkingServiceActivity.this, requestCode);
 
+    requestCount++;
     requestCode = Constant.PermissionRequestCode.DRAW_OVERLAY;
     if (RuntimePermissionUtils.hasDrawOverlayPermissions(StartNetworkingServiceActivity.this))
       onRequestPermissionsGranted(requestCode, null);

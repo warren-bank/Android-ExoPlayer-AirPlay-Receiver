@@ -30,19 +30,23 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
 
     if (requestCode >= 0)
       processRequestCode(requestCode);
-
-    finish();
+    else
+      finish();
   }
 
   private void processRequestCode(int requestCode) {
     switch(requestCode) {
       case Constant.PermissionRequestCode.MANAGE_EXTERNAL_STORAGE : {
-        if (!RuntimePermissionUtils.hasFilePermissions())
+        if (RuntimePermissionUtils.hasFilePermissions())
+          finish();
+        else
           RuntimePermissionUtils.showFilePermissions(RuntimePermissionsRequestActivity.this, requestCode);
         break;
       }
       case Constant.PermissionRequestCode.DRAW_OVERLAY : {
-        if (!RuntimePermissionUtils.hasDrawOverlayPermissions(RuntimePermissionsRequestActivity.this))
+        if (RuntimePermissionUtils.hasDrawOverlayPermissions(RuntimePermissionsRequestActivity.this))
+          finish();
+        else
           RuntimePermissionUtils.showDrawOverlayPermissions(RuntimePermissionsRequestActivity.this, requestCode);
         break;
       }
@@ -78,9 +82,12 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
 
     if (requestCode == Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE)
       processRequestCode(Constant.PermissionRequestCode.MANAGE_EXTERNAL_STORAGE);
+    else
+      finish();
   }
 
   public void onRequestPermissionsDenied(int requestCode, Object passthrough, String[] missingPermissions) {
+    finish();
   }
 
 }
