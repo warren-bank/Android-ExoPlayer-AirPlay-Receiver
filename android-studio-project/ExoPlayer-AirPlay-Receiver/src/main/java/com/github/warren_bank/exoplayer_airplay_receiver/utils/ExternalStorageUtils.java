@@ -131,7 +131,7 @@ public class ExternalStorageUtils {
 
   // convenience method
   public static boolean has_permission(Context context) {
-    return RuntimePermissionUtils.hasAllPermissions(context, Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE);
+    return RuntimePermissionUtils.hasAllPermissions(context, Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE) && RuntimePermissionUtils.hasFilePermissions();
   }
 
 }

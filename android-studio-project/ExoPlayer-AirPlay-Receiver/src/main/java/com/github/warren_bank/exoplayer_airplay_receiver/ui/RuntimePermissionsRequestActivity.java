@@ -9,11 +9,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 
+import java.util.ArrayList;
+
 public class RuntimePermissionsRequestActivity extends Activity implements RuntimePermissionUtils.RuntimePermissionListener {
+
+  private ArrayList<Integer> grantedCodes;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    grantedCodes = new ArrayList<Integer>();
 
     processIntent(getIntent());
   }
@@ -23,6 +29,26 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
     super.onNewIntent(intent);
 
     processIntent(intent);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+
+    int requestCode;
+    Message msg;
+
+    if (!grantedCodes.isEmpty()) {
+      for (Integer grantedCode : grantedCodes) {
+        requestCode = grantedCode.intValue();
+
+        msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Runtime_Permissions_Granted;
+        msg.obj  = requestCode;
+        MainApp.broadcastMessage(msg);
+      }
+      grantedCodes.clear();
+    }
   }
 
   private void processIntent(Intent intent) {
@@ -75,10 +101,7 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
   // implementation: RuntimePermissionUtils.RuntimePermissionListener
 
   public void onRequestPermissionsGranted(int requestCode, Object passthrough) {
-    Message msg = Message.obtain();
-    msg.what = Constant.Msg.Msg_Runtime_Permissions_Granted;
-    msg.obj  = requestCode;
-    MainApp.broadcastMessage(msg);
+    grantedCodes.add(Integer.valueOf(requestCode));
 
     if (requestCode == Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE)
       processRequestCode(Constant.PermissionRequestCode.MANAGE_EXTERNAL_STORAGE);

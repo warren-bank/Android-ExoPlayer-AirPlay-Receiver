@@ -204,6 +204,10 @@ final class MyMessageHandler extends Handler {
         final Runnable runnable = new Runnable() {
           @Override
           public void run() {
+            Message newMsg = Message.obtain();
+            newMsg.what = msgWhat;
+            newMsg.obj  = msgMap;
+
             String playUrl   = dataMap.get(Constant.PlayURL);
             String textUrl   = dataMap.get(Constant.CaptionURL);
             String referUrl  = dataMap.get(Constant.RefererURL);
@@ -238,7 +242,7 @@ final class MyMessageHandler extends Handler {
 
             Log.d(tag, ((msgWhat == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
 
-            if (requiresExternalStoragePermission(service, msg, playUrl, textUrl))
+            if (requiresExternalStoragePermission(service, newMsg, playUrl, textUrl))
               return;
 
             // normalize references to external storage by converting absolute filesystem paths to file: URIs
@@ -271,9 +275,6 @@ final class MyMessageHandler extends Handler {
                   StringUtils.convertArrayListToHashMap(matches)
                 );
 
-                Message newMsg = Message.obtain();
-                newMsg.what = msgWhat;
-                newMsg.obj  = msgMap;
                 requiresExternalStoragePermission(service, newMsg, "/", "/");
                 return;
               }
