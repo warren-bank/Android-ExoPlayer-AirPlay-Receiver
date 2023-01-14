@@ -100,6 +100,7 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
   // ---------------------------------------------------------------------------
   // implementation: RuntimePermissionUtils.RuntimePermissionListener
 
+  @Override
   public void onRequestPermissionsGranted(int requestCode, Object passthrough) {
     grantedCodes.add(Integer.valueOf(requestCode));
 
@@ -109,8 +110,13 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
       finish();
   }
 
+  @Override
   public void onRequestPermissionsDenied(int requestCode, Object passthrough, String[] missingPermissions) {
     finish();
+  }
+
+  @Override
+  public void onAllRequestsCompleted(Exception exception, Object passthrough) {
   }
 
 }

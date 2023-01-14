@@ -23,6 +23,7 @@ public final class RuntimePermissionUtils {
   public interface RuntimePermissionListener {
     public void onRequestPermissionsGranted (int requestCode, Object passthrough);
     public void onRequestPermissionsDenied  (int requestCode, Object passthrough, String[] missingPermissions);
+    public void onAllRequestsCompleted      (Exception exception, Object passthrough);
   }
 
   // ---------------------------------------------------------------------------
@@ -37,6 +38,166 @@ public final class RuntimePermissionUtils {
   private static Object getPassthroughCache(int requestCode) {
     Object passthrough = RuntimePermissionUtils.passthroughCache.remove(requestCode);
     return passthrough;
+  }
+
+  // ---------------------------------------------------------------------------
+  // convenience class: request multiple runtime permissions in sequence
+
+  private static final class SequentialRequesterClass implements RuntimePermissionListener {
+
+    // ---------------------------------
+    // static
+
+    private static SequentialRequesterClass activeInstance = null;
+
+    private static HashMap<RuntimePermissionListener,SequentialRequesterClass> allInstances = new HashMap<RuntimePermissionListener,SequentialRequesterClass>();
+
+    public static SequentialRequesterClass getInstance(RuntimePermissionListener listener) {
+      SequentialRequesterClass instance = SequentialRequesterClass.allInstances.get(listener);
+      return instance;
+    }
+
+    public static boolean isActiveInstance(SequentialRequesterClass instance) {
+      return (instance == SequentialRequesterClass.activeInstance);
+    }
+
+    public static void updateActiveInstance() {
+        SequentialRequesterClass.activeInstance = (SequentialRequesterClass.allInstances.isEmpty())
+          ? null
+          : SequentialRequesterClass.allInstances.values().iterator().next();
+
+        if (SequentialRequesterClass.activeInstance != null)
+          SequentialRequesterClass.activeInstance.requestNextCode();
+    }
+
+    public static List<Integer> convertRequestCodes(int[] requestCodes) throws Exception {
+      if (requestCodes == null)
+        throw new Exception("parameter cannot be null: requestCodes");
+      if (requestCodes.length == 0)
+        throw new Exception("array parameter cannot be empty: requestCodes");
+
+      List<Integer> result = new ArrayList<Integer>(requestCodes.length);
+      for (int requestCode : requestCodes) {
+        result.add(Integer.valueOf(requestCode));
+      }
+      return result;
+    }
+
+    // ---------------------------------
+    // instance
+
+    private Activity mActivity;
+    private RuntimePermissionListener mListener;
+    private List<Integer> mRequestCodes;
+    private List<Object> mPassthroughs;
+    private int mCurrentRequestCode;
+
+    public SequentialRequesterClass(Activity activity, RuntimePermissionListener listener, int[] requestCodes, Object passthrough) throws Exception {
+      this(activity, listener, SequentialRequesterClass.convertRequestCodes(requestCodes), passthrough);
+    }
+
+    public SequentialRequesterClass(Activity activity, RuntimePermissionListener listener, List<Integer> requestCodes, Object passthrough) throws Exception {
+      if (activity == null)
+        throw new Exception("parameter cannot be null: activity");
+      if (listener == null)
+        throw new Exception("parameter cannot be null: listener");
+      if (requestCodes == null)
+        throw new Exception("parameter cannot be null: requestCodes");
+      if (requestCodes.isEmpty())
+        throw new Exception("list parameter cannot be empty: requestCodes");
+
+      SequentialRequesterClass instance = SequentialRequesterClass.getInstance(listener);
+      if (instance != null) {
+        instance.appendRequestCodes(requestCodes);
+        instance.appendPassthrough(passthrough);
+      }
+      else {
+        mActivity           = activity;
+        mListener           = listener;
+        mRequestCodes       = new ArrayList<Integer>();
+        mPassthroughs       = new ArrayList<Object>();
+        mCurrentRequestCode = -1;
+
+        appendRequestCodes(requestCodes);
+        appendPassthrough(passthrough);
+
+        SequentialRequesterClass.allInstances.put(mListener, this);
+
+        if (SequentialRequesterClass.activeInstance == null) {
+          SequentialRequesterClass.activeInstance = this;
+          requestNextCode();
+        }
+      }
+    }
+
+    public void appendRequestCodes(List<Integer> newRequestCodes) {
+      if ((newRequestCodes == null) || newRequestCodes.isEmpty()) return;
+
+      for (Integer newRequestCode : newRequestCodes) {
+        appendRequestCode(newRequestCode);
+      }
+    }
+
+    public void appendRequestCode(int newRequestCode) {
+      appendRequestCode(Integer.valueOf(newRequestCode));
+    }
+
+    public void appendRequestCode(Integer newRequestCode) {
+      if ((newRequestCode == null) || mRequestCodes.contains(newRequestCode)) return;
+      mRequestCodes.add(newRequestCode);
+    }
+
+    public void appendPassthroughs(List<Object> newPassthroughs) {
+      if ((newPassthroughs == null) || newPassthroughs.isEmpty()) return;
+
+      for (Object newPassthrough : newPassthroughs) {
+        appendPassthrough(newPassthrough);
+      }
+    }
+
+    public void appendPassthrough(Object newPassthrough) {
+      if ((newPassthrough == null) || mPassthroughs.contains(newPassthrough)) return;
+      mPassthroughs.add(newPassthrough);
+    }
+
+    @Override
+    public void onRequestPermissionsGranted(int requestCode, Object passthrough) {
+      mRequestCodes.remove(Integer.valueOf(requestCode));
+      mListener.onRequestPermissionsGranted(requestCode, passthrough);
+
+      if (SequentialRequesterClass.isActiveInstance(this) && (mCurrentRequestCode == requestCode))
+        requestNextCode();
+    }
+
+    @Override
+    public void onRequestPermissionsDenied(int requestCode, Object passthrough, String[] missingPermissions) {
+      mRequestCodes.remove(Integer.valueOf(requestCode));
+      mListener.onRequestPermissionsDenied(requestCode, passthrough, missingPermissions);
+
+      if (SequentialRequesterClass.isActiveInstance(this) && (mCurrentRequestCode == requestCode))
+        requestNextCode();
+    }
+
+    @Override
+    public void onAllRequestsCompleted(Exception exception, Object passthrough) {
+      for (Object mPassthrough : mPassthroughs) {
+        mListener.onAllRequestsCompleted(exception, mPassthrough);
+      }
+      mPassthroughs.clear();
+
+      SequentialRequesterClass.allInstances.remove(mListener);
+      SequentialRequesterClass.updateActiveInstance();
+    }
+
+    protected void requestNextCode() {
+      if (mRequestCodes.isEmpty()) {
+        this.onAllRequestsCompleted((Exception) null, (Object) null);
+      }
+      else {
+        mCurrentRequestCode = ((Integer) mRequestCodes.get(0)).intValue();
+        RuntimePermissionUtils.requestPermissions(mActivity, /* listener= */ this, mCurrentRequestCode);
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -65,19 +226,44 @@ public final class RuntimePermissionUtils {
   public static void requestPermissions(Activity activity, RuntimePermissionListener listener, int requestCode, String[] allRequestedPermissions, Object passthrough) {
     String[] missingPermissions = RuntimePermissionUtils.getMissingPermissions(activity, allRequestedPermissions);
 
+    SequentialRequesterClass instance = SequentialRequesterClass.getInstance(listener);
+    if (instance != null)
+      listener = (RuntimePermissionListener) instance;
+
     if (missingPermissions == null) {
       listener.onRequestPermissionsGranted(requestCode, passthrough);
     }
     else {
       RuntimePermissionUtils.setPassthroughCache(requestCode, passthrough);
 
-      activity.requestPermissions(missingPermissions, requestCode);
+      if (instance != null)
+        instance.appendRequestCode(requestCode);
+      else
+        activity.requestPermissions(missingPermissions, requestCode);
+    }
+  }
+
+  public static void requestAllPermissions(Activity activity, RuntimePermissionListener listener, int[] requestCodes) {
+    Object passthrough = null;
+    RuntimePermissionUtils.requestAllPermissions(activity, listener, requestCodes, passthrough);
+  }
+
+  public static void requestAllPermissions(Activity activity, RuntimePermissionListener listener, int[] requestCodes, Object passthrough) {
+    try {
+      new RuntimePermissionUtils.SequentialRequesterClass(activity, listener, requestCodes, passthrough);
+    }
+    catch(Exception exception) {
+      listener.onAllRequestsCompleted(exception, passthrough);
     }
   }
 
   public static void onRequestPermissionsResult(RuntimePermissionListener listener, int requestCode, String[] permissions, int[] grantResults) {
     Object passthrough          = RuntimePermissionUtils.getPassthroughCache(requestCode);
     String[] missingPermissions = RuntimePermissionUtils.getMissingPermissions(permissions, grantResults);
+
+    SequentialRequesterClass instance = SequentialRequesterClass.getInstance(listener);
+    if (instance != null)
+      listener = (RuntimePermissionListener) instance;
 
     if (missingPermissions == null) {
       listener.onRequestPermissionsGranted(requestCode, passthrough);
@@ -89,6 +275,10 @@ public final class RuntimePermissionUtils {
 
   public static void onActivityResult(RuntimePermissionListener listener, int requestCode, int resultCode, Intent data) {
     Object passthrough = RuntimePermissionUtils.getPassthroughCache(requestCode);
+
+    SequentialRequesterClass instance = SequentialRequesterClass.getInstance(listener);
+    if (instance != null)
+      listener = (RuntimePermissionListener) instance;
 
     if (resultCode == Activity.RESULT_OK) {
       listener.onRequestPermissionsGranted(requestCode, passthrough);

@@ -45,6 +45,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   // ---------------------------------------------------------------------------
   // implementation: RuntimePermissionUtils.RuntimePermissionListener
 
+  @Override
   public void onRequestPermissionsGranted(int requestCode, Object passthrough) {
     requestCount--;
 
@@ -59,6 +60,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
       finish();
   }
 
+  @Override
   public void onRequestPermissionsDenied(int requestCode, Object passthrough, String[] missingPermissions) {
     requestCount--;
 
@@ -72,6 +74,10 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
 
     if (requestCount <= 0)
       finish();
+  }
+
+  @Override
+  public void onAllRequestsCompleted(Exception exception, Object passthrough) {
   }
 
   // ---------------------------------------------------------------------------
