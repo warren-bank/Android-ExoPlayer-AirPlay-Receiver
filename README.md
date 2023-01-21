@@ -3,6 +3,12 @@
 
 Android app to run on a set-top box and play video URLs "cast" to it with a stateless HTTP API (based on AirPlay v1).
 
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+     alt="Get it on IzzyOnDroid"
+     height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.github.warren_bank.exoplayer_airplay_receiver)
+
+Or get the latest APK from the [Releases Section](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/releases/latest).
+
 - - - -
 
 #### Overview:
