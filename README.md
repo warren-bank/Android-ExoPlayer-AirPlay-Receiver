@@ -794,12 +794,23 @@ __extended APIs:__
 
 * [_Bookmarks_ Android app](https://github.com/warren-bank/Android-Bookmarks) that is open-source, and can be used to:
   - configure [_Intents_](https://developer.android.com/reference/android/content/Intent) that broadcast [media key events](https://developer.android.com/reference/android/view/KeyEvent) to _ExoAirPlayer_&hellip; running on the same device
-    * example: _stop_
-      - action = `android.intent.action.MEDIA_BUTTON`
+    * example:
+      - _Name_ = `stop`
+      - _Package Name_ = `com.github.warren_bank.exoplayer_airplay_receiver`
+      - _Class Name_ = `androidx.media.session.MediaButtonReceiver`
+      - _Action_ = `android.intent.action.MEDIA_BUTTON`
       - extra:
-        * name = `android.intent.extra.KEY_EVENT`
-        * type = `int`
-        * value = [`86`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_MEDIA_STOP)
+        * _Name_ = `android.intent.extra.KEY_EVENT`
+        * _Type of Value_ = `int`
+        * _Value_ = [`86`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_MEDIA_STOP)
+    * notes:
+      - this example configures an _explicit_ Intent
+      - Android 8.0+ [does not allow](https://developer.android.com/guide/components/broadcast-exceptions) any app to receive _implicit_ broadcasts for media key events
+      - if _ExoAirPlayer_ is used on a device that is running a version of Android &lt; 8.0, then an _implicit_ Intent is sufficient
+        * the following configuration fields can be empty:
+          - _Package Name_
+          - _Class Name_
+        * as a result, broadcast receivers in _all_ apps that match the _implicit_ Intent will be notified
   - broadcast any such bookmarked _Intent_ by either:
     * triggering manually
       - long click on the chosen _Intent_ to open its context menu
