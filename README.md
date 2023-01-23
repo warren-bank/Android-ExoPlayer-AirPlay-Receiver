@@ -793,33 +793,67 @@ __extended APIs:__
     * [configuration data file](./etc/3rd-party%20high-level%20client%20apps%20%5Buser%20contributions%5D/HTTP%20Shortcuts%20for%20Android/shortcuts.json) by [heinnovator](https://github.com/heinnovator)
 
 * [_Bookmarks_ Android app](https://github.com/warren-bank/Android-Bookmarks) that is open-source, and can be used to:
-  - configure [_Intents_](https://developer.android.com/reference/android/content/Intent) that broadcast [media key events](https://developer.android.com/reference/android/view/KeyEvent) to _ExoAirPlayer_&hellip; running on the same device
-    * example:
-      - _Name_ = `stop`
-      - _Package Name_ = `com.github.warren_bank.exoplayer_airplay_receiver`
-      - _Class Name_ = `androidx.media.session.MediaButtonReceiver`
-      - _Action_ = `android.intent.action.MEDIA_BUTTON`
-      - extra:
-        * _Name_ = `android.intent.extra.KEY_EVENT`
-        * _Type of Value_ = `int`
-        * _Value_ = [`86`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_MEDIA_STOP)
-    * notes:
-      - this example configures an _explicit_ Intent
-      - Android 8.0+ [does not allow](https://developer.android.com/guide/components/broadcast-exceptions) any app to receive _implicit_ broadcasts for media key events
-      - if _ExoAirPlayer_ is used on a device that is running a version of Android &lt; 8.0, then an _implicit_ Intent is sufficient
-        * the following configuration fields can be empty:
-          - _Package Name_
-          - _Class Name_
-        * as a result, broadcast receivers in _all_ apps that match the _implicit_ Intent will be notified
-  - broadcast any such bookmarked _Intent_ by either:
-    * triggering manually
-      - long click on the chosen _Intent_ to open its context menu
-      - select: _Perform&hellip;_ &gt; _Send Broadcast_
-    * scheduling an alarm
-      - long click on the chosen _Intent_ to open its context menu
-      - select: _Schedule&hellip;_
-        * Perform = _Send Broadcast_
-        * configure other settings: date, time, interval, precision, etc&hellip;
+  - bookmark media streams
+    - configure [_Intents_](https://developer.android.com/reference/android/content/Intent) that play media streams in _ExoAirPlayer_&hellip; running on the same device
+      * example:
+        - _Name_ = `CBS News`
+        - _Action_ = `android.intent.action.VIEW`
+        - _Package Name_ = `com.github.warren_bank.exoplayer_airplay_receiver`
+        - _Class Name_ = `com.github.warren_bank.exoplayer_airplay_receiver.ui.StartNetworkingServiceActivity`
+        - _Data URI_ = `https://www.cbsnews.com/common/video/cbsn_header_prod.m3u8`
+        - _Data (MIME) Type_ = `application/x-mpegurl`
+        - extra:
+          * _Name_ = `referUrl`
+          * _Type of Value_ = `String`
+          * _Value_ = `https://www.cbsnews.com/live/`
+      * notes:
+        - this example configures an _explicit_ Intent
+          * the media stream will always play in _ExoAirPlayer_&hellip; running on the same device
+        - an _implicit_ Intent could also be configured
+          * the following configuration fields can be empty:
+            - _Package Name_
+            - _Class Name_
+          * as a result, an Activity chooser dialog will prompt the user to select from a list of _all_ installed apps that match the _implicit_ Intent&hellip; which includes _ExoAirPlayer_
+        - the HLS video stream for `CBS News` doesn't actually require a `Referer` HTTP request header, but one is added to illustrate how to do so
+    - start an Activity for any such bookmarked _Intent_ by either:
+      * triggering manually (method 1)
+        - click on the chosen _Intent_
+      * triggering manually (method 2)
+        - long click on the chosen _Intent_ to open its context menu
+        - select: _Perform&hellip;_ &gt; _Start Activity_
+      * scheduling an alarm
+        - long click on the chosen _Intent_ to open its context menu
+        - select: _Schedule&hellip;_
+          * Perform = _Start Activity_
+          * configure other settings: date, time, interval, precision, etc&hellip;
+  - simulate keypress of media keys
+    - configure [_Intents_](https://developer.android.com/reference/android/content/Intent) that broadcast [media key events](https://developer.android.com/reference/android/view/KeyEvent) to _ExoAirPlayer_&hellip; running on the same device
+      * example:
+        - _Name_ = `stop`
+        - _Action_ = `android.intent.action.MEDIA_BUTTON`
+        - _Package Name_ = `com.github.warren_bank.exoplayer_airplay_receiver`
+        - _Class Name_ = `androidx.media.session.MediaButtonReceiver`
+        - extra:
+          * _Name_ = `android.intent.extra.KEY_EVENT`
+          * _Type of Value_ = `int`
+          * _Value_ = [`86`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_MEDIA_STOP)
+      * notes:
+        - this example configures an _explicit_ Intent
+        - Android 8.0+ [does not allow](https://developer.android.com/guide/components/broadcast-exceptions) any app to receive _implicit_ broadcasts for media key events
+        - if _ExoAirPlayer_ is used on a device that is running a version of Android &lt; 8.0, then an _implicit_ Intent is sufficient
+          * the following configuration fields can be empty:
+            - _Package Name_
+            - _Class Name_
+          * as a result, broadcast receivers in _all_ installed apps that match the _implicit_ Intent will be notified
+    - broadcast any such bookmarked _Intent_ by either:
+      * triggering manually
+        - long click on the chosen _Intent_ to open its context menu
+        - select: _Perform&hellip;_ &gt; _Send Broadcast_
+      * scheduling an alarm
+        - long click on the chosen _Intent_ to open its context menu
+        - select: _Schedule&hellip;_
+          * Perform = _Send Broadcast_
+          * configure other settings: date, time, interval, precision, etc&hellip;
 
 - - - -
 
