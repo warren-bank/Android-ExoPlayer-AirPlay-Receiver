@@ -250,8 +250,11 @@ public class NetworkingService extends Service implements RequestListenerThread.
     if (Build.VERSION.SDK_INT >= 26) {
       Notification.Builder builder = new Notification.Builder(/* context= */ NetworkingService.this, /* channelId= */ getNotificationChannelId());
 
-      if (Build.VERSION.SDK_INT >= 31)
+      if (Build.VERSION.SDK_INT >= 31) {
+        builder.setContentTitle(getNetworkAddress());
+        builder.setContentText(getString(R.string.notification_service_content_line3));
         builder.setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE);
+      }
 
       notification = builder.build();
     }
@@ -284,7 +287,13 @@ public class NetworkingService extends Service implements RequestListenerThread.
     contentView.setTextViewText(R.id.notification_text_line1, getString(R.string.notification_service_content_line1));
     contentView.setTextViewText(R.id.notification_text_line2, getNetworkAddress());
     contentView.setTextViewText(R.id.notification_text_line3, getString(R.string.notification_service_content_line3));
-    notification.contentView   = contentView;
+
+    if (Build.VERSION.SDK_INT < 31)
+      notification.contentView = contentView;
+    if (Build.VERSION.SDK_INT >= 16)
+      notification.bigContentView = contentView;
+    if (Build.VERSION.SDK_INT >= 21)
+      notification.headsUpContentView = contentView;
 
     return notification;
   }
