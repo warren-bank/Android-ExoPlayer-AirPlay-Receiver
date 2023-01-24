@@ -245,10 +245,19 @@ public class NetworkingService extends Service implements RequestListenerThread.
   }
 
   private Notification getNotification() {
-    Notification notification  = (Build.VERSION.SDK_INT >= 26)
-      ? (new Notification.Builder(/* context= */ NetworkingService.this, /* channelId= */ getNotificationChannelId())).build()
-      :  new Notification()
-    ;
+    Notification notification;
+
+    if (Build.VERSION.SDK_INT >= 26) {
+      Notification.Builder builder = new Notification.Builder(/* context= */ NetworkingService.this, /* channelId= */ getNotificationChannelId());
+
+      if (Build.VERSION.SDK_INT >= 31)
+        builder.setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE);
+
+      notification = builder.build();
+    }
+    else {
+      notification = new Notification();
+    }
 
     notification.when          = System.currentTimeMillis();
     notification.flags         = 0;
