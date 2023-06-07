@@ -1,0 +1,8 @@
+{
+  "name": "1-download-ts",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@warren-bank/node-request-cli": "^4.0.19"
+  }
+}

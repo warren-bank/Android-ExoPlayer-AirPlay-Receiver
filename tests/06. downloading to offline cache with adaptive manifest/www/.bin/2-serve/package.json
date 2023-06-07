@@ -1,0 +1,8 @@
+{
+  "name": "2-serve",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@warren-bank/serve": "^130002.18.3"
+  }
+}

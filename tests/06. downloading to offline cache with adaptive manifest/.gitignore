@@ -1,0 +1,3 @@
+www/*.ts
+www/.bin/**/node_modules/
+www/.bin/**/*.log

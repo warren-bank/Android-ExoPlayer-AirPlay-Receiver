@@ -1,0 +1,47 @@
+{
+  "renderSingle":  false,
+  "cleanUrls":     false,
+  "trailingSlash": false,
+  "etag":          false,
+  "symlinks":      false,
+  "logReq":        true,
+  "logRes":        false,
+
+  "headers": [
+    {
+      "source":  "**/*.m3u8",
+      "headers": [
+        {
+          "key":   "Content-Type",
+          "value": "application/vnd.apple.mpegurl"
+        }
+      ]
+    },
+    {
+      "source":  "**/*.ts",
+      "headers": [
+        {
+          "key":   "Content-Type",
+          "value": "video/mp2t"
+        }
+      ]
+    }
+  ],
+
+  "rewrites": [
+    {
+      "engine":        "regex",
+      "source":        "^/([^/]+)/[^/]+(\\.m3u8)$",
+      "destination":   "/$1$2",
+      "flags":         "",
+      "terminal":      true
+    },
+    {
+      "engine":        "regex",
+      "source":        "^/[^/]+/(\\d+\\.ts)$",
+      "destination":   "/$1",
+      "flags":         "",
+      "terminal":      true
+    }
+  ]
+}
