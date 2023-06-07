@@ -18,6 +18,7 @@ import androidx.media3.common.DrmInitData;
 import androidx.media3.common.Format;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.TrackGroup;
+import androidx.media3.common.TrackSelectionParameters;
 import androidx.media3.common.util.Log;
 import androidx.media3.common.util.Util;
 import androidx.media3.datasource.HttpDataSource;
@@ -148,15 +149,16 @@ public class DownloadTracker {
 
   public void startDownload(MediaItem mediaItem, RenderersFactory renderersFactory) {
     @Nullable Download download = downloads.get(checkNotNull(mediaItem.playbackProperties).uri);
-    startDownload(download, mediaItem, renderersFactory);
+    startDownload(download, mediaItem, renderersFactory, null);
   }
 
-  public void startDownload(Download download, MediaItem mediaItem, RenderersFactory renderersFactory) {
+  public void startDownload(Download download, MediaItem mediaItem, RenderersFactory renderersFactory, TrackSelectionParameters trackSelectionParameters) {
     if (download == null || download.state == Download.STATE_FAILED) {
-      new StartDownloadHelper(
-          DownloadHelper.forMediaItem(context, mediaItem, renderersFactory, httpDataSourceFactory),
-          mediaItem
-      );
+      if (trackSelectionParameters == null) {
+        trackSelectionParameters = DownloadHelper.getDefaultTrackSelectorParameters(context);
+      }
+      DownloadHelper downloadHelper = DownloadHelper.forMediaItem(mediaItem, trackSelectionParameters, renderersFactory, httpDataSourceFactory);
+      new StartDownloadHelper(downloadHelper, mediaItem);
     }
   }
 
@@ -171,13 +173,13 @@ public class DownloadTracker {
     }
   }
 
-  public void toggleDownload(MediaItem mediaItem, RenderersFactory renderersFactory) {
+  public void toggleDownload(MediaItem mediaItem, RenderersFactory renderersFactory, TrackSelectionParameters trackSelectionParameters) {
     @Nullable Download download = downloads.get(checkNotNull(mediaItem.playbackProperties).uri);
     if (download != null && download.state != Download.STATE_FAILED) {
       stopDownload(download);
     }
     else {
-      startDownload(download, mediaItem, renderersFactory);
+      startDownload(download, mediaItem, renderersFactory, trackSelectionParameters);
     }
   }
 
@@ -362,6 +364,9 @@ public class DownloadTracker {
     }
 
     private void startDownload(DownloadRequest downloadRequest) {
+      if ((downloadRequest == null) || downloadRequest.streamKeys.isEmpty())
+        return;
+
       DownloadService.sendAddDownload(context, MyDownloadService.class, downloadRequest, /* foreground= */ false);
     }
 

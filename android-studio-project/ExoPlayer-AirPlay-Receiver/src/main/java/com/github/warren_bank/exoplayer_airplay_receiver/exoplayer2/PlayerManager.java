@@ -755,7 +755,11 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     if (mediaItem == null) return;
 
     sample.updateUseCache(!sample.useCache);
-    downloadTracker.toggleDownload(mediaItem, renderersFactory);
+    downloadTracker.toggleDownload(
+      mediaItem,
+      renderersFactory,
+      ((exoPlayer == null) ? null : exoPlayer.getTrackSelectionParameters())
+    );
   }
 
   // AirPlay functionality (exposed by HTTP endpoints)
