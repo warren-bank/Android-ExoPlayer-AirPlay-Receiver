@@ -1,8 +1,9 @@
 {
-  "name": "2-serve",
+  "name": "0-tools",
   "private": true,
   "version": "1.0.0",
   "dependencies": {
+    "@warren-bank/node-request-cli": "^4.0.19",
     "@warren-bank/serve": "^130002.18.3"
   }
 }

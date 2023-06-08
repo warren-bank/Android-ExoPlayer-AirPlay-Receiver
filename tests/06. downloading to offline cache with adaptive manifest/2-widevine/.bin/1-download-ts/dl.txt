@@ -1,0 +1,41 @@
+# https://shaka-player-demo.appspot.com/demo/
+# https://shaka-player-demo.appspot.com/demo/common/assets.js
+# https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/hls.m3u8
+# https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/playlist_v-0144p-0100k-libx264.mp4.m3u8
+# https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/playlist_a-eng-0128k-aac-2c.mp4.m3u8
+# https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/playlist_s-en.webvtt.m3u8
+
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-init.mp4	video/00.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s1.mp4		video/01.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s2.mp4		video/02.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s3.mp4		video/03.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s4.mp4		video/04.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s5.mp4		video/05.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s6.mp4		video/06.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s7.mp4		video/07.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s8.mp4		video/08.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s9.mp4		video/09.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/v-0144p-0100k-libx264-s10.mp4		video/10.ts
+
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-init.mp4			audio/00.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s1.mp4				audio/01.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s2.mp4				audio/02.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s3.mp4				audio/03.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s4.mp4				audio/04.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s5.mp4				audio/05.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s6.mp4				audio/06.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s7.mp4				audio/07.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s8.mp4				audio/08.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s9.mp4				audio/09.ts
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/a-eng-0128k-aac-2c-s10.mp4			audio/10.ts
+
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s1.vtt											captions/01.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s2.vtt											captions/02.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s3.vtt											captions/03.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s4.vtt											captions/04.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s5.vtt											captions/05.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s6.vtt											captions/06.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s7.vtt											captions/07.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s8.vtt											captions/08.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s9.vtt											captions/09.vtt
+https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine-hls/s-en-s10.vtt										captions/10.vtt

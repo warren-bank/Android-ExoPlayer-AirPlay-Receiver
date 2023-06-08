@@ -1,0 +1,14 @@
+# https://test-streams.mux.dev/
+# https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+# https://test-streams.mux.dev/x36xhzz/url_4/193039199_mp4_h264_aac_7.m3u8
+
+https://test-streams.mux.dev/x36xhzz/url_4/url_718/193039199_mp4_h264_aac_7.ts	video/01.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_719/193039199_mp4_h264_aac_7.ts	video/02.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_720/193039199_mp4_h264_aac_7.ts	video/03.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_721/193039199_mp4_h264_aac_7.ts	video/04.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_722/193039199_mp4_h264_aac_7.ts	video/05.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_723/193039199_mp4_h264_aac_7.ts	video/06.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_724/193039199_mp4_h264_aac_7.ts	video/07.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_725/193039199_mp4_h264_aac_7.ts	video/08.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_726/193039199_mp4_h264_aac_7.ts	video/09.ts
+https://test-streams.mux.dev/x36xhzz/url_4/url_727/193039199_mp4_h264_aac_7.ts	video/10.ts

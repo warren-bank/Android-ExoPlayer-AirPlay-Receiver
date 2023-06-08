@@ -1,3 +1,6 @@
-www/*.ts
-www/.bin/**/node_modules/
-www/.bin/**/*.log
+0-tools/node_modules/
+
+**/.bin/**/*.log
+**/audio/
+**/captions/
+**/video/

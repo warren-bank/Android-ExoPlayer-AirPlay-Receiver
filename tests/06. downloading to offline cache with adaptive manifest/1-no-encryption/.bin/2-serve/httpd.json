@@ -39,7 +39,7 @@
     {
       "engine":        "regex",
       "source":        "^/[^/]+/(\\d+\\.ts)$",
-      "destination":   "/$1",
+      "destination":   "/video/$1",
       "flags":         "",
       "terminal":      true
     }

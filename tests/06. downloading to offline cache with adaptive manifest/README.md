@@ -2,11 +2,11 @@
 
 1. download 10x .ts video segment files:
    ```bash
-     call ./www/.bin/1-download-ts/dl.bat
+     call ./TEST_CASE/.bin/1-download-ts/dl.bat
    ```
 2. run web server:
    ```bash
-     call ./www/.bin/2-serve/httpd.bat
+     call ./TEST_CASE/.bin/2-serve/httpd.bat
    ```
 3. open master manifest in _ExoAirPlayer_:
    ```bash
@@ -20,7 +20,7 @@
    ```
 4. open httpd requests log in a text editor:
    ```bash
-     leafpad ./www/.bin/2-serve/httpd.log
+     leafpad ./TEST_CASE/.bin/2-serve/httpd.log
    ```
    - this will show a chronological log of all requests by _ExoAirPlayer_ for both:
      * video manifests (.m3u8)
@@ -34,4 +34,4 @@
          * filepath: `/480p.m3u8`
        - video segment for particular stream resolution
          * URL path: `/480p/01.ts`
-         * filepath: `/01.ts`
+         * filepath: `/video/01.ts`
