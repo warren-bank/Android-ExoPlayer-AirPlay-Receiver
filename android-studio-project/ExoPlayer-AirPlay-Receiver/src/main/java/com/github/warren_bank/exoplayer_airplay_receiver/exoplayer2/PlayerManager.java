@@ -666,8 +666,12 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   private MediaItem getMediaItem(VideoSource sample) {
+    return getMediaItem(sample, /* forOfflineDownload= */ false);
+  }
+
+  private MediaItem getMediaItem(VideoSource sample, boolean forOfflineDownload) {
     return (sample != null)
-      ? sample.getMediaItem()
+      ? sample.getMediaItem(forOfflineDownload)
       : null;
   }
 
@@ -751,7 +755,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     VideoSource sample = getCurrentItem();
     if (sample == null) return;
 
-    MediaItem mediaItem = getMediaItem(sample);
+    MediaItem mediaItem = getMediaItem(sample, /* forOfflineDownload= */ true);
     if (mediaItem == null) return;
 
     sample.updateUseCache(!sample.useCache);
@@ -1578,7 +1582,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     if (sample == null) return;
 
     if (sample.useCache) {
-      downloadTracker.startDownload(sample.getMediaItem(), renderersFactory);
+      downloadTracker.startDownload(sample.getMediaItem(/* forOfflineDownload= */ true), renderersFactory);
     }
   }
 

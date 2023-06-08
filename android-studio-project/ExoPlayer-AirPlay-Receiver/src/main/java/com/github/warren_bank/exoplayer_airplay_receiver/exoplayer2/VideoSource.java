@@ -158,6 +158,10 @@ public final class VideoSource {
   }
 
   public MediaItem getMediaItem() {
+    return getMediaItem(/* forOfflineDownload= */ false);
+  }
+
+  public MediaItem getMediaItem(boolean forOfflineDownload) {
     MediaItem.Builder builder = new MediaItem.Builder();
 
     builder.setUri(uri);
@@ -171,15 +175,17 @@ public final class VideoSource {
       builder.setMimeType(uri_mimeType);
     }
 
-    // only  clip the trailing end, when there is a stop position
-    // never clip the leading  end, always seek to the start position
-    if (stopPosition >= 1f) {
-      builder
-        .setClipEndPositionMs(
-          (long) (stopPosition * 1000)
-        )
-        .setClipRelativeToDefaultPosition(true)
-      ;
+    if (!forOfflineDownload) {
+      // only  clip the trailing end, when there is a stop position
+      // never clip the leading  end, always seek to the start position
+      if (stopPosition >= 1f) {
+        builder
+          .setClipEndPositionMs(
+            (long) (stopPosition * 1000)
+          )
+          .setClipRelativeToDefaultPosition(true)
+        ;
+      }
     }
 
     if (!TextUtils.isEmpty(drm_scheme) && !TextUtils.isEmpty(drm_license_server)) {
@@ -197,7 +203,9 @@ public final class VideoSource {
       }
     }
 
-    setSubtitleConfigurations(builder, this);
+    if (!forOfflineDownload) {
+      setSubtitleConfigurations(builder, this);
+    }
 
     return builder.build();
   }
