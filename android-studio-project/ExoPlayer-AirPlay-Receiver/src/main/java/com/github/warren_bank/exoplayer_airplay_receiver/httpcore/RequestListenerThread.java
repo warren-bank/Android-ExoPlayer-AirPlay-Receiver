@@ -63,7 +63,7 @@ public class RequestListenerThread extends Thread {
   }
 
   public interface Callback {
-    void onNewIpAddress();
+    void onNewIpAddress(InetAddress ipAddress);
   }
 
   private static final String tag = RequestListenerThread.class.getSimpleName();
@@ -81,14 +81,42 @@ public class RequestListenerThread extends Thread {
   private MyHttpService httpService;
 
   public RequestListenerThread(Context context, PlaybackInfoSource playbackInfoSource, Callback callback) {
+    super(tag);
+
     this.context            = context;
     this.playbackInfoSource = playbackInfoSource;
     this.callback           = callback;
   }
 
+  private void onNewIpAddress() {
+    if (this.callback != null)
+      this.callback.onNewIpAddress(this.localAddress);
+  }
+
+  private void getLocalIpAddress() {
+    getLocalIpAddress(false);
+  }
+
+  private void getLocalIpAddress(boolean forceCallback) {
+    InetAddress currentLocalAddress = NetworkUtils.getLocalIpAddress(this.context);
+
+    boolean isNewIpAddress = (
+        forceCallback
+     || ((currentLocalAddress == null) && (this.localAddress != null))
+     || ((currentLocalAddress != null) && (this.localAddress == null))
+     || ((currentLocalAddress != null) && (this.localAddress != null) && !currentLocalAddress.equals(this.localAddress))
+    );
+
+    this.localAddress = currentLocalAddress;
+
+    if (isNewIpAddress)
+      onNewIpAddress();
+  }
+
   public void run() {
     try {
       Thread.sleep(2 * 1000);
+      getLocalIpAddress(true);
       initHttpServer();
     }
     catch (IOException e) {
@@ -101,8 +129,10 @@ public class RequestListenerThread extends Thread {
 
     while (!Thread.interrupted()) {
       try {
-        if (this.serversocket == null)
-          break;
+        if (this.serversocket == null) {
+          Log.d(tag, "problem initializing HTTP server");
+          throw new IOException();
+        }
 
         Socket socket = this.serversocket.accept();
         Log.d(tag, "airplay incoming connection from " + socket.getInetAddress() + "; socket id= [" + socket + "]");
@@ -115,46 +145,45 @@ public class RequestListenerThread extends Thread {
         exec.execute(thread);
       }
       catch(Exception e) {
-        int wifi_connection_status = get_wifi_connection_status();
+        if (this.serversocket != null) {
+          if (!this.serversocket.isClosed()) {
+            // Close the previous socket
+            try {
+              this.serversocket.close();
+            }
+            catch (IOException e2) {}
+          }
+          this.serversocket = null;
+        }
 
-        if ((e instanceof IOException) && (wifi_connection_status == 0)) {
-          while (wifi_connection_status == 0) {
+        getLocalIpAddress();
+
+        if ((e instanceof IOException) && (this.localAddress == null)) {
+          Log.d(tag, "Awaiting reconnection to WiFi network.");
+
+          while (this.localAddress == null) {
             // Socket closed due to temporary disconnection from WiFi network.
             // Check every 15 seconds for reconnection.
             try {
               Thread.sleep(15 * 1000);
-              wifi_connection_status = get_wifi_connection_status();
+              getLocalIpAddress();
             }
             catch (InterruptedException e2) {
               break;
             }
           }
-          if (wifi_connection_status == 0) {
+          if (this.localAddress == null) {
             // Thread was interrupted
             break;
           }
-          if ((this.serversocket != null) && !this.serversocket.isClosed()) {
-            // Close the previous socket
-            try {
-              this.serversocket.close();
-            }
-            catch (IOException e2) {
-              this.serversocket = null;
-            }
-          }
-          if ((this.serversocket == null) || this.serversocket.isClosed()) {
-            // Open a new socket
-            try {
-              initHttpServer();
 
-              if ((wifi_connection_status == 2) && (this.callback != null)) {
-                this.callback.onNewIpAddress();
-              }
-            }
-            catch (IOException e2) {
-              Log.e(tag, "problem reinitializing HTTP server", e);
-              this.serversocket = null;
-            }
+          // Open a new socket
+          try {
+            initHttpServer();
+          }
+          catch (IOException e2) {
+            Log.e(tag, "problem reinitializing HTTP server", e);
+            this.serversocket = null;
           }
         }
         else {
@@ -181,29 +210,12 @@ public class RequestListenerThread extends Thread {
     }
   }
 
-  /*
-   * return values:
-   *   0 = disconnected
-   *   1 = connected to same local address
-   *   2 = connected to new  local address
-   */
-  private int get_wifi_connection_status() {
-    InetAddress currentLocalAddress = NetworkUtils.getLocalIpAddress(this.context);
-
-    return (currentLocalAddress == null)
-      ? 0
-      : currentLocalAddress.equals(this.localAddress)
-        ? 1
-        : 2;
-  }
-
   private void initHttpServer() throws IOException {
     Log.d(tag, "airplay init http server");
 
-    this.localAddress = NetworkUtils.getLocalIpAddress(this.context);
-
     if (this.localAddress == null) {
-      Thread.interrupted();
+      macAddress = null;
+      this.serversocket = null;
       return;
     }
 
@@ -212,11 +224,11 @@ public class RequestListenerThread extends Thread {
       Log.d(tag, "airplay local MAC address = " + macAddress);
     }
 
-    serversocket = new ServerSocket(Constant.AIRPLAY_PORT, 2, this.localAddress);
-    serversocket.setReuseAddress(true);
+    this.serversocket = new ServerSocket(Constant.AIRPLAY_PORT, 2, this.localAddress);
+    this.serversocket.setReuseAddress(true);
 
-    params = new BasicHttpParams();
-    params
+    this.params = new BasicHttpParams();
+    this.params
       .setIntParameter(CoreConnectionPNames.SOCKET_BUFFER_SIZE, 8 * 1024)
       .setBooleanParameter(CoreConnectionPNames.STALE_CONNECTION_CHECK, false)
       .setBooleanParameter(CoreConnectionPNames.TCP_NODELAY, true)
@@ -232,15 +244,15 @@ public class RequestListenerThread extends Thread {
     HttpRequestHandlerRegistry registry = new HttpRequestHandlerRegistry();
 
     //http request handler, HttpFileHandler inherits from HttpRequestHandler
-    registry.register("*", new WebServiceHandler(playbackInfoSource));
+    registry.register("*", new WebServiceHandler(this.playbackInfoSource));
 
-    httpService = new MyHttpService(
+    this.httpService = new MyHttpService(
       httpProcessor,
       new NoConnectionReuseStrategy(), //DefaultConnectionReuseStrategy()
       new DefaultHttpResponseFactory()
     );
-    httpService.setParams(this.params);
-    httpService.setHandlerResolver(registry); //Set up a registered request handler for the http service.
+    this.httpService.setParams(this.params);
+    this.httpService.setHandlerResolver(registry); //Set up a registered request handler for the http service.
   }
 
   private static class WorkerThread extends Thread {

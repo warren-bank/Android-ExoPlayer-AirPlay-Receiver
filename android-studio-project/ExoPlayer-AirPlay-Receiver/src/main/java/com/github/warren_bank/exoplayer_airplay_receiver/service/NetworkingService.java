@@ -7,7 +7,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerNotifi
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
@@ -71,7 +70,6 @@ public class NetworkingService extends Service implements RequestListenerThread.
     Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.toast_registration_started), Toast.LENGTH_SHORT);
     toast.setGravity(Gravity.CENTER, 0, 0);
     toast.show();
-    showNotification();
 
     new Thread() {
       public void run() {
@@ -79,15 +77,15 @@ public class NetworkingService extends Service implements RequestListenerThread.
           thread = new RequestListenerThread(/* context= */ NetworkingService.this, /* RequestListenerThread.PlaybackInfoSource */ playbackInfoSource, /* RequestListenerThread.Callback */ NetworkingService.this);
           thread.setDaemon(false);
           thread.start();
-
-          registerAirplay();
         }
-        catch (IOException e) {
-          Log.e(tag, "problem initializing HTTP server and Bonjour services", e);
+        catch (Exception e) {
+          Log.e(tag, "Problem initializing HTTP server.", e);
 
           Message msg = Message.obtain();
           msg.what = Constant.Register.FAIL;
           MainApp.broadcastMessage(msg);
+
+          stopSelf();
         }
       }
     }.start();
@@ -153,19 +151,10 @@ public class NetworkingService extends Service implements RequestListenerThread.
     return null;
   }
 
-  private void registerAirplay() throws IOException {
+  private void registerAirplay() {
     Message msg = Message.obtain();
     try {
-      Thread.sleep(2 * 1000);
-    }
-    catch (InterruptedException e) {
-      Log.e(tag, "problem putting thread to sleep to allow HTTP server time to initialize prior to registering Bonjour services", e);
-    }
-    try {
       Log.d(tag, "Beginning registration of Bonjour services..");
-
-      if (localAddress == null)
-        localAddress = NetworkUtils.getLocalIpAddress(NetworkingService.this);
 
       if (localAddress == null) {
         Log.d(tag, "No local IP address found for any network interface that supports multicast");
@@ -310,9 +299,6 @@ public class NetworkingService extends Service implements RequestListenerThread.
   }
 
   private String getNetworkAddress() {
-    if (localAddress == null)
-      localAddress = NetworkUtils.getLocalIpAddress(NetworkingService.this);
-
     return (localAddress == null)
       ? "[offline]"
       : localAddress.getHostAddress() + ":" + Constant.AIRPLAY_PORT;
@@ -441,8 +427,16 @@ public class NetworkingService extends Service implements RequestListenerThread.
   // -------------------------------------------------------------------------
   // implement interface: RequestListenerThread.Callback
 
-  public void onNewIpAddress() {
+  public void onNewIpAddress(InetAddress ipAddress) {
+    this.localAddress = ipAddress;
     showNotification();
+
+    new Thread() {
+      public void run() {
+        unregisterAirplay();
+        registerAirplay();
+      }
+    }.start();
   }
 
 }

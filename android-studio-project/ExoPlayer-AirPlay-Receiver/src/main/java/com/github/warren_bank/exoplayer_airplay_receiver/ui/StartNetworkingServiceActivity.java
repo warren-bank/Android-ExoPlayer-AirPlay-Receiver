@@ -22,10 +22,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (NetworkUtils.isWifiConnected(MainApp.getInstance()))
-      requestPermissions();
-    else
-      finish();
+    requestPermissions();
   }
 
   @Override
@@ -103,7 +100,13 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   private void startNetworkingService() {
     Intent intent = new Intent(getApplicationContext(), NetworkingService.class);
     forwardMedia(intent);
-    MainApp.getInstance().startService(intent);
+
+    if (
+        NetworkUtils.isWifiConnected(MainApp.getInstance())
+     || NetworkingService.ACTION_PLAY.equals(intent.getAction())
+    ) {
+      MainApp.getInstance().startService(intent);
+    }
   }
 
   private void forwardMedia(Intent newIntent) {

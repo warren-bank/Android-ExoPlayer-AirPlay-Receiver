@@ -98,7 +98,6 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Register.FAIL : {
         ToastUtils.showToastCenterShort(service.getApplicationContext(), R.string.toast_registration_failure);
-        service.stopSelf();
         break;
       }
 
