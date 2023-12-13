@@ -28,7 +28,7 @@ public class ExternalStorageUtils {
         ? video_filename.substring(0, pos + 1)
         : video_filename + ".";
 
-      this.caption_regex = Pattern.compile("\\.(?:srt|ttml|vtt|webvtt|ssa|ass)$");
+      this.caption_regex = Pattern.compile("\\.(?:srt|ttml[12]?|dfxp|vtt|webvtt|ssa|ass)$");
     }
 
     @Override

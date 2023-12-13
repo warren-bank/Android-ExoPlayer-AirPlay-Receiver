@@ -3,6 +3,11 @@ package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/*
+ * reference:
+ *   https://github.com/androidx/media/blob/1.2.0/libraries/common/src/main/java/androidx/media3/common/MimeTypes.java
+ */
+
 public class MediaTypeUtils {
 
   // ===========================================================================
@@ -64,7 +69,9 @@ public class MediaTypeUtils {
   // ===================================
   // video
 
-  private static Pattern video_regex = Pattern.compile("\\.(mp4|mp4v|mpv|m1v|m4v|mpg|mpg2|mpeg|xvid|webm|3gp|avi|mov|mkv|ogg|ogv|ogm|m3u8|mpd|ism(?:[vc]|/manifest)?)(?:[\\?#]|$)");
+  private static Pattern video_regex = Pattern.compile("\\.(mp4|mp4v|m4v|f4v|mpeg|mpg[2]?|m1v|webm|og[gvm]|mkv|mov|flv|xvid|avi|mp4[23]|mjp[e]?g|mpv|ts[v]?|m2t[s]?|m4s|3gp[p]?|m3u8|mpd|ism(?:[vc]|/manifest)?)(?:[\\?#]|$)");
+
+
 
   public static String get_video_fileExtension(String uri) {
     return get_fileExtension(uri, video_regex);
@@ -105,39 +112,63 @@ public class MediaTypeUtils {
           case "mp4":
           case "mp4v":
           case "m4v":
+          case "f4v":
             mimeType = "video/mp4";
             break;
-          case "mpv":
-            mimeType = "video/MPV";
-            break;
-          case "m1v":
+          case "mpeg":
           case "mpg":
           case "mpg2":
-          case "mpeg":
+          case "m1v":
             mimeType = "video/mpeg";
-            break;
-          case "xvid":
-            mimeType = "video/x-xvid";
             break;
           case "webm":
             mimeType = "video/webm";
-            break;
-          case "3gp":
-            mimeType = "video/3gpp";
-            break;
-          case "avi":
-            mimeType = "video/x-msvideo";
-            break;
-          case "mov":
-            mimeType = "video/quicktime";
-            break;
-          case "mkv":
-            mimeType = "video/x-mkv";
             break;
           case "ogg":
           case "ogv":
           case "ogm":
             mimeType = "video/ogg";
+            break;
+          case "mkv":
+            mimeType = "video/x-mkv";
+            break;
+          case "mov":
+            mimeType = "video/quicktime";
+            break;
+          case "flv":
+            mimeType = "video/x-flv";
+            break;
+          case "xvid":
+            mimeType = "video/x-xvid";
+            break;
+          case "avi":
+            mimeType = "video/x-msvideo";
+            break;
+          case "mp42":
+            mimeType = "video/mp42";
+            break;
+          case "mp43":
+            mimeType = "video/mp43";
+            break;
+          case "mjpg":
+          case "mjpeg":
+            mimeType = "video/mjpeg";
+            break;
+          case "mpv":
+            mimeType = "video/MPV";
+            break;
+          case "ts":
+          case "tsv":
+          case "m2t":
+          case "m2ts":
+            mimeType = "video/mp2t";
+            break;
+          case "m4s":
+            mimeType = "video/iso.segment";
+            break;
+          case "3gp":
+          case "3gpp":
+            mimeType = "video/3gpp";
             break;
           case "m3u8":
             mimeType = "application/x-mpegURL";
@@ -161,7 +192,7 @@ public class MediaTypeUtils {
   // ===================================
   // audio
 
-  private static Pattern audio_regex = Pattern.compile("\\.(mp3|m4a|ogg|wav|flac)(?:[\\?#]|$)");
+  private static Pattern audio_regex = Pattern.compile("\\.(mp3|ogg|wav|flac|aac|m4[ab]|f4[ab]|tsa|amr|3ga)(?:[\\?#]|$)");
 
   public static String get_audio_fileExtension(String uri) {
     return get_fileExtension(uri, audio_regex);
@@ -183,9 +214,6 @@ public class MediaTypeUtils {
         case "mp3":
           mimeType = "audio/mpeg";
           break;
-        case "m4a":
-          mimeType = "audio/m4a";
-          break;
         case "ogg":
           mimeType = "application/ogg";
           break;
@@ -195,6 +223,22 @@ public class MediaTypeUtils {
         case "flac":
           mimeType = "audio/flac";
           break;
+        case "aac":
+        case "m4a":
+        case "m4b":
+        case "f4a":
+        case "f4b":
+          mimeType = "audio/mp4a-latm";
+          break;
+        case "tsa":
+          mimeType = "audio/mp2t";
+          break;
+        case "amr":
+          mimeType = "audio/amr";
+          break;
+        case "3ga":
+          mimeType = "audio/3gpp";
+          break;
       }
     }
     return mimeType;
@@ -203,7 +247,7 @@ public class MediaTypeUtils {
   // ===================================
   // captions
 
-  private static Pattern caption_regex = Pattern.compile("(?:\\.([^\\./]+))?\\.(srt|ttml|dfxp|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
+  private static Pattern caption_regex = Pattern.compile("(?:\\.([^\\./]+))?\\.(srt|ttml[12]?|dfxp|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
 
   public static String get_caption_label(String uri) {
     return get_fileExtension(uri, caption_regex, /* capture_group_index= */ 1);
@@ -230,6 +274,8 @@ public class MediaTypeUtils {
           mimeType = "application/x-subrip";
           break;
         case "ttml":
+        case "ttml1":
+        case "ttml2":
         case "dfxp":
           mimeType = "application/ttml+xml";
           break;
