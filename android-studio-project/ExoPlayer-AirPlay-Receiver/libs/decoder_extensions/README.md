@@ -1,10 +1,10 @@
 #### origin for pre-built native extension binaries:
 
-* [Just Player](https://github.com/moneytoo/Player/tree/v0.144/app/libs)
-  - release: [v0.144](https://github.com/moneytoo/Player/releases/tag/v0.144) (using [AndroidX Media3 1.0.2](https://github.com/androidx/media/releases/tag/1.0.2))
+* [Just Player](https://github.com/moneytoo/Player/tree/v0.154/app/libs)
+  - release: [v0.154](https://github.com/moneytoo/Player/releases/tag/v0.154) (using [AndroidX Media3 1.2.0](https://github.com/androidx/media/releases/tag/1.2.0))
   - extensions:
-    * [_av1_](https://github.com/moneytoo/Player/raw/v0.144/app/libs/lib-decoder-av1-release.aar)
-    * [_ffmpeg_](https://github.com/moneytoo/Player/raw/v0.144/app/libs/lib-decoder-ffmpeg-release.aar)
+    * [_av1_](https://github.com/moneytoo/Player/raw/v0.154/app/libs/lib-decoder-av1-release.aar)
+    * [_ffmpeg_](https://github.com/moneytoo/Player/raw/v0.154/app/libs/lib-decoder-ffmpeg-release.aar)
   - ABIs:
     * armeabi-v7a
     * arm64-v8a

@@ -1,6 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
 
 import androidx.annotation.Nullable;
+import androidx.media3.exoplayer.text.NonFinalTextRenderer;
 import androidx.media3.exoplayer.text.SubtitleDecoderFactory;
 import androidx.media3.exoplayer.text.TextOutput;
 

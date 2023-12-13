@@ -562,7 +562,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       truncateQueue(0);
       currentItemIndex = C.INDEX_UNSET;
       exoPlayer.setPlayWhenReady(false);
-      exoPlayer.retry();
+      retry(false);
     }
 
     for (VideoSource sample : samples) {
@@ -627,7 +627,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     currentItemIndex = C.INDEX_UNSET;
     exoPlayer.setPlayWhenReady(false);
-    exoPlayer.retry();
+    retry(false);
 
     sample.updateCaption(caption);
     MediaSource mediaSource = buildMediaSource(sample);
@@ -1305,7 +1305,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     if (exoPlayer != null) {
       try {
-        exoPlayer.stop(true);
+        exoPlayer.stop();
         exoPlayer.removeListener(this);
         exoPlayer.release();
       }
@@ -1323,7 +1323,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/common/src/main/java/androidx/media3/common/Player.java#L625-L1073
+  // https://github.com/androidx/media/blob/1.2.0/libraries/common/src/main/java/androidx/media3/common/Player.java#L781-L1211
   // ===========================================================================
   // Player.Listener implementation.
   // ===========================================================================
@@ -1381,7 +1381,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       case PlaybackException.ERROR_CODE_DRM_SYSTEM_ERROR :
       case PlaybackException.ERROR_CODE_DRM_DEVICE_REVOKED :
       case PlaybackException.ERROR_CODE_DRM_LICENSE_EXPIRED : {
-        retry();
+        retry(true);
         break;
       }
       case PlaybackException.ERROR_CODE_IO_INVALID_HTTP_CONTENT_TYPE :
@@ -1475,18 +1475,27 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
   // Internal methods.
 
+  // ===========================================================================
+  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayer.java#L1198-L1202
+  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L592
+  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L532
+  // ===========================================================================
+
   private void init() {
     if (exoPlayer == null) return;
 
     // Media queue management.
-    exoPlayer.prepare(concatenatingMediaSource);
+    exoPlayer.setMediaSource(concatenatingMediaSource);
+    retry(false);
   }
 
-  private void retry() {
+  private void retry(boolean seek) {
     if (exoPlayer == null) return;
 
-    exoPlayer.seekToDefaultPosition();
-    exoPlayer.retry();
+    if (seek)
+      exoPlayer.seekToDefaultPosition();
+
+    exoPlayer.prepare();
   }
 
   private void truncateQueue(int count) {

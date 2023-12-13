@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.0.0-beta03/demos/main/src/main/java/androidx/media3/demo/main/DemoDownloadService.java
+ *   https://github.com/androidx/media/blob/1.2.0/demos/main/src/main/java/androidx/media3/demo/main/DemoDownloadService.java
  */
 
 import static com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
@@ -36,7 +36,7 @@ public class MyDownloadService extends DownloadService {
         ResourceUtils.getInteger(R.integer.NOTIFICATION_ID_EXOPLAYER_DOWNLOADS),
         DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
         DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-        R.string.exo_download_notification_channel_name,  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/exoplayer/src/main/res/values/strings.xml#L20
+        R.string.exo_download_notification_channel_name,  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/res/values/strings.xml#L20
         /* channelDescriptionResourceId= */ 0
     );
   }

@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'                         // https://mvnrepository.com/artifact/com.android.tools.build/gradle?repo=google
-        classpath 'com.google.android.gms:strict-version-matcher-plugin:1.1.0'   // https://mvnrepository.com/artifact/com.google.android.gms/strict-version-matcher-plugin
+        classpath 'com.google.android.gms:strict-version-matcher-plugin:1.2.4'   // https://mvnrepository.com/artifact/com.google.android.gms/strict-version-matcher-plugin
     }
 }
 

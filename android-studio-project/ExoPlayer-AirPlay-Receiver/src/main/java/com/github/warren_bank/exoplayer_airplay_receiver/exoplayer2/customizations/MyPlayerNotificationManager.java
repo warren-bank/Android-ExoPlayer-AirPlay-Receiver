@@ -22,8 +22,8 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1159
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1204
+  // https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1189
+  // https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1233
   // ===========================================================================
   // * startOrUpdateNotification(...)
   //   - calls createNotification(...)
@@ -51,9 +51,9 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L309
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L354
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L560
+  // https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L313
+  // https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L358
+  // https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L564
   // ===========================================================================
   // * class Builder{...}
   // ===========================================================================
@@ -95,7 +95,7 @@ public class MyPlayerNotificationManager extends PlayerNotificationManager {
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.0.0-beta03/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L714
+  // https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L727
   // ===========================================================================
   // * PlayerNotificationManager(...)
   //   - constructor

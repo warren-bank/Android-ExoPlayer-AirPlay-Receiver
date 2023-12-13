@@ -1,27 +1,27 @@
 project.ext {
-    releaseVersionCode = Integer.parseInt("003040516", 10)  //Integer.MAX_VALUE == 2147483647
-    releaseVersion     = '003.04.05-16API'
+    releaseVersionCode = Integer.parseInt("003040616", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersion     = '003.04.06-16API'
     javaVersion        = JavaVersion.VERSION_1_8
     minSdkVersion      = 16
 
     // [Android 11+] if (targetSdkVersion >= 30), error: NetworkUtils.getMACAddress()
     //   see: https://developer.android.com/training/articles/user-data-ids#mac-11-plus
 
-    targetSdkVersion   = 33 //29
-    compileSdkVersion  = 33
-    buildToolsVersion  = '33.0.1'
+    targetSdkVersion   = 34 //29
+    compileSdkVersion  = 34
+    buildToolsVersion  = '34.0.0'
 
     libVersionDdPlist        = '1.23'
     libVersionHttpCore       = '4.4.13'
     libVersionJmDNS          = '3.5.8'
-    libVersionAndroidxMedia3 = '1.0.2'
+    libVersionAndroidxMedia3 = '1.2.0'
 
     // keep versions of AndroidX libraries in sync with those used by AndroidX Media3:
-    //   https://github.com/androidx/media/blob/1.0.2/constants.gradle#L39
+    //   https://github.com/androidx/media/blob/1.2.0/constants.gradle#L38
 
     libVersionAndroidxAnnotation = '1.3.0'
-    libVersionAndroidxAppCompat  = '1.3.1'
-    libVersionAndroidxCore       = '1.7.0'
+    libVersionAndroidxAppCompat  = '1.6.1'
+    libVersionAndroidxCore       = '1.8.0'
     libVersionAndroidxMedia      = '1.6.0'
-    libVersionAndroidxMaterial   = '1.4.0'
+    libVersionAndroidxMaterial   = '1.8.0'
 }
