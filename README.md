@@ -877,6 +877,37 @@ __extended APIs:__
 
 - - - -
 
+#### Keyboard hotkeys
+
+* `space` = toggle _pause/play_
+* `N` = next track
+* `P` = previous track
+* `S` = stop
+* `M` = toggle _on/off_ volume mute
+* `V` = toggle _on/off_ text captions
+* `F` = reset subtitle offset to 0
+* `G` = decrease subtitle offset by 1 second (-1000000)
+* `H` = increase subtitle offset by 1 second (+1000000)
+
+note: not case sensitive, unless `SHIFT` is explicitly specified.
+
+#### Keyboard media keys / Hardware buttons
+
+* play
+* pause
+* play/pause
+* stop
+* previous
+* next
+* rewind = 5 seconds
+* fast forward = 15 seconds
+* captions = toggle _on/off_
+* volume mute = toggle _on/off_
+* volume up
+* volume down
+
+- - - -
+
 #### Credits:
 
 * [AirPlay-Receiver-on-Android](https://github.com/gpfduoduo/AirPlay-Receiver-on-Android)

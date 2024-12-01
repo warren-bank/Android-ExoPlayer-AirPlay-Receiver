@@ -1176,18 +1176,21 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
           break;
         }
 
+        case KeyEvent.KEYCODE_S :
         case KeyEvent.KEYCODE_MEDIA_STOP : {
           AirPlay_stop();
           isHandled = true;
           break;
         }
 
+        case KeyEvent.KEYCODE_P :
         case KeyEvent.KEYCODE_MEDIA_PREVIOUS : {
           AirPlay_previous();
           isHandled = true;
           break;
         }
 
+        case KeyEvent.KEYCODE_N :
         case KeyEvent.KEYCODE_MEDIA_NEXT : {
           AirPlay_next();
           isHandled = true;
@@ -1208,14 +1211,40 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
           break;
         }
 
+        case KeyEvent.KEYCODE_TV_ZOOM_MODE : {
+          AirPlay_toggle_resize_mode();
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_V :
         case KeyEvent.KEYCODE_CAPTIONS : {
           AirPlay_toggle_captions();
           isHandled = true;
           break;
         }
 
-        case KeyEvent.KEYCODE_TV_ZOOM_MODE : {
-          AirPlay_toggle_resize_mode();
+        case KeyEvent.KEYCODE_F : {
+          AirPlay_set_captions_offset(0l);
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_G : {
+          AirPlay_add_captions_offset(-1000000l);
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_H : {
+          AirPlay_add_captions_offset(1000000l);
+          isHandled = true;
+          break;
+        }
+
+        case KeyEvent.KEYCODE_M :
+        case KeyEvent.KEYCODE_VOLUME_MUTE : {
+          AirPlay_toggle_volume();
           isHandled = true;
           break;
         }
@@ -1256,12 +1285,6 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
               }
             }
           }
-          break;
-        }
-
-        case KeyEvent.KEYCODE_VOLUME_MUTE : {
-          AirPlay_toggle_volume();
-          isHandled = true;
           break;
         }
       }
