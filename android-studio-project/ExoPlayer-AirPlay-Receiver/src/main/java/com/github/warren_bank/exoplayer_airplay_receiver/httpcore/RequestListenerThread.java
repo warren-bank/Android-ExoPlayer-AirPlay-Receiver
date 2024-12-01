@@ -561,6 +561,10 @@ public class RequestListenerThread extends Thread {
             float rate = Float.parseFloat(value);
             Log.d(tag, "airplay rate = " + rate);
 
+            if (Float.compare(rate, 0.0f) < 0) {
+              throw new NumberFormatException("negative rate of playback (ie: in reverse) is not supported");
+            }
+
             Message msg = Message.obtain();
             msg.what = Constant.Msg.Msg_Video_Rate;
             msg.obj = rate;

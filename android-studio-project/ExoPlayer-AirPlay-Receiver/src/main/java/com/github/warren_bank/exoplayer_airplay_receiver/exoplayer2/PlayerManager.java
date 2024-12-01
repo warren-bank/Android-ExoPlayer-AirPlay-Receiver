@@ -830,7 +830,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       if (exoPlayer.getPlayWhenReady())
         exoPlayer.setPlayWhenReady(false);
     }
-    else {
+    else if (Float.compare(rate, 0.0f) > 0) {
       // update playback speed
       exoPlayer.setPlaybackParameters(
         new PlaybackParameters(rate)
