@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.2.0/demos/main/src/main/java/androidx/media3/demo/main/TrackSelectionDialog.java
+ *   https://github.com/androidx/media/blob/1.5.0/demos/main/src/main/java/androidx/media3/demo/main/TrackSelectionDialog.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
@@ -255,11 +255,11 @@ public final class TrackSelectionDialog extends DialogFragment {
   private static String getTrackTypeString(Resources resources, @C.TrackType int trackType) {
     switch (trackType) {
       case C.TRACK_TYPE_VIDEO:
-        return resources.getString(R.string.exo_track_selection_title_video);
+        return resources.getString(R.string.track_selection_title_video);
       case C.TRACK_TYPE_AUDIO:
-        return resources.getString(R.string.exo_track_selection_title_audio);
+        return resources.getString(R.string.track_selection_title_audio);
       case C.TRACK_TYPE_TEXT:
-        return resources.getString(R.string.exo_track_selection_title_text);
+        return resources.getString(R.string.track_selection_title_text);
       default:
         throw new IllegalArgumentException();
     }

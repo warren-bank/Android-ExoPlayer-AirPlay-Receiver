@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="track_selection_title_video">فيديو</string>
+  <string name="track_selection_title_audio">صوتيات</string>
+  <string name="track_selection_title_text">النص</string>
+</resources>

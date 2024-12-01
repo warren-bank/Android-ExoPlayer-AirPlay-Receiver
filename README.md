@@ -908,6 +908,17 @@ note: not case sensitive, unless `SHIFT` is explicitly specified.
 
 - - - -
 
+#### Final release for `minSdkVersion`:
+
+* [v3.4.8](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/releases/tag/v3.4.8)
+  - is the final release that supports API 16 (Android 4.1, Jelly Bean)
+    * includes AndroidX Media3 [v1.2.0](https://github.com/androidx/media/blob/1.2.0/constants.gradle#L17)
+* [v3.5.0](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/releases/tag/v3.5.0)
+  - is the most recent release that supports API 21 (Android 5.0, Lollipop)
+    * includes AndroidX Media3 [v1.5.0](https://github.com/androidx/media/blob/1.5.0/constants.gradle#L17)
+
+- - - -
+
 #### Credits:
 
 * [AirPlay-Receiver-on-Android](https://github.com/gpfduoduo/AirPlay-Receiver-on-Android)

@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
   <string name="toast_registration_started">注册 AirPlay 服务...</string>

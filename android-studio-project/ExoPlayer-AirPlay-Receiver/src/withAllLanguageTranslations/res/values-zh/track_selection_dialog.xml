@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="track_selection_title_video">视频</string>
+  <string name="track_selection_title_audio">音频</string>
+  <string name="track_selection_title_text">文本</string>
+</resources>

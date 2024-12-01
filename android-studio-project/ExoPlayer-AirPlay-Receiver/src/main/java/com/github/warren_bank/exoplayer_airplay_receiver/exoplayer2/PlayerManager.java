@@ -1379,7 +1379,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.2.0/libraries/common/src/main/java/androidx/media3/common/Player.java#L781-L1211
+  // https://github.com/androidx/media/blob/1.5.0/libraries/common/src/main/java/androidx/media3/common/Player.java#L772-L1205
   // ===========================================================================
   // Player.Listener implementation.
   // ===========================================================================
@@ -1532,9 +1532,9 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   // Internal methods.
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayer.java#L1198-L1202
-  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L592
-  // https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L532
+  // https://github.com/androidx/media/blob/1.5.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayer.java#L1345-L1354
+  // https://github.com/androidx/media/blob/1.5.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L607
+  // https://github.com/androidx/media/blob/1.5.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L549
   // ===========================================================================
 
   private void init() {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!--
+    strings that were included in AndroidX Media3 v1.2.0
+      https://github.com/androidx/media/blob/1.2.0/libraries/ui/src/main/res/values/strings.xml
+    but removed from AndroidX Media3 v1.5.0
+      https://github.com/androidx/media/blob/1.5.0/libraries/ui/src/main/res/values/strings.xml
+    in commit:
+      https://github.com/androidx/media/commit/ebe74daaecc53a61a374676428405260e1a46584
+  -->
+
+  <!-- The title of a track selection view for video tracks. [CHAR LIMIT=20] -->
+  <string name="track_selection_title_video">Video</string>
+  <!-- The title of a track selection view for audio tracks. [CHAR LIMIT=20] -->
+  <string name="track_selection_title_audio">Audio</string>
+  <!-- The title of a track selection view for text (i.e. subtitle or caption) tracks. [CHAR LIMIT=20] -->
+  <string name="track_selection_title_text">Text</string>
+
+</resources>

@@ -2,7 +2,7 @@ package androidx.media3.exoplayer.text;
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.2.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/text/TextRenderer.java
+ *   https://github.com/androidx/media/blob/1.5.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/text/TextRenderer.java
  */
 
 import static androidx.media3.common.util.Assertions.checkNotNull;
@@ -28,6 +28,7 @@ import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.SampleStream.ReadDataResult;
 import androidx.media3.extractor.text.CueDecoder;
 import androidx.media3.extractor.text.CuesWithTiming;
+import androidx.media3.extractor.text.Subtitle;
 import androidx.media3.extractor.text.SubtitleDecoder;
 import androidx.media3.extractor.text.SubtitleDecoderException;
 import androidx.media3.extractor.text.SubtitleInputBuffer;
@@ -40,6 +41,7 @@ import android.os.Message;
 
 import com.google.common.collect.ImmutableList;
 
+import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -53,9 +55,6 @@ import java.util.Objects;
  * <p>This implementations decodes sample data to {@link Cue} instances. The actual rendering is
  * delegated to a {@link TextOutput}.
  */
-// TODO: b/289916598 - Add an opt-in method for the legacy subtitle decoding flow, and throw an
-//  exception if it's not used and a recognized subtitle MIME type (that isn't
-//  application/x-media3-cues) is passed in.
 @UnstableApi
 public class NonFinalTextRenderer extends BaseRenderer implements Callback {
 
@@ -88,7 +87,7 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
    */
   private static final int REPLACEMENT_STATE_WAIT_END_OF_STREAM = 2;
 
-  private static final int MSG_UPDATE_OUTPUT = 0;
+  private static final int MSG_UPDATE_OUTPUT = 1;
 
   // Fields used when handling CuesWithTiming objects from application/x-media3-cues samples.
   private final CueDecoder cueDecoder;
@@ -112,9 +111,10 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
   private boolean inputStreamEnded;
   private boolean outputStreamEnded;
   @Nullable private Format streamFormat;
-  private long outputStreamOffsetUs;
   private long lastRendererPositionUs;
   private long finalStreamEndPositionUs;
+  private boolean legacyDecodingEnabled;
+  @Nullable private IOException streamError;
 
   /**
    * @param output The output.
@@ -151,8 +151,8 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
         new DecoderInputBuffer(DecoderInputBuffer.BUFFER_REPLACEMENT_MODE_NORMAL);
     formatHolder = new FormatHolder();
     finalStreamEndPositionUs = C.TIME_UNSET;
-    outputStreamOffsetUs = C.TIME_UNSET;
     lastRendererPositionUs = C.TIME_UNSET;
+    legacyDecodingEnabled = false;
   }
 
   @Override
@@ -162,6 +162,10 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
 
   @Override
   public @Capabilities int supportsFormat(Format format) {
+    // TODO: b/289983417 - Return UNSUPPORTED for non-media3-cues once we stop supporting them
+    //   completely. In the meantime, we return SUPPORTED here and then throw later  if
+    //   legacyDecodingEnabled is false (when receiving the first Format or sample). This ensures
+    //   apps are aware (via the playback failure) they're using a legacy/deprecated code path.
     if (isCuesWithTiming(format) || subtitleDecoderFactory.supportsFormat(format)) {
       return RendererCapabilities.create(
           format.cryptoType == C.CRYPTO_TYPE_NONE ? C.FORMAT_HANDLED : C.FORMAT_UNSUPPORTED_DRM);
@@ -193,9 +197,9 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
       long startPositionUs,
       long offsetUs,
       MediaSource.MediaPeriodId mediaPeriodId) {
-    outputStreamOffsetUs = offsetUs;
     streamFormat = formats[0];
     if (!isCuesWithTiming(streamFormat)) {
+      assertLegacyDecodingEnabledIfRequired();
       if (subtitleDecoder != null) {
         decoderReplacementState = REPLACEMENT_STATE_SIGNAL_END_OF_STREAM;
       } else {
@@ -224,13 +228,13 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
         replaceSubtitleDecoder();
       } else {
         releaseSubtitleBuffers();
-        checkNotNull(subtitleDecoder).flush();
+        SubtitleDecoder subtitleDecoder = checkNotNull(this.subtitleDecoder);
+        subtitleDecoder.flush();
+        subtitleDecoder.setOutputStartTimeUs(getLastResetPositionUs());
       }
     }
   }
 
-  // Setting deprecated decode-only flag for compatibility with decoders that are still using it.
-  @SuppressWarnings("deprecation")
   @Override
   public void render(long positionUs, long elapsedRealtimeUs) {
     if (isCurrentStreamFinal()
@@ -248,8 +252,32 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
       checkNotNull(cuesResolver);
       renderFromCuesWithTiming(positionUs);
     } else {
+      assertLegacyDecodingEnabledIfRequired();
       renderFromSubtitles(positionUs);
     }
+  }
+
+  /**
+   * Sets whether to decode subtitle data during rendering.
+   *
+   * <p>If this is enabled, then the {@link SubtitleDecoderFactory} passed to the constructor is
+   * used to decode subtitle data during rendering.
+   *
+   * <p>If this is disabled this text renderer can only handle tracks with MIME type {@link
+   * MimeTypes#APPLICATION_MEDIA3_CUES} (which have been parsed from their original format during
+   * extraction), and will throw an exception if passed data of a different type.
+   *
+   * <p>This is disabled by default.
+   *
+   * <p>This method is experimental. It may change behavior, be renamed, or removed in a future
+   * release.
+   *
+   * @deprecated This method (and all support for 'legacy' subtitle decoding during rendering) will
+   *     be removed in a future release.
+   */
+  @Deprecated
+  public void experimentalSetLegacyDecodingEnabled(boolean legacyDecodingEnabled) {
+    this.legacyDecodingEnabled = legacyDecodingEnabled;
   }
 
   private void renderFromCuesWithTiming(long positionUs) {
@@ -405,9 +433,6 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
             waitingForKeyFrame &= !nextInputBuffer.isKeyFrame();
           }
           if (!waitingForKeyFrame) {
-            if (nextInputBuffer.timeUs < getLastResetPositionUs()) {
-              nextInputBuffer.addFlag(C.BUFFER_FLAG_DECODE_ONLY);
-            }
             checkNotNull(subtitleDecoder).queueInputBuffer(nextInputBuffer);
             this.nextSubtitleInputBuffer = null;
           }
@@ -425,7 +450,6 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
     streamFormat = null;
     finalStreamEndPositionUs = C.TIME_UNSET;
     clearOutput();
-    outputStreamOffsetUs = C.TIME_UNSET;
     lastRendererPositionUs = C.TIME_UNSET;
     if (subtitleDecoder != null) {
       releaseSubtitleDecoder();
@@ -439,9 +463,38 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
 
   @Override
   public boolean isReady() {
+    if (streamFormat == null) {
+      return true;
+    }
+    if (streamError == null) {
+      try {
+        maybeThrowStreamError();
+      } catch (IOException e) {
+        streamError = e;
+      }
+    }
+
+    if (streamError != null) {
+      if (isCuesWithTiming(checkNotNull(streamFormat))) {
+        return checkNotNull(cuesResolver).getNextCueChangeTimeUs(lastRendererPositionUs)
+            != C.TIME_END_OF_SOURCE;
+      } else {
+        if (outputStreamEnded
+            || (inputStreamEnded
+                && hasNoEventsAfter(subtitle, lastRendererPositionUs)
+                && hasNoEventsAfter(nextSubtitle, lastRendererPositionUs)
+                && nextSubtitleInputBuffer != null)) {
+          return false;
+        }
+      }
+    }
     // Don't block playback whilst subtitles are loading.
     // Note: To change this behavior, it will be necessary to consider [Internal: b/12949941].
     return true;
+  }
+
+  private static boolean hasNoEventsAfter(@Nullable Subtitle subtitle, long timeUs) {
+    return subtitle == null || subtitle.getEventTime(subtitle.getEventTimeCount() - 1) <= timeUs;
   }
 
   private void releaseSubtitleBuffers() {
@@ -467,6 +520,7 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
   private void initSubtitleDecoder() {
     waitingForKeyFrame = true;
     subtitleDecoder = subtitleDecoderFactory.createDecoder(checkNotNull(streamFormat));
+    subtitleDecoder.setOutputStartTimeUs(getLastResetPositionUs());
   }
 
   private void replaceSubtitleDecoder() {
@@ -538,9 +592,20 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
 
   private long getPresentationTimeUs(long positionUs) {
     checkState(positionUs != C.TIME_UNSET);
-    checkState(outputStreamOffsetUs != C.TIME_UNSET);
+    return positionUs - getStreamOffsetUs();
+  }
 
-    return positionUs - outputStreamOffsetUs;
+  private void assertLegacyDecodingEnabledIfRequired() {
+    checkState(
+        legacyDecodingEnabled
+            || Objects.equals(streamFormat.sampleMimeType, MimeTypes.APPLICATION_CEA608)
+            || Objects.equals(streamFormat.sampleMimeType, MimeTypes.APPLICATION_MP4CEA608)
+            || Objects.equals(streamFormat.sampleMimeType, MimeTypes.APPLICATION_CEA708),
+        "Legacy decoding is disabled, can't handle "
+            + streamFormat.sampleMimeType
+            + " samples (expected "
+            + MimeTypes.APPLICATION_MEDIA3_CUES
+            + ").");
   }
 
   /** Returns whether {@link Format#sampleMimeType} is {@link MimeTypes#APPLICATION_MEDIA3_CUES}. */

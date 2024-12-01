@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="track_selection_title_video">વિડિયો</string>
+  <string name="track_selection_title_audio">ઓડિયો</string>
+  <string name="track_selection_title_text">લખાણ</string>
+</resources>

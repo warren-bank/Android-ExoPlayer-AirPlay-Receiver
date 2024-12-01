@@ -2,6 +2,8 @@ apply from: '../constants.gradle'
 apply plugin: 'com.android.application'
 
 android {
+    namespace project.ext.applicationId
+
     compileSdkVersion project.ext.compileSdkVersion
     buildToolsVersion project.ext.buildToolsVersion
 
@@ -11,12 +13,12 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion project.ext.minSdkVersion
+        minSdkVersion    project.ext.minSdkVersion
         targetSdkVersion project.ext.targetSdkVersion
 
-        applicationId "com.github.warren_bank.exoplayer_airplay_receiver"
-        versionName project.ext.releaseVersion
-        versionCode project.ext.releaseVersionCode
+        applicationId project.ext.applicationId
+        versionName   project.ext.releaseVersion
+        versionCode   project.ext.releaseVersionCode
 
         archivesBaseName += "-$versionName"
     }
@@ -38,6 +40,10 @@ android {
             dimension "decoderExtensions"
             buildConfigField "boolean", "USE_DECODER_EXTENSIONS", "true"
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -71,6 +77,11 @@ android {
             include "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
             universalApk false
         }
+    }
+
+    dependenciesInfo {
+        includeInApk    = false  // Disables dependency metadata when building APKs.
+        includeInBundle = false  // Disables dependency metadata when building Android App Bundles.
     }
 
     lintOptions {

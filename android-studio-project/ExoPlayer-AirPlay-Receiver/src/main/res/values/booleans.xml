@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- Preference default values -->
   <bool name="prefval_enable_tunneled_video_playback">false</bool>

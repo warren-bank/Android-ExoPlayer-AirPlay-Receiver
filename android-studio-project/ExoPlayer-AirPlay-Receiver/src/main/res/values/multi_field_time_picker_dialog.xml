@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="time_picker_dialog_title">@string/text_offset_selection_title</string>
   <string name="time_picker_dialog_reset">Reset to Zero</string>

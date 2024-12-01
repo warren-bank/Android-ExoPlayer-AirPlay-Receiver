@@ -81,7 +81,7 @@ public class PlayerNotificationManagerContainer {
     Player player = playerManager.exoPlayer;
 
     // =========================================================================
-    // https://github.com/androidx/media/blob/1.2.0/libraries/session/src/main/java/androidx/media3/session/MediaSession.java#L251
+    // https://github.com/androidx/media/blob/1.5.0/libraries/session/src/main/java/androidx/media3/session/MediaSession.java#L248
     // =========================================================================
 
     mediaSession = new MediaSession.Builder(context, player)
