@@ -63,6 +63,10 @@ sleep 10
 curl --silent -X GET \
   "http://${airplay_ip}/rate?value=10.0"
 
+# ignore invalid input: negative rate is not allowed
+curl --silent -X GET \
+  "http://${airplay_ip}/rate?value=-1.0"
+
 # add video #2 to end of queue (add text captions, set 'Referer' request header, seek to 50%)
 #   note: position < 1 is a percent of the total track length
 curl --silent -X POST \
@@ -117,9 +121,45 @@ sleep 10
 curl --silent -X GET \
   "http://${airplay_ip}/volume?value=1.0"
 
+sleep 10
+
+# toggle mute on
+curl --silent -X GET \
+  "http://${airplay_ip}/mute-volume"
+
+sleep 10
+
+# toggle mute off
+curl --silent -X GET \
+  "http://${airplay_ip}/mute-volume"
+
+sleep 10
+
+# turn mute on
+curl --silent -X GET \
+  "http://${airplay_ip}/mute-volume?toggle=1"
+
+sleep 10
+
+# turn mute off
+curl --silent -X GET \
+  "http://${airplay_ip}/mute-volume?toggle=0"
+
 # seek to beginning of currently playing video
 curl --silent -X GET \
   "http://${airplay_ip}/scrub?position=0"
+
+sleep 10
+
+# toggle text captions off
+curl --silent -X GET \
+  "http://${airplay_ip}/show-captions"
+
+sleep 10
+
+# toggle text captions on
+curl --silent -X GET \
+  "http://${airplay_ip}/show-captions"
 
 sleep 10
 
@@ -132,8 +172,6 @@ sleep 10
 # turn text captions on
 curl --silent -X GET \
   "http://${airplay_ip}/show-captions?toggle=1"
-
-sleep 10
 
 # set time offset for text captions (-30 sec = -30*1e6)
 curl --silent -X GET \

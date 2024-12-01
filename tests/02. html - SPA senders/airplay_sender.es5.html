@@ -89,7 +89,7 @@ body > div.contents > div.section .oneline > * {
   height: 100%;
   vertical-align: middle;
 }
-body > div.contents > div.section .oneline.fullwidth > * {
+body > div.contents > div.section .fullwidth > * {
   width: 100%;
 }
 
@@ -198,6 +198,10 @@ window.onload  = function() {
   var $load_captions           = document.querySelector('button#load_captions')
   var $pause                   = document.querySelector('button#pause')
   var $resume                  = document.querySelector('button#resume')
+  var $toggle_mute             = document.querySelector('button#toggle_mute')
+  var $toggle_captions         = document.querySelector('button#toggle_captions')
+  var $mute_on                 = document.querySelector('button#mute_on')
+  var $mute_off                = document.querySelector('button#mute_off')
   var $captions_on             = document.querySelector('button#captions_on')
   var $captions_off            = document.querySelector('button#captions_off')
   var $previous                = document.querySelector('button#previous')
@@ -767,6 +771,34 @@ window.onload  = function() {
     event.stopPropagation()
 
     send_message('/rate?value=1.0', null)
+  }
+
+  $toggle_mute.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/mute-volume', null)
+  }
+
+  $toggle_captions.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/show-captions', null)
+  }
+
+  $mute_on.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/mute-volume?toggle=1', null)
+  }
+
+  $mute_off.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/mute-volume?toggle=0', null)
   }
 
   $captions_on.onclick = function(event) {
@@ -1784,6 +1816,22 @@ window.onload  = function() {
             </td>
           </tr>
           <tr>
+            <td class="fullwidth">
+              <button id="toggle_mute">Toggle<br />Mute</button>
+            </td>
+            <td class="fullwidth">
+              <button id="toggle_captions">Toggle<br />CC</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline fullwidth">
+              <button id="mute_on">Mute On</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="mute_off">Mute Off</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
             <td class="oneline fullwidth">
               <button id="captions_on">CC On</button>
             </td>
