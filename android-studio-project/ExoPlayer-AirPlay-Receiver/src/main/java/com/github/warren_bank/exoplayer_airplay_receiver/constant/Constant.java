@@ -181,24 +181,25 @@ public class Constant {
         public static final int Msg_Video_Next                  =  8;
         public static final int Msg_Video_Prev                  =  9;
         public static final int Msg_Audio_Volume                = 10;
-        public static final int Msg_Text_Load                   = 11;
-        public static final int Msg_Text_Show                   = 12;
-        public static final int Msg_Text_Set_Style              = 13;
-        public static final int Msg_Text_Set_Time               = 14;
-        public static final int Msg_Text_Add_Time               = 15;
-        public static final int Msg_Repeat_Mode                 = 16;
-        public static final int Msg_Resize_Mode                 = 17;
+        public static final int Msg_Audio_Volume_Mute           = 11;
+        public static final int Msg_Text_Load                   = 12;
+        public static final int Msg_Text_Show                   = 13;
+        public static final int Msg_Text_Set_Style              = 14;
+        public static final int Msg_Text_Set_Time               = 15;
+        public static final int Msg_Text_Add_Time               = 16;
+        public static final int Msg_Repeat_Mode                 = 17;
+        public static final int Msg_Resize_Mode                 = 18;
 
-        public static final int Msg_Show_Toast                  = 18;
-        public static final int Msg_Show_Player                 = 19;
-        public static final int Msg_Hide_Player                 = 20;
-        public static final int Msg_Start_Activity              = 21;
-        public static final int Msg_Video_Share                 = 22;
-        public static final int Msg_Preferences_Edit            = 23;
-        public static final int Msg_Delete_Cache                = 24;
-        public static final int Msg_Exit_Service                = 25;
+        public static final int Msg_Show_Toast                  = 19;
+        public static final int Msg_Show_Player                 = 20;
+        public static final int Msg_Hide_Player                 = 21;
+        public static final int Msg_Start_Activity              = 22;
+        public static final int Msg_Video_Share                 = 23;
+        public static final int Msg_Preferences_Edit            = 24;
+        public static final int Msg_Delete_Cache                = 25;
+        public static final int Msg_Exit_Service                = 26;
 
-        public static final int Msg_Runtime_Permissions_Granted = 26;
+        public static final int Msg_Runtime_Permissions_Granted = 27;
     }
 
     public interface Target {
@@ -217,6 +218,7 @@ public class Constant {
         public static final String NEXT                         = "/next";
         public static final String PREVIOUS                     = "/previous";
         public static final String VOLUME                       = "/volume";
+        public static final String VOLUME_MUTE                  = "/mute-volume";
         public static final String TXT_LOAD                     = "/load-captions";
         public static final String TXT_SHOW                     = "/show-captions";
         public static final String TXT_SET_STYLE                = "/set-captions-style";

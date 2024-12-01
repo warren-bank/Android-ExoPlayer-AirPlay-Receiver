@@ -363,9 +363,25 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_Audio_Volume_Mute : {
+        if (msg.obj == null) {
+          playerManager.AirPlay_toggle_volume();
+        }
+        else {
+          boolean muteVolume = (boolean) msg.obj;
+          playerManager.AirPlay_mute_volume(muteVolume);
+        }
+        break;
+      }
+
       case Constant.Msg.Msg_Text_Show : {
-        boolean showCaptions = (boolean) msg.obj;
-        playerManager.AirPlay_show_captions(showCaptions);
+        if (msg.obj == null) {
+          playerManager.AirPlay_toggle_captions();
+        }
+        else {
+          boolean showCaptions = (boolean) msg.obj;
+          playerManager.AirPlay_show_captions(showCaptions);
+        }
         break;
       }
 

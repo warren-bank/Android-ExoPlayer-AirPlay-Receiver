@@ -261,7 +261,7 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/previous"
   ```
-* mute audio:
+* silence audio:
   ```bash
     curl --silent -X GET \
       "http://${airplay_ip}/volume?value=0.0"
@@ -282,6 +282,21 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/volume?value=11.5"
   ```
+* toggle the 'on/off' state of whether the audio volume is mute:
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/mute-volume"
+  ```
+* set the state of whether the audio volume is mute to 'on':
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/mute-volume?toggle=1"
+  ```
+* set the state of whether the audio volume is mute to 'off':
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/mute-volume?toggle=0"
+  ```
 * load new text captions for current video in queue:
   ```bash
     curl --silent -X POST \
@@ -289,15 +304,20 @@ __extended APIs:__
       --data-binary "Caption-Location: ${caption_url_1}" \
       "http://${airplay_ip}/load-captions"
   ```
-* turn text captions off:
+* toggle the 'on/off' state of whether the text captions are visible:
   ```bash
     curl --silent -X GET \
-      "http://${airplay_ip}/show-captions?toggle=0"
+      "http://${airplay_ip}/show-captions"
   ```
-* turn text captions on:
+* set the state of whether the text captions are visible to 'on':
   ```bash
     curl --silent -X GET \
       "http://${airplay_ip}/show-captions?toggle=1"
+  ```
+* set the state of whether the text captions are visible to 'off':
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/show-captions?toggle=0"
   ```
 * set font style and size options for text captions to custom values:
   ```bash

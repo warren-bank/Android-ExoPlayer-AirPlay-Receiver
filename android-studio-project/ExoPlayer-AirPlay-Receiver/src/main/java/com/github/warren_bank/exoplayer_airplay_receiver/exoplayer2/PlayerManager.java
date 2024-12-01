@@ -94,6 +94,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private RtmpDataSource.Factory rtmpDataSourceFactory;
   private DownloadTracker downloadTracker;
   private float audioVolume;
+  private float mutedVolume;
   private boolean captionsDisabled;
   private MyLoadErrorHandlingPolicy loadErrorHandlingPolicy;
   private int currentItemIndex;
@@ -183,6 +184,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     );
 
     this.audioVolume             = 1.0f;
+    this.mutedVolume             = 0.0f;
     this.captionsDisabled        = false;
     this.loadErrorHandlingPolicy = new MyLoadErrorHandlingPolicy();
     this.currentItemIndex        = C.INDEX_UNSET;
@@ -961,6 +963,31 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     }
   }
 
+  public void AirPlay_mute_volume(boolean muteVolume) {
+    if (exoPlayer == null) return;
+
+    if ( muteVolume && (Float.compare(this.audioVolume, 0.0f) == 0)) // if ( muteVolume && (this.audioVolume == 0))
+      return;
+
+    if (!muteVolume && (Float.compare(this.mutedVolume, 0.0f) == 0)) // if (!muteVolume && (this.mutedVolume == 0))
+      return;
+
+    if (muteVolume) {
+      this.mutedVolume = this.audioVolume;
+      AirPlay_volume(0.0f);
+    }
+    else {
+      AirPlay_volume(this.mutedVolume);
+      this.mutedVolume = 0.0f;
+    }
+  }
+
+  public void AirPlay_toggle_volume() {
+    boolean muteVolume = Float.compare(this.audioVolume, 0.0f) > 0; // this.audioVolume > 0
+
+    AirPlay_mute_volume(muteVolume);
+  }
+
   /**
    * Change visibility of text captions.
    *
@@ -1229,6 +1256,12 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
               }
             }
           }
+          break;
+        }
+
+        case KeyEvent.KEYCODE_VOLUME_MUTE : {
+          AirPlay_toggle_volume();
+          isHandled = true;
           break;
         }
       }

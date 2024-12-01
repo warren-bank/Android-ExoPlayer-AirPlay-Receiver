@@ -802,22 +802,51 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.startsWith(Constant.Target.VOLUME_MUTE)) { //toggle audio volume on/off
+        String value = StringUtils.getQueryStringValue(target, "?toggle=");
+        try {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Audio_Volume_Mute;
+
+          if (TextUtils.isEmpty(value)) {
+            Log.d(tag, "airplay mute volume = toggle current state");
+            msg.obj = null;
+          }
+          else {
+            int toggleValue = Integer.parseInt(value, 10);
+            Log.d(tag, "airplay mute volume = " + toggleValue);
+            msg.obj = (toggleValue != 0); //boolean whether to "mute"
+          }
+
+          MainApp.broadcastMessage(msg);
+        }
+        catch (NumberFormatException e) {
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          return;
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.startsWith(Constant.Target.TXT_SHOW)) { //toggle text captions on/off
         String value = StringUtils.getQueryStringValue(target, "?toggle=");
-        if (!TextUtils.isEmpty(value)) {
-          try {
+        try {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Text_Show;
+
+          if (TextUtils.isEmpty(value)) {
+            Log.d(tag, "airplay captions = toggle current state");
+            msg.obj = null;
+          }
+          else {
             int toggleValue = Integer.parseInt(value, 10);
             Log.d(tag, "airplay captions = " + toggleValue);
-
-            Message msg = Message.obtain();
-            msg.what = Constant.Msg.Msg_Text_Show;
             msg.obj = (toggleValue != 0); //boolean whether to "show"
-            MainApp.broadcastMessage(msg);
           }
-          catch (NumberFormatException e) {
-            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
-            return;
-          }
+
+          MainApp.broadcastMessage(msg);
+        }
+        catch (NumberFormatException e) {
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          return;
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
