@@ -91,6 +91,7 @@ public final class ExoPlayerUtils {
       cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
       CookieHandler.setDefault(cookieManager);
       httpDataSourceFactory = new DefaultHttpDataSource.Factory();
+      httpDataSourceFactory.setAllowCrossProtocolRedirects(true);
 
       if (USER_AGENT != null) {
         httpDataSourceFactory.setUserAgent(USER_AGENT);

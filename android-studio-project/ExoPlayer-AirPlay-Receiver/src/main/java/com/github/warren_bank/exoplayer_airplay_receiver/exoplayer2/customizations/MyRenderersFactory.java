@@ -33,6 +33,7 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
     ArrayList<Renderer> out
   ) {
     textRenderer = new MyTextRenderer(output, outputLooper);
+    textRenderer.experimentalSetLegacyDecodingEnabled(true);
     out.add(textRenderer);
   }
 

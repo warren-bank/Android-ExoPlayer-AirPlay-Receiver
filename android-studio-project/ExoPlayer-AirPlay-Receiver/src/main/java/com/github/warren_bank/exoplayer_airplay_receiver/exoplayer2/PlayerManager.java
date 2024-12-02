@@ -133,6 +133,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
         : 0
     );
 
+    extractorsFactory.experimentalSetTextTrackTranscodingEnabled(true);
+
     trackSelector.setParameters(
       trackSelector.buildUponParameters()
         .setTunnelingEnabled(
@@ -156,10 +158,13 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     this.rtmpDataSourceFactory     = ExoPlayerUtils.getRtmpDataSourceFactory();
     this.downloadTracker           = ExoPlayerUtils.getDownloadTracker(context);
 
+    MediaSource.Factory msFactory  = new DefaultMediaSourceFactory(cacheDataSourceFactory, extractorsFactory);
+    msFactory.experimentalParseSubtitlesDuringExtraction(false);
+
     ExoPlayer.Builder builder = new ExoPlayer.Builder(
       context,
       (RenderersFactory) renderersFactory,
-      new DefaultMediaSourceFactory(cacheDataSourceFactory, extractorsFactory),
+      msFactory,
       trackSelector,
       loadControl,
       DefaultBandwidthMeter.getSingletonInstance(context),
@@ -1678,45 +1683,60 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   private MediaSource buildUriMediaSource(VideoSource sample) {
-    DataSource.Factory factory = (ExternalStorageUtils.isFileUri(sample.uri) || ExternalStorageUtils.isContentUri(sample.uri))
+    DataSource.Factory dsFactory = (ExternalStorageUtils.isFileUri(sample.uri) || ExternalStorageUtils.isContentUri(sample.uri))
       ? defaultDataSourceFactory
       : cacheDataSourceFactory;
 
-    if (factory == null)
+    if (dsFactory == null)
       return null;
 
     MediaItem mediaItem = sample.getMediaItem();
 
+    MediaSource.Factory msFactory = null;
+
     switch (sample.uri_mimeType) {
       case "application/x-mpegURL":
       case "application/x-mpegurl":
-        return new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
+        msFactory = new HlsMediaSource.Factory(dsFactory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
+        break;
       case "application/dash+xml":
-        return new DashMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
+        msFactory = new DashMediaSource.Factory(dsFactory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
+        break;
       case "application/vnd.ms-sstr+xml":
-        return new SsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
+        msFactory = new SsMediaSource.Factory(dsFactory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
+        break;
       case "application/x-rtsp":
-        return new RtspMediaSource.Factory().createMediaSource(mediaItem);
+        msFactory = new RtspMediaSource.Factory();
+        break;
       case "application/x-rtmp":
-        factory = rtmpDataSourceFactory;
-        return new ProgressiveMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
+        dsFactory = rtmpDataSourceFactory;
+        msFactory = new ProgressiveMediaSource.Factory(dsFactory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
+        break;
       default:
-        return new ProgressiveMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(mediaItem);
+        msFactory = new ProgressiveMediaSource.Factory(dsFactory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy);
+        break;
     }
+
+    if (msFactory == null)
+      return null;
+
+    msFactory.experimentalParseSubtitlesDuringExtraction(false);
+
+    return msFactory.createMediaSource(mediaItem);
   }
 
   private ArrayList<MediaSource> buildCaptionMediaSources(MediaSource video) {
     ArrayList<MediaSource> captions = new ArrayList<MediaSource>();
-    DataSource.Factory factory;
+    DataSource.Factory dsFactory;
 
     try {
       for (MediaItem.SubtitleConfiguration subtitleConfiguration : video.getMediaItem().localConfiguration.subtitleConfigurations) {
-        factory = ExternalStorageUtils.isFileUri(subtitleConfiguration.uri.toString())
+        dsFactory = ExternalStorageUtils.isFileUri(subtitleConfiguration.uri.toString())
           ? defaultDataSourceFactory
           : httpDataSourceFactory;
 
         captions.add(
-          new SingleSampleMediaSource.Factory(factory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(subtitleConfiguration, C.TIME_UNSET)
+          new SingleSampleMediaSource.Factory(dsFactory).setLoadErrorHandlingPolicy(loadErrorHandlingPolicy).createMediaSource(subtitleConfiguration, C.TIME_UNSET)
         );
       }
     }
