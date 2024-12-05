@@ -49,6 +49,24 @@ public class StringUtils {
     );
   }
 
+  /*
+   * Requirement:
+   *   method = POST
+   *   header = "Content-Type: application/x-www-form-urlencoded"
+   */
+  public static String getQueryStringValue(String url, byte[] entityContent, String prefix) {
+    String value = StringUtils.getQueryStringValue(url, prefix);
+
+    if (TextUtils.isEmpty(value) && (entityContent != null)) {
+      String requestBody;
+      requestBody = new String(entityContent);
+      requestBody = convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+
+      value = StringUtils.getQueryStringValue("?" + requestBody, prefix);
+    }
+    return value;
+  }
+
   public static String getRequestBodyValue(String requestBody, String prefix) {
     String suffix = "\n";
     return StringUtils.getValue(requestBody, prefix, suffix);

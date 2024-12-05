@@ -2,7 +2,12 @@ package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnBrowser;
+import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnCommand;
+import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnInfo;
+import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnVariables;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.BplistParser;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
@@ -37,6 +42,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
@@ -244,7 +250,10 @@ public class RequestListenerThread extends Thread {
     HttpRequestHandlerRegistry registry = new HttpRequestHandlerRegistry();
 
     //http request handler, HttpFileHandler inherits from HttpRequestHandler
-    registry.register("*", new WebServiceHandler(this.playbackInfoSource));
+    registry.register("*", new WebServiceHandler(
+      this.context,
+      this.playbackInfoSource
+    ));
 
     this.httpService = new MyHttpService(
       httpProcessor,
@@ -351,10 +360,12 @@ public class RequestListenerThread extends Thread {
   private static class WebServiceHandler implements HttpRequestHandler {
     private static final String tag = WebServiceHandler.class.getSimpleName();
 
+    private final Context context;
     private final RequestListenerThread.PlaybackInfoSource playbackInfoSource;
 
-    public WebServiceHandler(RequestListenerThread.PlaybackInfoSource playbackInfoSource) {
+    public WebServiceHandler(Context context, RequestListenerThread.PlaybackInfoSource playbackInfoSource) {
       super();
+      this.context            = context;
       this.playbackInfoSource = playbackInfoSource;
     }
 
@@ -1199,6 +1210,73 @@ public class RequestListenerThread extends Thread {
         MainApp.broadcastMessage(msg);
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+
+      // =======================================================================
+      // support for Media Player Classic Home Cinema (MPC-HC) API methods:
+      // =======================================================================
+      else if (target.startsWith(Constant.Target.MPC_API_COMMAND)) {
+        OnCommand.Result result = OnCommand.handle(target, entityContent, playbackInfoSource);
+
+        if (result.msg != null)
+          MainApp.broadcastMessage(result.msg);
+
+        if (result.stop) {
+          httpContext.setAttribute(Constant.Need_sendReverse, Constant.Status.Status_stop);
+          httpContext.setAttribute(Constant.ReverseMsg, Constant.getStopEventMsg(0, sessionId, Constant.Status.Status_stop));
+
+          photoCacheMaps.clear();
+        }
+
+        setCommonHeaders(httpResponse, result.statusCode);
+      }
+      else if (target.startsWith(Constant.Target.MPC_API_BROWSER)) {
+        String filepath = StringUtils.getQueryStringValue(target, entityContent, "?path=");
+        File file = ExternalStorageUtils.getFile(filepath);
+
+        if (file == null)
+          file = context.getExternalFilesDir(null);
+
+        if (file.isFile()) {
+          HashMap<String, String> dataMap = new HashMap<String, String>();
+          dataMap.put(Constant.PlayURL, file.getPath());
+
+          HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+          map.put(Constant.Video_Source_Map.DATA, dataMap);
+
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Video_Play;
+          msg.obj = map;
+          MainApp.broadcastMessage(msg);
+
+          // display parent directory
+          file = file.getParentFile();
+        }
+
+        if ((file != null) && file.isDirectory()) {
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+          httpResponse.setHeader("Content-Type", "text/html");
+
+          String responseStr = OnBrowser.getHtml(file);
+          httpResponse.setEntity(new StringEntity(responseStr));
+        }
+        else {
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+        }
+      }
+      else if (target.equals(Constant.Target.MPC_API_INFO)) {
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        httpResponse.setHeader("Content-Type", "text/html");
+
+        String responseStr = OnInfo.getHtml(context, playbackInfoSource);
+        httpResponse.setEntity(new StringEntity(responseStr));
+      }
+      else if (target.equals(Constant.Target.MPC_API_VARIABLES)) {
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        httpResponse.setHeader("Content-Type", "text/html");
+
+        String responseStr = OnVariables.getHtml(playbackInfoSource);
+        httpResponse.setEntity(new StringEntity(responseStr));
       }
 
       // =======================================================================

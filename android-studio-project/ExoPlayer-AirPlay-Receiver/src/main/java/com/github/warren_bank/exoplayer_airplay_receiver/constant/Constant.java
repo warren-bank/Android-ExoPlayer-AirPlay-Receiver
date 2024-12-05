@@ -242,6 +242,12 @@ public class Constant {
         public static final String PREFERENCES_EDIT             = "/edit-preferences";
         public static final String CACHE_DELETE                 = "/delete-cache";
         public static final String SERVICE_EXIT                 = "/exit-service";
+
+        // support for Media Player Classic Home Cinema (MPC-HC) API methods:
+        public static final String MPC_API_COMMAND              = "/command.html";
+        public static final String MPC_API_BROWSER              = "/browser.html";
+        public static final String MPC_API_INFO                 = "/info.html";
+        public static final String MPC_API_VARIABLES            = "/variables.html";
     }
 
     public interface Status {

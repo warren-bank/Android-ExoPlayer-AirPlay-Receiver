@@ -738,6 +738,8 @@ __extended APIs:__
 * POST data sent in requests to `/show-toast` API endpoint:
   - contains an arbitrary block of text
 
+- - - -
+
 #### Usage (high level):
 
 * [single-page application (SPA)](http://webcast-reloaded.surge.sh/airplay_sender.html) that can run in any web browser, and be used to:
@@ -884,6 +886,18 @@ __extended APIs:__
         - select: _Schedule&hellip;_
           * Perform = _Send Broadcast_
           * configure other settings: date, time, interval, precision, etc&hellip;
+
+- - - -
+
+#### Media Player Classic Home Cinema (MPC-HC) API
+
+* support for this API was added as an after-thought
+  - introduced in [v3.6.0](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/releases/tag/v3.6.0)
+* it allows access to a subset of features and functionality from any of the readily available off-the-shelf client software
+* tested with:
+  - [MPC-HC Remote Control](https://github.com/burdukowsky/mpc-hc-android) v1.0
+  - [Remote for MPC](https://play.google.com/store/apps/details?id=com.andreformosa.playerremote) v1.2.5
+  - [MPC REMOTE](https://play.google.com/store/apps/details?id=com.wethole.mpcrc) v1.10c
 
 - - - -
 
