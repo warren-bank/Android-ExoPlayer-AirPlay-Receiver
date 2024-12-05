@@ -849,6 +849,25 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.startsWith(Constant.Target.VOLUME_OFFSET)) { //add relative offset to audio volume
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!TextUtils.isEmpty(value)) {
+          try {
+            float offset = Float.parseFloat(value);
+            Log.d(tag, "airplay volume offset = " + offset);
+
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Audio_Volume_Offset;
+            msg.obj = offset;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.startsWith(Constant.Target.VOLUME_MUTE)) { //toggle audio volume on/off
         String value = StringUtils.getQueryStringValue(target, "?toggle=");
         try {

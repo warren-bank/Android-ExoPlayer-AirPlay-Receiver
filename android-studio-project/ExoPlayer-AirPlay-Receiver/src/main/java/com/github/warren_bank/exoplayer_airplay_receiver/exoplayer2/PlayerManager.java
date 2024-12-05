@@ -250,8 +250,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @return Is the instance of ExoPlayer able to immediately play from its current position.
    */
   public boolean isPlayerReady() {
-    if (exoPlayer == null)
-      return false;
+    if (exoPlayer == null) return false;
 
     int state = exoPlayer.getPlaybackState();
     return (state == Player.STATE_READY);
@@ -290,23 +289,19 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   public String getCurrentVideoMimeType() {
-    if (exoPlayer == null)
-      return null;
+    if (exoPlayer == null) return null;
 
     Format format = exoPlayer.getVideoFormat();
-    if (format == null)
-      return null;
+    if (format == null) return null;
 
     return format.sampleMimeType;
   }
 
   public String getCurrentAudioMimeType() {
-    if (exoPlayer == null)
-      return null;
+    if (exoPlayer == null) return null;
 
     Format format = exoPlayer.getAudioFormat();
-    if (format == null)
-      return null;
+    if (format == null) return null;
 
     return format.sampleMimeType;
   }
@@ -955,8 +950,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    *                       The value 6.5 is 100% input volume and amplified by 5.5 dB.
    */
   public void AirPlay_volume(float newAudioVolume) {
-    if (exoPlayer == null)
-      return;
+    if (exoPlayer == null) return;
 
     float maxVolume = (loudnessEnhancer != null)
       ? (float) (PreferencesMgr.get_max_audio_volume_boost_db() + 1.0f)
@@ -998,6 +992,13 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
         catch (Exception e) {}
       }
     }
+  }
+
+  public void AirPlay_add_volume_offset(float offset) {
+    if (exoPlayer == null) return;
+
+    float newAudioVolume = this.audioVolume + offset;
+    AirPlay_volume(newAudioVolume);
   }
 
   public void AirPlay_mute_volume(boolean muteVolume) {
