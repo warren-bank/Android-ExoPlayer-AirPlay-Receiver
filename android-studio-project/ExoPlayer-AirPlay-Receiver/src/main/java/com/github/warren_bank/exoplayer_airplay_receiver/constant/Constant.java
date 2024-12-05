@@ -176,30 +176,31 @@ public class Constant {
         public static final int Msg_Video_Seek                  =  4;
         public static final int Msg_Video_Rate                  =  5;
 
-        public static final int Msg_Video_Seek_Offset           =  6;
-        public static final int Msg_Video_Queue                 =  7;
-        public static final int Msg_Video_Next                  =  8;
-        public static final int Msg_Video_Prev                  =  9;
-        public static final int Msg_Audio_Volume                = 10;
-        public static final int Msg_Audio_Volume_Mute           = 11;
-        public static final int Msg_Text_Load                   = 12;
-        public static final int Msg_Text_Show                   = 13;
-        public static final int Msg_Text_Set_Style              = 14;
-        public static final int Msg_Text_Set_Time               = 15;
-        public static final int Msg_Text_Add_Time               = 16;
-        public static final int Msg_Repeat_Mode                 = 17;
-        public static final int Msg_Resize_Mode                 = 18;
+        public static final int Msg_Video_Pause                 =  6;
+        public static final int Msg_Video_Seek_Offset           =  7;
+        public static final int Msg_Video_Queue                 =  8;
+        public static final int Msg_Video_Next                  =  9;
+        public static final int Msg_Video_Prev                  = 10;
+        public static final int Msg_Audio_Volume                = 11;
+        public static final int Msg_Audio_Volume_Mute           = 12;
+        public static final int Msg_Text_Load                   = 13;
+        public static final int Msg_Text_Show                   = 14;
+        public static final int Msg_Text_Set_Style              = 15;
+        public static final int Msg_Text_Set_Time               = 16;
+        public static final int Msg_Text_Add_Time               = 17;
+        public static final int Msg_Repeat_Mode                 = 18;
+        public static final int Msg_Resize_Mode                 = 19;
 
-        public static final int Msg_Show_Toast                  = 19;
-        public static final int Msg_Show_Player                 = 20;
-        public static final int Msg_Hide_Player                 = 21;
-        public static final int Msg_Start_Activity              = 22;
-        public static final int Msg_Video_Share                 = 23;
-        public static final int Msg_Preferences_Edit            = 24;
-        public static final int Msg_Delete_Cache                = 25;
-        public static final int Msg_Exit_Service                = 26;
+        public static final int Msg_Show_Toast                  = 20;
+        public static final int Msg_Show_Player                 = 21;
+        public static final int Msg_Hide_Player                 = 22;
+        public static final int Msg_Start_Activity              = 23;
+        public static final int Msg_Video_Share                 = 24;
+        public static final int Msg_Preferences_Edit            = 25;
+        public static final int Msg_Delete_Cache                = 26;
+        public static final int Msg_Exit_Service                = 27;
 
-        public static final int Msg_Runtime_Permissions_Granted = 27;
+        public static final int Msg_Runtime_Permissions_Granted = 28;
     }
 
     public interface Target {
@@ -213,6 +214,7 @@ public class Constant {
         public static final String PLAYBACK_INFO                = "/playback-info";
 
         public static final String MEDIA_ITEM_INFO              = "/media-item-info";
+        public static final String PAUSE                        = "/pause";
         public static final String SCRUB_OFFSET                 = "/add-scrub-offset";
         public static final String QUEUE                        = "/queue";
         public static final String NEXT                         = "/next";

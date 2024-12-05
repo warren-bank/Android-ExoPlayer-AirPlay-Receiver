@@ -763,14 +763,14 @@ window.onload  = function() {
     event.preventDefault()
     event.stopPropagation()
 
-    send_message('/rate?value=0.0', null)
+    send_message('/pause?toggle=1', null)
   }
 
   $resume.onclick = function(event) {
     event.preventDefault()
     event.stopPropagation()
 
-    send_message('/rate?value=1.0', null)
+    send_message('/pause?toggle=0', null)
   }
 
   $toggle_mute.onclick = function(event) {

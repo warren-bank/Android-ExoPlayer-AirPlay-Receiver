@@ -47,15 +47,27 @@ curl --silent -X GET \
 
 sleep 30
 
-# pause the currently playing video
+# toggle pause on
 curl --silent -X GET \
-  "http://${airplay_ip}/rate?value=0.0"
+  "http://${airplay_ip}/pause"
 
 sleep 10
 
-# resume playback of the currently paused video
+# toggle pause off (resume)
 curl --silent -X GET \
-  "http://${airplay_ip}/rate?value=1.0"
+  "http://${airplay_ip}/pause"
+
+sleep 10
+
+# turn pause on
+curl --silent -X GET \
+  "http://${airplay_ip}/pause?toggle=1"
+
+sleep 10
+
+# turn pause off (resume)
+curl --silent -X GET \
+  "http://${airplay_ip}/pause?toggle=0"
 
 sleep 10
 
@@ -83,7 +95,7 @@ curl --silent -X POST \
 
 sleep 10
 
-# decrease speed of playback to 1x
+# reset speed of playback to 1x
 curl --silent -X GET \
   "http://${airplay_ip}/rate?value=1.0"
 

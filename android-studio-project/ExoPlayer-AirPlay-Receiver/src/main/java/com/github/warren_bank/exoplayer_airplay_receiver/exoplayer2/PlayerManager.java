@@ -822,6 +822,23 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     }
   }
 
+  public void AirPlay_pause(boolean pause) {
+    if (exoPlayer == null) return;
+
+    boolean not_paused = exoPlayer.getPlayWhenReady();
+    if (!pause == not_paused) return;
+
+    exoPlayer.setPlayWhenReady(!pause);
+  }
+
+  public void AirPlay_toggle_pause() {
+    if (exoPlayer == null) return;
+
+    boolean not_paused = exoPlayer.getPlayWhenReady();
+
+    AirPlay_pause(not_paused);
+  }
+
   /**
    * Change rate of speed for video playback.
    *
@@ -830,21 +847,12 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_rate(float rate) {
     if (exoPlayer == null) return;
 
-    if (Float.compare(rate, 0.0f) == 0) { // if (rate == 0.0f)
-      // pause playback
-      if (exoPlayer.getPlayWhenReady())
-        exoPlayer.setPlayWhenReady(false);
-    }
-    else if (Float.compare(rate, 0.0f) > 0) {
-      // update playback speed
-      exoPlayer.setPlaybackParameters(
-        new PlaybackParameters(rate)
-      );
+    if (Float.compare(rate, 0.0f) < 0) return;
 
-      // resume playback if paused
-      if (!exoPlayer.getPlayWhenReady())
-        exoPlayer.setPlayWhenReady(true);
-    }
+    // update playback speed
+    exoPlayer.setPlaybackParameters(
+      new PlaybackParameters(rate)
+    );
   }
 
   public void AirPlay_stop() {
@@ -866,7 +874,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       addRawVideoItem(R.raw.airplay, /* remove_previous_items= */ true);
     }
     else {
-      AirPlay_rate(0f);
+      AirPlay_pause(true);
       truncateQueue(0);
     }
   }

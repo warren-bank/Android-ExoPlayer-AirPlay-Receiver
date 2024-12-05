@@ -554,7 +554,7 @@ public class RequestListenerThread extends Thread {
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         httpResponse.setEntity(returnBody);
       }
-      else if (target.startsWith(Constant.Target.RATE)) { //Set playback rate (special case: 0 is pause)
+      else if (target.startsWith(Constant.Target.RATE)) { //Set playback rate
         String value = StringUtils.getQueryStringValue(target, "?value=");
         if (!TextUtils.isEmpty(value)) {
           try {
@@ -753,6 +753,30 @@ public class RequestListenerThread extends Thread {
 
           setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
+      }
+      else if (target.startsWith(Constant.Target.PAUSE)) { //toggle pause on/off
+        String value = StringUtils.getQueryStringValue(target, "?toggle=");
+        try {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Video_Pause;
+
+          if (TextUtils.isEmpty(value)) {
+            Log.d(tag, "airplay pause = toggle current state");
+            msg.obj = null;
+          }
+          else {
+            int toggleValue = Integer.parseInt(value, 10);
+            Log.d(tag, "airplay pause = " + toggleValue);
+            msg.obj = (toggleValue != 0); //boolean whether to "pause": false will resume playback
+          }
+
+          MainApp.broadcastMessage(msg);
+        }
+        catch (NumberFormatException e) {
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          return;
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
       else if (target.startsWith(Constant.Target.SCRUB_OFFSET)) { //perform seek operation relative to position of current video
         String value = StringUtils.getQueryStringValue(target, "?value=");

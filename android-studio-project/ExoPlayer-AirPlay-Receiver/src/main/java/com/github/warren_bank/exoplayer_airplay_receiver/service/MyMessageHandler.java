@@ -336,6 +336,17 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_Video_Pause : {
+        if (msg.obj == null) {
+          playerManager.AirPlay_toggle_pause();
+        }
+        else {
+          boolean pause = (boolean) msg.obj;
+          playerManager.AirPlay_pause(pause);
+        }
+        break;
+      }
+
       case Constant.Msg.Msg_Video_Rate : {
         float rate = (float) msg.obj;
         playerManager.AirPlay_rate(rate);

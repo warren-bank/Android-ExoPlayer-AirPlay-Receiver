@@ -173,20 +173,30 @@ __AirPlay v1 compatible APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/scrub?position=30.0"
   ```
-* pause the currently playing video:
+* toggle the 'on/off' state of whether to pause playback:
   ```bash
     curl --silent -X GET \
-      "http://${airplay_ip}/rate?value=0.0"
+      "http://${airplay_ip}/pause"
   ```
-* resume playback of the currently paused video:
+* set the state of whether to pause playback to 'on':
   ```bash
     curl --silent -X GET \
-      "http://${airplay_ip}/rate?value=1.0"
+      "http://${airplay_ip}/pause?toggle=1"
+  ```
+* set the state of whether to pause playback to 'off':
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/pause?toggle=0"
   ```
 * increase speed of playback to 10x:
   ```bash
     curl --silent -X GET \
       "http://${airplay_ip}/rate?value=10.0"
+  ```
+* reset speed of playback to 1x:
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/rate?value=1.0"
   ```
 * stop playback:
   ```bash
