@@ -5,6 +5,8 @@ import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,7 +44,9 @@ public class StringUtils {
 
   public static String getQueryStringValue(String url, String prefix) {
     String suffix = "&";
-    return StringUtils.getValue(url, prefix, suffix);
+    return decodeURIComponent(
+      StringUtils.getValue(url, prefix, suffix)
+    );
   }
 
   public static String getRequestBodyValue(String requestBody, String prefix) {
@@ -309,6 +313,24 @@ public class StringUtils {
     return ((value != null) && (count > 0))
       ? (new String(new char[count])).replace("\0", value)
       : null;
+  }
+
+  // ===================================
+
+  public static String decodeURIComponent(String s) {
+    try {
+      s = URLDecoder.decode(s, "UTF-8");
+    }
+    catch(Exception e) {}
+    return s;
+  }
+
+  public static String encodeURIComponent(String s) {
+    try {
+      s = URLEncoder.encode(s, "UTF-8");
+    }
+    catch(Exception e) {}
+    return s;
   }
 
 }
