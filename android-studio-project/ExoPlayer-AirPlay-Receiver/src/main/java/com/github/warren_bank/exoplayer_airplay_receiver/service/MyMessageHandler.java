@@ -336,6 +336,12 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_Video_Rate_Offset : {
+        float add_offset = (float) msg.obj;
+        playerManager.AirPlay_add_rate_offset(add_offset);
+        break;
+      }
+
       case Constant.Msg.Msg_Video_Pause : {
         if (msg.obj == null) {
           playerManager.AirPlay_toggle_pause();

@@ -797,6 +797,25 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.startsWith(Constant.Target.RATE_OFFSET)) { //add relative offset to current rate of speed for video playback
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!TextUtils.isEmpty(value)) {
+          try {
+            float offset = Float.parseFloat(value);
+            Log.d(tag, "airplay rate offset = " + offset);
+
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Video_Rate_Offset;
+            msg.obj = offset;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.equals(Constant.Target.NEXT)) { //skip forward to next video in queue
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Video_Next;

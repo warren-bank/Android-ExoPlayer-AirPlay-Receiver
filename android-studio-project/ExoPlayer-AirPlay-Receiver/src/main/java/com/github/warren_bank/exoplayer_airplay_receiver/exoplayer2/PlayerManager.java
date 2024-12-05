@@ -816,6 +816,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_add_scrub_offset(long offsetMs) {
     if (exoPlayer == null) return;
 
+    if (offsetMs == 0) return;
+
     if (exoPlayer.isCurrentMediaItemSeekable()) {
       long positionMs = exoPlayer.getCurrentPosition();
       exoPlayer.seekTo(currentItemIndex, positionMs + offsetMs);
@@ -844,15 +846,37 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    *
    * @param rate New rate of speed for video playback. The value 0.0 is equivalent to 'pause'.
    */
-  public void AirPlay_rate(float rate) {
+  public void AirPlay_rate(float speed) {
     if (exoPlayer == null) return;
 
-    if (Float.compare(rate, 0.0f) < 0) return;
+    // Update playback speed.
+    // Must be higher than 0.
+    //   https://github.com/androidx/media/blob/1.5.0/libraries/common/src/main/java/androidx/media3/common/Player.java#L2806
 
-    // update playback speed
-    exoPlayer.setPlaybackParameters(
-      new PlaybackParameters(rate)
-    );
+    if (Float.compare(speed, 0.0f) > 0)
+      exoPlayer.setPlaybackSpeed(speed);
+  }
+
+  /**
+   * Add relative offset to current rate of speed for video playback.
+   *
+   * @param offsetMs The position as a relative offset in milliseconds.
+   */
+  public void AirPlay_add_rate_offset(float offsetSpeed) {
+    if (exoPlayer == null) return;
+
+    if (Float.compare(offsetSpeed, 0.0f) == 0) return;
+
+    // current speed
+    float speed = exoPlayer.getPlaybackParameters().speed;
+
+    // new speed
+    speed += offsetSpeed;
+
+    if (Float.compare(speed, 0.0f) <= 0)
+      speed = 0.1f;
+
+    AirPlay_rate(speed);
   }
 
   public void AirPlay_stop() {
@@ -1090,6 +1114,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @param offset Measured in microseconds
    */
   public void AirPlay_add_captions_offset(long offset) {
+    if (offset == 0) return;
+
     textSynchronizer.addTextOffset(offset);
   }
 
