@@ -202,7 +202,10 @@ public class Constant {
         public static final int Msg_Delete_Cache                = 28;
         public static final int Msg_Exit_Service                = 29;
 
-        public static final int Msg_Runtime_Permissions_Granted = 30;
+        public interface Msg_Runtime_Permissions {
+            public static final int Request_EXTERNAL_STORAGE    = 30;
+            public static final int Granted                     = 31;
+        }
     }
 
     public interface Target {

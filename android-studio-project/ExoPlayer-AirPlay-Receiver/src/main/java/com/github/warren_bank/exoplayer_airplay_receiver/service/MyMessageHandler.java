@@ -445,7 +445,15 @@ final class MyMessageHandler extends Handler {
       // Runtime Permissions:
       // =======================================================================
 
-      case Constant.Msg.Msg_Runtime_Permissions_Granted : {
+      case Constant.Msg.Msg_Runtime_Permissions.Request_EXTERNAL_STORAGE : {
+        boolean requiresPermission = !ExternalStorageUtils.has_permission(service);
+        if (requiresPermission) {
+          startRuntimePermissionsRequestActivity(service, Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE);
+        }
+        break;
+      }
+
+      case Constant.Msg.Msg_Runtime_Permissions.Granted : {
         int requestCode = (int) msg.obj;
         switch(requestCode) {
           case Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE : {

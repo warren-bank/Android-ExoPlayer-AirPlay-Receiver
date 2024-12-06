@@ -4,6 +4,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnBrowser;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnCommand;
+import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnError;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnInfo;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnVariables;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.BplistParser;
@@ -38,6 +39,7 @@ import org.apache.http.protocol.ResponseServer;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -1231,37 +1233,54 @@ public class RequestListenerThread extends Thread {
         setCommonHeaders(httpResponse, result.statusCode);
       }
       else if (target.startsWith(Constant.Target.MPC_API_BROWSER)) {
-        String filepath = StringUtils.getQueryStringValue(target, entityContent, "?path=");
-        File file = ExternalStorageUtils.getFile(filepath);
-
-        if (file == null)
-          file = context.getExternalFilesDir(null);
-
-        if (file.isFile()) {
-          HashMap<String, String> dataMap = new HashMap<String, String>();
-          dataMap.put(Constant.PlayURL, file.getPath());
-
-          HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
-          map.put(Constant.Video_Source_Map.DATA, dataMap);
-
+        boolean requiresPermission = !ExternalStorageUtils.has_permission(context);
+        if (requiresPermission) {
           Message msg = Message.obtain();
-          msg.what = Constant.Msg.Msg_Video_Play;
-          msg.obj = map;
+          msg.what = Constant.Msg.Msg_Runtime_Permissions.Request_EXTERNAL_STORAGE;
           MainApp.broadcastMessage(msg);
 
-          // display parent directory
-          file = file.getParentFile();
-        }
-
-        if ((file != null) && file.isDirectory()) {
           setCommonHeaders(httpResponse, HttpStatus.SC_OK);
           httpResponse.setHeader("Content-Type", "text/html");
 
-          String responseStr = OnBrowser.getHtml(file);
+          String responseStr = OnError.getHtml(Constant.Msg.Msg_Runtime_Permissions.Request_EXTERNAL_STORAGE);
           httpResponse.setEntity(new StringEntity(responseStr));
         }
         else {
-          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          String filepath = StringUtils.getQueryStringValue(target, entityContent, "?path=");
+          File file = ExternalStorageUtils.getFile(filepath);
+
+          if (file == null)
+            file = Environment.getExternalStorageDirectory();
+
+          if (file == null)
+            file = Environment.getRootDirectory();
+
+          if (file.isFile()) {
+            HashMap<String, String> dataMap = new HashMap<String, String>();
+            dataMap.put(Constant.PlayURL, file.getPath());
+
+            HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+            map.put(Constant.Video_Source_Map.DATA, dataMap);
+
+            Message msg = Message.obtain();
+            msg.what = Constant.Msg.Msg_Video_Play;
+            msg.obj = map;
+            MainApp.broadcastMessage(msg);
+
+            // display parent directory
+            file = file.getParentFile();
+          }
+
+          if ((file != null) && file.isDirectory()) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+            httpResponse.setHeader("Content-Type", "text/html");
+
+            String responseStr = OnBrowser.getHtml(file);
+            httpResponse.setEntity(new StringEntity(responseStr));
+          }
+          else {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          }
         }
       }
       else if (target.equals(Constant.Target.MPC_API_INFO)) {

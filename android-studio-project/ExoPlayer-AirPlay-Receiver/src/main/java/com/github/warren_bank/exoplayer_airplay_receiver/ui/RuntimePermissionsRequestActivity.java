@@ -43,7 +43,7 @@ public class RuntimePermissionsRequestActivity extends Activity implements Runti
         requestCode = grantedCode.intValue();
 
         msg = Message.obtain();
-        msg.what = Constant.Msg.Msg_Runtime_Permissions_Granted;
+        msg.what = Constant.Msg.Msg_Runtime_Permissions.Granted;
         msg.obj  = requestCode;
         MainApp.broadcastMessage(msg);
       }
