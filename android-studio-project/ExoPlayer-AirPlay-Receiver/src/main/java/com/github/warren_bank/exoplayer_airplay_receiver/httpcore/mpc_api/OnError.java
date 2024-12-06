@@ -1,24 +1,48 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+
+import java.io.File;
 
 public class OnError {
 
+  public static final int DIRECTORY_DOES_NOT_EXIST = 1;
+  public static final int REQUEST_EXTERNAL_STORAGE = 2;
+
   public static String getHtml(int what) {
+    return getHtml(what, null, null);
+  }
+
+  public static String getHtml(int what, File directory) {
+    return getHtml(what, directory.getParent(), directory.getPath());
+  }
+
+  public static String getHtml(int what, String parent, String cwd) {
     StringBuilder sb = new StringBuilder();
-    String title = null;
+    boolean hidden   = false;
+    String title     = null;
 
     appendHtmlPrefix(sb);
 
     switch(what) {
-      case Constant.Msg.Msg_Runtime_Permissions.Request_EXTERNAL_STORAGE : {
-        title = "Permission Denied";
+      case DIRECTORY_DOES_NOT_EXIST : {
+        hidden = false;
+        title = cwd;
+        cwd = null;
+        break;
+      }
+
+      case REQUEST_EXTERNAL_STORAGE : {
         appendHtmlRequestExternalStorage(sb);
+
+        hidden = true;
+        title = "Permission Denied";
+        cwd = "/";
         break;
       }
     }
 
-    appendHtmlBoilerplate(sb, title);
+    appendHtmlBoilerplate(sb, hidden, title, parent, cwd);
     appendHtmlSuffix(sb);
 
     return sb.toString();
@@ -44,20 +68,27 @@ public class OnError {
     sb.append("    <p>To access this page, you must grant permission in the open dialog request window.</p>\n");
   }
 
-  // hidden content for compatibility with clients
-  private static void appendHtmlBoilerplate(StringBuilder sb, String title) {
+  // content for compatibility with clients
+  private static void appendHtmlBoilerplate(StringBuilder sb, boolean hidden, String title, String parent, String cwd) {
     if (title == null)
-      title = "Permission Denied";
+      title = "";
 
-    sb.append("    <div style=\"display:none;\">\n");
+    sb.append("    <div" + (hidden ? " style=\"display:none;\"" : "") + ">\n");
     sb.append("      <table class=\"browser-table\">\n");
     sb.append("        <tr><td class=\"text-center\"><strong>Location: </strong>" + title + "</td></tr>\n");
     sb.append("      </table>\n");
     sb.append("    </div>\n");
-    sb.append("    <div style=\"display:none;\">\n");
+    sb.append("    <div" + (hidden ? " style=\"display:none;\"" : "") + ">\n");
     sb.append("      <table class=\"browser-table\">\n");
     sb.append("        <tr><th>Name</th><th>Type</th><th>Size</th><th>Date Modified</th></tr>\n");
-    sb.append("        <tr><td class=\"dirname\"><a href=\"/browser.html?path=%2F\">.</a></td><td class=\"dirtype\">Directory</td><td class=\"dirsize\">&nbsp;</td><td class=\"dirdate\">&nbsp;</td></tr>\n");
+
+    if (parent != null) {
+      sb.append("        <tr><td class=\"dirname\"><a href=\"/browser.html?path=" + StringUtils.encodeURIComponent(parent) + "\">..</a></td><td class=\"dirtype\">Directory</td><td class=\"dirsize\">&nbsp;</td><td class=\"dirdate\">&nbsp;</td></tr>\n");
+    }
+    if (cwd != null) {
+      sb.append("        <tr><td class=\"dirname\"><a href=\"/browser.html?path=" + StringUtils.encodeURIComponent(cwd) + "\">.</a></td><td class=\"dirtype\">Directory</td><td class=\"dirsize\">&nbsp;</td><td class=\"dirdate\">&nbsp;</td></tr>\n");
+    }
+
     sb.append("      </table>\n");
     sb.append("    </div>\n");
   }

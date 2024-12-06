@@ -1242,7 +1242,7 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_OK);
           httpResponse.setHeader("Content-Type", "text/html");
 
-          String responseStr = OnError.getHtml(Constant.Msg.Msg_Runtime_Permissions.Request_EXTERNAL_STORAGE);
+          String responseStr = OnError.getHtml(OnError.REQUEST_EXTERNAL_STORAGE);
           httpResponse.setEntity(new StringEntity(responseStr));
         }
         else {
@@ -1269,9 +1269,12 @@ public class RequestListenerThread extends Thread {
 
             // display parent directory
             file = file.getParentFile();
+
+            if (file == null)
+              file = Environment.getRootDirectory();
           }
 
-          if ((file != null) && file.isDirectory()) {
+          if (file.isDirectory()) {
             setCommonHeaders(httpResponse, HttpStatus.SC_OK);
             httpResponse.setHeader("Content-Type", "text/html");
 
@@ -1279,7 +1282,13 @@ public class RequestListenerThread extends Thread {
             httpResponse.setEntity(new StringEntity(responseStr));
           }
           else {
-            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            // directory path does not exist
+
+            setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+            httpResponse.setHeader("Content-Type", "text/html");
+
+            String responseStr = OnError.getHtml(OnError.DIRECTORY_DOES_NOT_EXIST, file);
+            httpResponse.setEntity(new StringEntity(responseStr));
           }
         }
       }

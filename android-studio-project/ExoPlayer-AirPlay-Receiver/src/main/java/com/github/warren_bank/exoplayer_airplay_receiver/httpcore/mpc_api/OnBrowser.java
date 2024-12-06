@@ -83,15 +83,17 @@ public class OnBrowser {
       }
     });
 
-    for (File child : subdirs) {
-      sb.append("<tr>\n");
-      sb.append("  <td class=\"dirname\"><a href=\"" + getUrl(child.getPath()) + "\">" + child.getName() + "</a></td>\n");
-      sb.append("  <td class=\"dirtype\">Directory</td>\n");
-      sb.append("  <td class=\"dirsize\">&nbsp;</td>\n");
-      sb.append("  <td class=\"dirdate\">" + getLastModified(child, "&nbsp;") + "</td>\n");
-      sb.append("</tr>\n");
+    if (subdirs != null) {
+      for (File child : subdirs) {
+        sb.append("<tr>\n");
+        sb.append("  <td class=\"dirname\"><a href=\"" + getUrl(child.getPath()) + "\">" + child.getName() + "</a></td>\n");
+        sb.append("  <td class=\"dirtype\">Directory</td>\n");
+        sb.append("  <td class=\"dirsize\">&nbsp;</td>\n");
+        sb.append("  <td class=\"dirdate\">" + getLastModified(child, "&nbsp;") + "</td>\n");
+        sb.append("</tr>\n");
+      }
+      subdirs = null;
     }
-    subdirs = null;
 
     File[] mediafiles = directory.listFiles(new FileFilter() {
       public boolean accept(File child) {
@@ -106,29 +108,32 @@ public class OnBrowser {
       }
     });
 
-    for (File child : mediafiles) {
-      String uri  = "file:" + child.getName();
-      String ext  = null;
-      String type = null;
+    if (mediafiles != null) {
+      for (File child : mediafiles) {
+        String uri  = "file:" + child.getName();
+        String ext  = null;
+        String type = null;
 
-      if (MediaTypeUtils.isVideoFileUrl(uri)) {
-        ext  = MediaTypeUtils.get_video_fileExtension(uri);
-        type = MediaTypeUtils.get_video_mimeType(uri);
+        if (MediaTypeUtils.isVideoFileUrl(uri)) {
+          ext  = MediaTypeUtils.get_video_fileExtension(uri);
+          type = MediaTypeUtils.get_video_mimeType(uri);
+        }
+        else if (MediaTypeUtils.isAudioFileUrl(uri)) {
+          ext  = MediaTypeUtils.get_audio_fileExtension(uri);
+          type = MediaTypeUtils.get_audio_mimeType(uri);
+        }
+
+        if (TextUtils.isEmpty(type))
+          type = "&nbsp;";
+
+        sb.append("<tr class=\"" + (TextUtils.isEmpty(ext) ? "noext" : ext) + "\">\n");
+        sb.append("  <td><a href=\"" + getUrl(child.getPath()) + "\">" + child.getName() + "</a></td>\n");
+        sb.append("  <td><span class=\"nobr\">" + type + "</span></td>\n");
+        sb.append("  <td><span class=\"nobr\">" + getSize(child, "0", false) + "</span></td>\n");
+        sb.append("  <td><span class=\"nobr\">" + getLastModified(child, "&nbsp;") + "</span></td>\n");
+        sb.append("</tr>\n");
       }
-      else if (MediaTypeUtils.isAudioFileUrl(uri)) {
-        ext  = MediaTypeUtils.get_audio_fileExtension(uri);
-        type = MediaTypeUtils.get_audio_mimeType(uri);
-      }
-
-      if (TextUtils.isEmpty(type))
-        type = "&nbsp;";
-
-      sb.append("<tr class=\"" + (TextUtils.isEmpty(ext) ? "noext" : ext) + "\">\n");
-      sb.append("  <td><a href=\"" + getUrl(child.getPath()) + "\">" + child.getName() + "</a></td>\n");
-      sb.append("  <td><span class=\"nobr\">" + type + "</span></td>\n");
-      sb.append("  <td><span class=\"nobr\">" + getSize(child, "0", false) + "</span></td>\n");
-      sb.append("  <td><span class=\"nobr\">" + getLastModified(child, "&nbsp;") + "</span></td>\n");
-      sb.append("</tr>\n");
+      mediafiles = null;
     }
   }
 
