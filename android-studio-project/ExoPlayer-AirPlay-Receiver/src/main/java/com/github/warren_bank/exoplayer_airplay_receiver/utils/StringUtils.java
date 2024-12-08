@@ -105,7 +105,7 @@ public class StringUtils {
   public static HashMap<String, ArrayList<String>> parseRequestBody_allowDuplicateKeys(String requestBody, boolean normalize_lowercase_keys) {
     HashMap<String, ArrayList<String>> values = new HashMap<String, ArrayList<String>>();
 
-    String[] lines = requestBody.split("(?:\\r?\\n)+");
+    String[] lines = StringUtils.splitLines(requestBody);
     String[] parts;
     ArrayList<String> arrayList;
 
@@ -206,6 +206,12 @@ public class StringUtils {
     }
 
     return bundle;
+  }
+
+  public static String[] splitLines(String text) {
+    return (text == null)
+      ? null
+      : text.split("(?:\\r?\\n)+");
   }
 
   // unlike TextUtils, trim leading/trailing whitespace before testing for 0-length

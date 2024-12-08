@@ -104,15 +104,15 @@ __AirPlay v1 compatible APIs:__
   image_url='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/654px-Android_robot.svg.png'
 
   # URLs for test video:
-  videos_page='https://players.akamai.com/hls/'
-  video_url_1='https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8'
-  video_url_2='https://multiplatform-f.akamaihd.net/i/multi/april11/hdworld/hdworld_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8'
-  video_url_3='https://multiplatform-f.akamaihd.net/i/multi/april11/cctv/cctv_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8'
+  videos_page='https://test-streams.mux.dev/'
+  video_url_1='https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+  video_url_2='https://test-streams.mux.dev/tos_ismc/main.m3u8'
+  video_url_3='https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd'
 
   # URLs for test video text captions:
   captions_page='https://github.com/gpac/gpac/tree/master/tests/media/webvtt'
-  caption_url_1='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt'
-  caption_url_2='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.vtt'
+  caption_url_1='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.workaround-exoplayer-issue-7122.srt'
+  caption_url_2='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.vtt'
   caption_url_3='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/comments.vtt'
 
   # URLs for test video DRM:
@@ -129,12 +129,12 @@ __AirPlay v1 compatible APIs:__
   drm_video_url_2_license_server='https://playready.directtaps.net/pr/svc/rightsmanager.asmx'
 
   # URLs for test audio:
-  audio_flac_nfo='https://archive.org/details/tntvillage_457399'
-  audio_flac_url='https://archive.org/download/tntvillage_457399/Black%20Sabbath%201970-2013/Studio%20Albums/1970%20Black%20Sabbath/1970%20Black%20Sabbath%20%5B1986%20France%20NELCD%206002%20Castle%5D/Black%20Sabbath%20-%20Black%20Sabbath%20%281986%2C%20Castle%20Communications%2C%20NELCD%206002%29.flac'
+  audio_flac_nfo='https://archive.org/details/black-sabbath-black-sabbath-1970-lp-flac'
+  audio_flac_url='https://archive.org/download/black-sabbath-black-sabbath-1970-lp-flac/BLACK%20SABBATH%20-%201970%20-%20Black%20Sabbath%20%5BUK%20PBTHAL%20LP%2024-96%5D%20%5BFLAC%5D/01.-Black%20Sabbath.flac'
   audio_m3u_page='https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore'
   audio_mp3s_m3u='https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u'
-  audio_htm_page='https://archive.org/details/tntvillage_455310'
-  audio_mp3s_htm='https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/'
+  audio_htm_page='https://archive.org/details/Simon-and-Garfunkel-1966-10-21'
+  audio_mp3s_htm='https://archive.org/download/Simon-and-Garfunkel-1966-10-21/'
 
   # file paths for test media (on receiver):
   video_path='/storage/external_SD/test-media/video/file.mp4'
@@ -357,6 +357,28 @@ __extended APIs:__
   ```bash
     curl --silent -X GET \
       "http://${airplay_ip}/set-captions-offset?value=0"
+  ```
+* set regex filters for text captions (one per line):
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/plain" \
+      --data-binary "\[[^\]]*\]\n\([^\)]*\)" \
+      "http://${airplay_ip}/set-captions-filters"
+  ```
+* add additional regex filters for text captions (one per line):
+  ```bash
+    # note: regex patterns can include embedded flag expressions
+    curl --silent -X POST \
+      -H "Content-Type: text/plain" \
+      --data-binary "(?i)\b(?:foo|bar|baz)\b\n(?i)\b(?:hello|world)\b" \
+      "http://${airplay_ip}/add-captions-filters"
+  ```
+* remove all regex filters for text captions:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/plain" \
+      --data-binary "" \
+      "http://${airplay_ip}/set-captions-filters"
   ```
 * set repeat mode:
   ```bash
@@ -737,6 +759,10 @@ __extended APIs:__
       - limitation: update does not take effect until the app is restarted
 * POST data sent in requests to `/show-toast` API endpoint:
   - contains an arbitrary block of text
+* POST data sent in requests to `/set-captions-filters` and `/add-captions-filters` API endpoints:
+  - contains one regex pattern per line of text
+  - regex patterns can include [embedded flag expressions](https://docs.oracle.com/javase/tutorial/essential/regex/pattern.html#embedded)
+  - if POST data is absent in a request to `/set-captions-filters`, then the list of regex filters is cleared
 
 - - - -
 

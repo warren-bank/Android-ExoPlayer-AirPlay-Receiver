@@ -69,6 +69,7 @@ body > div.contents > div.section textarea#preferences_data {
   white-space: pre;
 }
 
+body > div.contents > div.section select#txt_filters_presets,
 body > div.contents > div.section select#toast_variables,
 body > div.contents > div.section select#predefined_intent_data,
 body > div.contents > div.section select#preferences_values {
@@ -234,6 +235,10 @@ window.onload  = function() {
   var $rate                    = document.querySelector('button#rate')
   var $volume_factor           = document.querySelector('input#volume_factor')
   var $volume                  = document.querySelector('button#volume')
+  var $txt_filters             = document.querySelector('textarea#txt_filters')
+  var $txt_filters_presets     = document.querySelector('select#txt_filters_presets')
+  var $set_txt_filters         = document.querySelector('button#set_txt_filters')
+  var $add_txt_filters         = document.querySelector('button#add_txt_filters')
   var $toast_message           = document.querySelector('textarea#toast_message')
   var $toast_variables         = document.querySelector('select#toast_variables')
   var $show_toast              = document.querySelector('button#show_toast')
@@ -997,6 +1002,66 @@ window.onload  = function() {
       send_message(path, data)
     }
     catch(e){}
+  }
+
+  $txt_filters_presets.addEventListener('change', function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var variable = $txt_filters_presets.value
+    var regexs = []
+    var old_value
+
+    if (variable) {
+      switch(variable) {
+        case '{{in-brackets}}':
+          regexs.push('\\[[^\\]]*\\]')
+          break
+        case '{{in-parenthesis}}':
+          regexs.push('\\([^\\)]*\\)')
+          break
+        case '{{music-lyrics}}':
+          regexs.push('^\\s*\\u266a.*$')
+          regexs.push('^.*\\u266a\\s*$')
+          break
+        case '{{not-ascii}}':
+          regexs.push('[^\\x00-\\xff]+')
+          break
+      }
+
+      if (regexs.length) {
+        old_value = $txt_filters.value.trim()
+        if (old_value) old_value += "\n"
+        $txt_filters.value = old_value + regexs.join("\n")
+      }
+
+      $txt_filters_presets.value = ''
+    }
+  })
+
+  $set_txt_filters.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/set-captions-filters'
+    var data = $txt_filters.value.trim()
+
+    send_message(path, data)
+  }
+
+  $add_txt_filters.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var filters = $txt_filters.value.trim()
+
+    if (!filters)
+      return
+
+    var path = '/add-captions-filters'
+    var data = filters
+
+    send_message(path, data)
   }
 
   $toast_variables.addEventListener('change', function(event) {
@@ -1975,6 +2040,24 @@ window.onload  = function() {
           </tr>
         </table>
       </div>
+      <div class="advanced_ui_mode flex">
+        <div>
+          <textarea id="txt_filters" rows="5"></textarea>
+        </div>
+        <div>
+          <div>
+            <select id="txt_filters_presets">
+              <option value="">Add Filter:</option>
+              <option value="{{in-brackets}}">In Brackets</option>
+              <option value="{{in-parenthesis}}">In Parenthesis</option>
+              <option value="{{music-lyrics}}">Music Lyrics</option>
+              <option value="{{not-ascii}}">Not Ascii</option>
+            </select>
+          </div>
+          <div><button id="set_txt_filters">Set CC Filters</button></div>
+          <div><button id="add_txt_filters">Add CC Filters</button></div>
+        </div>
+      </div>
     </div>
 
     <div class="section">
@@ -2114,54 +2197,68 @@ window.onload  = function() {
       <select id="sample_videos">
         <option value="0">-- video --</option>
         <option value="1"
-                x-video-url="rtmp://104.194.11.25:80/live/uVMS_ef7082d0422d07265f6c"
-                x-referer-url="http://www.umediaserver.net/uVMSDemo.html"
-               >Venice Beach - Los Angeles, CA (vid:rtmp)</option>
+                x-video-url="rtmp://wzmedia.dot.ca.gov:1935/D4/E37_at_Lakeville_Rd.stream"
+                x-referer-url="https://wzmedia.dot.ca.gov/D4/E37_at_Lakeville_Rd.stream/playlist.m3u8"
+                x-referer-url2="https://cwwp2.dot.ca.gov/data/d4/cctv/cctvStatusD04.txt"
+               >CA DOT traffic cam - SR-37 at Lakeville Road in Sonoma County (vid:rtmp)</option>
         <option value="2"
-                x-video-url="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
-                x-referer-url="https://www.wowza.com/developer/rtsp-stream-test"
-               >Big Buck Bunny (vid:rtsp)</option>
+                x-video-url="rtmp://wzmedia.dot.ca.gov:1935/D4/S101_at_JCT_1.stream"
+                x-referer-url="https://wzmedia.dot.ca.gov/D4/S101_at_JCT_1.stream/playlist.m3u8"
+                x-referer-url2="https://cwwp2.dot.ca.gov/data/d4/cctv/cctvStatusD04.txt"
+               >CA DOT traffic cam - US-101 at SR-1 in Mill Valley, Marin County (vid:rtmp)</option>
         <option value="3"
-                x-video-url="https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8"
-                x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/.captions/counter.workaround-exoplayer-issue-7122.srt"
-                x-referer-url="https://players.akamai.com/hls/"
+                x-video-url="rtsp://vss1live.dot.ga.gov:80/lo/atl-cam-914.stream"
+                x-referer-url="http://vss1live.dot.ga.gov:80/lo/atl-cam-914.stream/playlist.m3u8"
+                x-referer-url2="https://hub.arcgis.com/datasets/GEMA-SOC::gdot-live-traffic-cameras/api"
+                x-referer-url3="https://services1.arcgis.com/2iUE8l8JKrP2tygQ/arcgis/rest/services/GDOT_Live_Traffic_Cameras/FeatureServer/0/query?where=1%3D1&outFields=RTSP,RTMPT,HLS,location_description&returnGeometry=false&outSR=4326&f=json"
+               >GA DOT traffic cam - Marietta St at Ivan Allen Jr Blvd (vid:rtsp)</option>
+        <option value="4"
+                x-video-url="rtsp://vss1live.dot.ga.gov:80/lo/atl-cam-080.stream"
+                x-referer-url="http://vss1live.dot.ga.gov:80/lo/atl-cam-080.stream/playlist.m3u8"
+                x-referer-url2="https://hub.arcgis.com/datasets/GEMA-SOC::gdot-live-traffic-cameras/api"
+                x-referer-url3="https://services1.arcgis.com/2iUE8l8JKrP2tygQ/arcgis/rest/services/GDOT_Live_Traffic_Cameras/FeatureServer/0/query?where=1%3D1&outFields=RTSP,RTMPT,HLS,location_description&returnGeometry=false&outSR=4326&f=json"
+               >GA DOT traffic cam - Metropolitan Pkwy N at University Ave (vid:rtsp)</option>
+        <option value="5"
+                x-video-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                x-caption-url="https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.workaround-exoplayer-issue-7122.srt"
+                x-referer-url="https://test-streams.mux.dev/"
                 x-start-position="00:00:30"
                >Big Buck Bunny (vid:hls, subs:srt, pos:30s)</option>
-        <option value="4"
-                x-video-url="https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8"
-                x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"
-                x-referer-url="https://players.akamai.com/hls/"
-               >Sintel (vid:hls, subs:srt)</option>
-        <option value="5"
-                x-video-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TearsOfSteel.ism/manifest"
-                x-caption-url="http://amssamples.streaming.mediaservices.windows.net/bc57e088-27ec-44e0-ac20-a85ccbcd50da/TOS-en.vtt"
-                x-referer-url="http://ampdemo.azureedge.net/ams_samplestreams.html"
-               >Tears Of Steel (vid:dash, subs:vtt)</option>
         <option value="6"
+                x-video-url="https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd"
+                x-caption-url="https://durian.blender.org/wp-content/content/subtitles/sintel_en.srt"
+                x-referer-url="https://bitmovin.com/demos/stream-test/"
+               >Sintel (vid:dash, subs:srt)</option>
+        <option value="7"
+                x-video-url="https://test-streams.mux.dev/tos_ismc/main.m3u8"
+                x-caption-url="https://tears-of-steel-subtitles.s3.amazonaws.com/tears-en.vtt"
+                x-referer-url="https://test-streams.mux.dev/"
+               >Tears Of Steel (vid:hls, subs:vtt)</option>
+        <option value="8"
                 x-video-url="https://storage.googleapis.com/wvmedia/cenc/h264/tears/tears.mpd"
                 x-drm-license-scheme="widevine"
                 x-drm-license-server="https://proxy.uat.widevine.com/proxy?provider=widevine_test"
                >Tears Of Steel (vid:dash, drm:widevine)</option>
-        <option value="7"
+        <option value="9"
                 x-video-url="https://html5demos.com/assets/dizzy.mp4"
                 x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ttml/netflix_ttml_sample.xml#captions.ttml"
                 x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L598"
                >Dizzy (vid:mp4, subs:ttml)</option>
-        <option value="8"
+        <option value="10"
                 x-video-url="https://storage.googleapis.com/exoplayer-test-media-1/gen-3/screens/dash-vod-single-segment/video-avc-baseline-480.mp4"
                 x-caption-url="https://storage.googleapis.com/exoplayer-test-media-1/ssa/test-subs-position.ass"
                 x-referer-url="https://github.com/google/ExoPlayer/blob/r2.11.3/demos/main/src/main/assets/media.exolist.json#L605"
                >Sample (vid:mp4, subs:ssa)</option>
-        <option value="9"
+        <option value="11"
                 x-video-url="https://archive.org/download/Mozart_Vesperae_Solennes_de_Confessore/Mozart%20-%20Vesper%C3%A6%20Solennes%20de%20Confessore%20%28Cooke%29.m3u"
                 x-caption-url=""
                 x-referer-url="https://archive.org/details/Mozart_Vesperae_Solennes_de_Confessore"
                >Audio Playlist (list:m3u, files:mp3) - Mozart - Vesperæ Solennes de Confessore</option>
-        <option value="10"
-                x-video-url="https://archive.org/download/tntvillage_455310/S%26G/Live/1967%20-%20Live%20From%20New%20York%20City%20%40320/"
+        <option value="12"
+                x-video-url="https://archive.org/download/Simon-and-Garfunkel-1966-10-21/"
                 x-caption-url=""
-                x-referer-url="https://archive.org/details/tntvillage_455310"
-               >Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1967) Live From New York City</option>
+                x-referer-url="https://archive.org/details/Simon-and-Garfunkel-1966-10-21"
+               >Audio Playlist (list:html, files:mp3) - Simon &amp; Garfunkel - (1966-10-21) Live at Shriver Hall / John Hopkins University</option>
       </select>
     </div>
 

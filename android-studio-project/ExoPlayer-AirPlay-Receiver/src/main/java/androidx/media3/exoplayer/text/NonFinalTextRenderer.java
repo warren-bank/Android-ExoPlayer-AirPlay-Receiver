@@ -562,7 +562,7 @@ public class NonFinalTextRenderer extends BaseRenderer implements Callback {
   }
 
   @SuppressWarnings("deprecation") // We need to call both onCues method for backward compatibility.
-  private void invokeUpdateOutputInternal(CueGroup cueGroup) {
+  protected void invokeUpdateOutputInternal(CueGroup cueGroup) {
     output.onCues(cueGroup.cues);
     output.onCues(cueGroup);
   }

@@ -16,7 +16,7 @@ import android.os.Looper;
 
 import java.util.ArrayList;
 
-public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer {
+public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer, TextFilter {
   private MyTextRenderer textRenderer;
 
   public MyRenderersFactory(Context context, boolean preferExtensionRenderer) {
@@ -37,6 +37,10 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
     out.add(textRenderer);
   }
 
+  // ---------------------------------------------------------------------------
+  // implement: TextSynchronizer
+  // ---------------------------------------------------------------------------
+
   @Override
   public long getTextOffset() {
     return (textRenderer != null)
@@ -55,4 +59,21 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
     if (textRenderer != null)
       textRenderer.addTextOffset(value);
   }
+
+  // ---------------------------------------------------------------------------
+  // implement: TextFilter
+  // ---------------------------------------------------------------------------
+
+  @Override
+  public void setTextFilters(String[] textFilters) {
+    if (textRenderer != null)
+      textRenderer.setTextFilters(textFilters);
+  }
+
+  @Override
+  public void addTextFilters(String[] textFilters) {
+    if (textRenderer != null)
+      textRenderer.addTextFilters(textFilters);
+  }
+
 }

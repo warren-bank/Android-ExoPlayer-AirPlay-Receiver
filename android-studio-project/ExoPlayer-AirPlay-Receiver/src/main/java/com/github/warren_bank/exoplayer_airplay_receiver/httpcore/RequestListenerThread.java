@@ -990,6 +990,36 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (
+        target.equals(Constant.Target.TXT_SET_FILTERS) ||
+        target.equals(Constant.Target.TXT_ADD_FILTERS)
+      ) { //update list of regex patterns that dynamically filter text captions
+        try {
+          if (
+            target.equals(Constant.Target.TXT_ADD_FILTERS) &&
+            (entityContent == null)
+          ) throw new Exception("no input");
+
+          String[] textFilters = null;
+
+          if (entityContent != null) {
+            String requestBody;
+            requestBody = new String(entityContent);
+            requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+            textFilters = StringUtils.splitLines(requestBody);
+          }
+
+          Message msg = Message.obtain();
+          msg.what = target.equals(Constant.Target.TXT_SET_FILTERS) ? Constant.Msg.Msg_Text_Set_Filters : Constant.Msg.Msg_Text_Add_Filters;
+          msg.obj = textFilters;
+          MainApp.broadcastMessage(msg);
+        }
+        catch (Exception e) {
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          return;
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.startsWith(Constant.Target.REPEAT_MODE)) { //update repeat mode of media player
         String value = StringUtils.getQueryStringValue(target, "?value=");
         if (!TextUtils.isEmpty(value)) {

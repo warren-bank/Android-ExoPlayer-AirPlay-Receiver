@@ -4,6 +4,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyLoadErrorHandlingPolicy;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyRenderersFactory;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextFilter;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
@@ -101,6 +102,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private Handler handler;
   private LoudnessEnhancer loudnessEnhancer;
 
+  public TextFilter       textFilter;
   public TextSynchronizer textSynchronizer;
   public ExoPlayer exoPlayer;
 
@@ -121,6 +123,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     this.renderersFactory         = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer());
     this.extractorsFactory        = new DefaultExtractorsFactory();
     this.trackSelector            = new DefaultTrackSelector(context);
+    this.textFilter               = (TextFilter)       renderersFactory;
     this.textSynchronizer         = (TextSynchronizer) renderersFactory;
 
     extractorsFactory.setTsExtractorTimestampSearchBytes(
@@ -1118,6 +1121,24 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     if (offset == 0) return;
 
     textSynchronizer.addTextOffset(offset);
+  }
+
+  /**
+   * Set a list of regex patterns that dynamically filter text captions.
+   *
+   * @param textFilters List of regex patterns
+   */
+  public void AirPlay_set_captions_filters(String[] textFilters) {
+    textFilter.setTextFilters(textFilters);
+  }
+
+  /**
+   * Add to current list of regex patterns that dynamically filter text captions.
+   *
+   * @param textFilters List of additional regex patterns
+   */
+  public void AirPlay_add_captions_filters(String[] textFilters) {
+    textFilter.addTextFilters(textFilters);
   }
 
   /**
