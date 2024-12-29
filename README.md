@@ -53,6 +53,7 @@ Nested extension(s) can optionally be used to distinguish between [different lan
   - I find much better video content to stream on websites, and wrote some tools to identify and cast these URLs
     * [_WebCast-Reloaded_ Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) to use with desktop web browsers
     * [_WebCast_ Android app](https://github.com/warren-bank/Android-WebCast) to use with mobile devices
+    * [collection of userscripts](https://warren-bank.github.io/Android-WebMonkey/index.html) to use with both [mobile devices](https://github.com/warren-bank/Android-WebMonkey) and [desktop web browsers](https://www.tampermonkey.net/)
 * I also really like using Android set-top boxes
   - mainly to play video files stored on an attached drive
   - they are incredibly adaptable
@@ -68,7 +69,7 @@ Nested extension(s) can optionally be used to distinguish between [different lan
 
 * the goal is __not__ to provide an app that is recognized on the LAN as a virtual Chromecast device
   - [CheapCast](https://github.com/mauimauer/cheapcast) accomplished this in 2013
-    * Google quickly [changed its protocol](https://blog.oakbits.com/google-cast-protocol-discovery-and-connection.html)
+    * Google quickly [changed its protocol](https://web.archive.org/web/20210117143825/https://blog.oakbits.com/google-cast-protocol-discovery-and-connection.html)
 * AirPlay v1 uses a very simple stateless [HTTP API](http://nto.github.io/AirPlay.html#video)
   - this is a great starting point
     * it supports: play, pause, seek, stop
@@ -788,11 +789,12 @@ __extended APIs:__
   - when the app's settings are configured to use an external video player:
     * clicking on any video will broadcast an Intent to start the video in another application (ex: _ExoAirPlayer_)
 
-* [Greasemonkey userscripts](https://warren-bank.github.io/Android-WebMonkey/index.html)
+* [collection of userscripts](https://warren-bank.github.io/Android-WebMonkey/index.html)
   - that can run in any web browser with support for userscripts:
-    * [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) extension for Chrome/Chromium
-    * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) addon for Firefox
     * [WebMonkey](https://github.com/warren-bank/Android-WebMonkey) application for Android
+    * [Tampermonkey](https://www.tampermonkey.net/) extension for [Chrome/Chromium](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) and [Firefox/Fenix](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
+    * [Violentmonkey](https://violentmonkey.github.io/) extension for [Chrome/Chromium](https://chrome.google.com/webstore/detail/violent-monkey/jinjaccalgkegednnccohejagnlnfdag) and [Firefox/Fenix](https://addons.mozilla.org/firefox/addon/violentmonkey/)
+    * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) addon for Firefox
     * etc&hellip;
   - and be used to:
     * apply site-specific knowledge to obtain the URL of a video on the requested page
@@ -800,6 +802,11 @@ __extended APIs:__
       - broadcast an Intent to start the video in another application (ex: _ExoAirPlayer_)
     * in other web browsers:
       - automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
+
+* [_MpcFreemote_ Android app](https://github.com/warren-bank/Android-MpcFreemote) that is open-source, and can be used to:
+  - discover [Media Player Classic (MPC) receivers](#media-player-classic-home-cinema-mpc-hc-api) on the same LAN
+  - browse the remote file system to find A/V media, and initiate playback
+  - send commands to control most aspects of playback
 
 * [_Toaster Cast_ Android app](https://apkpure.com/toaster-cast-dlna-upnp-player/com.n7mobile.simpleupnpplayer) that can be used to:
   - discover AirPlay v1 receivers on the same LAN
