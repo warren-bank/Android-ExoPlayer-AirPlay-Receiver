@@ -1245,11 +1245,14 @@ window.onload  = () => {
           regexs.push('\\([^\\)]*\\)')
           break
         case '{{music-lyrics}}':
-          regexs.push('^\\s*\\u266a.*$')
-          regexs.push('^.*\\u266a\\s*$')
+          regexs.push('(?usm)^[\\u266a].*$')
+          regexs.push('(?usm)^.*[\\u266a]$')
+          break
+        case '{{not-dialog}}':
+          regexs.push('^[^a-zA-Z0-9]+$')
           break
         case '{{not-ascii}}':
-          regexs.push('[^\\x00-\\xff]+')
+          regexs.push('[^\\x00-\\x7f]+')
           break
       }
 
@@ -2232,7 +2235,7 @@ window.onload  = () => {
       </div>
       <div class="advanced_ui_mode flex">
         <div>
-          <textarea id="txt_filters" rows="5"></textarea>
+          <textarea id="txt_filters" rows="7"></textarea>
         </div>
         <div>
           <div>
@@ -2241,6 +2244,7 @@ window.onload  = () => {
               <option value="{{in-brackets}}">In Brackets</option>
               <option value="{{in-parenthesis}}">In Parenthesis</option>
               <option value="{{music-lyrics}}">Music Lyrics</option>
+              <option value="{{not-dialog}}">Not Dialog</option>
               <option value="{{not-ascii}}">Not Ascii</option>
             </select>
           </div>
