@@ -240,10 +240,14 @@ window.onload  = () => {
   const $set_repeat_mode         = document.querySelector('button#set_repeat_mode')
   const $resize_mode             = document.querySelector('select#resize_mode')
   const $set_resize_mode         = document.querySelector('button#set_resize_mode')
-  const $rate_factor             = document.querySelector('input#rate_factor')
-  const $rate                    = document.querySelector('button#rate')
-  const $volume_factor           = document.querySelector('input#volume_factor')
-  const $volume                  = document.querySelector('button#volume')
+  const $set_rate_factor         = document.querySelector('input#set_rate_factor')
+  const $set_rate                = document.querySelector('button#set_rate')
+  const $add_rate_factor         = document.querySelector('input#add_rate_factor')
+  const $add_rate                = document.querySelector('button#add_rate')
+  const $set_volume_factor       = document.querySelector('input#set_volume_factor')
+  const $set_volume              = document.querySelector('button#set_volume')
+  const $add_volume_factor       = document.querySelector('input#add_volume_factor')
+  const $add_volume              = document.querySelector('button#add_volume')
   const $txt_filters             = document.querySelector('textarea#txt_filters')
   const $txt_filters_presets     = document.querySelector('select#txt_filters_presets')
   const $set_txt_filters         = document.querySelector('button#set_txt_filters')
@@ -1201,12 +1205,12 @@ window.onload  = () => {
     catch(e){}
   }
 
-  $rate.onclick = (event) => {
+  $set_rate.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     try {
-      const rate = get_value($rate_factor, 0.0)  // const rate = parseFloat($rate_factor.value) || 0.0
+      const rate = get_value($set_rate_factor, 0.0)  // const rate = parseFloat($set_rate_factor.value) || 0.0
       const path = `/rate?value=${rate}`
       const data = null
 
@@ -1215,13 +1219,41 @@ window.onload  = () => {
     catch(e){}
   }
 
-  $volume.onclick = (event) => {
+  $add_rate.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
 
     try {
-      const vol = get_value($volume_factor, 0.0) // const vol  = parseFloat($volume_factor.value) || 0.0
+      const rate = get_value($add_rate_factor, 0.0)  // const rate = parseFloat($add_rate_factor.value) || 0.0
+      const path = `/add-rate-offset?value=${rate}`
+      const data = null
+
+      send_message(path, data)
+    }
+    catch(e){}
+  }
+
+  $set_volume.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      const vol = get_value($set_volume_factor, 0.0) // const vol  = parseFloat($set_volume_factor.value) || 0.0
       const path = `/volume?value=${vol}`
+      const data = null
+
+      send_message(path, data)
+    }
+    catch(e){}
+  }
+
+  $add_volume.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      const vol = get_value($add_volume_factor, 0.0) // const vol  = parseFloat($add_volume_factor.value) || 0.0
+      const path = `/add-volume-offset?value=${vol}`
       const data = null
 
       send_message(path, data)
@@ -2217,18 +2249,34 @@ window.onload  = () => {
         <table align="center">
           <tr class="advanced_ui_mode">
             <td class="oneline">
-              <input id="rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" min="0" max="1000" step="0.1" size="3" placeholder="1.0" />
+              <input id="set_rate_factor" type="number" x-type="range" x-min="0" x-max="1000" x-step="0.001" min="0" max="1000" step="0.1" size="3" placeholder="1.0" />
             </td>
             <td class="oneline fullwidth">
-              <button id="rate">Change Speed</button>
+              <button id="set_rate">Set Speed</button>
             </td>
           </tr>
           <tr class="advanced_ui_mode">
             <td class="oneline">
-              <input id="volume_factor" type="number" x-type="range" x-min="0" x-max="51" x-step="0.001" min="0" max="51" step="0.1" size="3" placeholder="1.0" />
+              <input id="add_rate_factor" type="number" x-type="range" x-min="-1000" x-max="1000" x-step="0.001" min="-1000" max="1000" step="0.1" size="3" placeholder="1.0" />
             </td>
             <td class="oneline fullwidth">
-              <button id="volume">Change Volume</button>
+              <button id="add_rate">Add Speed</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="set_volume_factor" type="number" x-type="range" x-min="0" x-max="51" x-step="0.001" min="0" max="51" step="0.1" size="3" placeholder="1.0" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="set_volume">Set Volume</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="add_volume_factor" type="number" x-type="range" x-min="-51" x-max="51" x-step="0.001" min="-51" max="51" step="0.1" size="3" placeholder="1.0" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="add_volume">Add Volume</button>
             </td>
           </tr>
         </table>
