@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- Preference default values (float) -->
+  <item type="dimen" format="float" name="prefval_audio_volume_percent_increment">0.05</item>   <!--  20 steps from 0.0 to  1.0 -->
+  <item type="dimen" format="float" name="prefval_audio_volume_boost_db_increment">0.50</item>  <!-- 100 steps from 1.0 to 51.0 -->
+  <item type="dimen" format="float" name="prefval_ts_extractor_timestamp_search_bytes_factor">2.50</item>
+
+</resources>

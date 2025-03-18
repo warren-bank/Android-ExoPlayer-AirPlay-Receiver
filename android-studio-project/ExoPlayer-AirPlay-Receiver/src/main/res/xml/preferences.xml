@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+    android:key="@string/pref_settings_key"
+    android:title="@string/pref_settings_title">
+
+    <EditTextPreference
+      android:key="@string/prefkey_default_user_agent"
+      android:defaultValue="@string/prefval_default_user_agent"
+      android:title="@string/pref_default_user_agent_title"
+      android:summary="@string/pref_default_user_agent_summary"
+      android:inputType="text" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_max_audio_volume_boost_db"
+      android:defaultValue="@integer/prefval_max_audio_volume_boost_db"
+      android:title="@string/pref_max_audio_volume_boost_db_title"
+      android:summary="@string/pref_max_audio_volume_boost_db_summary"
+      android:inputType="number"
+      android:numeric="integer"
+      android:maxLength="3" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_max_parallel_downloads"
+      android:defaultValue="@integer/prefval_max_parallel_downloads"
+      android:title="@string/pref_max_parallel_downloads_title"
+      android:summary="@string/pref_max_parallel_downloads_summary"
+      android:inputType="number"
+      android:numeric="integer"
+      android:maxLength="3" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_seek_back_ms_increment"
+      android:defaultValue="@integer/prefval_seek_back_ms_increment"
+      android:title="@string/pref_seek_back_ms_increment_title"
+      android:summary="@string/pref_seek_back_ms_increment_summary"
+      android:inputType="number"
+      android:numeric="integer"
+      android:maxLength="8" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_seek_forward_ms_increment"
+      android:defaultValue="@integer/prefval_seek_forward_ms_increment"
+      android:title="@string/pref_seek_forward_ms_increment_title"
+      android:summary="@string/pref_seek_forward_ms_increment_summary"
+      android:inputType="number"
+      android:numeric="integer"
+      android:maxLength="8" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_audio_volume_percent_increment"
+      android:defaultValue="@dimen/prefval_audio_volume_percent_increment"
+      android:title="@string/pref_audio_volume_percent_increment_title"
+      android:summary="@string/pref_audio_volume_percent_increment_summary"
+      android:inputType="numberDecimal"
+      android:numeric="decimal"
+      android:maxLength="5" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_audio_volume_boost_db_increment"
+      android:defaultValue="@dimen/prefval_audio_volume_boost_db_increment"
+      android:title="@string/pref_audio_volume_boost_db_increment_title"
+      android:summary="@string/pref_audio_volume_boost_db_increment_summary"
+      android:inputType="numberDecimal"
+      android:numeric="decimal"
+      android:maxLength="5" />
+
+    <com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.preference.NumericPreference
+      android:key="@string/prefkey_ts_extractor_timestamp_search_bytes_factor"
+      android:defaultValue="@dimen/prefval_ts_extractor_timestamp_search_bytes_factor"
+      android:title="@string/pref_ts_extractor_timestamp_search_bytes_factor_title"
+      android:summary="@string/pref_ts_extractor_timestamp_search_bytes_factor_summary"
+      android:inputType="numberDecimal"
+      android:numeric="decimal"
+      android:maxLength="5" />
+
+    <CheckBoxPreference
+      android:key="@string/prefkey_enable_tunneled_video_playback"
+      android:defaultValue="@bool/prefval_enable_tunneled_video_playback"
+      android:title="@string/pref_enable_tunneled_video_playback_title"
+      android:summaryOn="@string/pref_enable_tunneled_video_playback_summary_on"
+      android:summaryOff="@string/pref_enable_tunneled_video_playback_summary_off" />
+
+    <CheckBoxPreference
+      android:key="@string/prefkey_enable_hdmv_dts_audio_streams"
+      android:defaultValue="@bool/prefval_enable_hdmv_dts_audio_streams"
+      android:title="@string/pref_enable_hdmv_dts_audio_streams_title"
+      android:summaryOn="@string/pref_enable_hdmv_dts_audio_streams_summary_on"
+      android:summaryOff="@string/pref_enable_hdmv_dts_audio_streams_summary_off" />
+
+    <CheckBoxPreference
+      android:key="@string/prefkey_pause_on_change_to_audio_output_device"
+      android:defaultValue="@bool/prefval_pause_on_change_to_audio_output_device"
+      android:title="@string/pref_pause_on_change_to_audio_output_device_title"
+      android:summaryOn="@string/pref_pause_on_change_to_audio_output_device_summary_on"
+      android:summaryOff="@string/pref_pause_on_change_to_audio_output_device_summary_off" />
+
+    <CheckBoxPreference
+      android:key="@string/prefkey_prefer_extension_renderer"
+      android:defaultValue="@bool/prefval_prefer_extension_renderer"
+      android:title="@string/pref_prefer_extension_renderer_title"
+      android:summaryOn="@string/pref_prefer_extension_renderer_summary_on"
+      android:summaryOff="@string/pref_prefer_extension_renderer_summary_off" />
+
+    <Preference
+      android:title="@string/pref_footer_notation_title"
+      android:summary="@string/pref_footer_notation_summary"
+      android:selectable="false"
+      android:persistent="false" />
+
+  </PreferenceCategory>
+</PreferenceScreen>

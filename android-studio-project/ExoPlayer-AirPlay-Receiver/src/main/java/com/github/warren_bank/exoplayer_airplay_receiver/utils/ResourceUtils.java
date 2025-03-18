@@ -5,6 +5,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.TypedValue;
 
 public class ResourceUtils {
 
@@ -24,13 +25,9 @@ public class ResourceUtils {
   }
 
   public static float getFloat(Context context, int id) {
-    return getFloat(context, id, /* divisor= */ 100.0f);
-  }
-
-  public static float getFloat(Context context, int id, float divisor) {
-    int value = getInteger(context, id);
-
-    return (float) (value / divisor);
+    TypedValue typedValue = new TypedValue();
+    context.getResources().getValue(id, typedValue, true);
+    return typedValue.getFloat();
   }
 
   public static Bitmap getBitmap(Context context, int id) {
@@ -61,10 +58,6 @@ public class ResourceUtils {
 
   public static float getFloat(int id) {
     return getFloat(getApplicationContext(), id);
-  }
-
-  public static float getFloat(int id, float divisor) {
-    return getFloat(getApplicationContext(), id, divisor);
   }
 
   public static Bitmap getBitmap(int id) {

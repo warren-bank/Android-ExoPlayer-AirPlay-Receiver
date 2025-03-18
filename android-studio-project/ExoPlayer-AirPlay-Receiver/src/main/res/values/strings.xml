@@ -54,10 +54,10 @@
   <string translatable="false" name="prefkey_default_user_agent">default_user_agent</string>
   <string translatable="false" name="prefkey_max_audio_volume_boost_db">max_audio_volume_boost_db</string>
   <string translatable="false" name="prefkey_max_parallel_downloads">max_parallel_downloads</string>
-  <string translatable="false" name="prefkey_audio_volume_percent_increment">audio_volume_percent_increment</string>
-  <string translatable="false" name="prefkey_audio_volume_boost_db_increment">audio_volume_boost_db_increment</string>
   <string translatable="false" name="prefkey_seek_back_ms_increment">seek_back_ms_increment</string>
   <string translatable="false" name="prefkey_seek_forward_ms_increment">seek_forward_ms_increment</string>
+  <string translatable="false" name="prefkey_audio_volume_percent_increment">audio_volume_percent_increment</string>
+  <string translatable="false" name="prefkey_audio_volume_boost_db_increment">audio_volume_boost_db_increment</string>
   <string translatable="false" name="prefkey_ts_extractor_timestamp_search_bytes_factor">ts_extractor_timestamp_search_bytes_factor</string>
   <string translatable="false" name="prefkey_enable_tunneled_video_playback">enable_tunneled_video_playback</string>
   <string translatable="false" name="prefkey_enable_hdmv_dts_audio_streams">enable_hdmv_dts_audio_streams</string>
@@ -66,5 +66,65 @@
 
   <!-- Preference default values -->
   <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36</string>
+
+  <!-- Settings -->
+  <string translatable="false" name="pref_settings_key">settings_key</string>
+  <string name="pref_settings_title">ExoAirPlayer Settings</string>
+
+  <!-- Settings: User Agent -->
+  <string name="pref_default_user_agent_title">User Agent</string>
+  <string name="pref_default_user_agent_summary">request header value..</string>
+
+  <!-- Settings: Max Audio Volume Boost (dB) -->
+  <string name="pref_max_audio_volume_boost_db_title">Max Audio Volume Boost (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">restrain amplification to..</string>
+
+  <!-- Settings: Max Parallel Downloads -->
+  <string name="pref_max_parallel_downloads_title">(*) Max Parallel Downloads</string>
+  <string name="pref_max_parallel_downloads_summary">size of thread pool in download manager..</string>
+
+  <!-- Settings: Backward Seek Increment (ms) -->
+  <string name="pref_seek_back_ms_increment_title">(*) Backward Seek Increment (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">time increment to seek backwards..</string>
+
+  <!-- Settings: Forward Seek Increment (ms) -->
+  <string name="pref_seek_forward_ms_increment_title">(*) Forward Seek Increment (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">time increment to seek forwards..</string>
+
+  <!-- Settings: Audio Volume Increment (percentage) -->
+  <string name="pref_audio_volume_percent_increment_title">Audio Volume Increment (percentage)</string>
+  <string name="pref_audio_volume_percent_increment_summary">when less than 100%, volume increment..</string>
+
+  <!-- Settings: Audio Volume Boost Increment (dB) -->
+  <string name="pref_audio_volume_boost_db_increment_title">Audio Volume Boost Increment (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">when at 100%, amplification increment..</string>
+
+  <!-- Settings: factor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES -->
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">factor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">multiplication factor to apply a relative adjustment..</string>
+
+  <!-- Settings: Track Tunneling -->
+  <string name="pref_enable_tunneled_video_playback_title">Track Tunneling</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">tunneled playback is enabled</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">tunneled playback is disabled</string>
+
+  <!-- Settings: HDMV DTS audio streams -->
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS audio streams</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">stream handler is enabled</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">stream handler is disabled</string>
+
+  <!-- Settings: Pause on change to audio output device -->
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pause on change to audio output device</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">pause is enabled</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">pause is disabled</string>
+
+  <!-- Settings: Media Decoders -->
+  <string name="pref_prefer_extension_renderer_title">(*) Media Decoders</string>
+  <string name="pref_prefer_extension_renderer_summary_on">software extension decoders are enabled and preferred over hardware decoders</string>
+  <string name="pref_prefer_extension_renderer_summary_off">software extension decoders are disabled, only hardware decoders are enabled</string>
+
+  <!-- Settings: footer notation -->
+  <string translatable="false" name="pref_footer_notation_title">-- * --</string>
+  <string name="pref_footer_notation_summary">Changes to these settings will take effect after the app is restarted.</string>
 
 </resources>

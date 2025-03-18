@@ -13,6 +13,49 @@ import java.util.HashMap;
 
 public class PreferencesMgr {
 
+  private static class OnSharedPreferenceChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+      int pref_key_id = get_pref_key_id(key);
+      if (pref_key_id == -1) return;
+
+      update_internal_state(pref_key_id);
+      notifyListeners(pref_key_id);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // internal helper: to map keys from String values to integer resource id values
+
+  private static int[] pref_key_ids = new int[]{
+    R.string.prefkey_default_user_agent,
+    R.string.prefkey_max_audio_volume_boost_db,
+    R.string.prefkey_max_parallel_downloads,
+    R.string.prefkey_seek_back_ms_increment,
+    R.string.prefkey_seek_forward_ms_increment,
+    R.string.prefkey_audio_volume_percent_increment,
+    R.string.prefkey_audio_volume_boost_db_increment,
+    R.string.prefkey_ts_extractor_timestamp_search_bytes_factor,
+    R.string.prefkey_enable_tunneled_video_playback,
+    R.string.prefkey_enable_hdmv_dts_audio_streams,
+    R.string.prefkey_pause_on_change_to_audio_output_device,
+    R.string.prefkey_prefer_extension_renderer
+  };
+
+  private static int get_pref_key_id(String key) {
+    Context context = getApplicationContext();
+
+    for (int i=0; i < pref_key_ids.length; i++) {
+      if (key.equals(
+        ResourceUtils.getString(context, pref_key_ids[i])
+      )) {
+        return pref_key_ids[i];
+      }
+    }
+
+    return -1;
+  }
+
   // ---------------------------------------------------------------------------
   // internal:
 
@@ -181,13 +224,13 @@ public class PreferencesMgr {
     return ((context == null) || (prefs == null))
       ? getPrefFloat(
           /* pref_key_id= */      R.string.prefkey_audio_volume_percent_increment,
-          /* default_value_id= */ R.integer.prefval_audio_volume_percent_increment
+          /* default_value_id= */ R.dimen.prefval_audio_volume_percent_increment
         )
       : getPrefFloat(
           context,
           prefs,
           /* pref_key_id= */      R.string.prefkey_audio_volume_percent_increment,
-          /* default_value_id= */ R.integer.prefval_audio_volume_percent_increment
+          /* default_value_id= */ R.dimen.prefval_audio_volume_percent_increment
         )
     ;
   }
@@ -196,13 +239,13 @@ public class PreferencesMgr {
     return ((context == null) || (prefs == null))
       ? getPrefFloat(
           /* pref_key_id= */      R.string.prefkey_audio_volume_boost_db_increment,
-          /* default_value_id= */ R.integer.prefval_audio_volume_boost_db_increment
+          /* default_value_id= */ R.dimen.prefval_audio_volume_boost_db_increment
         )
       : getPrefFloat(
           context,
           prefs,
           /* pref_key_id= */      R.string.prefkey_audio_volume_boost_db_increment,
-          /* default_value_id= */ R.integer.prefval_audio_volume_boost_db_increment
+          /* default_value_id= */ R.dimen.prefval_audio_volume_boost_db_increment
         )
     ;
   }
@@ -211,13 +254,13 @@ public class PreferencesMgr {
     return ((context == null) || (prefs == null))
       ? getPrefFloat(
           /* pref_key_id= */      R.string.prefkey_ts_extractor_timestamp_search_bytes_factor,
-          /* default_value_id= */ R.integer.prefval_ts_extractor_timestamp_search_bytes_factor
+          /* default_value_id= */ R.dimen.prefval_ts_extractor_timestamp_search_bytes_factor
         )
       : getPrefFloat(
           context,
           prefs,
           /* pref_key_id= */      R.string.prefkey_ts_extractor_timestamp_search_bytes_factor,
-          /* default_value_id= */ R.integer.prefval_ts_extractor_timestamp_search_bytes_factor
+          /* default_value_id= */ R.dimen.prefval_ts_extractor_timestamp_search_bytes_factor
         )
     ;
   }
@@ -287,6 +330,8 @@ public class PreferencesMgr {
 
   private static boolean is_initialized = false;
 
+  private static OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+
   private static String  default_user_agent;
   private static int     max_audio_volume_boost_db;
   private static int     max_parallel_downloads;
@@ -306,6 +351,9 @@ public class PreferencesMgr {
     is_initialized          = true;
     Context context         = getApplicationContext();
     SharedPreferences prefs = getPrefs(context);
+
+    onSharedPreferenceChangeListener = new OnSharedPreferenceChangeListener();
+    prefs.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
 
     default_user_agent                         = get_default_user_agent(context, prefs);
     max_audio_volume_boost_db                  = get_max_audio_volume_boost_db(context, prefs);
@@ -549,106 +597,15 @@ public class PreferencesMgr {
     int pref_key_id;
     boolean did_edit;
 
+    // pass 1: update persistent preferences
     for (String key : values.keySet()) {
       value = (String) values.get(key);
 
-      switch(key) {
-        case "default-user-agent" : {
-          pref_key_id = R.string.prefkey_default_user_agent;
-          did_edit    = setPrefString(context, editor, pref_key_id, /* old_value= */ default_user_agent, /* raw_value= */ value);
+      pref_key_id = get_pref_key_id(key);
+      if (pref_key_id == -1) continue;
 
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "max-audio-volume-boost-db" : {
-          pref_key_id = R.string.prefkey_max_audio_volume_boost_db;
-          did_edit    = setPrefInteger(context, editor, pref_key_id, /* old_value= */ max_audio_volume_boost_db, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "max-parallel-downloads" : {
-          pref_key_id = R.string.prefkey_max_parallel_downloads;
-          did_edit    = setPrefInteger(context, editor, pref_key_id, /* old_value= */ max_parallel_downloads, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "seek-back-ms-increment" : {
-          pref_key_id = R.string.prefkey_seek_back_ms_increment;
-          did_edit    = setPrefInteger(context, editor, pref_key_id, /* old_value= */ seek_back_ms_increment, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "seek-forward-ms-increment" : {
-          pref_key_id = R.string.prefkey_seek_forward_ms_increment;
-          did_edit    = setPrefInteger(context, editor, pref_key_id, /* old_value= */ seek_forward_ms_increment, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "audio-volume-percent-increment" : {
-          pref_key_id = R.string.prefkey_audio_volume_percent_increment;
-          did_edit    = setPrefFloat(context, editor, pref_key_id, /* old_value= */ audio_volume_percent_increment, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "audio-volume-boost-db-increment" : {
-          pref_key_id = R.string.prefkey_audio_volume_boost_db_increment;
-          did_edit    = setPrefFloat(context, editor, pref_key_id, /* old_value= */ audio_volume_boost_db_increment, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "ts-extractor-timestamp-search-bytes-factor" : {
-          pref_key_id = R.string.prefkey_ts_extractor_timestamp_search_bytes_factor;
-          did_edit    = setPrefFloat(context, editor, pref_key_id, /* old_value= */ ts_extractor_timestamp_search_bytes_factor, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "enable-tunneled-video-playback" : {
-          pref_key_id = R.string.prefkey_enable_tunneled_video_playback;
-          did_edit    = setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_tunneled_video_playback, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "enable-hdmv-dts-audio-streams" : {
-          pref_key_id = R.string.prefkey_enable_hdmv_dts_audio_streams;
-          did_edit    = setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_hdmv_dts_audio_streams, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "pause-on-change-to-audio-output-device" : {
-          pref_key_id = R.string.prefkey_pause_on_change_to_audio_output_device;
-          did_edit    = setPrefBoolean(context, editor, pref_key_id, /* old_value= */ pause_on_change_to_audio_output_device, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-
-        case "prefer-extension-renderer" : {
-          pref_key_id = R.string.prefkey_prefer_extension_renderer;
-          did_edit    = setPrefBoolean(context, editor, pref_key_id, /* old_value= */ prefer_extension_renderer, /* raw_value= */ value);
-
-          if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
-          break;
-        }
-      }
+      did_edit = update_preference(context, editor, pref_key_id, /* raw_value= */ value);
+      if (did_edit) updated_ids.add(Integer.valueOf(pref_key_id));
     }
 
     if (updated_ids.isEmpty()) return;
@@ -656,78 +613,130 @@ public class PreferencesMgr {
     did_edit = editor.commit();
     if (!did_edit) return;
 
-    // first pass: update static values
+    // pass 2: update internal state
     for (Integer num : updated_ids) {
       pref_key_id = num.intValue();
 
-      switch(pref_key_id) {
-        case R.string.prefkey_default_user_agent : {
-          default_user_agent = get_default_user_agent(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_max_audio_volume_boost_db : {
-          max_audio_volume_boost_db = get_max_audio_volume_boost_db(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_max_parallel_downloads : {
-          max_parallel_downloads = get_max_parallel_downloads(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_seek_back_ms_increment : {
-          seek_back_ms_increment = get_seek_back_ms_increment(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_seek_forward_ms_increment : {
-          seek_forward_ms_increment = get_seek_forward_ms_increment(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_audio_volume_percent_increment : {
-          audio_volume_percent_increment = get_audio_volume_percent_increment(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_audio_volume_boost_db_increment : {
-          audio_volume_boost_db_increment = get_audio_volume_boost_db_increment(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_ts_extractor_timestamp_search_bytes_factor : {
-          ts_extractor_timestamp_search_bytes_factor = get_ts_extractor_timestamp_search_bytes_factor(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_enable_tunneled_video_playback : {
-          enable_tunneled_video_playback = get_enable_tunneled_video_playback(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_enable_hdmv_dts_audio_streams : {
-          enable_hdmv_dts_audio_streams = get_enable_hdmv_dts_audio_streams(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_pause_on_change_to_audio_output_device : {
-          pause_on_change_to_audio_output_device = get_pause_on_change_to_audio_output_device(context, prefs);
-          break;
-        }
-
-        case R.string.prefkey_prefer_extension_renderer : {
-          prefer_extension_renderer = get_prefer_extension_renderer(context, prefs);
-          break;
-        }
-      }
+      update_internal_state(context, prefs, pref_key_id);
     }
 
-    // second pass: notify listeners
+    // pass 3: notify listeners
     for (Integer num : updated_ids) {
       pref_key_id = num.intValue();
 
       notifyListeners(pref_key_id);
+    }
+  }
+
+  private static boolean update_preference(Context context, SharedPreferences.Editor editor, int pref_key_id, String raw_value) {
+    switch(pref_key_id) {
+      case R.string.prefkey_default_user_agent :
+        return setPrefString(context, editor, pref_key_id, /* old_value= */ default_user_agent, raw_value);
+
+      case R.string.prefkey_max_audio_volume_boost_db :
+        return setPrefInteger(context, editor, pref_key_id, /* old_value= */ max_audio_volume_boost_db, raw_value);
+
+      case R.string.prefkey_max_parallel_downloads :
+        return setPrefInteger(context, editor, pref_key_id, /* old_value= */ max_parallel_downloads, raw_value);
+
+      case R.string.prefkey_seek_back_ms_increment :
+        return setPrefInteger(context, editor, pref_key_id, /* old_value= */ seek_back_ms_increment, raw_value);
+
+      case R.string.prefkey_seek_forward_ms_increment :
+        return setPrefInteger(context, editor, pref_key_id, /* old_value= */ seek_forward_ms_increment, raw_value);
+
+      case R.string.prefkey_audio_volume_percent_increment :
+        return setPrefFloat(context, editor, pref_key_id, /* old_value= */ audio_volume_percent_increment, raw_value);
+
+      case R.string.prefkey_audio_volume_boost_db_increment :
+        return setPrefFloat(context, editor, pref_key_id, /* old_value= */ audio_volume_boost_db_increment, raw_value);
+
+      case R.string.prefkey_ts_extractor_timestamp_search_bytes_factor :
+        return setPrefFloat(context, editor, pref_key_id, /* old_value= */ ts_extractor_timestamp_search_bytes_factor, raw_value);
+
+      case R.string.prefkey_enable_tunneled_video_playback :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_tunneled_video_playback, raw_value);
+
+      case R.string.prefkey_enable_hdmv_dts_audio_streams :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_hdmv_dts_audio_streams, raw_value);
+
+      case R.string.prefkey_pause_on_change_to_audio_output_device :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ pause_on_change_to_audio_output_device, raw_value);
+
+      case R.string.prefkey_prefer_extension_renderer :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ prefer_extension_renderer, raw_value);
+    }
+    return false;
+  }
+
+  private static void update_internal_state(int pref_key_id) {
+    Context context         = getApplicationContext();
+    SharedPreferences prefs = getPrefs(context);
+
+    update_internal_state(context, prefs, pref_key_id);
+  }
+
+  private static void update_internal_state(Context context, SharedPreferences prefs, int pref_key_id) {
+    switch(pref_key_id) {
+      case R.string.prefkey_default_user_agent : {
+        default_user_agent = get_default_user_agent(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_max_audio_volume_boost_db : {
+        max_audio_volume_boost_db = get_max_audio_volume_boost_db(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_max_parallel_downloads : {
+        max_parallel_downloads = get_max_parallel_downloads(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_seek_back_ms_increment : {
+        seek_back_ms_increment = get_seek_back_ms_increment(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_seek_forward_ms_increment : {
+        seek_forward_ms_increment = get_seek_forward_ms_increment(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_audio_volume_percent_increment : {
+        audio_volume_percent_increment = get_audio_volume_percent_increment(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_audio_volume_boost_db_increment : {
+        audio_volume_boost_db_increment = get_audio_volume_boost_db_increment(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_ts_extractor_timestamp_search_bytes_factor : {
+        ts_extractor_timestamp_search_bytes_factor = get_ts_extractor_timestamp_search_bytes_factor(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_enable_tunneled_video_playback : {
+        enable_tunneled_video_playback = get_enable_tunneled_video_playback(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_enable_hdmv_dts_audio_streams : {
+        enable_hdmv_dts_audio_streams = get_enable_hdmv_dts_audio_streams(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_pause_on_change_to_audio_output_device : {
+        pause_on_change_to_audio_output_device = get_pause_on_change_to_audio_output_device(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_prefer_extension_renderer : {
+        prefer_extension_renderer = get_prefer_extension_renderer(context, prefs);
+        break;
+      }
     }
   }
 

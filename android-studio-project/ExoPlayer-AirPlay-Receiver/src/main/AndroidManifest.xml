@@ -69,6 +69,13 @@
             android:exported="true" />
 
         <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:launchMode="singleTask"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.ImageViewerActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
