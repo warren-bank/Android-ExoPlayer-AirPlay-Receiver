@@ -1141,6 +1141,13 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }
       }
+      else if (target.equals(Constant.Target.SETTINGS_SHOW)) {
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_Show_Settings;
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.equals(Constant.Target.PLAYER_SHOW)) {
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Show_Player;

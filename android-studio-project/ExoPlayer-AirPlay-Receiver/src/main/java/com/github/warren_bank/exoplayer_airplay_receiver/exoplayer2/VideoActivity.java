@@ -7,6 +7,8 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
+import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
+import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +16,13 @@ import androidx.media3.common.util.RepeatModeUtil;
 import androidx.media3.ui.PlayerView;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class VideoActivity extends AppCompatActivity implements PlayerView.ControllerVisibilityListener, View.OnClickListener {
   public static boolean isVisible = false;
@@ -28,6 +32,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
   private Button        selectTracksButton;
   private Button        selectTextOffsetButton;
   private Button        toggleDownloadButton;
+  private ImageButton   openSettingsButton;
   private boolean       isShowingTrackSelectionDialog;
   private boolean       isShowingTextOffsetSelectionDialog;
 
@@ -60,6 +65,8 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
     selectTextOffsetButton.setOnClickListener(this);
     toggleDownloadButton = (Button) findViewById(R.id.toggle_download_button);
     toggleDownloadButton.setOnClickListener(this);
+    openSettingsButton = (ImageButton) findViewById(R.id.open_settings_button);
+    openSettingsButton.setOnClickListener(this);
     isShowingTrackSelectionDialog      = false;
     isShowingTextOffsetSelectionDialog = false;
   }
@@ -103,6 +110,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
     selectTracksButton.setVisibility(visibility);
     selectTextOffsetButton.setVisibility(visibility);
     toggleDownloadButton.setVisibility(visibility);
+    openSettingsButton.setVisibility(visibility);
   }
 
   // View.OnClickListener
@@ -145,6 +153,14 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
       playerManager.toggleCurrentItemUseCache();
       updateButtons(/* textOnly= */ true);
     }
+
+    if (
+         view == openSettingsButton
+    ) {
+      Message msg = Message.obtain();
+      msg.what = Constant.Msg.Msg_Show_Settings;
+      MainApp.broadcastMessage(msg);
+    }
   }
 
   private void updateButtons(boolean textOnly) {
@@ -157,6 +173,9 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
       );
       toggleDownloadButton.setEnabled(
         (playerManager != null) && (playerManager.getCurrentItem() != null)
+      );
+      openSettingsButton.setEnabled(
+        true
       );
     }
 

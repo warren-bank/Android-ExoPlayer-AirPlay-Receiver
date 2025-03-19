@@ -14,6 +14,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extrac
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.ImageViewerActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.RuntimePermissionsRequestActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
+import com.github.warren_bank.exoplayer_airplay_receiver.ui.settings.SettingsActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.IntentUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
@@ -98,6 +99,17 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Register.FAIL : {
         ToastUtils.showToastCenterShort(service.getApplicationContext(), R.string.toast_registration_failure);
+        break;
+      }
+
+      // =======================================================================
+      // Display Settings
+      // =======================================================================
+
+      case Constant.Msg.Msg_Show_Settings : {
+        startSettingsActivity(
+          service
+        );
         break;
       }
 
@@ -670,6 +682,13 @@ final class MyMessageHandler extends Handler {
       }
     }
 
+    service.startActivity(intent);
+  }
+
+  private void startSettingsActivity(NetworkingService service) {
+    Log.d(tag, "starting SettingsActivity");
+    Intent intent = new Intent(service, SettingsActivity.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     service.startActivity(intent);
   }
 

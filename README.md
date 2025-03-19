@@ -465,6 +465,11 @@ __extended APIs:__
       --data-binary "Content-Location: ${recursive_path}" \
       "http://${airplay_ip}/play"
   ```
+* show the app settings in the top-most foreground Activity:
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/show-settings"
+  ```
 * show the video player in the top-most foreground Activity:
   ```bash
     curl --silent -X GET \

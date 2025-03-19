@@ -196,17 +196,18 @@ public class Constant {
         public static final int Msg_Resize_Mode                 = 23;
 
         public static final int Msg_Show_Toast                  = 24;
-        public static final int Msg_Show_Player                 = 25;
-        public static final int Msg_Hide_Player                 = 26;
-        public static final int Msg_Start_Activity              = 27;
-        public static final int Msg_Video_Share                 = 28;
-        public static final int Msg_Preferences_Edit            = 29;
-        public static final int Msg_Delete_Cache                = 30;
-        public static final int Msg_Exit_Service                = 31;
+        public static final int Msg_Show_Settings               = 25;
+        public static final int Msg_Show_Player                 = 26;
+        public static final int Msg_Hide_Player                 = 27;
+        public static final int Msg_Start_Activity              = 28;
+        public static final int Msg_Video_Share                 = 29;
+        public static final int Msg_Preferences_Edit            = 30;
+        public static final int Msg_Delete_Cache                = 31;
+        public static final int Msg_Exit_Service                = 32;
 
         public interface Msg_Runtime_Permissions {
-            public static final int Request_EXTERNAL_STORAGE    = 32;
-            public static final int Granted                     = 33;
+            public static final int Request_EXTERNAL_STORAGE    = 33;
+            public static final int Granted                     = 34;
         }
     }
 
@@ -241,6 +242,7 @@ public class Constant {
         public static final String RESIZE_MODE                  = "/resize-mode";
 
         public static final String TOAST_SHOW                   = "/show-toast";
+        public static final String SETTINGS_SHOW                = "/show-settings";
         public static final String PLAYER_SHOW                  = "/show-player";
         public static final String PLAYER_SHOW_PIP              = "/show-player-pip";
         public static final String PLAYER_HIDE                  = "/hide-player";
