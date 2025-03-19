@@ -247,6 +247,7 @@ window.onload  = function() {
   var $toast_variables         = document.querySelector('select#toast_variables')
   var $show_toast              = document.querySelector('button#show_toast')
   var $image_file              = document.querySelector('input#image_file')
+  var $show_settings           = document.querySelector('button#show_settings')
   var $show_player             = document.querySelector('button#show_player')
   var $show_player_pip         = document.querySelector('button#show_player_pip')
   var $hide_player             = document.querySelector('button#hide_player')
@@ -1140,6 +1141,16 @@ window.onload  = function() {
     send_message(path, data)
 
     $image_file.value = null
+  }
+
+  $show_settings.onclick = function(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    var path = '/show-settings'
+    var data = null
+
+    send_message(path, data)
   }
 
   $show_player.onclick = function(event) {
@@ -2144,7 +2155,10 @@ window.onload  = function() {
       <div>
         <table align="center">
           <tr class="advanced_ui_mode">
-            <td colspan=3 align="center" class="oneline">
+            <td class="oneline fullwidth">
+              <button id="show_settings">Show Settings</button>
+            </td>
+            <td colspan=2 align="center" class="oneline">
               <button><label for="image_file">Display Image File&hellip;</label></button>
               <input id="image_file" type="file" accept="image/bmp, image/gif, image/jpeg, image/png, image/webp, image/heic, image/heif" />
             </td>
