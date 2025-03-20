@@ -601,6 +601,9 @@ public class PreferencesMgr {
     for (String key : values.keySet()) {
       value = (String) values.get(key);
 
+      // normalize API key to match SharedPreferences key
+      key = key.replace('-', '_');
+
       pref_key_id = get_pref_key_id(key);
       if (pref_key_id == -1) continue;
 
