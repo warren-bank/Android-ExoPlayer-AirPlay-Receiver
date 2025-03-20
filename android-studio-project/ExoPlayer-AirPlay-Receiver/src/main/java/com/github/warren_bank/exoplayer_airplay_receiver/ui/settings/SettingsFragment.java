@@ -9,6 +9,11 @@ public class SettingsFragment extends PreferenceFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    reload();
+  }
+
+  public void reload() {
+    setPreferenceScreen(null);
     addPreferencesFromResource(R.xml.preferences);
   }
 }
