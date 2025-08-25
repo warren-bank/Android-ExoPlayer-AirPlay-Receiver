@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <string name="track_selection_title_video">비디오</string>
-  <string name="track_selection_title_audio">오디오</string>
-  <string name="track_selection_title_text">텍스트</string>
-</resources>
