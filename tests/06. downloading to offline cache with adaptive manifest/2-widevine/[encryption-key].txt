@@ -1,3 +1,0 @@
-DRM:
-  Scheme = Widevine
-  URL    = https://cwip-shaka-proxy.appspot.com/no_auth
