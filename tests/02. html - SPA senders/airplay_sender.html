@@ -1271,6 +1271,10 @@ window.onload  = () => {
 
     if (variable) {
       switch(variable) {
+        case '{{ssa-tags}}':
+          regexs.push('\\\\[hnNr]')
+          regexs.push('\\{\\\\.*?\\}')
+          break
         case '{{in-brackets}}':
           regexs.push('\\[[^\\]]*\\]')
           break
@@ -2300,6 +2304,7 @@ window.onload  = () => {
           <div>
             <select id="txt_filters_presets">
               <option value="">Add Filter:</option>
+              <option value="{{ssa-tags}}">SSA/ASS Tags</option>
               <option value="{{in-brackets}}">In Brackets</option>
               <option value="{{in-parenthesis}}">In Parenthesis</option>
               <option value="{{music-lyrics}}">Music Lyrics</option>
