@@ -5,7 +5,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
-import android.support.v4.media.session.MediaSessionCompat;
 import androidx.annotation.Nullable;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaSession;
@@ -81,14 +80,16 @@ public class PlayerNotificationManagerContainer {
     Player player = playerManager.exoPlayer;
 
     // =========================================================================
-    // https://github.com/androidx/media/blob/1.5.0/libraries/session/src/main/java/androidx/media3/session/MediaSession.java#L248
+    // https://github.com/androidx/media/blob/1.8.0/libraries/session/src/main/java/androidx/media3/session/MediaSession.java#L248
+    // https://github.com/androidx/media/blob/1.8.0/libraries/session/src/main/java/androidx/media3/session/MediaSession.java#L1381
+    // https://github.com/androidx/media/blob/1.8.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerNotificationManager.java#L1020
     // =========================================================================
 
     mediaSession = new MediaSession.Builder(context, player)
       .setId(context.getPackageName())
       .build();
 
-    playerNotificationManager.setMediaSessionToken((MediaSessionCompat.Token) mediaSession.getSessionCompatToken());
+    playerNotificationManager.setMediaSessionToken(mediaSession.getPlatformToken());
     playerNotificationManager.setPlayer(player);
   }
 

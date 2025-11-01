@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.5.0/demos/main/src/main/java/androidx/media3/demo/main/DemoDownloadService.java
+ *   https://github.com/androidx/media/blob/1.8.0/demos/main/src/main/java/androidx/media3/demo/main/DemoDownloadService.java
  */
 
 import static com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils.DOWNLOAD_NOTIFICATION_CHANNEL_ID;
@@ -11,7 +11,6 @@ import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media3.common.util.NotificationUtil;
 import androidx.media3.common.util.Util;
@@ -36,13 +35,12 @@ public class MyDownloadService extends DownloadService {
         ResourceUtils.getInteger(R.integer.NOTIFICATION_ID_EXOPLAYER_DOWNLOADS),
         DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
         DOWNLOAD_NOTIFICATION_CHANNEL_ID,
-        R.string.exo_download_notification_channel_name,  // https://github.com/androidx/media/blob/1.5.0/libraries/exoplayer/src/main/res/values/strings.xml#L20
+        R.string.exo_download_notification_channel_name,  // https://github.com/androidx/media/blob/1.8.0/libraries/exoplayer/src/main/res/values/strings.xml#L20
         /* channelDescriptionResourceId= */ 0
     );
   }
 
   @Override
-  @NonNull
   protected DownloadManager getDownloadManager() {
     // This will only happen once, because getDownloadManager is guaranteed to be called only once in the life cycle of the process.
     DownloadManager downloadManager = ExoPlayerUtils.getDownloadManager(/* context= */ this);
@@ -63,7 +61,6 @@ public class MyDownloadService extends DownloadService {
   }
 
   @Override
-  @NonNull
   protected Notification getForegroundNotification(List<Download> downloads, @Requirements.RequirementFlags int notMetRequirements) {
     return ExoPlayerUtils.getDownloadNotificationHelper(/* context= */ this)
         .buildProgressNotification(
