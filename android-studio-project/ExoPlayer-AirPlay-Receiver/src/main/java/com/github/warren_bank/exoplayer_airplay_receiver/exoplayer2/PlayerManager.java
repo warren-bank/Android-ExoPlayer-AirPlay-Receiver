@@ -126,6 +126,14 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     this.textFilter               = (TextFilter)       renderersFactory;
     this.textSynchronizer         = (TextSynchronizer) renderersFactory;
 
+    renderersFactory.audioProcessorChain.enable_downmix_surround_to_stereo(
+      PreferencesMgr.get_enable_downmix_surround_sound_to_stereo()
+    );
+
+    renderersFactory.audioProcessorChain.enable_downmix_stereo_to_mono(
+      PreferencesMgr.get_enable_downmix_stereo_sound_to_mono()
+    );
+
     extractorsFactory.setTsExtractorTimestampSearchBytes(
       (int) (PreferencesMgr.get_ts_extractor_timestamp_search_bytes_factor() * TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES)
     );
@@ -1571,6 +1579,18 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
           PreferencesMgr.get_pause_on_change_to_audio_output_device()
         );
         break;
+      }
+
+      case R.string.prefkey_enable_downmix_surround_sound_to_stereo : {
+        renderersFactory.audioProcessorChain.enable_downmix_surround_to_stereo(
+          PreferencesMgr.get_enable_downmix_surround_sound_to_stereo()
+        );
+      }
+
+      case R.string.prefkey_enable_downmix_stereo_sound_to_mono : {
+        renderersFactory.audioProcessorChain.enable_downmix_stereo_to_mono(
+          PreferencesMgr.get_enable_downmix_stereo_sound_to_mono()
+        );
       }
 
       case R.string.prefkey_max_audio_volume_boost_db       :

@@ -39,7 +39,9 @@ public class PreferencesMgr {
     R.string.prefkey_enable_tunneled_video_playback,
     R.string.prefkey_enable_hdmv_dts_audio_streams,
     R.string.prefkey_pause_on_change_to_audio_output_device,
-    R.string.prefkey_prefer_extension_renderer
+    R.string.prefkey_prefer_extension_renderer,
+    R.string.prefkey_enable_downmix_surround_sound_to_stereo,
+    R.string.prefkey_enable_downmix_stereo_sound_to_mono
   };
 
   private static int get_pref_key_id(String key) {
@@ -325,6 +327,36 @@ public class PreferencesMgr {
     ;
   }
 
+  private static boolean get_enable_downmix_surround_sound_to_stereo(Context context, SharedPreferences prefs) {
+    return ((context == null) || (prefs == null))
+      ? getPrefBoolean(
+          /* pref_key_id= */      R.string.prefkey_enable_downmix_surround_sound_to_stereo,
+          /* default_value_id= */ R.bool.prefval_enable_downmix_surround_sound_to_stereo
+        )
+      : getPrefBoolean(
+          context,
+          prefs,
+          /* pref_key_id= */      R.string.prefkey_enable_downmix_surround_sound_to_stereo,
+          /* default_value_id= */ R.bool.prefval_enable_downmix_surround_sound_to_stereo
+        )
+    ;
+  }
+
+  private static boolean get_enable_downmix_stereo_sound_to_mono(Context context, SharedPreferences prefs) {
+    return ((context == null) || (prefs == null))
+      ? getPrefBoolean(
+          /* pref_key_id= */      R.string.prefkey_enable_downmix_stereo_sound_to_mono,
+          /* default_value_id= */ R.bool.prefval_enable_downmix_stereo_sound_to_mono
+        )
+      : getPrefBoolean(
+          context,
+          prefs,
+          /* pref_key_id= */      R.string.prefkey_enable_downmix_stereo_sound_to_mono,
+          /* default_value_id= */ R.bool.prefval_enable_downmix_stereo_sound_to_mono
+        )
+    ;
+  }
+
   // ---------------------------------------------------------------------------
   // internal state:
 
@@ -344,6 +376,8 @@ public class PreferencesMgr {
   private static boolean enable_hdmv_dts_audio_streams;
   private static boolean pause_on_change_to_audio_output_device;
   private static boolean prefer_extension_renderer;
+  private static boolean enable_downmix_surround_sound_to_stereo;
+  private static boolean enable_downmix_stereo_sound_to_mono;
 
   private static void initialize() {
     if (is_initialized) return;
@@ -367,6 +401,8 @@ public class PreferencesMgr {
     enable_hdmv_dts_audio_streams              = get_enable_hdmv_dts_audio_streams(context, prefs);
     pause_on_change_to_audio_output_device     = get_pause_on_change_to_audio_output_device(context, prefs);
     prefer_extension_renderer                  = get_prefer_extension_renderer(context, prefs);
+    enable_downmix_surround_sound_to_stereo    = get_enable_downmix_surround_sound_to_stereo(context, prefs);
+    enable_downmix_stereo_sound_to_mono        = get_enable_downmix_stereo_sound_to_mono(context, prefs);
   }
 
   // ---------------------------------------------------------------------------
@@ -430,6 +466,16 @@ public class PreferencesMgr {
   public static boolean get_prefer_extension_renderer() {
     initialize();
     return prefer_extension_renderer;
+  }
+
+  public static boolean get_enable_downmix_surround_sound_to_stereo() {
+    initialize();
+    return enable_downmix_surround_sound_to_stereo;
+  }
+
+  public static boolean get_enable_downmix_stereo_sound_to_mono() {
+    initialize();
+    return enable_downmix_stereo_sound_to_mono;
   }
 
   // ---------------------------------------------------------------------------
@@ -668,6 +714,12 @@ public class PreferencesMgr {
 
       case R.string.prefkey_prefer_extension_renderer :
         return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ prefer_extension_renderer, raw_value);
+
+      case R.string.prefkey_enable_downmix_surround_sound_to_stereo :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_downmix_surround_sound_to_stereo, raw_value);
+
+      case R.string.prefkey_enable_downmix_stereo_sound_to_mono :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_downmix_stereo_sound_to_mono, raw_value);
     }
     return false;
   }
@@ -740,6 +792,16 @@ public class PreferencesMgr {
         prefer_extension_renderer = get_prefer_extension_renderer(context, prefs);
         break;
       }
+
+      case R.string.prefkey_enable_downmix_surround_sound_to_stereo : {
+        enable_downmix_surround_sound_to_stereo = get_enable_downmix_surround_sound_to_stereo(context, prefs);
+        break;
+      }
+
+      case R.string.prefkey_enable_downmix_stereo_sound_to_mono : {
+        enable_downmix_stereo_sound_to_mono = get_enable_downmix_stereo_sound_to_mono(context, prefs);
+        break;
+      }
     }
   }
 
@@ -762,6 +824,8 @@ public class PreferencesMgr {
     lines.add("enable-hdmv-dts-audio-streams: %b");
     lines.add("pause-on-change-to-audio-output-device: %b");
     lines.add("prefer-extension-renderer: %b");
+    lines.add("enable-downmix-surround-sound-to-stereo: %b");
+    lines.add("enable-downmix-stereo-sound-to-mono: %b");
 
     return String.format(
       TextUtils.join("\n", lines),
@@ -776,7 +840,9 @@ public class PreferencesMgr {
       enable_tunneled_video_playback,
       enable_hdmv_dts_audio_streams,
       pause_on_change_to_audio_output_device,
-      prefer_extension_renderer
+      prefer_extension_renderer,
+      enable_downmix_surround_sound_to_stereo,
+      enable_downmix_stereo_sound_to_mono
     );
   }
 

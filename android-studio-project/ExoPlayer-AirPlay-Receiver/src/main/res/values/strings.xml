@@ -63,6 +63,8 @@
   <string translatable="false" name="prefkey_enable_hdmv_dts_audio_streams">enable_hdmv_dts_audio_streams</string>
   <string translatable="false" name="prefkey_pause_on_change_to_audio_output_device">pause_on_change_to_audio_output_device</string>
   <string translatable="false" name="prefkey_prefer_extension_renderer">prefer_extension_renderer</string>
+  <string translatable="false" name="prefkey_enable_downmix_surround_sound_to_stereo">enable_downmix_surround_sound_to_stereo</string>
+  <string translatable="false" name="prefkey_enable_downmix_stereo_sound_to_mono">enable_downmix_stereo_sound_to_mono</string>
 
   <!-- Preference default values -->
   <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36</string>
@@ -122,6 +124,16 @@
   <string name="pref_prefer_extension_renderer_title">(*) Media Decoders</string>
   <string name="pref_prefer_extension_renderer_summary_on">software extension decoders are enabled and preferred over hardware decoders</string>
   <string name="pref_prefer_extension_renderer_summary_off">software extension decoders are disabled, only hardware decoders are enabled</string>
+
+  <!-- Settings: Downmix surround sound to stereo -->
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Downmix surround sound to stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">when there are between 3 and 6 audio channels, reduce to 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">play audio tracks with surround sound</string>
+
+  <!-- Settings: Downmix stereo sound to mono -->
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Downmix stereo sound to mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">when there are 2 audio channels, reduce to 1</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">play audio tracks with stereo sound</string>
 
   <!-- Settings: footer notation -->
   <string translatable="false" name="pref_footer_notation_title">-- * --</string>

@@ -102,6 +102,20 @@
       android:summaryOn="@string/pref_prefer_extension_renderer_summary_on"
       android:summaryOff="@string/pref_prefer_extension_renderer_summary_off" />
 
+    <CheckBoxPreference
+      android:key="@string/prefkey_enable_downmix_surround_sound_to_stereo"
+      android:defaultValue="@bool/prefval_enable_downmix_surround_sound_to_stereo"
+      android:title="@string/pref_enable_downmix_surround_sound_to_stereo_title"
+      android:summaryOn="@string/pref_enable_downmix_surround_sound_to_stereo_summary_on"
+      android:summaryOff="@string/pref_enable_downmix_surround_sound_to_stereo_summary_off" />
+
+    <CheckBoxPreference
+      android:key="@string/prefkey_enable_downmix_stereo_sound_to_mono"
+      android:defaultValue="@bool/prefval_enable_downmix_stereo_sound_to_mono"
+      android:title="@string/pref_enable_downmix_stereo_sound_to_mono_title"
+      android:summaryOn="@string/pref_enable_downmix_stereo_sound_to_mono_summary_on"
+      android:summaryOff="@string/pref_enable_downmix_stereo_sound_to_mono_summary_off" />
+
     <Preference
       android:title="@string/pref_footer_notation_title"
       android:summary="@string/pref_footer_notation_summary"
