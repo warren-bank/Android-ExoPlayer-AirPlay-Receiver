@@ -70,6 +70,16 @@ public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
     public boolean isActive() {
       return this.enabled && super.isActive();
     }
+
+    @Override
+    protected AudioFormat onConfigure(AudioFormat inputAudioFormat) throws UnhandledAudioFormatException {
+      try {
+        return super.onConfigure(inputAudioFormat);
+      }
+      catch(UnhandledAudioFormatException e) {
+        return AudioFormat.NOT_SET;
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------
