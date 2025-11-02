@@ -120,7 +120,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     this.playerView               = null;
     this.mediaQueue               = new MyArrayList<>();
     this.concatenatingMediaSource = new ConcatenatingMediaSource();
-    this.renderersFactory         = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer());
+    this.renderersFactory         = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer(), !PreferencesMgr.get_enable_audio_passthrough());
     this.extractorsFactory        = new DefaultExtractorsFactory();
     this.trackSelector            = new DefaultTrackSelector(context);
     this.textFilter               = (TextFilter)       renderersFactory;
@@ -1603,7 +1603,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       case R.string.prefkey_max_parallel_downloads    :
       case R.string.prefkey_seek_back_ms_increment    :
       case R.string.prefkey_seek_forward_ms_increment :
-      case R.string.prefkey_prefer_extension_renderer : {
+      case R.string.prefkey_prefer_extension_renderer :
+      case R.string.prefkey_enable_audio_passthrough  : {
         // nothing to do: value will take effect when app is restarted
         break;
       }

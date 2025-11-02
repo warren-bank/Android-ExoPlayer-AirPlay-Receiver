@@ -40,6 +40,7 @@ public class PreferencesMgr {
     R.string.prefkey_enable_hdmv_dts_audio_streams,
     R.string.prefkey_pause_on_change_to_audio_output_device,
     R.string.prefkey_prefer_extension_renderer,
+    R.string.prefkey_enable_audio_passthrough,
     R.string.prefkey_enable_downmix_surround_sound_to_stereo,
     R.string.prefkey_enable_downmix_stereo_sound_to_mono
   };
@@ -327,6 +328,21 @@ public class PreferencesMgr {
     ;
   }
 
+  private static boolean get_enable_audio_passthrough(Context context, SharedPreferences prefs) {
+    return ((context == null) || (prefs == null))
+      ? getPrefBoolean(
+          /* pref_key_id= */      R.string.prefkey_enable_audio_passthrough,
+          /* default_value_id= */ R.bool.prefval_enable_audio_passthrough
+        )
+      : getPrefBoolean(
+          context,
+          prefs,
+          /* pref_key_id= */      R.string.prefkey_enable_audio_passthrough,
+          /* default_value_id= */ R.bool.prefval_enable_audio_passthrough
+        )
+    ;
+  }
+
   private static boolean get_enable_downmix_surround_sound_to_stereo(Context context, SharedPreferences prefs) {
     return ((context == null) || (prefs == null))
       ? getPrefBoolean(
@@ -376,6 +392,7 @@ public class PreferencesMgr {
   private static boolean enable_hdmv_dts_audio_streams;
   private static boolean pause_on_change_to_audio_output_device;
   private static boolean prefer_extension_renderer;
+  private static boolean enable_audio_passthrough;
   private static boolean enable_downmix_surround_sound_to_stereo;
   private static boolean enable_downmix_stereo_sound_to_mono;
 
@@ -401,6 +418,7 @@ public class PreferencesMgr {
     enable_hdmv_dts_audio_streams              = get_enable_hdmv_dts_audio_streams(context, prefs);
     pause_on_change_to_audio_output_device     = get_pause_on_change_to_audio_output_device(context, prefs);
     prefer_extension_renderer                  = get_prefer_extension_renderer(context, prefs);
+    enable_audio_passthrough                   = get_enable_audio_passthrough(context, prefs);
     enable_downmix_surround_sound_to_stereo    = get_enable_downmix_surround_sound_to_stereo(context, prefs);
     enable_downmix_stereo_sound_to_mono        = get_enable_downmix_stereo_sound_to_mono(context, prefs);
   }
@@ -466,6 +484,11 @@ public class PreferencesMgr {
   public static boolean get_prefer_extension_renderer() {
     initialize();
     return prefer_extension_renderer;
+  }
+
+  public static boolean get_enable_audio_passthrough() {
+    initialize();
+    return enable_audio_passthrough;
   }
 
   public static boolean get_enable_downmix_surround_sound_to_stereo() {
@@ -715,6 +738,9 @@ public class PreferencesMgr {
       case R.string.prefkey_prefer_extension_renderer :
         return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ prefer_extension_renderer, raw_value);
 
+      case R.string.prefkey_enable_audio_passthrough :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_audio_passthrough, raw_value);
+
       case R.string.prefkey_enable_downmix_surround_sound_to_stereo :
         return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_downmix_surround_sound_to_stereo, raw_value);
 
@@ -793,6 +819,11 @@ public class PreferencesMgr {
         break;
       }
 
+      case R.string.prefkey_enable_audio_passthrough : {
+        enable_audio_passthrough = get_enable_audio_passthrough(context, prefs);
+        break;
+      }
+
       case R.string.prefkey_enable_downmix_surround_sound_to_stereo : {
         enable_downmix_surround_sound_to_stereo = get_enable_downmix_surround_sound_to_stereo(context, prefs);
         break;
@@ -824,6 +855,7 @@ public class PreferencesMgr {
     lines.add("enable-hdmv-dts-audio-streams: %b");
     lines.add("pause-on-change-to-audio-output-device: %b");
     lines.add("prefer-extension-renderer: %b");
+    lines.add("enable-audio-passthrough: %b");
     lines.add("enable-downmix-surround-sound-to-stereo: %b");
     lines.add("enable-downmix-stereo-sound-to-mono: %b");
 
@@ -841,6 +873,7 @@ public class PreferencesMgr {
       enable_hdmv_dts_audio_streams,
       pause_on_change_to_audio_output_device,
       prefer_extension_renderer,
+      enable_audio_passthrough,
       enable_downmix_surround_sound_to_stereo,
       enable_downmix_stereo_sound_to_mono
     );

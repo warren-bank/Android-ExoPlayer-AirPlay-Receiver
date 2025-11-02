@@ -3,6 +3,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 /*
  * references:
  *   https://github.com/androidx/media/blob/1.8.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/DefaultRenderersFactory.java
+ *   https://github.com/androidx/media/blob/1.8.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/audio/DefaultAudioSink.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
@@ -19,15 +20,17 @@ import android.os.Looper;
 import java.util.ArrayList;
 
 public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer, TextFilter {
+  private boolean useDefaultAudioCapabilities;
   private MyTextRenderer textRenderer;
   public MyAudioProcessorChain audioProcessorChain;
 
-  public MyRenderersFactory(Context context, boolean preferExtensionRenderer) {
+  public MyRenderersFactory(Context context, boolean preferExtensionRenderer, boolean useDefaultAudioCapabilities) {
     super(context);
     setExtensionRendererMode(/* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(preferExtensionRenderer));
 
-    textRenderer = null;
-    audioProcessorChain = MyAudioProcessorChain.getInstance();
+    this.useDefaultAudioCapabilities = useDefaultAudioCapabilities;
+    this.textRenderer = null;
+    this.audioProcessorChain = MyAudioProcessorChain.getInstance();
   }
 
   @Override
@@ -45,7 +48,11 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
 
   @Override
   protected AudioSink buildAudioSink(Context context, boolean enableFloatOutput, boolean enableAudioTrackPlaybackParams) {
-    return new DefaultAudioSink.Builder(context)
+    DefaultAudioSink.Builder builder = useDefaultAudioCapabilities
+      ? new DefaultAudioSink.Builder()
+      : new DefaultAudioSink.Builder(context);
+
+    return builder
       .setEnableFloatOutput(enableFloatOutput)
       .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
       .setAudioProcessorChain(audioProcessorChain)
