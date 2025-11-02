@@ -248,6 +248,7 @@ public class Constant {
         public static final String PLAYER_HIDE                  = "/hide-player";
         public static final String ACTIVITY_START               = "/start-activity";
         public static final String VIDEO_SHARE                  = "/share-video";
+        public static final String PREFERENCES_INFO             = "/preferences-info";
         public static final String PREFERENCES_EDIT             = "/edit-preferences";
         public static final String CACHE_DELETE                 = "/delete-cache";
         public static final String SERVICE_EXIT                 = "/exit-service";

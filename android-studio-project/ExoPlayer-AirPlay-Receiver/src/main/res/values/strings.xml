@@ -68,7 +68,7 @@
   <string translatable="false" name="prefkey_enable_downmix_stereo_sound_to_mono">enable_downmix_stereo_sound_to_mono</string>
 
   <!-- Preference default values -->
-  <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4710.39 Safari/537.36</string>
+  <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</string>
 
   <!-- Settings -->
   <string translatable="false" name="pref_settings_key">settings_key</string>

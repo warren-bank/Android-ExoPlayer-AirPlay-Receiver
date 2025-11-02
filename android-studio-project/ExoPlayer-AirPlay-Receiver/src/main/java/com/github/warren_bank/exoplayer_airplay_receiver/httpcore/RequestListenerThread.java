@@ -10,6 +10,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.OnVari
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.BplistParser;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
 import org.apache.http.Header;
@@ -1218,6 +1219,13 @@ public class RequestListenerThread extends Thread {
         MainApp.broadcastMessage(msg);
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
+      else if (target.equalsIgnoreCase(Constant.Target.PREFERENCES_INFO)) {
+        String preferences_info = PreferencesMgr.serialize();
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        httpResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
+        httpResponse.setEntity(new StringEntity(preferences_info));
       }
       else if (
         (entityContent != null) &&

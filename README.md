@@ -763,6 +763,19 @@ __extended APIs:__
         * [reference](https://exoplayer.dev/doc/reference/com/google/android/exoplayer2/DefaultRenderersFactory.html#EXTENSION_RENDERER_MODE_PREFER)
       - default: `false`
       - limitation: update does not take effect until the app is restarted
+    * _enable-audio-passthrough_
+      - type: boolean
+      - description: allow audio passthrough based on hardware capability detection?
+      - default: `true`
+      - limitation: update does not take effect until the app is restarted
+    * _enable-downmix-surround-sound-to-stereo_
+      - type: boolean
+      - description: downmix surround sound to stereo?
+      - default: `false`
+    * _enable-downmix-stereo-sound-to-mono_
+      - type: boolean
+      - description: downmix stereo sound to mono?
+      - default: `false`
 * POST data sent in requests to `/show-toast` API endpoint:
   - contains an arbitrary block of text
 * POST data sent in requests to `/set-captions-filters` and `/add-captions-filters` API endpoints:
