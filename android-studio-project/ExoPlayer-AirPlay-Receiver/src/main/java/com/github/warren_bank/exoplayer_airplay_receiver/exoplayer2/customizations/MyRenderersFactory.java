@@ -26,6 +26,10 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
 
   public MyRenderersFactory(Context context, boolean preferExtensionRenderer, boolean useDefaultAudioCapabilities) {
     super(context);
+
+    setEnableAudioFloatOutput(false);
+    setEnableAudioTrackPlaybackParams(false);
+    setEnableDecoderFallback(true);
     setExtensionRendererMode(/* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(preferExtensionRenderer));
 
     this.useDefaultAudioCapabilities = useDefaultAudioCapabilities;
