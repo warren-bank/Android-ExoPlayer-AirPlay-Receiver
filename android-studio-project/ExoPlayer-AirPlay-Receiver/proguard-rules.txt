@@ -4,6 +4,21 @@
 -keepnames class androidx.media3.exoplayer.** { *; }
 -keepnames class javax.jmdns.** { *; }
 
+# --------------------------------------------------------------------
+# https://github.com/androidx/media/blob/1.8.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/DefaultRenderersFactory.java
+#   in methods: buildVideoRenderers, buildAudioRenderers
+#   reflection: Class<?> clazz = Class.forName("...")
+# --------------------------------------------------------------------
+-keepnames class androidx.media3.decoder.vp9.LibvpxVideoRenderer
+-keepnames class androidx.media3.decoder.av1.Libgav1VideoRenderer
+-keepnames class androidx.media3.decoder.ffmpeg.ExperimentalFfmpegVideoRenderer
+-keepnames class androidx.media3.decoder.midi.MidiRenderer
+-keepnames class androidx.media3.decoder.opus.LibopusAudioRenderer
+-keepnames class androidx.media3.decoder.flac.LibflacAudioRenderer
+-keepnames class androidx.media3.decoder.ffmpeg.FfmpegAudioRenderer
+-keepnames class androidx.media3.decoder.iamf.LibiamfAudioRenderer
+-keepnames class androidx.media3.decoder.mpegh.MpeghAudioRenderer
+
 -dontwarn androidx.media3.exoplayer.**
 -dontwarn javax.jmdns.test.**
 -dontwarn org.apache.**
