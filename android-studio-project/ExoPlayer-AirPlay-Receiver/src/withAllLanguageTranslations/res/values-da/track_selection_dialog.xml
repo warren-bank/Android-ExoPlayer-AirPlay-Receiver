@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="track_selection_title_video">Video</string>
-  <string name="track_selection_title_audio">Lyd</string>
+  <string name="track_selection_title_audio">Audio</string>
   <string name="track_selection_title_text">Tekst</string>
 </resources>
