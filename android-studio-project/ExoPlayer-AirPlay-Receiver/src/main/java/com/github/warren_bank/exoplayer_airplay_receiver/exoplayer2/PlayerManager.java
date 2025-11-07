@@ -569,7 +569,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     if (samples.length != mediaSources.length)
       return;
 
-    boolean isEnded = (exoPlayer != null) && !exoPlayer.isPlaying() && exoPlayer.getPlayWhenReady();
+    boolean isEnded = (exoPlayer != null) && (exoPlayer.getPlaybackState() == Player.STATE_ENDED);
 
     if (isEnded || remove_previous_items) {
       truncateQueue(0);
