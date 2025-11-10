@@ -28,6 +28,7 @@ public class PreferencesMgr {
   // internal helper: to map keys from String values to integer resource id values
 
   private static int[] pref_key_ids = new int[]{
+    R.string.prefkey_http_api_password,
     R.string.prefkey_default_user_agent,
     R.string.prefkey_max_audio_volume_boost_db,
     R.string.prefkey_max_parallel_downloads,
@@ -147,6 +148,21 @@ public class PreferencesMgr {
 
   // ---------------------------------------------------------------------------
   // internal getters:
+
+  private static String get_http_api_password(Context context, SharedPreferences prefs) {
+    return ((context == null) || (prefs == null))
+      ? getPrefString(
+          /* pref_key_id= */      R.string.prefkey_http_api_password,
+          /* default_value_id= */ R.string.prefval_http_api_password
+        )
+      : getPrefString(
+          context,
+          prefs,
+          /* pref_key_id= */      R.string.prefkey_http_api_password,
+          /* default_value_id= */ R.string.prefval_http_api_password
+        )
+    ;
+  }
 
   private static String get_default_user_agent(Context context, SharedPreferences prefs) {
     return ((context == null) || (prefs == null))
@@ -380,6 +396,7 @@ public class PreferencesMgr {
 
   private static OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
+  private static String  http_api_password;
   private static String  default_user_agent;
   private static int     max_audio_volume_boost_db;
   private static int     max_parallel_downloads;
@@ -406,6 +423,7 @@ public class PreferencesMgr {
     onSharedPreferenceChangeListener = new OnSharedPreferenceChangeListener();
     prefs.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
 
+    http_api_password                          = get_http_api_password(context, prefs);
     default_user_agent                         = get_default_user_agent(context, prefs);
     max_audio_volume_boost_db                  = get_max_audio_volume_boost_db(context, prefs);
     max_parallel_downloads                     = get_max_parallel_downloads(context, prefs);
@@ -425,6 +443,11 @@ public class PreferencesMgr {
 
   // ---------------------------------------------------------------------------
   // public getters:
+
+  public static String get_http_api_password() {
+    initialize();
+    return http_api_password;
+  }
 
   public static String get_default_user_agent() {
     initialize();
@@ -702,6 +725,9 @@ public class PreferencesMgr {
 
   private static boolean update_preference(Context context, SharedPreferences.Editor editor, int pref_key_id, String raw_value) {
     switch(pref_key_id) {
+      case R.string.prefkey_http_api_password :
+        return setPrefString(context, editor, pref_key_id, /* old_value= */ http_api_password, raw_value);
+
       case R.string.prefkey_default_user_agent :
         return setPrefString(context, editor, pref_key_id, /* old_value= */ default_user_agent, raw_value);
 
@@ -759,6 +785,11 @@ public class PreferencesMgr {
 
   private static void update_internal_state(Context context, SharedPreferences prefs, int pref_key_id) {
     switch(pref_key_id) {
+      case R.string.prefkey_http_api_password : {
+        http_api_password = get_http_api_password(context, prefs);
+        break;
+      }
+
       case R.string.prefkey_default_user_agent : {
         default_user_agent = get_default_user_agent(context, prefs);
         break;
@@ -843,6 +874,7 @@ public class PreferencesMgr {
 
     ArrayList<String> lines = new ArrayList<String>();
 
+    lines.add("http-api-password: %s");
     lines.add("default-user-agent: %s");
     lines.add("max-audio-volume-boost-db: %d");
     lines.add("max-parallel-downloads: %d");
@@ -861,6 +893,7 @@ public class PreferencesMgr {
 
     return String.format(
       TextUtils.join("\n", lines),
+      http_api_password,
       default_user_agent,
       max_audio_volume_boost_db,
       max_parallel_downloads,

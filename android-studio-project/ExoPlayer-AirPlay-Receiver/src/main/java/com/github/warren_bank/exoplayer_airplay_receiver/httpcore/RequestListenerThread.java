@@ -51,6 +51,7 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +61,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class RequestListenerThread extends Thread {
   public interface PlaybackInfoSource {
@@ -76,6 +79,10 @@ public class RequestListenerThread extends Thread {
   }
 
   private static final String tag = RequestListenerThread.class.getSimpleName();
+  private static final String HTTP_CONTEXT_ATTRIBUTE_REMOTEADDRESS = "remoteAddress";
+  private static final String HTTP_REQUEST_HEADER_NAME_PASSWORD = "X-ExoAirPlayer-Password";
+  private static final String HTTP_REQUEST_QUERYSTRING_PARAMETER_PASSWORD = "password";
+  private static final Pattern HTTP_REQUEST_QUERYSTRING_PARAMETER_PASSWORD_PATTERN = Pattern.compile("([?&])" + HTTP_REQUEST_QUERYSTRING_PARAMETER_PASSWORD + "=([^&]*)(&?)");
 
   public  static Map<String, byte[]> photoCacheMaps = Collections.synchronizedMap(new HashMap<String, byte[]>());
   private static Map<String, Socket> socketMaps     = Collections.synchronizedMap(new HashMap<String, Socket>());
@@ -287,6 +294,11 @@ public class RequestListenerThread extends Thread {
       HttpContext context = new BasicHttpContext(null);
 
       try {
+        context.setAttribute(HTTP_CONTEXT_ATTRIBUTE_REMOTEADDRESS, this.socket.getInetAddress().getHostAddress());
+      }
+      catch(Exception e) {}
+
+      try {
         while (!Thread.interrupted() && this.conn.isOpen()) {
           this.httpService.handleRequest(this.conn, context);
           Log.d(tag, "socket maps size = " + socketMaps.size());
@@ -410,6 +422,29 @@ public class RequestListenerThread extends Thread {
       if (null != typeHead)
         contentType = typeHead.getValue();
       Log.d(tag, "airplay  incoming HTTP  method = " + method + "; target = " + target + "; contentType = " + contentType);
+
+      if (!isRequestAllowed(target, httpRequest, httpContext)) {
+        setCommonHeaders(httpResponse, HttpStatus.SC_UNAUTHORIZED); //401 Unauthorized
+
+        String remoteAddress = (String) httpContext.getAttribute(HTTP_CONTEXT_ATTRIBUTE_REMOTEADDRESS);
+        httpResponse.setEntity(new StringEntity(remoteAddress, "UTF-8"));
+        return;
+      }
+      else {
+        // sanitize target by removing optional password querystring parameter
+        try {
+          Matcher matcher = HTTP_REQUEST_QUERYSTRING_PARAMETER_PASSWORD_PATTERN.matcher(target);
+          if (matcher.find()) {
+            String sep1 = matcher.group(1);
+            String sep2 = matcher.group(3);
+
+            target = TextUtils.isEmpty(sep2)
+              ? matcher.replaceFirst("")
+              : matcher.replaceFirst(sep1);
+          }
+        }
+        catch(Exception e) {}
+      }
 
       Header sessionHead = httpRequest.getFirstHeader("X-Apple-Session-ID");
       String sessionId = "";
@@ -1358,6 +1393,66 @@ public class RequestListenerThread extends Thread {
 
         setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
       }
+    }
+
+    private static boolean isRequestAllowed(String target, HttpRequest httpRequest, HttpContext httpContext) {
+      String real_password = PreferencesMgr.get_http_api_password();
+      if (TextUtils.isEmpty(real_password))
+        return true;
+
+      String user_hash = "";
+      String real_hash = "";
+
+      // look for hash of "IP:password" in request headers
+      try {
+        user_hash = httpRequest.getFirstHeader(HTTP_REQUEST_HEADER_NAME_PASSWORD).getValue();
+      }
+      catch(Exception e) {}
+
+      // look for hash of "IP:password" in querystring parameters
+      if (TextUtils.isEmpty(user_hash)) {
+        try {
+          Matcher matcher = HTTP_REQUEST_QUERYSTRING_PARAMETER_PASSWORD_PATTERN.matcher(target);
+          if (matcher.find()) {
+            user_hash = matcher.group(2);
+          }
+        }
+        catch(Exception e) {}
+      }
+
+      // normalize hex encoding
+      if (!TextUtils.isEmpty(user_hash)) {
+        user_hash = user_hash.trim();
+        user_hash = user_hash.toUpperCase();
+        if (user_hash.startsWith("0X"))
+          user_hash = user_hash.substring(2);
+      }
+
+      if (TextUtils.isEmpty(user_hash))
+        return false;
+
+      // calculate real hash
+      try {
+        String remoteAddress = (String) httpContext.getAttribute(HTTP_CONTEXT_ATTRIBUTE_REMOTEADDRESS);
+        String input = remoteAddress + ":" + real_password;
+
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] hashByteArray = md.digest(input.getBytes("UTF-8"));
+        String hashHexString = bytesToHex(hashByteArray);
+
+        real_hash = hashHexString;
+      }
+      catch(Exception e) {}
+
+      return user_hash.equals(real_hash);
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+      StringBuilder sb = new StringBuilder();
+      for (byte b : bytes) {
+        sb.append(String.format("%02X", b));
+      }
+      return sb.toString();
     }
 
     private static void setCommonHeaders(HttpResponse httpResponse, int statusCode) {

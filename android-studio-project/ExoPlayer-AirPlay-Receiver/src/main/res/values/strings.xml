@@ -51,6 +51,7 @@
   <string translatable="false" name="toast_variable_top_activity">{{top-activity}}</string>
 
   <!-- Preference keys -->
+  <string translatable="false" name="prefkey_http_api_password">http_api_password</string>
   <string translatable="false" name="prefkey_default_user_agent">default_user_agent</string>
   <string translatable="false" name="prefkey_max_audio_volume_boost_db">max_audio_volume_boost_db</string>
   <string translatable="false" name="prefkey_max_parallel_downloads">max_parallel_downloads</string>
@@ -68,11 +69,16 @@
   <string translatable="false" name="prefkey_enable_downmix_stereo_sound_to_mono">enable_downmix_stereo_sound_to_mono</string>
 
   <!-- Preference default values -->
+  <string translatable="false" name="prefval_http_api_password"></string>
   <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</string>
 
   <!-- Settings -->
   <string translatable="false" name="pref_settings_key">settings_key</string>
   <string name="pref_settings_title">ExoAirPlayer Settings</string>
+
+  <!-- Settings: HTTP API Password -->
+  <string name="pref_http_api_password_title">HTTP API Password</string>
+  <string name="pref_http_api_password_summary">secret shared only with authorized clients..</string>
 
   <!-- Settings: User Agent -->
   <string name="pref_default_user_agent_title">User Agent</string>

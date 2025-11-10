@@ -168,6 +168,7 @@ select > option {
 }
 
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/sha-1@1.0.0/dist/sha1.umd.js"></script>
   <script>
 
 window.onload  = function() {
@@ -179,6 +180,7 @@ window.onload  = function() {
   var $ui_mode                      = document.querySelector('button#ui_mode')
   var $airplay_host                 = document.querySelector('input#airplay_host')
   var $airplay_port                 = document.querySelector('input#airplay_port')
+  var $airplay_password             = document.querySelector('input#airplay_password')
   var $airplay_tls                  = document.querySelector('input#airplay_tls')
   var $video_url                    = document.querySelector('input#video_url')
   var $caption_url                  = document.querySelector('input#caption_url')
@@ -418,6 +420,7 @@ window.onload  = function() {
     $share_video_data.value = data.join("\n")
 
     data = []
+    data.push('http-api-password: ')
     data.push('default-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
     data.push('max-audio-volume-boost-db: 50')
     data.push('max-parallel-downloads: 6')
@@ -441,11 +444,17 @@ window.onload  = function() {
   // ===============================================================================================
   // XHR helper
 
-  var send_message = function(path, data, callback) {
-    var host = $airplay_host.value.trim()
-    var port = $airplay_port.value.trim() || '8192'
-    var tls  = $airplay_tls.checked
-    var url = (tls ? 'https' : 'http') + '://' + host + ':' + port + path
+  var client_ip = null
+
+  var send_message = function(path, data, callback, is_retry) {
+    var host     = $airplay_host.value.trim()
+    var port     = $airplay_port.value.trim() || '8192'
+    var password = $airplay_password.value.trim()
+    var hash     = (client_ip && password && (typeof window.sha1 === 'function'))
+      ? window.sha1(client_ip + ':' + password)
+      : null
+    var tls      = $airplay_tls.checked
+    var url      = (tls ? 'https' : 'http') + '://' + host + ':' + port + path
 
     if (!host) {
       alert('AirPlay "host" is required')
@@ -458,12 +467,19 @@ window.onload  = function() {
 
     var xhr = new XMLHttpRequest()
 
-    if (callback) {
-      xhr.onload = function() {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            callback(xhr.responseText)
-          }
+    xhr.onload = function() {
+      if (xhr.readyState === 4) {
+        if ((xhr.status === 200) && (typeof callback === 'function')) {
+          callback(xhr.responseText)
+        }
+        if (xhr.status === 401) {
+          if (xhr.responseText && (client_ip !== xhr.responseText))
+            client_ip = xhr.responseText
+
+          if (!is_retry && client_ip && password && (typeof window.sha1 === 'function'))
+            send_message(path, data, callback, true)
+          else
+            alert('AirPlay "password" is required')
         }
       }
     }
@@ -471,15 +487,20 @@ window.onload  = function() {
     if (data) {
       xhr.open("POST", url, true, null, null)
       xhr.setRequestHeader("Content-Type", "text/parameters")
+      if (hash)
+        xhr.setRequestHeader("X-ExoAirPlayer-Password", hash)
       xhr.send(data)
     }
     else {
       xhr.open("GET", url, true, null, null)
+      if (hash)
+        xhr.setRequestHeader("X-ExoAirPlayer-Password", hash)
       xhr.send()
     }
 
     // save network address of AirPlay receiver in cookie
-    persist_form_fields(host, port, tls)
+    if (!is_retry)
+      persist_form_fields(host, port, tls)
   }
 
   // ===============================================================================================
@@ -1774,6 +1795,14 @@ window.onload  = function() {
             </td>
             <td class="oneline left">
               <input id="airplay_port" type="number" x-type="range" x-min="1" x-max="999999" x-step="1" min="1" max="999999" step="1" size="6" placeholder="8192" />
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline right">
+              <label for="airplay_password">Password:</label>
+            </td>
+            <td class="oneline left">
+              <input id="airplay_password" type="text" size="15" />
             </td>
           </tr>
           <tr>

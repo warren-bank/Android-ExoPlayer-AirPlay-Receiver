@@ -5,6 +5,13 @@
     android:title="@string/pref_settings_title">
 
     <EditTextPreference
+      android:key="@string/prefkey_http_api_password"
+      android:defaultValue="@string/prefval_http_api_password"
+      android:title="@string/pref_http_api_password_title"
+      android:summary="@string/pref_http_api_password_summary"
+      android:inputType="text" />
+
+    <EditTextPreference
       android:key="@string/prefkey_default_user_agent"
       android:defaultValue="@string/prefval_default_user_agent"
       android:title="@string/pref_default_user_agent_title"

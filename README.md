@@ -704,6 +704,10 @@ __extended APIs:__
   - keys and values can be separated by either `:` or `=` characters, with optional whitespace
   - keys are not case sensitive
   - recognized keys include:
+    * _http-api-password_
+      - type: string
+      - description: secret shared only with authorized clients
+      - default: ``
     * _default-user-agent_
       - type: string
       - description: default _User-Agent_ HTTP request header
@@ -782,6 +786,47 @@ __extended APIs:__
   - contains one regex pattern per line of text
   - regex patterns can include [embedded flag expressions](https://docs.oracle.com/javase/tutorial/essential/regex/pattern.html#embedded)
   - if POST data is absent in a request to `/set-captions-filters`, then the list of regex filters is cleared
+
+#### HTTP API Password:
+
+* configure _ExoAirPlayer_ preferences&hellip;
+  - assign a value to: `HTTP API Password`
+  - default: _none_
+* this is a shared secret
+  - it is never sent over the LAN in clear text
+* when a client makes a network request to any HTTP API endpoint,
+  - _ExoAirPlayer_ will look for either&hellip;
+    * the HTTP request header: `X-ExoAirPlayer-Password: VALUE`
+    * the querystring parameter: `password=VALUE`
+  - where:
+    * `VALUE` is a hex-encoded SHA-1 hash of: `<IP-of-Client>:<PASSWORD>`
+    * `VALUE` is not case sensitive, and `0x` prefix is optional
+    * `<IP-of-Client>` is intended to prevent replay attacks,<br>by making the hash valid only when the client's request originates from a particular IP
+* when this value is either not found or not correct,
+  - _ExoAirPlayer_ will respond with:
+    * _code_: `401 Unauthorized`
+    * _body_: `<IP-of-Client>`
+
+```bash
+  # network address for running instance of 'ExoPlayer AirPlay Receiver'
+  airplay_ip='192.168.1.100:8192'
+
+  # network address for client
+  client_ip=$(curl --fail-with-body --silent -X GET "http://${airplay_ip}/")
+
+  # SHA-1 hash to authenticate HTTP API requests
+  password='abc'
+  sha1_hash=$(echo -n "${client_ip}:${password}" | sha1sum -t -z | awk '{print $1}')
+
+  # toggle the 'on/off' state of whether to pause playback:
+  curl --silent -X GET \
+    -H "X-ExoAirPlayer-Password: ${sha1_hash}" \
+    "http://${airplay_ip}/pause"
+
+  # toggle the 'on/off' state of whether to pause playback:
+  curl --silent -X GET \
+    "http://${airplay_ip}/pause?password=${sha1_hash}"
+```
 
 - - - -
 
