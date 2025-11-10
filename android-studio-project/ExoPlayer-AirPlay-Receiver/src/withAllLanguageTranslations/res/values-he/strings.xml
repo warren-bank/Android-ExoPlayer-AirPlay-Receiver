@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">התחל\nהורדה</string>
   <string name="toggle_download_button_stop">עצור\nהורדה</string>
   <string name="pref_settings_title">ExoAirPlayer הגדרות</string>
+  <string name="pref_http_api_password_title">HTTP API סיסמה</string>
+  <string name="pref_http_api_password_summary">סוד המשותף רק ללקוחות מורשים..</string>
   <string name="pref_default_user_agent_title">סוכן משתמש</string>
   <string name="pref_default_user_agent_summary">ערך כותרת הבקשה..</string>
   <string name="pref_max_audio_volume_boost_db_title">הגברת עוצמת השמע למקסימום (dB)</string>

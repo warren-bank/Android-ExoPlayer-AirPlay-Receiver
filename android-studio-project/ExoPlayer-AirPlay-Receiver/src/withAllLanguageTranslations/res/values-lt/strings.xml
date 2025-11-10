@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Pradėti\nAtsisiųsti</string>
   <string name="toggle_download_button_stop">Sustabdyti\nAtsisiųsti</string>
   <string name="pref_settings_title">ExoAirPlayer Nustatymai</string>
+  <string name="pref_http_api_password_title">HTTP API Slaptažodis</string>
+  <string name="pref_http_api_password_summary">paslaptis, kurią žino tik įgalioti klientai..</string>
   <string name="pref_default_user_agent_title">Vartotojo agentas</string>
   <string name="pref_default_user_agent_summary">prašymo antraštės vertė..</string>
   <string name="pref_max_audio_volume_boost_db_title">Maksimalus garso stiprumo padidinimas (dB)</string>

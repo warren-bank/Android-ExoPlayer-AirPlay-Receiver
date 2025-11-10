@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Sākt\nLejupielādēt</string>
   <string name="toggle_download_button_stop">Apstāties\nLejupielādēt</string>
   <string name="pref_settings_title">ExoAirPlayer Iestatījumi</string>
+  <string name="pref_http_api_password_title">HTTP API Parole</string>
+  <string name="pref_http_api_password_summary">noslēpums, kas tiek atklāts tikai pilnvarotiem klientiem..</string>
   <string name="pref_default_user_agent_title">Lietotāja aģents</string>
   <string name="pref_default_user_agent_summary">pieprasījuma galvenes vērtība..</string>
   <string name="pref_max_audio_volume_boost_db_title">Maksimālais skaļuma pastiprinājums (dB)</string>

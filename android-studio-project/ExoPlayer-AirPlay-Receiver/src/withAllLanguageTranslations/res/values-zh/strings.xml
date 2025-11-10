@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">开始\n下载</string>
   <string name="toggle_download_button_stop">停止\n下载</string>
   <string name="pref_settings_title">ExoAirPlayer 设置</string>
+  <string name="pref_http_api_password_title">HTTP API 密码</string>
+  <string name="pref_http_api_password_summary">仅与授权客户共享的机密..</string>
   <string name="pref_default_user_agent_title">用户代理</string>
   <string name="pref_default_user_agent_summary">请求头值..</string>
   <string name="pref_max_audio_volume_boost_db_title">最大音量增强 (dB)</string>

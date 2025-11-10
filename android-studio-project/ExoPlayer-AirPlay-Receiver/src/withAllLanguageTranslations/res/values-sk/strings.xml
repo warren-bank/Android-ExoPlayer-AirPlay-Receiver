@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Začať\nStiahnuť</string>
   <string name="toggle_download_button_stop">Zastaviť\nStiahnuť</string>
   <string name="pref_settings_title">ExoAirPlayer Nastavenia</string>
+  <string name="pref_http_api_password_title">HTTP API Heslo</string>
+  <string name="pref_http_api_password_summary">tajomstvo zdieľané len s autorizovanými klientmi..</string>
   <string name="pref_default_user_agent_title">Používateľský agent</string>
   <string name="pref_default_user_agent_summary">hodnota hlavičky požiadavky..</string>
   <string name="pref_max_audio_volume_boost_db_title">Maximálne zvýšenie hlasitosti zvuku (dB)</string>

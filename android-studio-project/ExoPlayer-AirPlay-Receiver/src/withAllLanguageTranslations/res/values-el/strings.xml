@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Έναρξη\nΛήψη</string>
   <string name="toggle_download_button_stop">Σταμάτα\nΛήψη</string>
   <string name="pref_settings_title">ExoAirPlayer Ρυθμίσεις</string>
+  <string name="pref_http_api_password_title">HTTP API Κωδικός πρόσβασης</string>
+  <string name="pref_http_api_password_summary">μυστικό που μοιράζεται μόνο με εξουσιοδοτημένους πελάτες..</string>
   <string name="pref_default_user_agent_title">Πρόγραμμα περιήγησης</string>
   <string name="pref_default_user_agent_summary">τιμή κεφαλίδας αιτήματος..</string>
   <string name="pref_max_audio_volume_boost_db_title">Μέγιστη ενίσχυση έντασης ήχου (dB)</string>

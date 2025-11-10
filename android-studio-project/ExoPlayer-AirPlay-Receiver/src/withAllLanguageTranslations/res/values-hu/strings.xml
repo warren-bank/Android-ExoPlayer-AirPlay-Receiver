@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Kezdés\nLetöltés</string>
   <string name="toggle_download_button_stop">Állj meg!\nLetöltés</string>
   <string name="pref_settings_title">ExoAirPlayer Beállítások</string>
+  <string name="pref_http_api_password_title">HTTP API Jelszó</string>
+  <string name="pref_http_api_password_summary">csak engedélyezett ügyfelekkel megosztott titok..</string>
   <string name="pref_default_user_agent_title">Felhasználói ügynök</string>
   <string name="pref_default_user_agent_summary">kérés fejléc értéke..</string>
   <string name="pref_max_audio_volume_boost_db_title">Maximális hangerejű hangfokozás (dB)</string>

@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Початок\nЗавантажити</string>
   <string name="toggle_download_button_stop">Зупинитися\nЗавантажити</string>
   <string name="pref_settings_title">ExoAirPlayer Налаштування</string>
+  <string name="pref_http_api_password_title">HTTP API Пароль</string>
+  <string name="pref_http_api_password_summary">секрет, який розкривається тільки уповноваженим клієнтам..</string>
   <string name="pref_default_user_agent_title">Користувацький агент</string>
   <string name="pref_default_user_agent_summary">значення заголовка запиту..</string>
   <string name="pref_max_audio_volume_boost_db_title">Максимальне підвищення гучності звуку (dB)</string>

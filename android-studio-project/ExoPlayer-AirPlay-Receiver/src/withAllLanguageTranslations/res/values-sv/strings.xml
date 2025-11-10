@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Start\nLadda ner</string>
   <string name="toggle_download_button_stop">Stopp\nLadda ner</string>
   <string name="pref_settings_title">ExoAirPlayer Inställningar</string>
+  <string name="pref_http_api_password_title">HTTP API Lösenord</string>
+  <string name="pref_http_api_password_summary">hemlighet som endast delas med auktoriserade kunder..</string>
   <string name="pref_default_user_agent_title">Användaragent</string>
   <string name="pref_default_user_agent_summary">värde för begäranhuvud..</string>
   <string name="pref_max_audio_volume_boost_db_title">Maximal ljudvolymförstärkning (dB)</string>

@@ -19,6 +19,8 @@
   <string name="toggle_download_button_start">Inicio\nDescargar</string>
   <string name="toggle_download_button_stop">Alto\nDescargar</string>
   <string name="pref_settings_title">ExoAirPlayer Configuración</string>
+  <string name="pref_http_api_password_title">HTTP API Contraseña</string>
+  <string name="pref_http_api_password_summary">secreto compartido solo con clientes autorizados..</string>
   <string name="pref_default_user_agent_title">Agente de usuario</string>
   <string name="pref_default_user_agent_summary">valor del encabezado de la solicitud..</string>
   <string name="pref_max_audio_volume_boost_db_title">Aumento del volumen máximo de audio (dB)</string>
