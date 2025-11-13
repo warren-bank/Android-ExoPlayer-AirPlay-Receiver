@@ -19,7 +19,7 @@ When either audio or video media is playing and the player's window doesn't have
 (ex: listening to background audio, or by pressing the "home" button while watching a video),
 another notification is added to control playback or refocus the player's window.
 
-[This page](http://webcast-reloaded.surge.sh/airplay_sender.html) is the simplest way to send signals to a running instance,
+[This page](http://webcast-reloaded.frii.site/airplay_sender.html) is the simplest way to send signals to a running instance,
 though other ["high level" tools](#usage-high-level) exist to capture media URLs from the wild.
 
 Audio or video files/playlists can also be started directly from the Android file system,
@@ -832,7 +832,7 @@ __extended APIs:__
 
 #### Usage (high level):
 
-* [single-page application (SPA)](http://webcast-reloaded.surge.sh/airplay_sender.html) that can run in any web browser, and be used to:
+* [single-page application (SPA)](http://webcast-reloaded.frii.site/airplay_sender.html) that can run in any web browser, and be used to:
   - send commands to a running instance of [ExoPlayer AirPlay Receiver](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver)
     * "cast" video URLs to its playlist
     * control all aspects of playback
@@ -840,7 +840,7 @@ __extended APIs:__
 * [_WebCast-Reloaded_ Chrome extension](https://github.com/warren-bank/crx-webcast-reloaded) that can run in any Chromium-based desktop web browser, and be used to:
   - intercept the URL of (nearly) all videos on any website
   - display these video URLs as a list of links
-    * clicking on any link will transfer the URL of the video (as well as the URL of the referer webpage) to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
+    * clicking on any link will transfer the URL of the video (as well as the URL of the referer webpage) to the [SPA](http://webcast-reloaded.frii.site/airplay_sender.html) (above)
       - more precisely, the link to the SPA is displayed as a small AirPlay icon ![AirPlay icon](https://github.com/warren-bank/crx-webcast-reloaded/raw/v0.6.0/chrome_extension/data/airplay.png)
       - the other links transfer the video URL to other tools
         * webpage to watch the video in an HTML5 player with the ability to "cast" the video to a Chromecast
@@ -864,7 +864,7 @@ __extended APIs:__
     * in _WebMonkey_:
       - broadcast an Intent to start the video in another application (ex: _ExoAirPlayer_)
     * in other web browsers:
-      - automatically redirect to the [SPA](http://webcast-reloaded.surge.sh/airplay_sender.html) (above)
+      - automatically redirect to the [SPA](http://webcast-reloaded.frii.site/airplay_sender.html) (above)
 
 * [_MpcFreemote_ Android app](https://github.com/warren-bank/Android-MpcFreemote) that is open-source, and can be used to:
   - discover [Media Player Classic (MPC) receivers](#media-player-classic-home-cinema-mpc-hc-api) on the same LAN
@@ -991,9 +991,13 @@ __extended APIs:__
   - introduced in [v3.6.0](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/releases/tag/v3.6.0)
 * it allows access to a subset of features and functionality from any of the readily available off-the-shelf client software
 * tested with:
+  - [_MpcFreemote_](https://github.com/warren-bank/Android-MpcFreemote) v3.0.0
   - [MPC-HC Remote Control](https://github.com/burdukowsky/mpc-hc-android) v1.0
   - [Remote for MPC](https://play.google.com/store/apps/details?id=com.andreformosa.playerremote) v1.2.5
   - [MPC REMOTE](https://play.google.com/store/apps/details?id=com.wethole.mpcrc) v1.10c
+* the offical MPC-HC web interface [does not support any method of user authentication](https://github.com/clsid2/mpc-hc/issues/2172)
+  - consequently, the [`HTTP API Password`](#http-api-password) preference in _ExoAirPlayer_ will prevent standard MPC-HC clients from being able to work properly
+  - in the future, I might add support for authentication to [_MpcFreemote_](https://github.com/warren-bank/Android-MpcFreemote)&hellip; TBA
 
 - - - -
 
