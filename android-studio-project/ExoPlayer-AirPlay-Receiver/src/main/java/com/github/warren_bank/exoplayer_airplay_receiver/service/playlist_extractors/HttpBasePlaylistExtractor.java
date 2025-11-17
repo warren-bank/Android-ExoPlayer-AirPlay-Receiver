@@ -24,13 +24,23 @@ public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
 
   protected void postParse(URL context, ArrayList<String> matches) {}
 
-  protected String resolveM3uPlaylistItem(URL context, String relative) {
+  protected String resolveM3uPlaylistItem(URL context, String relative, boolean resolveAbsolutePathToFileUri) {
     String uri = null;
 
-    uri = resolveM3uPlaylistItem(
-      ((context != null) ? context.toString() : ""),
-      UrlUtils.decodeURL(relative)
-    );
+    String baseContext  = (context == null) ? null : context.toString();
+    String baseRelative = UrlUtils.decodeURL(relative);
+
+    if (!resolveAbsolutePathToFileUri && (context != null) && (baseRelative != null) && !baseRelative.isEmpty() && (baseRelative.charAt(0) == '/')) {
+      baseContext = null;
+      try {
+        baseRelative = (new URL(context, baseRelative)).toString();
+      }
+      catch(Exception e) {
+        baseRelative = null;
+      }
+    }
+
+    uri = resolveM3uPlaylistItem(baseContext, baseRelative);
 
     if (uri != null)
       uri = UrlUtils.encodeURL(uri);

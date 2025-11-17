@@ -1,5 +1,6 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors;
 
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.HtmlUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 
 import java.net.URL;
@@ -37,7 +38,8 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
       hash_key = hash_keys.get(i);
       val      = url_chunks.get(hash_key);
       href     = val[0] + val[1];
-      uri      = resolveM3uPlaylistItem(context, href);
+      href     = HtmlUtils.unescapeHtml3(href);
+      uri      = resolveM3uPlaylistItem(context, href, false);
 
       if (uri != null)
         matches.add(uri);

@@ -14,7 +14,7 @@ public class HttpM3uPlaylistExtractor extends HttpBasePlaylistExtractor {
   protected void parseLine(String line, URL context, ArrayList<String> matches) {
     if (ignoreM3uLine(line)) return;
 
-    String uri = resolveM3uPlaylistItem(context, line);
+    String uri = resolveM3uPlaylistItem(context, line, true);
     if (uri != null)
       matches.add(uri);
   }
