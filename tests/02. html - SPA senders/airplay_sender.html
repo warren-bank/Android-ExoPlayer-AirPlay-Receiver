@@ -93,14 +93,16 @@ body > div.contents > div.section textarea {
 body > div.contents > div.section textarea#req_headers,
 body > div.contents > div.section textarea#drm_headers,
 body > div.contents > div.section textarea#intent_data,
-body > div.contents > div.section textarea#preferences_data {
+body > div.contents > div.section textarea#preferences_data,
+body > div.contents > div.section textarea#keycode_map_data {
   white-space: pre;
 }
 
 body > div.contents > div.section select#txt_filters_presets,
 body > div.contents > div.section select#toast_variables,
 body > div.contents > div.section select#predefined_intent_data,
-body > div.contents > div.section select#preferences_values {
+body > div.contents > div.section select#preferences_values,
+body > div.contents > div.section select#keycode_map_values {
   width: 8em;
   padding: 4px;
 }
@@ -274,6 +276,10 @@ window.onload  = () => {
   const $preferences_values           = document.querySelector('select#preferences_values')
   const $load_preferences_from_server = document.querySelector('button#load_preferences_from_server')
   const $edit_preferences             = document.querySelector('button#edit_preferences')
+  const $keycode_map_data             = document.querySelector('textarea#keycode_map_data')
+  const $keycode_map_values           = document.querySelector('select#keycode_map_values')
+  const $load_keycode_map_from_server = document.querySelector('button#load_keycode_map_from_server')
+  const $set_keycode_map              = document.querySelector('button#set_keycode_map')
   const $delete_cache                 = document.querySelector('button#delete_cache')
   const $exit_service                 = document.querySelector('button#exit_service')
   const $sample_videos                = document.querySelector('select#sample_videos')
@@ -1880,6 +1886,51 @@ window.onload  = () => {
     send_message(path, data)
   }
 
+  $keycode_map_values.addEventListener('change', (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const keycode = $keycode_map_values.value
+
+    if (keycode) {
+      let data  = $keycode_map_data.value.trim()
+
+      data += !data.endsWith(':')
+        ? `${data.length ? "\n" : ''}${keycode}:`
+        : ` ${keycode}`
+
+      $keycode_map_data.value   = data
+      $keycode_map_values.value = ''
+    }
+  })
+
+  $load_keycode_map_from_server.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/keycode-map-info'
+    const data = null
+
+    const callback = (responseText) => {
+      $keycode_map_data.value = responseText
+    }
+
+    send_message(path, data, callback)
+  }
+
+  $set_keycode_map.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/set-keycode-map'
+    const data = $keycode_map_data.value.trim()
+
+    if (!data)
+      return
+
+    send_message(path, data)
+  }
+
   $delete_cache.onclick = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -2484,6 +2535,358 @@ window.onload  = () => {
           </div>
           <div><button id="load_preferences_from_server">Load<br />Preferences<br />from Server</button></div>
           <div><button id="edit_preferences">Edit<br />Preferences</button></div>
+        </div>
+      </div>
+      <div class="flex">
+        <div>
+          <textarea id="keycode_map_data" rows="13"></textarea>
+        </div>
+        <div>
+          <div>
+            <select id="keycode_map_values">
+              <option value="">Set Value:</option>
+              <option value="KEYCODE_0">KEYCODE_0</option>
+              <option value="KEYCODE_1">KEYCODE_1</option>
+              <option value="KEYCODE_11">KEYCODE_11</option>
+              <option value="KEYCODE_12">KEYCODE_12</option>
+              <option value="KEYCODE_2">KEYCODE_2</option>
+              <option value="KEYCODE_3">KEYCODE_3</option>
+              <option value="KEYCODE_3D_MODE">KEYCODE_3D_MODE</option>
+              <option value="KEYCODE_4">KEYCODE_4</option>
+              <option value="KEYCODE_5">KEYCODE_5</option>
+              <option value="KEYCODE_6">KEYCODE_6</option>
+              <option value="KEYCODE_7">KEYCODE_7</option>
+              <option value="KEYCODE_8">KEYCODE_8</option>
+              <option value="KEYCODE_9">KEYCODE_9</option>
+              <option value="KEYCODE_A">KEYCODE_A</option>
+              <option value="KEYCODE_ALL_APPS">KEYCODE_ALL_APPS</option>
+              <option value="KEYCODE_ALT_LEFT">KEYCODE_ALT_LEFT</option>
+              <option value="KEYCODE_ALT_RIGHT">KEYCODE_ALT_RIGHT</option>
+              <option value="KEYCODE_APOSTROPHE">KEYCODE_APOSTROPHE</option>
+              <option value="KEYCODE_APP_SWITCH">KEYCODE_APP_SWITCH</option>
+              <option value="KEYCODE_ASSIST">KEYCODE_ASSIST</option>
+              <option value="KEYCODE_AT">KEYCODE_AT</option>
+              <option value="KEYCODE_AVR_INPUT">KEYCODE_AVR_INPUT</option>
+              <option value="KEYCODE_AVR_POWER">KEYCODE_AVR_POWER</option>
+              <option value="KEYCODE_B">KEYCODE_B</option>
+              <option value="KEYCODE_BACK">KEYCODE_BACK</option>
+              <option value="KEYCODE_BACKSLASH">KEYCODE_BACKSLASH</option>
+              <option value="KEYCODE_BOOKMARK">KEYCODE_BOOKMARK</option>
+              <option value="KEYCODE_BREAK">KEYCODE_BREAK</option>
+              <option value="KEYCODE_BRIGHTNESS_DOWN">KEYCODE_BRIGHTNESS_DOWN</option>
+              <option value="KEYCODE_BRIGHTNESS_UP">KEYCODE_BRIGHTNESS_UP</option>
+              <option value="KEYCODE_BUTTON_1">KEYCODE_BUTTON_1</option>
+              <option value="KEYCODE_BUTTON_10">KEYCODE_BUTTON_10</option>
+              <option value="KEYCODE_BUTTON_11">KEYCODE_BUTTON_11</option>
+              <option value="KEYCODE_BUTTON_12">KEYCODE_BUTTON_12</option>
+              <option value="KEYCODE_BUTTON_13">KEYCODE_BUTTON_13</option>
+              <option value="KEYCODE_BUTTON_14">KEYCODE_BUTTON_14</option>
+              <option value="KEYCODE_BUTTON_15">KEYCODE_BUTTON_15</option>
+              <option value="KEYCODE_BUTTON_16">KEYCODE_BUTTON_16</option>
+              <option value="KEYCODE_BUTTON_2">KEYCODE_BUTTON_2</option>
+              <option value="KEYCODE_BUTTON_3">KEYCODE_BUTTON_3</option>
+              <option value="KEYCODE_BUTTON_4">KEYCODE_BUTTON_4</option>
+              <option value="KEYCODE_BUTTON_5">KEYCODE_BUTTON_5</option>
+              <option value="KEYCODE_BUTTON_6">KEYCODE_BUTTON_6</option>
+              <option value="KEYCODE_BUTTON_7">KEYCODE_BUTTON_7</option>
+              <option value="KEYCODE_BUTTON_8">KEYCODE_BUTTON_8</option>
+              <option value="KEYCODE_BUTTON_9">KEYCODE_BUTTON_9</option>
+              <option value="KEYCODE_BUTTON_A">KEYCODE_BUTTON_A</option>
+              <option value="KEYCODE_BUTTON_B">KEYCODE_BUTTON_B</option>
+              <option value="KEYCODE_BUTTON_C">KEYCODE_BUTTON_C</option>
+              <option value="KEYCODE_BUTTON_L1">KEYCODE_BUTTON_L1</option>
+              <option value="KEYCODE_BUTTON_L2">KEYCODE_BUTTON_L2</option>
+              <option value="KEYCODE_BUTTON_MODE">KEYCODE_BUTTON_MODE</option>
+              <option value="KEYCODE_BUTTON_R1">KEYCODE_BUTTON_R1</option>
+              <option value="KEYCODE_BUTTON_R2">KEYCODE_BUTTON_R2</option>
+              <option value="KEYCODE_BUTTON_SELECT">KEYCODE_BUTTON_SELECT</option>
+              <option value="KEYCODE_BUTTON_START">KEYCODE_BUTTON_START</option>
+              <option value="KEYCODE_BUTTON_THUMBL">KEYCODE_BUTTON_THUMBL</option>
+              <option value="KEYCODE_BUTTON_THUMBR">KEYCODE_BUTTON_THUMBR</option>
+              <option value="KEYCODE_BUTTON_X">KEYCODE_BUTTON_X</option>
+              <option value="KEYCODE_BUTTON_Y">KEYCODE_BUTTON_Y</option>
+              <option value="KEYCODE_BUTTON_Z">KEYCODE_BUTTON_Z</option>
+              <option value="KEYCODE_C">KEYCODE_C</option>
+              <option value="KEYCODE_CALCULATOR">KEYCODE_CALCULATOR</option>
+              <option value="KEYCODE_CALENDAR">KEYCODE_CALENDAR</option>
+              <option value="KEYCODE_CALL">KEYCODE_CALL</option>
+              <option value="KEYCODE_CAMERA">KEYCODE_CAMERA</option>
+              <option value="KEYCODE_CAPS_LOCK">KEYCODE_CAPS_LOCK</option>
+              <option value="KEYCODE_CAPTIONS">KEYCODE_CAPTIONS</option>
+              <option value="KEYCODE_CHANNEL_DOWN">KEYCODE_CHANNEL_DOWN</option>
+              <option value="KEYCODE_CHANNEL_UP">KEYCODE_CHANNEL_UP</option>
+              <option value="KEYCODE_CLEAR">KEYCODE_CLEAR</option>
+              <option value="KEYCODE_CLOSE">KEYCODE_CLOSE</option>
+              <option value="KEYCODE_COMMA">KEYCODE_COMMA</option>
+              <option value="KEYCODE_CONTACTS">KEYCODE_CONTACTS</option>
+              <option value="KEYCODE_COPY">KEYCODE_COPY</option>
+              <option value="KEYCODE_CTRL_LEFT">KEYCODE_CTRL_LEFT</option>
+              <option value="KEYCODE_CTRL_RIGHT">KEYCODE_CTRL_RIGHT</option>
+              <option value="KEYCODE_CUT">KEYCODE_CUT</option>
+              <option value="KEYCODE_D">KEYCODE_D</option>
+              <option value="KEYCODE_DEL">KEYCODE_DEL</option>
+              <option value="KEYCODE_DEMO_APP_1">KEYCODE_DEMO_APP_1</option>
+              <option value="KEYCODE_DEMO_APP_2">KEYCODE_DEMO_APP_2</option>
+              <option value="KEYCODE_DEMO_APP_3">KEYCODE_DEMO_APP_3</option>
+              <option value="KEYCODE_DEMO_APP_4">KEYCODE_DEMO_APP_4</option>
+              <option value="KEYCODE_DICTATE">KEYCODE_DICTATE</option>
+              <option value="KEYCODE_DO_NOT_DISTURB">KEYCODE_DO_NOT_DISTURB</option>
+              <option value="KEYCODE_DPAD_CENTER">KEYCODE_DPAD_CENTER</option>
+              <option value="KEYCODE_DPAD_DOWN">KEYCODE_DPAD_DOWN</option>
+              <option value="KEYCODE_DPAD_DOWN_LEFT">KEYCODE_DPAD_DOWN_LEFT</option>
+              <option value="KEYCODE_DPAD_DOWN_RIGHT">KEYCODE_DPAD_DOWN_RIGHT</option>
+              <option value="KEYCODE_DPAD_LEFT">KEYCODE_DPAD_LEFT</option>
+              <option value="KEYCODE_DPAD_RIGHT">KEYCODE_DPAD_RIGHT</option>
+              <option value="KEYCODE_DPAD_UP">KEYCODE_DPAD_UP</option>
+              <option value="KEYCODE_DPAD_UP_LEFT">KEYCODE_DPAD_UP_LEFT</option>
+              <option value="KEYCODE_DPAD_UP_RIGHT">KEYCODE_DPAD_UP_RIGHT</option>
+              <option value="KEYCODE_DVR">KEYCODE_DVR</option>
+              <option value="KEYCODE_E">KEYCODE_E</option>
+              <option value="KEYCODE_EISU">KEYCODE_EISU</option>
+              <option value="KEYCODE_EMOJI_PICKER">KEYCODE_EMOJI_PICKER</option>
+              <option value="KEYCODE_ENDCALL">KEYCODE_ENDCALL</option>
+              <option value="KEYCODE_ENTER">KEYCODE_ENTER</option>
+              <option value="KEYCODE_ENVELOPE">KEYCODE_ENVELOPE</option>
+              <option value="KEYCODE_EQUALS">KEYCODE_EQUALS</option>
+              <option value="KEYCODE_ESCAPE">KEYCODE_ESCAPE</option>
+              <option value="KEYCODE_EXPLORER">KEYCODE_EXPLORER</option>
+              <option value="KEYCODE_F">KEYCODE_F</option>
+              <option value="KEYCODE_F1">KEYCODE_F1</option>
+              <option value="KEYCODE_F10">KEYCODE_F10</option>
+              <option value="KEYCODE_F11">KEYCODE_F11</option>
+              <option value="KEYCODE_F12">KEYCODE_F12</option>
+              <option value="KEYCODE_F13">KEYCODE_F13</option>
+              <option value="KEYCODE_F14">KEYCODE_F14</option>
+              <option value="KEYCODE_F15">KEYCODE_F15</option>
+              <option value="KEYCODE_F16">KEYCODE_F16</option>
+              <option value="KEYCODE_F17">KEYCODE_F17</option>
+              <option value="KEYCODE_F18">KEYCODE_F18</option>
+              <option value="KEYCODE_F19">KEYCODE_F19</option>
+              <option value="KEYCODE_F2">KEYCODE_F2</option>
+              <option value="KEYCODE_F20">KEYCODE_F20</option>
+              <option value="KEYCODE_F21">KEYCODE_F21</option>
+              <option value="KEYCODE_F22">KEYCODE_F22</option>
+              <option value="KEYCODE_F23">KEYCODE_F23</option>
+              <option value="KEYCODE_F24">KEYCODE_F24</option>
+              <option value="KEYCODE_F3">KEYCODE_F3</option>
+              <option value="KEYCODE_F4">KEYCODE_F4</option>
+              <option value="KEYCODE_F5">KEYCODE_F5</option>
+              <option value="KEYCODE_F6">KEYCODE_F6</option>
+              <option value="KEYCODE_F7">KEYCODE_F7</option>
+              <option value="KEYCODE_F8">KEYCODE_F8</option>
+              <option value="KEYCODE_F9">KEYCODE_F9</option>
+              <option value="KEYCODE_FEATURED_APP_1">KEYCODE_FEATURED_APP_1</option>
+              <option value="KEYCODE_FEATURED_APP_2">KEYCODE_FEATURED_APP_2</option>
+              <option value="KEYCODE_FEATURED_APP_3">KEYCODE_FEATURED_APP_3</option>
+              <option value="KEYCODE_FEATURED_APP_4">KEYCODE_FEATURED_APP_4</option>
+              <option value="KEYCODE_FOCUS">KEYCODE_FOCUS</option>
+              <option value="KEYCODE_FORWARD">KEYCODE_FORWARD</option>
+              <option value="KEYCODE_FORWARD_DEL">KEYCODE_FORWARD_DEL</option>
+              <option value="KEYCODE_FULLSCREEN">KEYCODE_FULLSCREEN</option>
+              <option value="KEYCODE_FUNCTION">KEYCODE_FUNCTION</option>
+              <option value="KEYCODE_G">KEYCODE_G</option>
+              <option value="KEYCODE_GRAVE">KEYCODE_GRAVE</option>
+              <option value="KEYCODE_GUIDE">KEYCODE_GUIDE</option>
+              <option value="KEYCODE_H">KEYCODE_H</option>
+              <option value="KEYCODE_HEADSETHOOK">KEYCODE_HEADSETHOOK</option>
+              <option value="KEYCODE_HELP">KEYCODE_HELP</option>
+              <option value="KEYCODE_HENKAN">KEYCODE_HENKAN</option>
+              <option value="KEYCODE_HOME">KEYCODE_HOME</option>
+              <option value="KEYCODE_I">KEYCODE_I</option>
+              <option value="KEYCODE_INFO">KEYCODE_INFO</option>
+              <option value="KEYCODE_INSERT">KEYCODE_INSERT</option>
+              <option value="KEYCODE_J">KEYCODE_J</option>
+              <option value="KEYCODE_K">KEYCODE_K</option>
+              <option value="KEYCODE_KANA">KEYCODE_KANA</option>
+              <option value="KEYCODE_KATAKANA_HIRAGANA">KEYCODE_KATAKANA_HIRAGANA</option>
+              <option value="KEYCODE_KEYBOARD_BACKLIGHT_DOWN">KEYCODE_KEYBOARD_BACKLIGHT_DOWN</option>
+              <option value="KEYCODE_KEYBOARD_BACKLIGHT_TOGGLE">KEYCODE_KEYBOARD_BACKLIGHT_TOGGLE</option>
+              <option value="KEYCODE_KEYBOARD_BACKLIGHT_UP">KEYCODE_KEYBOARD_BACKLIGHT_UP</option>
+              <option value="KEYCODE_L">KEYCODE_L</option>
+              <option value="KEYCODE_LANGUAGE_SWITCH">KEYCODE_LANGUAGE_SWITCH</option>
+              <option value="KEYCODE_LAST_CHANNEL">KEYCODE_LAST_CHANNEL</option>
+              <option value="KEYCODE_LEFT_BRACKET">KEYCODE_LEFT_BRACKET</option>
+              <option value="KEYCODE_LOCK">KEYCODE_LOCK</option>
+              <option value="KEYCODE_M">KEYCODE_M</option>
+              <option value="KEYCODE_MACRO_1">KEYCODE_MACRO_1</option>
+              <option value="KEYCODE_MACRO_2">KEYCODE_MACRO_2</option>
+              <option value="KEYCODE_MACRO_3">KEYCODE_MACRO_3</option>
+              <option value="KEYCODE_MACRO_4">KEYCODE_MACRO_4</option>
+              <option value="KEYCODE_MANNER_MODE">KEYCODE_MANNER_MODE</option>
+              <option value="KEYCODE_MEDIA_AUDIO_TRACK">KEYCODE_MEDIA_AUDIO_TRACK</option>
+              <option value="KEYCODE_MEDIA_CLOSE">KEYCODE_MEDIA_CLOSE</option>
+              <option value="KEYCODE_MEDIA_EJECT">KEYCODE_MEDIA_EJECT</option>
+              <option value="KEYCODE_MEDIA_FAST_FORWARD">KEYCODE_MEDIA_FAST_FORWARD</option>
+              <option value="KEYCODE_MEDIA_NEXT">KEYCODE_MEDIA_NEXT</option>
+              <option value="KEYCODE_MEDIA_PAUSE">KEYCODE_MEDIA_PAUSE</option>
+              <option value="KEYCODE_MEDIA_PLAY">KEYCODE_MEDIA_PLAY</option>
+              <option value="KEYCODE_MEDIA_PLAY_PAUSE">KEYCODE_MEDIA_PLAY_PAUSE</option>
+              <option value="KEYCODE_MEDIA_PREVIOUS">KEYCODE_MEDIA_PREVIOUS</option>
+              <option value="KEYCODE_MEDIA_RECORD">KEYCODE_MEDIA_RECORD</option>
+              <option value="KEYCODE_MEDIA_REWIND">KEYCODE_MEDIA_REWIND</option>
+              <option value="KEYCODE_MEDIA_SKIP_BACKWARD">KEYCODE_MEDIA_SKIP_BACKWARD</option>
+              <option value="KEYCODE_MEDIA_SKIP_FORWARD">KEYCODE_MEDIA_SKIP_FORWARD</option>
+              <option value="KEYCODE_MEDIA_STEP_BACKWARD">KEYCODE_MEDIA_STEP_BACKWARD</option>
+              <option value="KEYCODE_MEDIA_STEP_FORWARD">KEYCODE_MEDIA_STEP_FORWARD</option>
+              <option value="KEYCODE_MEDIA_STOP">KEYCODE_MEDIA_STOP</option>
+              <option value="KEYCODE_MEDIA_TOP_MENU">KEYCODE_MEDIA_TOP_MENU</option>
+              <option value="KEYCODE_MENU">KEYCODE_MENU</option>
+              <option value="KEYCODE_META_LEFT">KEYCODE_META_LEFT</option>
+              <option value="KEYCODE_META_RIGHT">KEYCODE_META_RIGHT</option>
+              <option value="KEYCODE_MINUS">KEYCODE_MINUS</option>
+              <option value="KEYCODE_MOVE_END">KEYCODE_MOVE_END</option>
+              <option value="KEYCODE_MOVE_HOME">KEYCODE_MOVE_HOME</option>
+              <option value="KEYCODE_MUHENKAN">KEYCODE_MUHENKAN</option>
+              <option value="KEYCODE_MUSIC">KEYCODE_MUSIC</option>
+              <option value="KEYCODE_MUTE">KEYCODE_MUTE</option>
+              <option value="KEYCODE_N">KEYCODE_N</option>
+              <option value="KEYCODE_NAVIGATE_IN">KEYCODE_NAVIGATE_IN</option>
+              <option value="KEYCODE_NAVIGATE_NEXT">KEYCODE_NAVIGATE_NEXT</option>
+              <option value="KEYCODE_NAVIGATE_OUT">KEYCODE_NAVIGATE_OUT</option>
+              <option value="KEYCODE_NAVIGATE_PREVIOUS">KEYCODE_NAVIGATE_PREVIOUS</option>
+              <option value="KEYCODE_NEW">KEYCODE_NEW</option>
+              <option value="KEYCODE_NOTIFICATION">KEYCODE_NOTIFICATION</option>
+              <option value="KEYCODE_NUM">KEYCODE_NUM</option>
+              <option value="KEYCODE_NUMPAD_0">KEYCODE_NUMPAD_0</option>
+              <option value="KEYCODE_NUMPAD_1">KEYCODE_NUMPAD_1</option>
+              <option value="KEYCODE_NUMPAD_2">KEYCODE_NUMPAD_2</option>
+              <option value="KEYCODE_NUMPAD_3">KEYCODE_NUMPAD_3</option>
+              <option value="KEYCODE_NUMPAD_4">KEYCODE_NUMPAD_4</option>
+              <option value="KEYCODE_NUMPAD_5">KEYCODE_NUMPAD_5</option>
+              <option value="KEYCODE_NUMPAD_6">KEYCODE_NUMPAD_6</option>
+              <option value="KEYCODE_NUMPAD_7">KEYCODE_NUMPAD_7</option>
+              <option value="KEYCODE_NUMPAD_8">KEYCODE_NUMPAD_8</option>
+              <option value="KEYCODE_NUMPAD_9">KEYCODE_NUMPAD_9</option>
+              <option value="KEYCODE_NUMPAD_ADD">KEYCODE_NUMPAD_ADD</option>
+              <option value="KEYCODE_NUMPAD_COMMA">KEYCODE_NUMPAD_COMMA</option>
+              <option value="KEYCODE_NUMPAD_DIVIDE">KEYCODE_NUMPAD_DIVIDE</option>
+              <option value="KEYCODE_NUMPAD_DOT">KEYCODE_NUMPAD_DOT</option>
+              <option value="KEYCODE_NUMPAD_ENTER">KEYCODE_NUMPAD_ENTER</option>
+              <option value="KEYCODE_NUMPAD_EQUALS">KEYCODE_NUMPAD_EQUALS</option>
+              <option value="KEYCODE_NUMPAD_LEFT_PAREN">KEYCODE_NUMPAD_LEFT_PAREN</option>
+              <option value="KEYCODE_NUMPAD_MULTIPLY">KEYCODE_NUMPAD_MULTIPLY</option>
+              <option value="KEYCODE_NUMPAD_RIGHT_PAREN">KEYCODE_NUMPAD_RIGHT_PAREN</option>
+              <option value="KEYCODE_NUMPAD_SUBTRACT">KEYCODE_NUMPAD_SUBTRACT</option>
+              <option value="KEYCODE_NUM_LOCK">KEYCODE_NUM_LOCK</option>
+              <option value="KEYCODE_O">KEYCODE_O</option>
+              <option value="KEYCODE_P">KEYCODE_P</option>
+              <option value="KEYCODE_PAGE_DOWN">KEYCODE_PAGE_DOWN</option>
+              <option value="KEYCODE_PAGE_UP">KEYCODE_PAGE_UP</option>
+              <option value="KEYCODE_PAIRING">KEYCODE_PAIRING</option>
+              <option value="KEYCODE_PASTE">KEYCODE_PASTE</option>
+              <option value="KEYCODE_PERIOD">KEYCODE_PERIOD</option>
+              <option value="KEYCODE_PICTSYMBOLS">KEYCODE_PICTSYMBOLS</option>
+              <option value="KEYCODE_PLUS">KEYCODE_PLUS</option>
+              <option value="KEYCODE_POUND">KEYCODE_POUND</option>
+              <option value="KEYCODE_POWER">KEYCODE_POWER</option>
+              <option value="KEYCODE_PRINT">KEYCODE_PRINT</option>
+              <option value="KEYCODE_PROFILE_SWITCH">KEYCODE_PROFILE_SWITCH</option>
+              <option value="KEYCODE_PROG_BLUE">KEYCODE_PROG_BLUE</option>
+              <option value="KEYCODE_PROG_GREEN">KEYCODE_PROG_GREEN</option>
+              <option value="KEYCODE_PROG_RED">KEYCODE_PROG_RED</option>
+              <option value="KEYCODE_PROG_YELLOW">KEYCODE_PROG_YELLOW</option>
+              <option value="KEYCODE_Q">KEYCODE_Q</option>
+              <option value="KEYCODE_R">KEYCODE_R</option>
+              <option value="KEYCODE_RECENT_APPS">KEYCODE_RECENT_APPS</option>
+              <option value="KEYCODE_REFRESH">KEYCODE_REFRESH</option>
+              <option value="KEYCODE_RIGHT_BRACKET">KEYCODE_RIGHT_BRACKET</option>
+              <option value="KEYCODE_RO">KEYCODE_RO</option>
+              <option value="KEYCODE_S">KEYCODE_S</option>
+              <option value="KEYCODE_SCREENSHOT">KEYCODE_SCREENSHOT</option>
+              <option value="KEYCODE_SCROLL_LOCK">KEYCODE_SCROLL_LOCK</option>
+              <option value="KEYCODE_SEARCH">KEYCODE_SEARCH</option>
+              <option value="KEYCODE_SEMICOLON">KEYCODE_SEMICOLON</option>
+              <option value="KEYCODE_SETTINGS">KEYCODE_SETTINGS</option>
+              <option value="KEYCODE_SHIFT_LEFT">KEYCODE_SHIFT_LEFT</option>
+              <option value="KEYCODE_SHIFT_RIGHT">KEYCODE_SHIFT_RIGHT</option>
+              <option value="KEYCODE_SLASH">KEYCODE_SLASH</option>
+              <option value="KEYCODE_SLEEP">KEYCODE_SLEEP</option>
+              <option value="KEYCODE_SOFT_LEFT">KEYCODE_SOFT_LEFT</option>
+              <option value="KEYCODE_SOFT_RIGHT">KEYCODE_SOFT_RIGHT</option>
+              <option value="KEYCODE_SOFT_SLEEP">KEYCODE_SOFT_SLEEP</option>
+              <option value="KEYCODE_SPACE">KEYCODE_SPACE</option>
+              <option value="KEYCODE_STAR">KEYCODE_STAR</option>
+              <option value="KEYCODE_STB_INPUT">KEYCODE_STB_INPUT</option>
+              <option value="KEYCODE_STB_POWER">KEYCODE_STB_POWER</option>
+              <option value="KEYCODE_STEM_1">KEYCODE_STEM_1</option>
+              <option value="KEYCODE_STEM_2">KEYCODE_STEM_2</option>
+              <option value="KEYCODE_STEM_3">KEYCODE_STEM_3</option>
+              <option value="KEYCODE_STEM_PRIMARY">KEYCODE_STEM_PRIMARY</option>
+              <option value="KEYCODE_STYLUS_BUTTON_PRIMARY">KEYCODE_STYLUS_BUTTON_PRIMARY</option>
+              <option value="KEYCODE_STYLUS_BUTTON_SECONDARY">KEYCODE_STYLUS_BUTTON_SECONDARY</option>
+              <option value="KEYCODE_STYLUS_BUTTON_TAIL">KEYCODE_STYLUS_BUTTON_TAIL</option>
+              <option value="KEYCODE_STYLUS_BUTTON_TERTIARY">KEYCODE_STYLUS_BUTTON_TERTIARY</option>
+              <option value="KEYCODE_SWITCH_CHARSET">KEYCODE_SWITCH_CHARSET</option>
+              <option value="KEYCODE_SYM">KEYCODE_SYM</option>
+              <option value="KEYCODE_SYSRQ">KEYCODE_SYSRQ</option>
+              <option value="KEYCODE_SYSTEM_NAVIGATION_DOWN">KEYCODE_SYSTEM_NAVIGATION_DOWN</option>
+              <option value="KEYCODE_SYSTEM_NAVIGATION_LEFT">KEYCODE_SYSTEM_NAVIGATION_LEFT</option>
+              <option value="KEYCODE_SYSTEM_NAVIGATION_RIGHT">KEYCODE_SYSTEM_NAVIGATION_RIGHT</option>
+              <option value="KEYCODE_SYSTEM_NAVIGATION_UP">KEYCODE_SYSTEM_NAVIGATION_UP</option>
+              <option value="KEYCODE_T">KEYCODE_T</option>
+              <option value="KEYCODE_TAB">KEYCODE_TAB</option>
+              <option value="KEYCODE_THUMBS_DOWN">KEYCODE_THUMBS_DOWN</option>
+              <option value="KEYCODE_THUMBS_UP">KEYCODE_THUMBS_UP</option>
+              <option value="KEYCODE_TV">KEYCODE_TV</option>
+              <option value="KEYCODE_TV_ANTENNA_CABLE">KEYCODE_TV_ANTENNA_CABLE</option>
+              <option value="KEYCODE_TV_AUDIO_DESCRIPTION">KEYCODE_TV_AUDIO_DESCRIPTION</option>
+              <option value="KEYCODE_TV_AUDIO_DESCRIPTION_MIX_DOWN">KEYCODE_TV_AUDIO_DESCRIPTION_MIX_DOWN</option>
+              <option value="KEYCODE_TV_AUDIO_DESCRIPTION_MIX_UP">KEYCODE_TV_AUDIO_DESCRIPTION_MIX_UP</option>
+              <option value="KEYCODE_TV_CONTENTS_MENU">KEYCODE_TV_CONTENTS_MENU</option>
+              <option value="KEYCODE_TV_DATA_SERVICE">KEYCODE_TV_DATA_SERVICE</option>
+              <option value="KEYCODE_TV_INPUT">KEYCODE_TV_INPUT</option>
+              <option value="KEYCODE_TV_INPUT_COMPONENT_1">KEYCODE_TV_INPUT_COMPONENT_1</option>
+              <option value="KEYCODE_TV_INPUT_COMPONENT_2">KEYCODE_TV_INPUT_COMPONENT_2</option>
+              <option value="KEYCODE_TV_INPUT_COMPOSITE_1">KEYCODE_TV_INPUT_COMPOSITE_1</option>
+              <option value="KEYCODE_TV_INPUT_COMPOSITE_2">KEYCODE_TV_INPUT_COMPOSITE_2</option>
+              <option value="KEYCODE_TV_INPUT_HDMI_1">KEYCODE_TV_INPUT_HDMI_1</option>
+              <option value="KEYCODE_TV_INPUT_HDMI_2">KEYCODE_TV_INPUT_HDMI_2</option>
+              <option value="KEYCODE_TV_INPUT_HDMI_3">KEYCODE_TV_INPUT_HDMI_3</option>
+              <option value="KEYCODE_TV_INPUT_HDMI_4">KEYCODE_TV_INPUT_HDMI_4</option>
+              <option value="KEYCODE_TV_INPUT_VGA_1">KEYCODE_TV_INPUT_VGA_1</option>
+              <option value="KEYCODE_TV_MEDIA_CONTEXT_MENU">KEYCODE_TV_MEDIA_CONTEXT_MENU</option>
+              <option value="KEYCODE_TV_NETWORK">KEYCODE_TV_NETWORK</option>
+              <option value="KEYCODE_TV_NUMBER_ENTRY">KEYCODE_TV_NUMBER_ENTRY</option>
+              <option value="KEYCODE_TV_POWER">KEYCODE_TV_POWER</option>
+              <option value="KEYCODE_TV_RADIO_SERVICE">KEYCODE_TV_RADIO_SERVICE</option>
+              <option value="KEYCODE_TV_SATELLITE">KEYCODE_TV_SATELLITE</option>
+              <option value="KEYCODE_TV_SATELLITE_BS">KEYCODE_TV_SATELLITE_BS</option>
+              <option value="KEYCODE_TV_SATELLITE_CS">KEYCODE_TV_SATELLITE_CS</option>
+              <option value="KEYCODE_TV_SATELLITE_SERVICE">KEYCODE_TV_SATELLITE_SERVICE</option>
+              <option value="KEYCODE_TV_TELETEXT">KEYCODE_TV_TELETEXT</option>
+              <option value="KEYCODE_TV_TERRESTRIAL_ANALOG">KEYCODE_TV_TERRESTRIAL_ANALOG</option>
+              <option value="KEYCODE_TV_TERRESTRIAL_DIGITAL">KEYCODE_TV_TERRESTRIAL_DIGITAL</option>
+              <option value="KEYCODE_TV_TIMER_PROGRAMMING">KEYCODE_TV_TIMER_PROGRAMMING</option>
+              <option value="KEYCODE_TV_ZOOM_MODE">KEYCODE_TV_ZOOM_MODE</option>
+              <option value="KEYCODE_U">KEYCODE_U</option>
+              <option value="KEYCODE_UNKNOWN">KEYCODE_UNKNOWN</option>
+              <option value="KEYCODE_V">KEYCODE_V</option>
+              <option value="KEYCODE_VIDEO_APP_1">KEYCODE_VIDEO_APP_1</option>
+              <option value="KEYCODE_VIDEO_APP_2">KEYCODE_VIDEO_APP_2</option>
+              <option value="KEYCODE_VIDEO_APP_3">KEYCODE_VIDEO_APP_3</option>
+              <option value="KEYCODE_VIDEO_APP_4">KEYCODE_VIDEO_APP_4</option>
+              <option value="KEYCODE_VIDEO_APP_5">KEYCODE_VIDEO_APP_5</option>
+              <option value="KEYCODE_VIDEO_APP_6">KEYCODE_VIDEO_APP_6</option>
+              <option value="KEYCODE_VIDEO_APP_7">KEYCODE_VIDEO_APP_7</option>
+              <option value="KEYCODE_VIDEO_APP_8">KEYCODE_VIDEO_APP_8</option>
+              <option value="KEYCODE_VOICE_ASSIST">KEYCODE_VOICE_ASSIST</option>
+              <option value="KEYCODE_VOLUME_DOWN">KEYCODE_VOLUME_DOWN</option>
+              <option value="KEYCODE_VOLUME_MUTE">KEYCODE_VOLUME_MUTE</option>
+              <option value="KEYCODE_VOLUME_UP">KEYCODE_VOLUME_UP</option>
+              <option value="KEYCODE_W">KEYCODE_W</option>
+              <option value="KEYCODE_WAKEUP">KEYCODE_WAKEUP</option>
+              <option value="KEYCODE_WINDOW">KEYCODE_WINDOW</option>
+              <option value="KEYCODE_X">KEYCODE_X</option>
+              <option value="KEYCODE_Y">KEYCODE_Y</option>
+              <option value="KEYCODE_YEN">KEYCODE_YEN</option>
+              <option value="KEYCODE_Z">KEYCODE_Z</option>
+              <option value="KEYCODE_ZENKAKU_HANKAKU">KEYCODE_ZENKAKU_HANKAKU</option>
+              <option value="KEYCODE_ZOOM_IN">KEYCODE_ZOOM_IN</option>
+              <option value="KEYCODE_ZOOM_OUT">KEYCODE_ZOOM_OUT</option>
+            </select>
+          </div>
+          <div><button id="load_keycode_map_from_server">Load<br />KeyCode Map<br />from Server</button></div>
+          <div><button id="set_keycode_map">Set<br />KeyCode Map</button></div>
         </div>
       </div>
       <div>

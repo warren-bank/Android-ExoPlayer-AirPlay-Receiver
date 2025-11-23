@@ -43,7 +43,9 @@ public class PreferencesMgr {
     R.string.prefkey_prefer_extension_renderer,
     R.string.prefkey_enable_audio_passthrough,
     R.string.prefkey_enable_downmix_surround_sound_to_stereo,
-    R.string.prefkey_enable_downmix_stereo_sound_to_mono
+    R.string.prefkey_enable_downmix_stereo_sound_to_mono,
+    R.string.prefkey_enable_keycode_event_notifications,
+    R.string.prefkey_serialized_keycode_map
   };
 
   private static int get_pref_key_id(String key) {
@@ -389,6 +391,36 @@ public class PreferencesMgr {
     ;
   }
 
+  private static boolean get_enable_keycode_event_notifications(Context context, SharedPreferences prefs) {
+    return ((context == null) || (prefs == null))
+      ? getPrefBoolean(
+          /* pref_key_id= */      R.string.prefkey_enable_keycode_event_notifications,
+          /* default_value_id= */ R.bool.prefval_enable_keycode_event_notifications
+        )
+      : getPrefBoolean(
+          context,
+          prefs,
+          /* pref_key_id= */      R.string.prefkey_enable_keycode_event_notifications,
+          /* default_value_id= */ R.bool.prefval_enable_keycode_event_notifications
+        )
+    ;
+  }
+
+  private static String get_serialized_keycode_map(Context context, SharedPreferences prefs) {
+    return ((context == null) || (prefs == null))
+      ? getPrefString(
+          /* pref_key_id= */      R.string.prefkey_serialized_keycode_map,
+          /* default_value_id= */ R.string.prefval_serialized_keycode_map
+        )
+      : getPrefString(
+          context,
+          prefs,
+          /* pref_key_id= */      R.string.prefkey_serialized_keycode_map,
+          /* default_value_id= */ R.string.prefval_serialized_keycode_map
+        )
+    ;
+  }
+
   // ---------------------------------------------------------------------------
   // internal state:
 
@@ -412,6 +444,10 @@ public class PreferencesMgr {
   private static boolean enable_audio_passthrough;
   private static boolean enable_downmix_surround_sound_to_stereo;
   private static boolean enable_downmix_stereo_sound_to_mono;
+  private static boolean enable_keycode_event_notifications;
+  private static String  serialized_keycode_map; // Base64 encoded binary representation of serialized HashMap
+
+  private static HashMap<String, String> keycode_map;
 
   private static void initialize() {
     if (is_initialized) return;
@@ -439,6 +475,10 @@ public class PreferencesMgr {
     enable_audio_passthrough                   = get_enable_audio_passthrough(context, prefs);
     enable_downmix_surround_sound_to_stereo    = get_enable_downmix_surround_sound_to_stereo(context, prefs);
     enable_downmix_stereo_sound_to_mono        = get_enable_downmix_stereo_sound_to_mono(context, prefs);
+    enable_keycode_event_notifications         = get_enable_keycode_event_notifications(context, prefs);
+    serialized_keycode_map                     = get_serialized_keycode_map(context, prefs);
+
+    keycode_map                                = (HashMap<String, String>) SerializationUtils.deserializeObject(serialized_keycode_map);
   }
 
   // ---------------------------------------------------------------------------
@@ -522,6 +562,27 @@ public class PreferencesMgr {
   public static boolean get_enable_downmix_stereo_sound_to_mono() {
     initialize();
     return enable_downmix_stereo_sound_to_mono;
+  }
+
+  public static boolean get_enable_keycode_event_notifications() {
+    initialize();
+    return enable_keycode_event_notifications;
+  }
+
+  public static String get_serialized_keycode_map() {
+    return get_serialized_keycode_map(/* base64= */ false);
+  }
+
+  public static String get_serialized_keycode_map(boolean base64) {
+    initialize();
+    return base64
+      ? serialized_keycode_map
+      : SerializationUtils.serializeHashMap(keycode_map);
+  }
+
+  public static HashMap<String, String> get_keycode_map() {
+    initialize();
+    return keycode_map;
   }
 
   // ---------------------------------------------------------------------------
@@ -772,6 +833,9 @@ public class PreferencesMgr {
 
       case R.string.prefkey_enable_downmix_stereo_sound_to_mono :
         return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_downmix_stereo_sound_to_mono, raw_value);
+
+      case R.string.prefkey_enable_keycode_event_notifications :
+        return setPrefBoolean(context, editor, pref_key_id, /* old_value= */ enable_keycode_event_notifications, raw_value);
     }
     return false;
   }
@@ -864,7 +928,36 @@ public class PreferencesMgr {
         enable_downmix_stereo_sound_to_mono = get_enable_downmix_stereo_sound_to_mono(context, prefs);
         break;
       }
+
+      case R.string.prefkey_enable_keycode_event_notifications : {
+        enable_keycode_event_notifications = get_enable_keycode_event_notifications(context, prefs);
+        break;
+      }
     }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  public static void set_keycode_map(HashMap<String, String> new_keycode_map) {
+    String new_serialized_keycode_map = (new_keycode_map != null)
+      ? SerializationUtils.serializeObject(new_keycode_map)
+      : "";
+
+    // 1: update persistent preferences
+    Context context                 = getApplicationContext();
+    SharedPreferences prefs         = getPrefs(context);
+    SharedPreferences.Editor editor = getPrefsEditor(prefs);
+    int pref_key_id                 = R.string.prefkey_serialized_keycode_map;
+
+    setPrefString(context, editor, pref_key_id, /* old_value= */ serialized_keycode_map, /* raw_value= */ new_serialized_keycode_map);
+    editor.commit();
+
+    // 2: update internal state
+    keycode_map            = new_keycode_map;
+    serialized_keycode_map = new_serialized_keycode_map;
+
+    // 3: notify listeners
+    notifyListeners(pref_key_id);
   }
 
   // ---------------------------------------------------------------------------
@@ -890,6 +983,7 @@ public class PreferencesMgr {
     lines.add("enable-audio-passthrough: %b");
     lines.add("enable-downmix-surround-sound-to-stereo: %b");
     lines.add("enable-downmix-stereo-sound-to-mono: %b");
+    lines.add("enable-keycode-event-notifications: %b");
 
     return String.format(
       TextUtils.join("\n", lines),
@@ -908,7 +1002,8 @@ public class PreferencesMgr {
       prefer_extension_renderer,
       enable_audio_passthrough,
       enable_downmix_surround_sound_to_stereo,
-      enable_downmix_stereo_sound_to_mono
+      enable_downmix_stereo_sound_to_mono,
+      enable_keycode_event_notifications
     );
   }
 

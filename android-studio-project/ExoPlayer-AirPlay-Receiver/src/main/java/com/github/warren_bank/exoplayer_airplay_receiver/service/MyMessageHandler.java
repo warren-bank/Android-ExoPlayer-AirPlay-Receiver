@@ -176,6 +176,13 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_KeyCode_Map_Set : {
+        PreferencesMgr.set_keycode_map(
+          /* values= */ (HashMap) msg.obj
+        );
+        break;
+      }
+
       // =======================================================================
       // Delete Cache
       // =======================================================================

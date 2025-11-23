@@ -10,6 +10,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUt
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ToastUtils;
 
 import androidx.annotation.Nullable;
 import androidx.media3.common.C;
@@ -1214,8 +1215,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     boolean isHandled = (playerView != null) && playerView.dispatchKeyEvent(event);
 
     if (!isHandled && (exoPlayer != null) && (event.getRepeatCount() == 0) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
-      // apply custom handler(s)
+      // apply user-defined KeyCode remapping
+      event = remapKeyEvent(event);
 
+      // apply custom handler(s)
       switch(event.getKeyCode()) {
 
         case KeyEvent.KEYCODE_MEDIA_PLAY : {
@@ -1360,6 +1363,38 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     }
 
     return isHandled;
+  }
+
+  private KeyEvent remapKeyEvent(KeyEvent event) {
+    HashMap<String, String> keycode_map = PreferencesMgr.get_keycode_map();
+
+    int oldKeyCode = event.getKeyCode();
+    if (oldKeyCode == KeyEvent.KEYCODE_UNKNOWN)
+      return event;
+
+    String oldKeyCodeStr = KeyEvent.keyCodeToString(oldKeyCode);
+
+    if (PreferencesMgr.get_enable_keycode_event_notifications()) {
+      ToastUtils.showToastCenterShort(context, oldKeyCodeStr);
+    }
+
+    if (keycode_map == null)
+      return event;
+
+    String newKeyCodeStr = keycode_map.get(oldKeyCodeStr);
+    if (TextUtils.isEmpty(newKeyCodeStr))
+      return event;
+
+    int newKeyCode = KeyEvent.keyCodeFromString(newKeyCodeStr);
+    if (newKeyCode == KeyEvent.KEYCODE_UNKNOWN)
+      return event;
+
+    if (PreferencesMgr.get_enable_keycode_event_notifications()) {
+      ToastUtils.showToastCenterShort(context, String.format("%s => %s", oldKeyCodeStr, newKeyCodeStr));
+    }
+
+    // apply user-defined KeyCode remapping
+    return new KeyEvent(event.getAction(), newKeyCode);
   }
 
   public void release() {

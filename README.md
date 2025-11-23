@@ -780,6 +780,37 @@ __extended APIs:__
       - type: boolean
       - description: downmix stereo sound to mono?
       - default: `false`
+    * _enable-keycode-event-notifications_
+      - type: boolean
+      - description: show KeyCode event notifications?
+      - default: `false`
+* POST data sent in requests to `/set-keycode-map` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys or values are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys and values are case sensitive
+  - recognized keys and values include:
+    * [`KEYCODE_0`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_0) &hellip; [`KEYCODE_ZOOM_OUT`](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_ZOOM_OUT)
+  - the purpose for which is to remap keyboard keys to different keycode values
+  - POST data example:
+    ```text
+      KEYCODE_DPAD_DOWN:  KEYCODE_G
+      KEYCODE_DPAD_UP:    KEYCODE_H
+      KEYCODE_DPAD_LEFT:  KEYCODE_MEDIA_REWIND
+      KEYCODE_DPAD_RIGHT: KEYCODE_MEDIA_FAST_FORWARD
+      KEYCODE_ENTER:      KEYCODE_MEDIA_PLAY_PAUSE
+    ```
+  - which remaps:
+    * down arrow key to "G" keycode
+      - decrease subtitle offset by 1 second
+    * up arrow key to "H" keycode
+      - increase subtitle offset by 1 second
+    * left arrow key to "![fast_rewind](https://github.com/google/material-design-icons/raw/4.0.0/png/av/fast_rewind/materialicons/18dp/1x/baseline_fast_rewind_black_18dp.png)" keycode
+      - rewind by 5 seconds
+    * right arrow key to "![fast_forward](https://github.com/google/material-design-icons/raw/4.0.0/png/av/fast_forward/materialicons/18dp/1x/baseline_fast_forward_black_18dp.png)" keycode
+      - fast forward by 15 seconds
+    * enter key to "![play_arrow](https://github.com/google/material-design-icons/raw/4.0.0/png/av/play_arrow/materialicons/18dp/1x/baseline_play_arrow_black_18dp.png)![pause](https://github.com/google/material-design-icons/raw/4.0.0/png/av/pause/materialicons/18dp/1x/baseline_pause_black_18dp.png)" keycode
+      - toggle _play/pause_
 * POST data sent in requests to `/show-toast` API endpoint:
   - contains an arbitrary block of text
 * POST data sent in requests to `/set-captions-filters` and `/add-captions-filters` API endpoints:
@@ -1003,7 +1034,7 @@ __extended APIs:__
 
 #### Keyboard hotkeys
 
-* `space` = toggle _pause/play_
+* `space` = toggle _play/pause_
 * `N` = next track
 * `P` = previous track
 * `S` = stop

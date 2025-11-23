@@ -8,5 +8,6 @@
   <bool name="prefval_enable_audio_passthrough">true</bool>
   <bool name="prefval_enable_downmix_surround_sound_to_stereo">false</bool>
   <bool name="prefval_enable_downmix_stereo_sound_to_mono">false</bool>
+  <bool name="prefval_enable_keycode_event_notifications">false</bool>
 
 </resources>

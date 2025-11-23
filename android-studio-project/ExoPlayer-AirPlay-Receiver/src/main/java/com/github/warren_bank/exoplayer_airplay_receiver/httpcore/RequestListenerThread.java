@@ -1279,6 +1279,30 @@ public class RequestListenerThread extends Thread {
 
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.equalsIgnoreCase(Constant.Target.KEYCODE_MAP_INFO)) {
+        String serialized_keycode_map = PreferencesMgr.get_serialized_keycode_map();
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        httpResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
+        httpResponse.setEntity(new StringEntity(serialized_keycode_map));
+      }
+      else if (
+        (entityContent != null) &&
+        target.equals(Constant.Target.KEYCODE_MAP_SET)
+      ) {
+        String requestBody;
+        requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+
+        HashMap<String, String> keycode_map = StringUtils.parseRequestBody(requestBody, /* normalize_lowercase_keys= */ false);
+
+        Message msg = Message.obtain();
+        msg.what = Constant.Msg.Msg_KeyCode_Map_Set;
+        msg.obj = keycode_map;
+        MainApp.broadcastMessage(msg);
+
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.equals(Constant.Target.CACHE_DELETE)) {
         Message msg = Message.obtain();
         msg.what = Constant.Msg.Msg_Delete_Cache;

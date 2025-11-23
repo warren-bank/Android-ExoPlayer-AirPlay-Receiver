@@ -202,12 +202,13 @@ public class Constant {
         public static final int Msg_Start_Activity              = 28;
         public static final int Msg_Video_Share                 = 29;
         public static final int Msg_Preferences_Edit            = 30;
-        public static final int Msg_Delete_Cache                = 31;
-        public static final int Msg_Exit_Service                = 32;
+        public static final int Msg_KeyCode_Map_Set             = 31;
+        public static final int Msg_Delete_Cache                = 32;
+        public static final int Msg_Exit_Service                = 33;
 
         public interface Msg_Runtime_Permissions {
-            public static final int Request_EXTERNAL_STORAGE    = 33;
-            public static final int Granted                     = 34;
+            public static final int Request_EXTERNAL_STORAGE    = 34;
+            public static final int Granted                     = 35;
         }
     }
 
@@ -250,6 +251,8 @@ public class Constant {
         public static final String VIDEO_SHARE                  = "/share-video";
         public static final String PREFERENCES_INFO             = "/preferences-info";
         public static final String PREFERENCES_EDIT             = "/edit-preferences";
+        public static final String KEYCODE_MAP_INFO             = "/keycode-map-info";
+        public static final String KEYCODE_MAP_SET              = "/set-keycode-map";
         public static final String CACHE_DELETE                 = "/delete-cache";
         public static final String SERVICE_EXIT                 = "/exit-service";
 

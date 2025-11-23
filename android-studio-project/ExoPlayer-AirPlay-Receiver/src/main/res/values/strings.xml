@@ -67,10 +67,13 @@
   <string translatable="false" name="prefkey_enable_audio_passthrough">enable_audio_passthrough</string>
   <string translatable="false" name="prefkey_enable_downmix_surround_sound_to_stereo">enable_downmix_surround_sound_to_stereo</string>
   <string translatable="false" name="prefkey_enable_downmix_stereo_sound_to_mono">enable_downmix_stereo_sound_to_mono</string>
+  <string translatable="false" name="prefkey_enable_keycode_event_notifications">enable_keycode_event_notifications</string>
+  <string translatable="false" name="prefkey_serialized_keycode_map">serialized_keycode_map</string>
 
   <!-- Preference default values -->
   <string translatable="false" name="prefval_http_api_password"></string>
   <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
 
   <!-- Settings -->
   <string translatable="false" name="pref_settings_key">settings_key</string>
@@ -146,6 +149,11 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Downmix stereo sound to mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">when there are 2 audio channels, reduce to 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">play audio tracks with stereo sound</string>
+
+  <!-- Settings: KeyCode event notifications -->
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode event notifications</string>
+  <string name="pref_enable_keycode_event_notifications_summary_on">show</string>
+  <string name="pref_enable_keycode_event_notifications_summary_off">hide</string>
 
   <!-- Settings: footer notation -->
   <string translatable="false" name="pref_footer_notation_title">-- * --</string>
