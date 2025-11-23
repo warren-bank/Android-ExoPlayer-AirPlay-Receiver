@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ukázat</string>
+  <string name="hide">skrýt</string>
   <string name="toast_registration_started">Registrace AirPlay služba...</string>
   <string name="toast_registration_success">AirPlay úspěšná registrace</string>
   <string name="toast_registration_failure">AirPlay registrace se nezdařila</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Převést stereofonní zvuk na monofonní</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">pokud jsou k dispozici 2 zvukové kanály, snižte počet na 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">přehrávat zvukové stopy se stereofonním zvukem</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode oznámení o událostech</string>
   <string name="pref_footer_notation_summary">Změny těchto nastavení se projeví po restartování aplikace..</string>
 </resources>

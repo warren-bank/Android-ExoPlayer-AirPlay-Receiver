@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">להראות</string>
+  <string name="hide">הסתר</string>
   <string name="toast_registration_started">הרשמה AirPlay שירות...</string>
   <string name="toast_registration_success">AirPlay הרשמה מוצלחת</string>
   <string name="toast_registration_failure">AirPlay הרישום נכשל</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">מערבב צליל סטריאו למונו</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">כאשר יש 2 ערוצי אודיו, צמצם ל-1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">השמעת רצועות אודיו עם צליל סטריאו</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode הודעות על אירועים</string>
   <string name="pref_footer_notation_summary">שינויים בהגדרות אלה ייכנסו לתוקף לאחר הפעלה מחדש של האפליקציה..</string>
 </resources>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">показать</string>
+  <string name="hide">скрыть</string>
   <string name="toast_registration_started">Регистрация AirPlay услуга...</string>
   <string name="toast_registration_success">AirPlay успешная регистрация</string>
   <string name="toast_registration_failure">AirPlay регистрация не удалась</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Смешивание стереозвука в моно</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">если есть 2 аудиоканала, уменьшить до 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">воспроизведение аудиодорожек со стереозвуком</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode уведомления о событиях</string>
   <string name="pref_footer_notation_summary">Изменения в этих настройках вступят в силу после перезапуска приложения..</string>
 </resources>

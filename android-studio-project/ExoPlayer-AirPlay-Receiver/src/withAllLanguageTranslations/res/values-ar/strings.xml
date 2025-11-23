@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">عرض</string>
+  <string name="hide">إخفاء</string>
   <string name="toast_registration_started">التسجيل AirPlay خدمة...</string>
   <string name="toast_registration_success">AirPlay نجاح التسجيل</string>
   <string name="toast_registration_failure">AirPlay فشل التسجيل</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">تحويل الصوت الاستريو إلى صوت أحادي</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">عندما يكون هناك قناتان صوتيتان، قلل إلى قناة واحدة</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">تشغيل المقاطع الصوتية بصوت ستيريو</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode إخطارات الأحداث</string>
   <string name="pref_footer_notation_summary">ستصبح التغييرات التي يتم إجراؤها على هذه الإعدادات سارية المفعول بعد إعادة تشغيل التطبيق..</string>
 </resources>

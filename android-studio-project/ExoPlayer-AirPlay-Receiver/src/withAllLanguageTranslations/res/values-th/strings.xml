@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">แสดง</string>
+  <string name="hide">ซ่อน</string>
   <string name="toast_registration_started">ลงทะเบียน AirPlay บริการ...</string>
   <string name="toast_registration_success">AirPlay การลงทะเบียนสำเร็จ</string>
   <string name="toast_registration_failure">AirPlay การลงทะเบียนล้มเหลว</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">ดาวน์มิกซ์เสียงสเตอริโอเป็นโมโน</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">เมื่อมีช่องเสียง 2 ช่อง ให้ลดเหลือ 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">เล่นแทร็กเสียงด้วยระบบเสียงสเตอริโอ</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode การแจ้งเตือนเหตุการณ์</string>
   <string name="pref_footer_notation_summary">การเปลี่ยนแปลงการตั้งค่าเหล่านี้จะมีผลหลังจากรีสตาร์ทแอป.</string>
 </resources>

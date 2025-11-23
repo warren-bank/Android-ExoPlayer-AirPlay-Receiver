@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">展示</string>
+  <string name="hide">隱藏</string>
   <string name="toast_registration_started">註冊 AirPlay 服務...</string>
   <string name="toast_registration_success">AirPlay 註冊成功</string>
   <string name="toast_registration_failure">AirPlay 註冊失敗</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">將立體聲混音為單聲道</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">當存在兩個音頻通道時，減少至一個</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">播放具立體聲效果的音軌</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode 事件通知</string>
   <string name="pref_footer_notation_summary">變更這些設定後，需重新啟動應用程式方能生效.</string>
 </resources>

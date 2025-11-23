@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">izstāde</string>
+  <string name="hide">slēpt</string>
   <string name="toast_registration_started">Reģistrēšanās AirPlay pakalpojums...</string>
   <string name="toast_registration_success">AirPlay reģistrācijas veiksmīga pabeigšana</string>
   <string name="toast_registration_failure">AirPlay reģistrācija neizdevās</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo skaņas samazināšana līdz mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">ja ir 2 audio kanāli, samaziniet līdz 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">atskaņot audio ierakstus ar stereo skaņu</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode notikumu paziņojumi</string>
   <string name="pref_footer_notation_summary">Izmaiņas šajos iestatījumos stāsies spēkā pēc lietotnes pārstartēšanas..</string>
 </resources>

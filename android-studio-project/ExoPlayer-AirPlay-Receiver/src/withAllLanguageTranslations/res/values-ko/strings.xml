@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">보여주다</string>
+  <string name="hide">숨김</string>
   <string name="toast_registration_started">등록 AirPlay 서비스...</string>
   <string name="toast_registration_success">AirPlay 등록 성공</string>
   <string name="toast_registration_failure">AirPlay 등록에 실패했습니다</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">스테레오 사운드를 모노로 다운믹스</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">오디오 채널이 2개일 경우 1개로 줄임</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">스테레오 사운드로 오디오 트랙 재생</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode 이벤트 알림</string>
   <string name="pref_footer_notation_summary">이 설정 변경 사항은 앱을 재시작한 후 적용됩니다.</string>
 </resources>

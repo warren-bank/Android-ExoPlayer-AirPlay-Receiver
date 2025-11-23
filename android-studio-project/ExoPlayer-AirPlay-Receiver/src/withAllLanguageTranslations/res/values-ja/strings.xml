@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">表示</string>
+  <string name="hide">隠す</string>
   <string name="toast_registration_started">登録 AirPlay サービス...</string>
   <string name="toast_registration_success">AirPlay 登録成功</string>
   <string name="toast_registration_failure">AirPlay 登録に失敗しました</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">ステレオ音声をモノラルにダウンミックスする</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">オーディオチャンネルが2つある場合、1つに減らす</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">オーディオトラックをステレオサウンドで再生する</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode イベント通知</string>
   <string name="pref_footer_notation_summary">これらの設定の変更は、アプリを再起動した後に有効になります.</string>
 </resources>

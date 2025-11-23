@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">vise</string>
+  <string name="hide">skjul</string>
   <string name="toast_registration_started">Registrering AirPlay tjeneste...</string>
   <string name="toast_registration_success">AirPlay registrering vellykket</string>
   <string name="toast_registration_failure">AirPlay Registreringen mislyktes</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Nedmikse stereolyd til mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">når det er 2 lydkanaler, reduser til 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">spille av lydspor med stereolyd</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode hendelsesvarsler</string>
   <string name="pref_footer_notation_summary">Endringer i disse innstillingene trer i kraft etter at appen er startet på nytt..</string>
 </resources>

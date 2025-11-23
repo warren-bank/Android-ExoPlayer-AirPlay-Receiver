@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">näita</string>
+  <string name="hide">peida</string>
   <string name="toast_registration_started">Registreerimine AirPlay teenus...</string>
   <string name="toast_registration_success">AirPlay registreerimine õnnestus</string>
   <string name="toast_registration_failure">AirPlay registreerimine ebaõnnestus</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereoheli monoheli allamiksimine</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">kui on 2 helikanalit, vähendage 1-ni</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">mängi heliridu stereokõlaga</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode sündmuste teated</string>
   <string name="pref_footer_notation_summary">Need seaded muutuvad pärast rakenduse taaskäivitamist..</string>
 </resources>

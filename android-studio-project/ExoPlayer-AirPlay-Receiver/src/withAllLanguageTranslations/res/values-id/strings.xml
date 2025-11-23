@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">tampilkan</string>
+  <string name="hide">sembunyikan</string>
   <string name="toast_registration_started">Pendaftaran AirPlay layanan...</string>
   <string name="toast_registration_success">AirPlay Pendaftaran berhasil</string>
   <string name="toast_registration_failure">AirPlay Pendaftaran gagal</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Mengubah suara stereo menjadi mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Jika ada 2 saluran audio, kurangi menjadi 1.</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Memutar trek audio dengan suara stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Pemberitahuan acara</string>
   <string name="pref_footer_notation_summary">Perubahan pada pengaturan ini akan berlaku setelah aplikasi di-restart..</string>
 </resources>

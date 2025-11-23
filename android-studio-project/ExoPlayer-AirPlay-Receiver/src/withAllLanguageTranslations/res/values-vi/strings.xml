@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">hiển thị</string>
+  <string name="hide">ẩn</string>
   <string name="toast_registration_started">Đăng ký AirPlay dịch vụ...</string>
   <string name="toast_registration_success">AirPlay Đăng ký thành công</string>
   <string name="toast_registration_failure">AirPlay Đăng ký không thành công</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Chuyển đổi âm thanh stereo sang mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Khi có 2 kênh âm thanh, giảm xuống còn 1 kênh.</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Phát các bản nhạc âm thanh với âm thanh stereo.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Thông báo sự kiện</string>
   <string name="pref_footer_notation_summary">Các thay đổi đối với các thiết lập này sẽ có hiệu lực sau khi ứng dụng được khởi động lại..</string>
 </resources>

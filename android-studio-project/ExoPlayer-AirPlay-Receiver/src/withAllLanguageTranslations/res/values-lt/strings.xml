@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">parodyti</string>
+  <string name="hide">paslėpti</string>
   <string name="toast_registration_started">Registracija AirPlay paslauga...</string>
   <string name="toast_registration_success">AirPlay registracija sėkminga</string>
   <string name="toast_registration_failure">AirPlay registracija nepavyko</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo garso sumaišymas į mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">kai yra 2 garso kanalai, sumažinkite iki 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">groti garso takelius su stereo garsu</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode įvykių pranešimai</string>
   <string name="pref_footer_notation_summary">Šių nustatymų pakeitimai įsigalios po to, kai programa bus paleista iš naujo..</string>
 </resources>

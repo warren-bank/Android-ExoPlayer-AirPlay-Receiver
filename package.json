@@ -6,7 +6,7 @@
     "@warren-bank/translate-android-strings": "^3.0.1"
   },
   "scripts": {
-    "translate:strings": "translate-android-strings -s \"deepl\" -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/strings.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/withAllLanguageTranslations/res\" -m --nc --nw -b \"(?:ExoAirPlayer|ExoPlayer|AirPlay|HTTP|API|DRM|\\((?:\\*|dB|ms)\\)|\\d+%|x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES|HDMV DTS|AC3 Dolby Digital|PCM)\"",
+    "translate:strings": "translate-android-strings -s \"deepl\" -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/strings.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/withAllLanguageTranslations/res\" -m --nc --nw -b \"(?:ExoAirPlayer|ExoPlayer|AirPlay|HTTP|API|DRM|\\((?:\\*|dB|ms)\\)|\\d+%|x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES|HDMV DTS|AC3 Dolby Digital|PCM|KeyCode)\"",
     "translate:dialog":  "translate-android-strings -s \"deepl\" -i \"en\" -f \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/main/res/values/track_selection_dialog.xml\" -d \"android-studio-project/ExoPlayer-AirPlay-Receiver/src/withAllLanguageTranslations/res\" -m --nc --nw",
     "translate:all": "npm run translate:strings && npm run translate:dialog",
 

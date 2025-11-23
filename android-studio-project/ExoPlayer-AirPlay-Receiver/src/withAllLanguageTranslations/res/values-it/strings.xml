@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">ExoAirPlayer</string>
+  <string name="show">mostrare</string>
+  <string name="hide">nascondere</string>
   <string name="toast_registration_started">Registrazione AirPlay servizio...</string>
   <string name="toast_registration_success">AirPlay registrazione riuscita</string>
   <string name="toast_registration_failure">AirPlay Registrazione non riuscita</string>
@@ -58,5 +60,6 @@
   <string name="pref_enable_downmix_stereo_sound_to_mono_title">Downmix audio stereo in mono</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">quando ci sono 2 canali audio, ridurre a 1</string>
   <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">riprodurre tracce audio con suono stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode notifiche di eventi</string>
   <string name="pref_footer_notation_summary">Le modifiche a queste impostazioni avranno effetto dopo il riavvio dell\'app..</string>
 </resources>
