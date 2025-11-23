@@ -1221,6 +1221,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       // apply custom handler(s)
       switch(event.getKeyCode()) {
 
+        case KeyEvent.KEYCODE_UNKNOWN : {
+          break;
+        }
+
         case KeyEvent.KEYCODE_MEDIA_PLAY : {
           if (isPlayerReady() && !exoPlayer.getPlayWhenReady()) {
             exoPlayer.setPlayWhenReady(true);
