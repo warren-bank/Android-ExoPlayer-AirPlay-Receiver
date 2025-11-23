@@ -2,6 +2,10 @@
 <resources>
   <string name="app_name">ExoAirPlayer</string>
 
+  <!-- generic reusable phrases -->
+  <string name="show">show</string>
+  <string name="hide">hide</string>
+
   <!-- Toast messages -->
   <string name="toast_registration_started">Registering AirPlay service...</string>
   <string name="toast_registration_success">AirPlay registration success</string>
@@ -152,8 +156,8 @@
 
   <!-- Settings: KeyCode event notifications -->
   <string name="pref_enable_keycode_event_notifications_title">KeyCode event notifications</string>
-  <string name="pref_enable_keycode_event_notifications_summary_on">show</string>
-  <string name="pref_enable_keycode_event_notifications_summary_off">hide</string>
+  <string name="pref_enable_keycode_event_notifications_summary_on">@string/show</string>
+  <string name="pref_enable_keycode_event_notifications_summary_off">@string/hide</string>
 
   <!-- Settings: footer notation -->
   <string translatable="false" name="pref_footer_notation_title">-- * --</string>
