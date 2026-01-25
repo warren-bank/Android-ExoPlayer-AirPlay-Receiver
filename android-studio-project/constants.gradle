@@ -11,15 +11,15 @@ project.ext {
 
     targetSdkVersion   = 35 //29
     compileSdkVersion  = 35
-    buildToolsVersion  = '34.0.0'
+    buildToolsVersion  = '35.0.0'
 
     libVersionDdPlist        = '1.23'
     libVersionHttpCore       = '4.4.13'
     libVersionJmDNS          = '3.5.8'
-    libVersionAndroidxMedia3 = '1.9.0-alpha01'
+    libVersionAndroidxMedia3 = '1.9.0'
 
     // keep versions of AndroidX libraries in sync with those used by AndroidX Media3:
-    //   https://github.com/androidx/media/blob/1.9.0-alpha01/constants.gradle#L42
+    //   https://github.com/androidx/media/blob/1.9.0/constants.gradle#L42
 
     libVersionAndroidxAnnotation = '1.6.0'
     libVersionAndroidxAppCompat  = '1.6.1'

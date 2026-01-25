@@ -2,7 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.8.0/demos/main/src/main/java/androidx/media3/demo/main/DemoUtil.java
+ *   https://github.com/androidx/media/blob/1.9.0/demos/main/src/main/java/androidx/media3/demo/main/DemoUtil.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;

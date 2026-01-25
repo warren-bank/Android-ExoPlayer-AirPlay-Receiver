@@ -2,8 +2,8 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * references:
- *   https://github.com/androidx/media/blob/1.8.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/DefaultRenderersFactory.java
- *   https://github.com/androidx/media/blob/1.8.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/audio/DefaultAudioSink.java
+ *   https://github.com/androidx/media/blob/1.9.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/DefaultRenderersFactory.java
+ *   https://github.com/androidx/media/blob/1.9.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/audio/DefaultAudioSink.java
  */
 
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.ExoPlayerUtils;
@@ -28,7 +28,7 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
     super(context);
 
     setEnableAudioFloatOutput(false);
-    setEnableAudioTrackPlaybackParams(false);
+    setEnableAudioOutputPlaybackParameters(false);
     setEnableDecoderFallback(true);
     setExtensionRendererMode(/* int extensionRendererMode = */ ExoPlayerUtils.getExtensionRendererMode(preferExtensionRenderer));
 
@@ -51,14 +51,14 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
   }
 
   @Override
-  protected AudioSink buildAudioSink(Context context, boolean enableFloatOutput, boolean enableAudioTrackPlaybackParams) {
+  protected AudioSink buildAudioSink(Context context, boolean enableFloatOutput, boolean enableAudioOutputPlaybackParams) {
     DefaultAudioSink.Builder builder = useDefaultAudioCapabilities
       ? new DefaultAudioSink.Builder()
       : new DefaultAudioSink.Builder(context);
 
     return builder
       .setEnableFloatOutput(enableFloatOutput)
-      .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
+      .setEnableAudioOutputPlaybackParameters(enableAudioOutputPlaybackParams)
       .setAudioProcessorChain(audioProcessorChain)
       .build();
   }

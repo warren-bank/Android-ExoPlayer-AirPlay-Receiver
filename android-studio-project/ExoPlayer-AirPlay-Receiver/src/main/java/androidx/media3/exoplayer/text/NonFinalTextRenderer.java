@@ -2,7 +2,7 @@ package androidx.media3.exoplayer.text;
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.9.0-alpha01/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/text/TextRenderer.java
+ *   https://github.com/androidx/media/blob/1.9.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/text/TextRenderer.java
  */
 
 import static com.google.common.base.Preconditions.checkNotNull;
