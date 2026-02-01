@@ -55,6 +55,7 @@
   <string translatable="false" name="toast_variable_top_activity">{{top-activity}}</string>
 
   <!-- Preference keys -->
+  <string translatable="false" name="prefkey_mdsn_server_name">mdsn_server_name</string>
   <string translatable="false" name="prefkey_http_api_password">http_api_password</string>
   <string translatable="false" name="prefkey_default_user_agent">default_user_agent</string>
   <string translatable="false" name="prefkey_max_audio_volume_boost_db">max_audio_volume_boost_db</string>
@@ -75,6 +76,7 @@
   <string translatable="false" name="prefkey_serialized_keycode_map">serialized_keycode_map</string>
 
   <!-- Preference default values -->
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
   <string translatable="false" name="prefval_http_api_password"></string>
   <string translatable="false" name="prefval_default_user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</string>
   <string translatable="false" name="prefval_serialized_keycode_map"></string>
@@ -82,6 +84,10 @@
   <!-- Settings -->
   <string translatable="false" name="pref_settings_key">settings_key</string>
   <string name="pref_settings_title">ExoAirPlayer Settings</string>
+
+  <!-- Settings: Bonjour Service Name -->
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Service Name</string>
+  <string name="pref_mdsn_server_name_summary">the name advertised by mDNS..</string>
 
   <!-- Settings: HTTP API Password -->
   <string name="pref_http_api_password_title">HTTP API Password</string>

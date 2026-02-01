@@ -7,6 +7,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerNotifi
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread;
 import com.github.warren_bank.exoplayer_airplay_receiver.ui.VideoPlayerActivity;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ResourceUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.WakeLockMgr;
@@ -55,7 +56,7 @@ public class NetworkingService extends Service implements RequestListenerThread.
     playerManager             = PlayerManager.createPlayerManager(     /* context= */ NetworkingService.this);
     playerNotificationManager = new PlayerNotificationManagerContainer(/* context= */ NetworkingService.this, playerManager, /* pendingIntentActivityClass= */ VideoPlayerActivity.class);
     playbackInfoSource        = new MyPlaybackInfoSource(playerManager);
-    airplayName               = Build.MODEL + "@" + getString(R.string.app_name);
+    airplayName               = PreferencesMgr.get_mdsn_server_name();
     localAddress              = null;
     airPlayBonjour            = null;
 
