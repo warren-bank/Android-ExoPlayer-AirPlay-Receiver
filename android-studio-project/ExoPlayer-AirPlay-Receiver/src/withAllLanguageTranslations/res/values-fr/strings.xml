@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">Commencer\nTélécharger</string>
   <string name="toggle_download_button_stop">Arrêtez\nTélécharger</string>
   <string name="pref_settings_title">ExoAirPlayer Paramètres</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nom du service</string>
+  <string name="pref_mdsn_server_name_summary">le nom annoncé par mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API Mot de passe</string>
   <string name="pref_http_api_password_summary">secret partagé uniquement avec les clients autorisés..</string>
   <string name="pref_default_user_agent_title">Agent utilisateur</string>

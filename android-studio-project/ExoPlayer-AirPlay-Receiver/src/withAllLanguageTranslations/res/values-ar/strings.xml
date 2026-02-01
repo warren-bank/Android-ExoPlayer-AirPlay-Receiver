@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">ابدأ\nتنزيل</string>
   <string name="toggle_download_button_stop">توقف\nتنزيل</string>
   <string name="pref_settings_title">ExoAirPlayer الإعدادات</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour اسم الخدمة</string>
+  <string name="pref_mdsn_server_name_summary">الاسم المعلن عنه بواسطة mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API كلمة المرور</string>
   <string name="pref_http_api_password_summary">سر لا يُفصح عنه إلا للعملاء المصرح لهم..</string>
   <string name="pref_default_user_agent_title">وكيل المستخدم</string>

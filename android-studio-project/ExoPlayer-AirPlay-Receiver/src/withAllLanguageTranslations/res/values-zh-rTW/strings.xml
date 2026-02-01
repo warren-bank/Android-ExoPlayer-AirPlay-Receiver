@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">開始\n下載</string>
   <string name="toggle_download_button_stop">停止\n下載</string>
   <string name="pref_settings_title">ExoAirPlayer 設定</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour 服務名稱</string>
+  <string name="pref_mdsn_server_name_summary">由...所宣傳的名稱 mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API 密碼</string>
   <string name="pref_http_api_password_summary">僅與授權客戶共享的機密..</string>
   <string name="pref_default_user_agent_title">使用者代理程式</string>

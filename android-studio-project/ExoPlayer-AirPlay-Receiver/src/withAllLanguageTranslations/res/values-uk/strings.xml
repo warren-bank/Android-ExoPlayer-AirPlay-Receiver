@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">Початок\nЗавантажити</string>
   <string name="toggle_download_button_stop">Зупинитися\nЗавантажити</string>
   <string name="pref_settings_title">ExoAirPlayer Налаштування</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Назва послуги</string>
+  <string name="pref_mdsn_server_name_summary">назва, рекламована mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API Пароль</string>
   <string name="pref_http_api_password_summary">секрет, який розкривається тільки уповноваженим клієнтам..</string>
   <string name="pref_default_user_agent_title">Користувацький агент</string>

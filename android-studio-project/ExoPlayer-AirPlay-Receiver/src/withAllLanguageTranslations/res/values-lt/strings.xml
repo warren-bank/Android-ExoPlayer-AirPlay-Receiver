@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">Pradėti\nAtsisiųsti</string>
   <string name="toggle_download_button_stop">Sustabdyti\nAtsisiųsti</string>
   <string name="pref_settings_title">ExoAirPlayer Nustatymai</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Paslaugos pavadinimas</string>
+  <string name="pref_mdsn_server_name_summary">pavadinimas, kurį reklamuoja mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API Slaptažodis</string>
   <string name="pref_http_api_password_summary">paslaptis, kurią žino tik įgalioti klientai..</string>
   <string name="pref_default_user_agent_title">Vartotojo agentas</string>

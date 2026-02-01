@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">Mulai\nUnduh</string>
   <string name="toggle_download_button_stop">Berhenti\nUnduh</string>
   <string name="pref_settings_title">ExoAirPlayer Pengaturan</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nama Layanan</string>
+  <string name="pref_mdsn_server_name_summary">nama yang diiklankan oleh mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API Kata sandi</string>
   <string name="pref_http_api_password_summary">Rahasia yang hanya dibagikan kepada klien yang berwenang...</string>
   <string name="pref_default_user_agent_title">Agen Pengguna</string>

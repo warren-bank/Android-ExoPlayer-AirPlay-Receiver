@@ -21,6 +21,8 @@
   <string name="toggle_download_button_start">시작\n다운로드</string>
   <string name="toggle_download_button_stop">멈춰\n다운로드</string>
   <string name="pref_settings_title">ExoAirPlayer 설정</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour 서비스 이름</string>
+  <string name="pref_mdsn_server_name_summary">광고된 이름 mDNS..</string>
   <string name="pref_http_api_password_title">HTTP API 비밀번호</string>
   <string name="pref_http_api_password_summary">승인된 고객에게만 공유되는 비밀..</string>
   <string name="pref_default_user_agent_title">사용자 에이전트</string>
