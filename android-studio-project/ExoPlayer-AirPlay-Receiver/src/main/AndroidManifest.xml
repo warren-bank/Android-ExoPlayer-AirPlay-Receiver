@@ -9,6 +9,12 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- FOREGROUND_SERVICE_CONNECTED_DEVICE: required by Android >= 14 to start a FGS w/ foregroundServiceType="connectedDevice" -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <!-- FOREGROUND_SERVICE_DATA_SYNC: required by Android >= 14 to start a FGS w/ foregroundServiceType="dataSync" -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- FOREGROUND_SERVICE_MEDIA_PLAYBACK: required by Android >= 14 to start a FGS w/ foregroundServiceType="mediaPlayback" -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <!-- GET_TASKS: used to interpolate "{{top-activity}}" in "/show-toast" text, which is only supported by Android < 5.0 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -51,7 +57,7 @@
 
         <service
             android:name=".service.NetworkingService"
-            android:foregroundServiceType="dataSync|mediaPlayback"
+            android:foregroundServiceType="connectedDevice|mediaPlayback"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
