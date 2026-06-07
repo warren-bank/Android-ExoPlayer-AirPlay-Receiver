@@ -8,6 +8,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaSourceUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PreferencesMgr;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.SystemUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ToastUtils;
@@ -1847,7 +1848,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     try {
       for (MediaItem.SubtitleConfiguration subtitleConfiguration : video.getMediaItem().localConfiguration.subtitleConfigurations) {
-        dsFactory = ExternalStorageUtils.isFileUri(subtitleConfiguration.uri.toString())
+        String uri = subtitleConfiguration.uri.toString();
+        dsFactory = (ExternalStorageUtils.isFileUri(uri) || MediaTypeUtils.is_protocol_data(uri))
           ? defaultDataSourceFactory
           : httpDataSourceFactory;
 

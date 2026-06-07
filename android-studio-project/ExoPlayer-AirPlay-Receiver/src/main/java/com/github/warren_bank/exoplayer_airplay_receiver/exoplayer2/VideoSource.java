@@ -83,7 +83,7 @@ public final class VideoSource {
     // enforce that URLs are encoded and RFC 2396-compliant
     if (!TextUtils.isEmpty(uri))
       uri = UriUtils.encodeURI(uri);
-    if (!TextUtils.isEmpty(caption))
+    if (!TextUtils.isEmpty(caption) && !MediaTypeUtils.is_protocol_data(caption))
       caption = UriUtils.encodeURI(caption);
     if (!TextUtils.isEmpty(referer))
       referer = UriUtils.encodeURI(referer);

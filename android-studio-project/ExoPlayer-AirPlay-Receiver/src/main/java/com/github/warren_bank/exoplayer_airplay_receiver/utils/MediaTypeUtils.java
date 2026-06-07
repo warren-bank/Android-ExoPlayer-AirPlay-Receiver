@@ -32,6 +32,10 @@ public class MediaTypeUtils {
     return is_protocol(uri, new String[]{protocol});
   }
 
+  public static boolean is_protocol_data(String uri) {
+    return is_protocol(uri, "data");
+  }
+
   public static boolean is_protocol_rtmp(String uri) {
     return is_protocol(uri, "rtmp");
   }
@@ -67,11 +71,22 @@ public class MediaTypeUtils {
   }
 
   // ===================================
+  // base64 data: URI
+
+  private static Pattern base64_data_regex = Pattern.compile("^data:([^;]+)?;?(?:[^;]+;)*base64,[A-Za-z0-9\\-_\\+/]+#?(.+)?$");
+
+  public static String get_base64_data_mimeType(String uri) {
+    return get_fileExtension(uri, base64_data_regex, /* capture_group_index= */ 1);
+  }
+
+  public static String get_base64_data_fragment(String uri) {
+    return get_fileExtension(uri, base64_data_regex, /* capture_group_index= */ 2);
+  }
+
+  // ===================================
   // video
 
   private static Pattern video_regex = Pattern.compile("\\.(mp4|mp4v|m4v|f4v|mpeg|mpg[2]?|m1v|webm|og[gvm]|mkv|mov|flv|xvid|avi|mp4[23]|mjp[e]?g|mpv|ts[v]?|m2t[s]?|m4s|3gp[p]?|m3u8|mpd|ism(?:[vc]|/manifest)?)(?:[\\?#]|$)");
-
-
 
   public static String get_video_fileExtension(String uri) {
     return get_fileExtension(uri, video_regex);
@@ -250,14 +265,33 @@ public class MediaTypeUtils {
   private static Pattern caption_regex = Pattern.compile("(?:\\.([^\\./]+))?\\.(srt|ttml[12]?|dfxp|vtt|webvtt|ssa|ass)(?:[\\?#]|$)");
 
   public static String get_caption_label(String uri) {
+    if (is_protocol_data(uri)) {
+      String fragment = get_base64_data_fragment(uri);
+      return (fragment != null)
+        ? get_fileExtension(fragment, caption_regex, /* capture_group_index= */ 1)
+        : null;
+    }
+
     return get_fileExtension(uri, caption_regex, /* capture_group_index= */ 1);
   }
 
   public static String get_caption_fileExtension(String uri) {
+    if (is_protocol_data(uri)) {
+      String fragment = get_base64_data_fragment(uri);
+      return (fragment != null)
+        ? get_fileExtension(fragment, caption_regex, /* capture_group_index= */ 2)
+        : null;
+    }
+
     return get_fileExtension(uri, caption_regex, /* capture_group_index= */ 2);
   }
 
   public static boolean isCaptionFileUrl(String uri) {
+    if (is_protocol_data(uri)) {
+      String data_mimeType = get_caption_mimeType(uri);
+      return (data_mimeType != null);
+    }
+
     if (!is_protocol_supported(uri)) return false;
 
     String file_ext = get_caption_fileExtension(uri);
@@ -265,6 +299,20 @@ public class MediaTypeUtils {
   }
 
   public static String get_caption_mimeType(String uri) {
+    if (is_protocol_data(uri)) {
+      String data_mimeType = get_base64_data_mimeType(uri);
+
+      if (data_mimeType != null) {
+        switch (data_mimeType) {
+          case "application/x-subrip":
+          case "application/ttml+xml":
+          case "text/vtt":
+          case "text/x-ssa":
+            return data_mimeType;
+        }
+      }
+    }
+
     String file_ext = get_caption_fileExtension(uri);
     String mimeType = "";
 
