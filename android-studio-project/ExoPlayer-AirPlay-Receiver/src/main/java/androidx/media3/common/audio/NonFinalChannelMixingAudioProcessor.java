@@ -2,7 +2,7 @@ package androidx.media3.common.audio;
 
 /*
  * based on:
- *   https://github.com/androidx/media/blob/1.9.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingAudioProcessor.java
+ *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingAudioProcessor.java
  */
 
 import static com.google.common.base.Preconditions.checkNotNull;

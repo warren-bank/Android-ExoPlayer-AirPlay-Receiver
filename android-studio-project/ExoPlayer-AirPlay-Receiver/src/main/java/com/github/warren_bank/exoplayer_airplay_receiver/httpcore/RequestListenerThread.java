@@ -213,7 +213,6 @@ public class RequestListenerThread extends Thread {
     Log.d(tag, "exec shut down");
   }
 
-  @Override
   public void destroy() {
     try {
       Log.d(tag, "serverSocket destroy");
