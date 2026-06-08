@@ -73,7 +73,7 @@ public class MediaTypeUtils {
   // ===================================
   // base64 data: URI
 
-  private static Pattern base64_data_regex = Pattern.compile("^data:([^;]+)?;?(?:[^;]+;)*base64,[A-Za-z0-9\\-_\\+/]+#?(.+)?$");
+  private static Pattern base64_data_regex = Pattern.compile("^data:([^;]+)?;?(?:[^;]+;)*base64,[A-Za-z0-9\\-_\\+/]+=*#?(.+)?$");
 
   public static String get_base64_data_mimeType(String uri) {
     return get_fileExtension(uri, base64_data_regex, /* capture_group_index= */ 1);
