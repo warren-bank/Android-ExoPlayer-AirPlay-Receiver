@@ -2,8 +2,6 @@ package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
 import android.net.Uri;
 
-import java.net.URI;
-
 public class UriUtils {
 
   /* =============================================
@@ -110,14 +108,21 @@ public class UriUtils {
     }
   }
 
-  public static URI parseURI(String strUri) {
+  public static String normalizePath(String pathSegment) {
+    pathSegment = Uri.decode(pathSegment);
+    pathSegment = Uri.encode(pathSegment, "/" + PATH_CHARS);
+
+    return pathSegment;
+  }
+
+  public static String resolve(String baseUri, String pathSegment) {
     try {
-      strUri = UriUtils.encodeURI(strUri);
+      Uri uri = Uri.withAppendedPath(
+        Uri.parse(baseUri),
+        UriUtils.normalizePath(pathSegment)
+      );
 
-      if (strUri == null)
-        throw new Exception("uri is empty");
-
-      return new URI(strUri);
+      return uri.toString();
     }
     catch(Exception e) {
       return null;

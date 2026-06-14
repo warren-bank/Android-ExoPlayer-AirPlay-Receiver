@@ -3,7 +3,6 @@ package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extra
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.HtmlUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -22,13 +21,13 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
   private HashMap<String, String[]> url_chunks;
 
   @Override
-  protected void preParse(URL context) {
+  protected void preParse(String strUrl) {
     hash_keys  = new ArrayList<String>();
     url_chunks = new HashMap<String, String[]>();
   }
 
   @Override
-  protected void postParse(URL context, ArrayList<String> matches) {
+  protected void postParse(String strUrl, ArrayList<String> matches) {
     String hash_key;
     String[] val;
     String href;
@@ -39,7 +38,7 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
       val      = url_chunks.get(hash_key);
       href     = val[0] + val[1];
       href     = HtmlUtils.unescapeHtml3(href);
-      uri      = resolveM3uPlaylistItem(context, href, false);
+      uri      = resolveM3uPlaylistItem(strUrl, href, false);
 
       if (uri != null)
         matches.add(uri);
@@ -58,7 +57,7 @@ public class HttpHtmlPlaylistExtractor extends HttpBasePlaylistExtractor {
       : false;
   }
 
-  protected void parseLine(String line, URL context, ArrayList<String> matches) {
+  protected void parseLine(String line, String strUrl, ArrayList<String> matches) {
     Matcher matcher = HttpHtmlPlaylistExtractor.linkhref_regex.matcher(line);
     String m1, m2, lm1, lm2, lo2;
     int po, pm;

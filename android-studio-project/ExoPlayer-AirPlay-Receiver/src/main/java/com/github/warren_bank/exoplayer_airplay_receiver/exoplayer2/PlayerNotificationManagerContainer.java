@@ -115,7 +115,7 @@ public class PlayerNotificationManagerContainer {
     if (sample == null) return null;
 
     try {
-      // "sample.uri" is always encoded; no need to re-encode with: "UriUtils.parseURI(sample.uri)"
+      // encoding of "sample.uri" has been normalized by: "UriUtils.encodeURI(strUri)"
       URI uri = new URI(sample.uri);
       return uri;
     }

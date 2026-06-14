@@ -20,7 +20,7 @@ public class StringUtils {
   public static String getValue(String textBlock, String prefix, String suffix) {
     String value = "";
 
-    if ((prefix == null) || prefix.isEmpty())
+    if (TextUtils.isEmpty(prefix))
       return value;
 
     int indexStart, indexEnd;
@@ -30,7 +30,7 @@ public class StringUtils {
       return value;
     indexStart += prefix.length();
 
-    indexEnd = ((suffix == null) || suffix.isEmpty())
+    indexEnd = TextUtils.isEmpty(suffix)
       ? -1
       : textBlock.indexOf(suffix, indexStart);
 
@@ -320,7 +320,7 @@ public class StringUtils {
   }
 
   public static List<String> convertStringToList(String text, String delimiter_token) {
-    if (TextUtils.isEmpty(text)) return Collections.emptyList();
+    if (StringUtils.isEmpty(text)) return Collections.emptyList();
 
     if (delimiter_token == null)
       delimiter_token = Pattern.quote(Constant.Delimiter.DEFAULT);

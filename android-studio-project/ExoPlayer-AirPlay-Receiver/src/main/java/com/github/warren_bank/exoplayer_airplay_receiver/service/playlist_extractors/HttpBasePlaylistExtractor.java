@@ -1,6 +1,8 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.service.playlist_extractors;
 
-import com.github.warren_bank.exoplayer_airplay_receiver.utils.UrlUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.UriUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,34 +20,22 @@ public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
 
   protected abstract boolean isParserForUrl(String strUrl);
 
-  protected abstract void parseLine(String line, URL context, ArrayList<String> matches);
+  protected abstract void parseLine(String line, String strUrl, ArrayList<String> matches);
 
-  protected void preParse(URL context) {}
+  protected void preParse(String strUrl) {}
 
-  protected void postParse(URL context, ArrayList<String> matches) {}
+  protected void postParse(String strUrl, ArrayList<String> matches) {}
 
-  protected String resolveM3uPlaylistItem(URL context, String relative, boolean resolveAbsolutePathToFileUri) {
-    String uri = null;
-
-    String baseContext  = (context == null) ? null : context.toString();
-    String baseRelative = UrlUtils.decodeURL(relative);
-
-    if (!resolveAbsolutePathToFileUri && (context != null) && (baseRelative != null) && !baseRelative.isEmpty() && (baseRelative.charAt(0) == '/')) {
-      baseContext = null;
-      try {
-        baseRelative = (new URL(context, baseRelative)).toString();
-      }
-      catch(Exception e) {
-        baseRelative = null;
-      }
+  protected String resolveM3uPlaylistItem(String baseUri, String pathSegment, boolean resolveAbsolutePathToFileUri) {
+    if (!resolveAbsolutePathToFileUri && !StringUtils.isEmpty(baseUri) && !StringUtils.isEmpty(pathSegment) && (pathSegment.charAt(0) == '/')) {
+      pathSegment = UriUtils.resolve(baseUri, pathSegment);
+      baseUri = null;
+    }
+    else if (!MediaTypeUtils.is_protocol_supported(pathSegment)) {
+      pathSegment = UriUtils.normalizePath(pathSegment);
     }
 
-    uri = resolveM3uPlaylistItem(baseContext, baseRelative);
-
-    if (uri != null)
-      uri = UrlUtils.encodeURL(uri);
-
-    return uri;
+    return resolveM3uPlaylistItem(baseUri, pathSegment);
   }
 
   public ArrayList<String> expandPlaylist(String strUrl) {
@@ -58,7 +48,7 @@ public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
   public ArrayList<String> expandPlaylist(String strUrl, String charsetName) {
     Charset cs = null;
 
-    if ((charsetName == null) || charsetName.isEmpty()) {
+    if (StringUtils.isEmpty(charsetName)) {
       cs = Charset.defaultCharset(); // UTF-8
     }
     else {
@@ -87,23 +77,19 @@ public abstract class HttpBasePlaylistExtractor extends BasePlaylistExtractor {
       URL url;
       String line;
 
-      // ascii encoded
       url = new URL(strUrl);
 
       // read all the text returned by the server
       in = new BufferedReader(new InputStreamReader(url.openStream(), cs));
 
-      // remove ascii encoding
-      url = new URL(UrlUtils.decodeURL(strUrl));
-
-      preParse(url);
+      preParse(strUrl);
       while ((line = in.readLine()) != null) {
         line = normalizeLine(line);
         if (line == null) continue;
 
-        parseLine(line, url, matches);
+        parseLine(line, strUrl, matches);
       }
-      postParse(url, matches);
+      postParse(strUrl, matches);
     }
     catch (Exception e) {
     }
