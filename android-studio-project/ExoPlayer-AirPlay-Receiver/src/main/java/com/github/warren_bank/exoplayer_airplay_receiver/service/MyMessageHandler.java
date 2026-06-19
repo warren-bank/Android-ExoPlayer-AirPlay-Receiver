@@ -335,6 +335,14 @@ final class MyMessageHandler extends Handler {
 
       case Constant.Msg.Msg_Text_Load : {
         String textUrl = (String) msg.obj;
+
+        Message newMsg = Message.obtain();
+        newMsg.what = msg.what;
+        newMsg.obj  = textUrl;
+
+        if (requiresExternalStoragePermission(service, newMsg, null, textUrl))
+          return;
+
         playerManager.loadCaptions(textUrl);
         break;
       }
