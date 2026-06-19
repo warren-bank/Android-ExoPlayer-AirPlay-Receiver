@@ -1,8 +1,8 @@
 project.ext {
     applicationId      = 'com.github.warren_bank.exoplayer_airplay_receiver'
 
-    releaseVersionCode = Integer.parseInt("003140323", 10)  //Integer.MAX_VALUE == 2147483647
-    releaseVersion     = '003.14.03-23API'
+    releaseVersionCode = Integer.parseInt("003140423", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersion     = '003.14.04-23API'
     javaVersion        = JavaVersion.VERSION_17             //https://docs.gradle.org/8.9/javadoc/org/gradle/api/JavaVersion.html
     minSdkVersion      = 23
 
