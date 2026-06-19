@@ -348,6 +348,13 @@ public class NetworkingService extends Service implements RequestListenerThread.
 
           handler.handleMessage(msg);
         }
+        else if (intent.hasExtra(Constant.CaptionURL)) {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Text_Load;
+          msg.obj  = intent.getStringExtra(Constant.CaptionURL);
+
+          handler.handleMessage(msg);
+        }
         break;
       }
       case Intent.ACTION_MEDIA_BUTTON : {

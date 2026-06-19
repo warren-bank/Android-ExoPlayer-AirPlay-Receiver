@@ -4,6 +4,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.MainApp;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.service.NetworkingService;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.NetworkUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.RuntimePermissionUtils;
 
@@ -130,7 +131,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
               case "application/octet-stream" :
               case "resource/folder" :
               case "vnd.android.document/directory" : {
-                data = filterDirectory(data);
+                data = processDataUri(newIntent, data);
 
                 if (data == null) {
                   // fallback
@@ -138,7 +139,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
                   if ((dirPath != null) && ExternalStorageUtils.isFileUri(dirPath)) {
                     dirPath = ExternalStorageUtils.normalizeFileUri(dirPath);
                     data = Uri.parse(dirPath);
-                    data = filterDirectory(data);
+                    data = processDataUri(newIntent, data);
 
                     if (data != null) {
                       // prevent propogation of extra to new Intent
@@ -154,7 +155,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
         }
         case Intent.ACTION_SEND : {
           data = (Uri) oldIntent.getParcelableExtra(Intent.EXTRA_STREAM);
-          data = filterDirectory(data);
+          data = processDataUri(newIntent, data);
           break;
         }
       }
@@ -168,6 +169,25 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
       newIntent.replaceExtras(oldIntent);
       newIntent.putExtra(Constant.PlayURL, data.toString());
     }
+  }
+
+  private Uri processDataUri(Intent newIntent, Uri data) {
+    if (data == null) return null;
+
+    if (isCaptionFile(data)) {
+      newIntent.setAction(NetworkingService.ACTION_PLAY);
+      newIntent.putExtra(Constant.CaptionURL, data.toString());
+      return null;
+    }
+
+    return filterDirectory(data);
+  }
+
+  private boolean isCaptionFile(Uri data) {
+    if (data == null) return false;
+
+    String uri = data.toString();
+    return MediaTypeUtils.isCaptionFileUrl(uri);
   }
 
   private Uri filterDirectory(Uri data) {
