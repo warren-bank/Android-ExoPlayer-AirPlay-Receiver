@@ -27,8 +27,9 @@ import android.widget.ImageButton;
 public class VideoActivity extends AppCompatActivity implements PlayerView.ControllerVisibilityListener, View.OnClickListener {
   public static boolean isVisible = false;
 
+  protected PlayerView  playerView;
+
   private PlayerManager playerManager;
-  private PlayerView    playerView;
   private Button        selectTracksButton;
   private Button        selectTextOffsetButton;
   private Button        toggleDownloadButton;

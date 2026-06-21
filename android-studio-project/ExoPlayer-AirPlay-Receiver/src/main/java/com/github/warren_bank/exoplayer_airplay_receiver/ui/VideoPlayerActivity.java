@@ -5,15 +5,18 @@ import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoActivity;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.PipUtils;
 
+import androidx.annotation.RequiresApi;
+import androidx.media3.ui.PlayerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.RequiresApi;
+import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-public class VideoPlayerActivity extends VideoActivity {
+public class VideoPlayerActivity extends VideoActivity implements PlayerView.FullscreenButtonClickListener {
   public static boolean isPipMode = false;
 
   private boolean enterPipMode;
@@ -30,6 +33,9 @@ public class VideoPlayerActivity extends VideoActivity {
     MainApp.registerHandler(VideoPlayerActivity.class.getName(), handler);
 
     processIntent(getIntent());
+
+    if (PipUtils.supportsPictureInPictureMode(this))
+      playerView.setFullscreenButtonClickListener(this);
   }
 
   @Override
@@ -69,13 +75,17 @@ public class VideoPlayerActivity extends VideoActivity {
   }
 
   private void updatePictureInPictureMode(Intent intent) {
+    if (PipUtils.supportsPictureInPictureMode(this))
+      playerView.setFullscreenButtonState(!enterPipMode);
+
     if (!isPipMode && enterPipMode) {
+      onVisibilityChanged(View.GONE);
       enterPipMode = false;
-      PipUtils.enterPictureInPictureMode(VideoPlayerActivity.this);
+      PipUtils.enterPictureInPictureMode(this);
     }
     else if (isPipMode && !enterPipMode && (intent != null)) {
       isPipMode = false;
-      PipUtils.exitPictureInPictureMode(VideoPlayerActivity.this, intent);
+      PipUtils.exitPictureInPictureMode(this, intent);
     }
   }
 
@@ -106,5 +116,25 @@ public class VideoPlayerActivity extends VideoActivity {
       }
 
     }
+  }
+
+  // Event handler interfaces.
+
+  // PlayerView.FullscreenButtonClickListener
+  @Override
+  public void onFullscreenButtonClick(boolean isFullscreen) {
+    if (!isFullscreen) {
+      enterPipMode = true;
+      updatePictureInPictureMode(null);
+    }
+  }
+
+  // PlayerView.ControllerVisibilityListener
+  @Override
+  public void onVisibilityChanged(int visibility) {
+    if (isPipMode)
+      visibility = View.GONE;
+
+    super.onVisibilityChanged(visibility);
   }
 }
