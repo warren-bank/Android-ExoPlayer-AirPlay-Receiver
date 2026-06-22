@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 
 import java.lang.ref.WeakReference;
@@ -75,17 +76,31 @@ public class VideoPlayerActivity extends VideoActivity implements PlayerView.Ful
   }
 
   private void updatePictureInPictureMode(Intent intent) {
-    if (PipUtils.supportsPictureInPictureMode(this))
-      playerView.setFullscreenButtonState(!enterPipMode);
+    if (!PipUtils.supportsPictureInPictureMode(this)) return;
+
+    playerView.setFullscreenButtonState(!enterPipMode);
 
     if (!isPipMode && enterPipMode) {
       onVisibilityChanged(View.GONE);
+      isPipMode = true; // redundant to avoid race condition: will also be set by onPictureInPictureModeChanged(), but should be set early for onVisibilityChanged() to prevent FOUC
       enterPipMode = false;
       PipUtils.enterPictureInPictureMode(this);
     }
     else if (isPipMode && !enterPipMode && (intent != null)) {
       isPipMode = false;
       PipUtils.exitPictureInPictureMode(this, intent);
+    }
+  }
+
+  private void togglePictureInPictureMode() {
+    if (enterPipMode) return;
+
+    if (!isPipMode) {
+      enterPipMode = true;
+      updatePictureInPictureMode(null);
+    }
+    else {
+      updatePictureInPictureMode(getIntent());
     }
   }
 
@@ -116,6 +131,27 @@ public class VideoPlayerActivity extends VideoActivity implements PlayerView.Ful
       }
 
     }
+  }
+
+  // Activity input.
+
+  @Override
+  public boolean dispatchKeyEvent(KeyEvent event) {
+    boolean isHandled = super.dispatchKeyEvent(event);
+
+    if (!isHandled && (event.getRepeatCount() == 0) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
+      // apply custom handler(s)
+      switch(event.getKeyCode()) {
+
+        case KeyEvent.KEYCODE_WINDOW : {
+          togglePictureInPictureMode();
+          isHandled = true;
+          break;
+        }
+      }
+    }
+
+    return isHandled;
   }
 
   // Event handler interfaces.
