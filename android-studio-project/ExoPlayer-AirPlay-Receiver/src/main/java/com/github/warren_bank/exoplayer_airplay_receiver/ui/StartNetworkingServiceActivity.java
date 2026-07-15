@@ -124,6 +124,8 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
           data = oldIntent.getData();
           type = oldIntent.getType();
 
+          data = filterCaptionFile(newIntent, data);
+
           if (type != null) {
             type = type.toLowerCase();
 
@@ -172,6 +174,13 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   }
 
   private Uri processDataUri(Intent newIntent, Uri data) {
+    data = filterCaptionFile(newIntent, data);
+    data = filterDirectory(data);
+
+    return data;
+  }
+
+  private Uri filterCaptionFile(Intent newIntent, Uri data) {
     if (data == null) return null;
 
     if (isCaptionFile(data)) {
@@ -180,7 +189,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
       return null;
     }
 
-    return filterDirectory(data);
+    return data;
   }
 
   private boolean isCaptionFile(Uri data) {
@@ -191,14 +200,13 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
   }
 
   private Uri filterDirectory(Uri data) {
+    if (data == null) return null;
+
     Uri filtered = data;
     String scheme, path, uri;
     File file;
 
     try {
-      if (data == null)
-        throw new Exception();
-
       scheme = data.getScheme();
       if (scheme == null)
         throw new Exception();

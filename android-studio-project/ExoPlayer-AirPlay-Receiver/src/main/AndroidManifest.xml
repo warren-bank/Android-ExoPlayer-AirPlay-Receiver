@@ -159,6 +159,13 @@
                 <data android:mimeType="application/x-ogg"/>
                 <data android:mimeType="application/x-rtmp"/>
                 <data android:mimeType="application/x-rtsp"/>
+
+                <!-- captions -->
+
+                <data android:mimeType="application/ttml+xml"/>
+                <data android:mimeType="application/x-subrip"/>
+                <data android:mimeType="text/vtt"/>
+                <data android:mimeType="text/x-ssa"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -272,6 +279,28 @@
                 <data android:pathPattern=".*\\.OGG"/>
                 <data android:pathPattern=".*\\.TSA"/>
                 <data android:pathPattern=".*\\.WAV"/>
+
+                <!-- captions -->
+
+                <data android:pathPattern=".*\\.ass"/>
+                <data android:pathPattern=".*\\.dfxp"/>
+                <data android:pathPattern=".*\\.srt"/>
+                <data android:pathPattern=".*\\.ssa"/>
+                <data android:pathPattern=".*\\.ttml"/>
+                <data android:pathPattern=".*\\.ttml1"/>
+                <data android:pathPattern=".*\\.ttml2"/>
+                <data android:pathPattern=".*\\.vtt"/>
+                <data android:pathPattern=".*\\.webvtt"/>
+
+                <data android:pathPattern=".*\\.ASS"/>
+                <data android:pathPattern=".*\\.DFXP"/>
+                <data android:pathPattern=".*\\.SRT"/>
+                <data android:pathPattern=".*\\.SSA"/>
+                <data android:pathPattern=".*\\.TTML"/>
+                <data android:pathPattern=".*\\.TTML1"/>
+                <data android:pathPattern=".*\\.TTML2"/>
+                <data android:pathPattern=".*\\.VTT"/>
+                <data android:pathPattern=".*\\.WEBVTT"/>
 
                 <!-- M3U playlist (HTTP, File) -->
 
