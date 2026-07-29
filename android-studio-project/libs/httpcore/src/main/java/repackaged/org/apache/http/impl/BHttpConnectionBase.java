@@ -1,0 +1,401 @@
+/*
+ * ====================================================================
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the Apache Software Foundation.  For more
+ * information on the Apache Software Foundation, please see
+ * <http://www.apache.org/>.
+ *
+ */
+
+package repackaged.org.apache.http.impl;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.util.concurrent.atomic.AtomicReference;
+
+import repackaged.org.apache.http.ConnectionClosedException;
+import repackaged.org.apache.http.Header;
+import repackaged.org.apache.http.HttpConnectionMetrics;
+import repackaged.org.apache.http.HttpEntity;
+import repackaged.org.apache.http.HttpException;
+import repackaged.org.apache.http.HttpInetConnection;
+import repackaged.org.apache.http.HttpMessage;
+import repackaged.org.apache.http.config.MessageConstraints;
+import repackaged.org.apache.http.entity.BasicHttpEntity;
+import repackaged.org.apache.http.entity.ContentLengthStrategy;
+import repackaged.org.apache.http.impl.entity.LaxContentLengthStrategy;
+import repackaged.org.apache.http.impl.entity.StrictContentLengthStrategy;
+import repackaged.org.apache.http.impl.io.ChunkedInputStream;
+import repackaged.org.apache.http.impl.io.ChunkedOutputStream;
+import repackaged.org.apache.http.impl.io.ContentLengthInputStream;
+import repackaged.org.apache.http.impl.io.ContentLengthOutputStream;
+import repackaged.org.apache.http.impl.io.EmptyInputStream;
+import repackaged.org.apache.http.impl.io.HttpTransportMetricsImpl;
+import repackaged.org.apache.http.impl.io.IdentityInputStream;
+import repackaged.org.apache.http.impl.io.IdentityOutputStream;
+import repackaged.org.apache.http.impl.io.SessionInputBufferImpl;
+import repackaged.org.apache.http.impl.io.SessionOutputBufferImpl;
+import repackaged.org.apache.http.io.SessionInputBuffer;
+import repackaged.org.apache.http.io.SessionOutputBuffer;
+import repackaged.org.apache.http.protocol.HTTP;
+import repackaged.org.apache.http.util.Args;
+import repackaged.org.apache.http.util.NetUtils;
+
+/**
+ * This class serves as a base for all {@link repackaged.org.apache.http.HttpConnection} implementations
+ * and provides functionality common to both client and server HTTP connections.
+ *
+ * @since 4.0
+ */
+public class BHttpConnectionBase implements HttpInetConnection {
+
+    private final SessionInputBufferImpl inBuffer;
+    private final SessionOutputBufferImpl outbuffer;
+    private final MessageConstraints messageConstraints;
+    private final HttpConnectionMetricsImpl connMetrics;
+    private final ContentLengthStrategy incomingContentStrategy;
+    private final ContentLengthStrategy outgoingContentStrategy;
+    private final AtomicReference<Socket> socketHolder;
+
+    /**
+     * Creates new instance of BHttpConnectionBase.
+     *
+     * @param bufferSize buffer size. Must be a positive number.
+     * @param fragmentSizeHint fragment size hint.
+     * @param charDecoder decoder to be used for decoding HTTP protocol elements.
+     *   If {@code null} simple type cast will be used for byte to char conversion.
+     * @param charEncoder encoder to be used for encoding HTTP protocol elements.
+     *   If {@code null} simple type cast will be used for char to byte conversion.
+     * @param messageConstraints Message constraints. If {@code null}
+     *   {@link MessageConstraints#DEFAULT} will be used.
+     * @param incomingContentStrategy incoming content length strategy. If {@code null}
+     *   {@link LaxContentLengthStrategy#INSTANCE} will be used.
+     * @param outgoingContentStrategy outgoing content length strategy. If {@code null}
+     *   {@link StrictContentLengthStrategy#INSTANCE} will be used.
+     */
+    protected BHttpConnectionBase(
+            final int bufferSize,
+            final int fragmentSizeHint,
+            final CharsetDecoder charDecoder,
+            final CharsetEncoder charEncoder,
+            final MessageConstraints messageConstraints,
+            final ContentLengthStrategy incomingContentStrategy,
+            final ContentLengthStrategy outgoingContentStrategy) {
+        super();
+        Args.positive(bufferSize, "Buffer size");
+        final HttpTransportMetricsImpl inTransportMetrics = new HttpTransportMetricsImpl();
+        final HttpTransportMetricsImpl outTransportMetrics = new HttpTransportMetricsImpl();
+        this.inBuffer = new SessionInputBufferImpl(inTransportMetrics, bufferSize, -1,
+                messageConstraints != null ? messageConstraints : MessageConstraints.DEFAULT, charDecoder);
+        this.outbuffer = new SessionOutputBufferImpl(outTransportMetrics, bufferSize, fragmentSizeHint,
+                charEncoder);
+        this.messageConstraints = messageConstraints;
+        this.connMetrics = new HttpConnectionMetricsImpl(inTransportMetrics, outTransportMetrics);
+        this.incomingContentStrategy = incomingContentStrategy != null ? incomingContentStrategy :
+            LaxContentLengthStrategy.INSTANCE;
+        this.outgoingContentStrategy = outgoingContentStrategy != null ? outgoingContentStrategy :
+            StrictContentLengthStrategy.INSTANCE;
+        this.socketHolder = new AtomicReference<Socket>();
+    }
+
+    protected void ensureOpen() throws IOException {
+        final Socket socket = this.socketHolder.get();
+        if (socket == null) {
+            throw new ConnectionClosedException();
+        }
+        if (!this.inBuffer.isBound()) {
+            this.inBuffer.bind(getSocketInputStream(socket));
+        }
+        if (!this.outbuffer.isBound()) {
+            this.outbuffer.bind(getSocketOutputStream(socket));
+        }
+    }
+
+    protected InputStream getSocketInputStream(final Socket socket) throws IOException {
+        return socket.getInputStream();
+    }
+
+    protected OutputStream getSocketOutputStream(final Socket socket) throws IOException {
+        return socket.getOutputStream();
+    }
+
+    /**
+     * Binds this connection to the given {@link Socket}. This socket will be
+     * used by the connection to send and receive data.
+     * <p>
+     * After this method's execution the connection status will be reported
+     * as open and the {@link #isOpen()} will return {@code true}.
+     *
+     * @param socket the socket.
+     * @throws IOException in case of an I/O error.
+     */
+    protected void bind(final Socket socket) throws IOException {
+        Args.notNull(socket, "Socket");
+        this.socketHolder.set(socket);
+        this.inBuffer.bind(null);
+        this.outbuffer.bind(null);
+    }
+
+    protected SessionInputBuffer getSessionInputBuffer() {
+        return this.inBuffer;
+    }
+
+    protected SessionOutputBuffer getSessionOutputBuffer() {
+        return this.outbuffer;
+    }
+
+    protected void doFlush() throws IOException {
+        this.outbuffer.flush();
+    }
+
+    @Override
+    public boolean isOpen() {
+        return this.socketHolder.get() != null;
+    }
+
+    protected Socket getSocket() {
+        return this.socketHolder.get();
+    }
+
+    protected OutputStream createOutputStream(
+            final long len,
+            final SessionOutputBuffer outbuffer) {
+        if (len == ContentLengthStrategy.CHUNKED) {
+            return new ChunkedOutputStream(2048, outbuffer);
+        } else if (len == ContentLengthStrategy.IDENTITY) {
+            return new IdentityOutputStream(outbuffer);
+        } else {
+            return new ContentLengthOutputStream(outbuffer, len);
+        }
+    }
+
+    protected OutputStream prepareOutput(final HttpMessage message) throws HttpException {
+        final long len = this.outgoingContentStrategy.determineLength(message);
+        return createOutputStream(len, this.outbuffer);
+    }
+
+    protected InputStream createInputStream(
+            final long len,
+            final SessionInputBuffer inBuffer) {
+        if (len == ContentLengthStrategy.CHUNKED) {
+            return new ChunkedInputStream(inBuffer, this.messageConstraints);
+        } else if (len == ContentLengthStrategy.IDENTITY) {
+            return new IdentityInputStream(inBuffer);
+        } else if (len == 0L) {
+            return EmptyInputStream.INSTANCE;
+        } else {
+            return new ContentLengthInputStream(inBuffer, len);
+        }
+    }
+
+    protected HttpEntity prepareInput(final HttpMessage message) throws HttpException {
+        final BasicHttpEntity entity = new BasicHttpEntity();
+
+        final long len = this.incomingContentStrategy.determineLength(message);
+        final InputStream inStream = createInputStream(len, this.inBuffer);
+        if (len == ContentLengthStrategy.CHUNKED) {
+            entity.setChunked(true);
+            entity.setContentLength(-1);
+            entity.setContent(inStream);
+        } else if (len == ContentLengthStrategy.IDENTITY) {
+            entity.setChunked(false);
+            entity.setContentLength(-1);
+            entity.setContent(inStream);
+        } else {
+            entity.setChunked(false);
+            entity.setContentLength(len);
+            entity.setContent(inStream);
+        }
+
+        final Header contentTypeHeader = message.getFirstHeader(HTTP.CONTENT_TYPE);
+        if (contentTypeHeader != null) {
+            entity.setContentType(contentTypeHeader);
+        }
+        final Header contentEncodingHeader = message.getFirstHeader(HTTP.CONTENT_ENCODING);
+        if (contentEncodingHeader != null) {
+            entity.setContentEncoding(contentEncodingHeader);
+        }
+        return entity;
+    }
+
+    @Override
+    public InetAddress getLocalAddress() {
+        final Socket socket = this.socketHolder.get();
+        return socket != null ? socket.getLocalAddress() : null;
+    }
+
+    @Override
+    public int getLocalPort() {
+        final Socket socket = this.socketHolder.get();
+        return socket != null ? socket.getLocalPort() : -1;
+    }
+
+    @Override
+    public InetAddress getRemoteAddress() {
+        final Socket socket = this.socketHolder.get();
+        return socket != null ? socket.getInetAddress() : null;
+    }
+
+    @Override
+    public int getRemotePort() {
+        final Socket socket = this.socketHolder.get();
+        return socket != null ? socket.getPort() : -1;
+    }
+
+    @Override
+    public void setSocketTimeout(final int timeout) {
+        final Socket socket = this.socketHolder.get();
+        if (socket != null) {
+            try {
+                socket.setSoTimeout(timeout);
+            } catch (final SocketException ignore) {
+                // It is not quite clear from the Sun's documentation if there are any
+                // other legitimate cases for a socket exception to be thrown when setting
+                // SO_TIMEOUT besides the socket being already closed
+            }
+        }
+    }
+
+    @Override
+    public int getSocketTimeout() {
+        final Socket socket = this.socketHolder.get();
+        if (socket != null) {
+            try {
+                return socket.getSoTimeout();
+            } catch (final SocketException ignore) {
+                return -1;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public void shutdown() throws IOException {
+        final Socket socket = this.socketHolder.getAndSet(null);
+        if (socket != null) {
+            // force abortive close (RST)
+            try {
+                socket.setSoLinger(true, 0);
+            } catch (final IOException ex) {
+            } finally {
+                socket.close();
+            }
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        final Socket socket = this.socketHolder.getAndSet(null);
+        if (socket != null) {
+            try {
+                this.inBuffer.clear();
+                this.outbuffer.flush();
+                try {
+                    try {
+                        socket.shutdownOutput();
+                    } catch (final IOException ignore) {
+                    }
+                    try {
+                        socket.shutdownInput();
+                    } catch (final IOException ignore) {
+                    }
+                } catch (final UnsupportedOperationException ignore) {
+                    // if one isn't supported, the other one isn't either
+                }
+            } finally {
+                socket.close();
+            }
+        }
+    }
+
+    private int fillInputBuffer(final int timeout) throws IOException {
+        final Socket socket = this.socketHolder.get();
+        final int oldtimeout = socket.getSoTimeout();
+        try {
+            socket.setSoTimeout(timeout);
+            return this.inBuffer.fillBuffer();
+        } finally {
+            socket.setSoTimeout(oldtimeout);
+        }
+    }
+
+    protected boolean awaitInput(final int timeout) throws IOException {
+        if (this.inBuffer.hasBufferedData()) {
+            return true;
+        }
+        fillInputBuffer(timeout);
+        return this.inBuffer.hasBufferedData();
+    }
+
+    @Override
+    public boolean isStale() {
+        if (!isOpen()) {
+            return true;
+        }
+        try {
+            final int bytesRead = fillInputBuffer(1);
+            return bytesRead < 0;
+        } catch (final SocketTimeoutException ex) {
+            return false;
+        } catch (final IOException ex) {
+            return true;
+        }
+    }
+
+    protected void incrementRequestCount() {
+        this.connMetrics.incrementRequestCount();
+    }
+
+    protected void incrementResponseCount() {
+        this.connMetrics.incrementResponseCount();
+    }
+
+    @Override
+    public HttpConnectionMetrics getMetrics() {
+        return this.connMetrics;
+    }
+
+    @Override
+    public String toString() {
+        final Socket socket = this.socketHolder.get();
+        if (socket != null) {
+            final StringBuilder buffer = new StringBuilder();
+            final SocketAddress remoteAddress = socket.getRemoteSocketAddress();
+            final SocketAddress localAddress = socket.getLocalSocketAddress();
+            if (remoteAddress != null && localAddress != null) {
+                NetUtils.formatAddress(buffer, localAddress);
+                buffer.append("<->");
+                NetUtils.formatAddress(buffer, remoteAddress);
+            }
+            return buffer.toString();
+        }
+        return "[Not bound]";
+    }
+
+}

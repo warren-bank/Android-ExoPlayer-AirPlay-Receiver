@@ -19,7 +19,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.mpc_api.WMComm
 import com.github.warren_bank.exoplayer_airplay_receiver.httpcore.RequestListenerThread.PlaybackInfoSource;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
-import org.apache.http.HttpStatus;
+import repackaged.org.apache.http.HttpStatus;
 
 import android.os.Message;
 import android.text.TextUtils;

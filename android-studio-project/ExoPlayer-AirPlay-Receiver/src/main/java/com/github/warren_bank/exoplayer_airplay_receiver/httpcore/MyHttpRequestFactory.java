@@ -1,11 +1,11 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.MethodNotSupportedException;
-import org.apache.http.RequestLine;
-import org.apache.http.impl.DefaultHttpRequestFactory;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
-import org.apache.http.message.BasicHttpRequest;
+import repackaged.org.apache.http.HttpRequest;
+import repackaged.org.apache.http.MethodNotSupportedException;
+import repackaged.org.apache.http.RequestLine;
+import repackaged.org.apache.http.impl.DefaultHttpRequestFactory;
+import repackaged.org.apache.http.message.BasicHttpEntityEnclosingRequest;
+import repackaged.org.apache.http.message.BasicHttpRequest;
 
 import android.util.Log;
 

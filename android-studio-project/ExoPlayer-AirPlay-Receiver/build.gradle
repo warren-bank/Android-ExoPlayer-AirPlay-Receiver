@@ -91,6 +91,8 @@ android {
 }
 
 dependencies {
+    implementation project(':repackaged-httpcore')
+
     compileOnly         'androidx.annotation:annotation:'                   + project.ext.libVersionAndroidxAnnotation          // ( 27 KB) https://mvnrepository.com/artifact/androidx.annotation/annotation
     annotationProcessor 'androidx.annotation:annotation:'                   + project.ext.libVersionAndroidxAnnotation
 
@@ -115,7 +117,6 @@ dependencies {
     implementation      'androidx.media3:media3-ui:'                        + project.ext.libVersionAndroidxMedia3              // (422 KB) https://mvnrepository.com/artifact/androidx.media3/media3-ui?repo=google
 
     implementation      'com.googlecode.plist:dd-plist:'                    + project.ext.libVersionDdPlist                     // ( 74 KB) https://mvnrepository.com/artifact/com.googlecode.plist/dd-plist
-    implementation      'org.apache.httpcomponents:httpcore:'               + project.ext.libVersionHttpCore                    // (320 KB) https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
     implementation      'org.jmdns:jmdns:'                                  + project.ext.libVersionJmDNS                       // (209 KB) https://mvnrepository.com/artifact/org.jmdns/jmdns
 
     withDecoderExtensionsImplementation fileTree(dir: "libs/decoder_extensions", include: ["extension-*.aar"])

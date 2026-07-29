@@ -1,0 +1,19 @@
+apply from: '../../constants.gradle'
+apply plugin: 'com.android.library'
+
+android {
+  namespace "repackaged.org.apache.http"
+
+  compileSdkVersion project.ext.compileSdkVersion
+  buildToolsVersion project.ext.buildToolsVersion
+
+  compileOptions {
+    sourceCompatibility project.ext.javaVersion
+    targetCompatibility project.ext.javaVersion
+  }
+
+  defaultConfig {
+    minSdkVersion    project.ext.minSdkVersion
+    targetSdkVersion project.ext.targetSdkVersion
+  }
+}

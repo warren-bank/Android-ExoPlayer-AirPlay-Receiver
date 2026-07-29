@@ -1,11 +1,11 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
-import org.apache.http.HttpRequestFactory;
-import org.apache.http.impl.DefaultHttpServerConnection;
-import org.apache.http.impl.io.HttpRequestParser;
-import org.apache.http.io.HttpMessageParser;
-import org.apache.http.io.SessionInputBuffer;
-import org.apache.http.params.HttpParams;
+import repackaged.org.apache.http.HttpRequestFactory;
+import repackaged.org.apache.http.impl.DefaultHttpServerConnection;
+import repackaged.org.apache.http.impl.io.HttpRequestParser;
+import repackaged.org.apache.http.io.HttpMessageParser;
+import repackaged.org.apache.http.io.SessionInputBuffer;
+import repackaged.org.apache.http.params.HttpParams;
 
 import android.util.Log;
 

@@ -1,1 +1,4 @@
 include ':ExoPlayer-AirPlay-Receiver'
+
+include ':repackaged-httpcore'
+project(':repackaged-httpcore').projectDir = new File(rootDir, 'libs/httpcore')

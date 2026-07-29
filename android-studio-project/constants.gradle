@@ -14,7 +14,6 @@ project.ext {
     buildToolsVersion  = '36.1.0'
 
     libVersionDdPlist        = '1.23'
-    libVersionHttpCore       = '4.4.13'
     libVersionJmDNS          = '3.5.8'
     libVersionAndroidxMedia3 = '1.10.1'
 

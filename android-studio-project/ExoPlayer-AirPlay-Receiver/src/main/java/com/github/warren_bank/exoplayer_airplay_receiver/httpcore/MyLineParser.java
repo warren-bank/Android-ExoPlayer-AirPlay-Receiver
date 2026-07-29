@@ -1,11 +1,11 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.httpcore;
 
-import org.apache.http.ParseException;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.RequestLine;
-import org.apache.http.message.BasicLineParser;
-import org.apache.http.message.ParserCursor;
-import org.apache.http.util.CharArrayBuffer;
+import repackaged.org.apache.http.ParseException;
+import repackaged.org.apache.http.ProtocolVersion;
+import repackaged.org.apache.http.RequestLine;
+import repackaged.org.apache.http.message.BasicLineParser;
+import repackaged.org.apache.http.message.ParserCursor;
+import repackaged.org.apache.http.util.CharArrayBuffer;
 
 import android.util.Log;
 

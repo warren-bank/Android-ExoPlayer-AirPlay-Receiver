@@ -1,0 +1,43 @@
+--------------------------------------------------------------------------------
+
+Google historically bundled a modified, frozen version of HttpClient/HttpCore into the Android SDK, creating massive classpath conflicts.
+
+releases <= 003.14.06-23API included the dependency:
+  implementation 'org.apache.httpcomponents:httpcore:' + project.ext.libVersionHttpCore
+
+* release builds avoided duplicate class conflict because its dependencies are obfuscated.
+
+* debug builds would crash with a fatal exception when an HTTP request is received:
+    java.lang.IncompatibleClassChangeError: Class 'org.apache.http.message.BufferedHeader' does not implement interface 'org.apache.http.NameValuePair'
+
+--------------------------------------------------------------------------------
+
+releases > 003.14.06-23API repackage the httpcore dependency
+
+from:
+  implementation 'org.apache.httpcomponents:httpcore:4.4.13'
+package namespace:
+  org.apache.http.*
+
+to:
+  ./
+package namespace:
+  repackaged.org.apache.http.*
+
+* release builds are unchanged.
+
+* debug builds function properly.
+
+--------------------------------------------------------------------------------
+
+https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore/4.4.13
+https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.4.13/
+https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13-sources.jar
+
+--------------------------------------------------------------------------------
+
+search:  org.apache.http
+replace: repackaged.org.apache.http
+
+--------------------------------------------------------------------------------
