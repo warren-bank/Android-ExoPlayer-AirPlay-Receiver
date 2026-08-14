@@ -53,11 +53,18 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.activity_video);
 
+    // =========================================================================
+    // https://github.com/androidx/media/blob/1.11.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerView.java
+    // https://github.com/androidx/media/blob/1.11.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerControlView.java#L530-L537
+    // =========================================================================
+
     playerView = (PlayerView) findViewById(R.id.player_view);
     playerView.setControllerVisibilityListener(this);
     playerView.setKeepContentOnPlayerReset(false);
     playerView.setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER);
     playerView.setRepeatToggleModes(RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE | RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE | RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL);
+    playerView.setShowShuffleButton(true);
+    playerView.setShowSubtitleButton(true);
     playerView.requestFocus();
 
     selectTracksButton = (Button) findViewById(R.id.select_tracks_button);

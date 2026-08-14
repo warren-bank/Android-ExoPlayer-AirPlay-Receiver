@@ -218,6 +218,8 @@ window.onload  = () => {
   const $mute_off                     = document.querySelector('button#mute_off')
   const $captions_on                  = document.querySelector('button#captions_on')
   const $captions_off                 = document.querySelector('button#captions_off')
+  const $shuffle_on                   = document.querySelector('button#shuffle_on')
+  const $shuffle_off                  = document.querySelector('button#shuffle_off')
   const $previous                     = document.querySelector('button#previous')
   const $next                         = document.querySelector('button#next')
   const $stop                         = document.querySelector('button#stop')
@@ -1079,6 +1081,20 @@ window.onload  = () => {
     event.stopPropagation()
 
     send_message('/show-captions?toggle=0', null)
+  }
+
+  $shuffle_on.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/shuffle?toggle=1', null)
+  }
+
+  $shuffle_off.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    send_message('/shuffle?toggle=0', null)
   }
 
   $previous.onclick = (event) => {
@@ -2240,6 +2256,14 @@ window.onload  = () => {
             </td>
             <td class="oneline fullwidth">
               <button id="captions_off">CC Off</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline fullwidth">
+              <button id="shuffle_on">Shuffle On</button>
+            </td>
+            <td class="oneline fullwidth">
+              <button id="shuffle_off">Shuffle Off</button>
             </td>
           </tr>
           <tr>

@@ -484,6 +484,17 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_Shuffle : {
+        if (msg.obj == null) {
+          playerManager.AirPlay_toggle_shuffle();
+        }
+        else {
+          boolean shuffle = (boolean) msg.obj;
+          playerManager.AirPlay_shuffle(shuffle);
+        }
+        break;
+      }
+
       // =======================================================================
       // Runtime Permissions:
       // =======================================================================

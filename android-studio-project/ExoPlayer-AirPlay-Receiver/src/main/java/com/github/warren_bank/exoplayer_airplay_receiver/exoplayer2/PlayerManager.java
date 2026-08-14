@@ -36,6 +36,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.MergingMediaSource;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.source.ShuffleOrder.DefaultShuffleOrder;
 import androidx.media3.exoplayer.source.SingleSampleMediaSource;
 import androidx.media3.exoplayer.dash.DashMediaSource;
 import androidx.media3.exoplayer.hls.HlsMediaSource;
@@ -69,6 +70,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /** Manages ExoPlayer and an internal media queue */
 public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPreferenceChangeListener {
@@ -598,7 +600,9 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       Runnable runCompletionAction = new Runnable() {
         @Override
         public void run() {
-          selectQueueItem(0);
+          selectQueueItem(
+            getStartIndex()
+          );
         }
       };
 
@@ -613,6 +617,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
         Arrays.asList(mediaSources)
       );
     }
+
+    reshuffle();
   }
 
   /**
@@ -718,6 +724,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     concatenatingMediaSource.removeMediaSource(itemIndex);
     mediaQueue.remove(itemIndex);
+    reshuffle();
     if ((itemIndex == currentItemIndex) && (itemIndex == mediaQueue.size())) {
       maybeSetCurrentItemAndNotify(C.INDEX_UNSET);
     } else if (itemIndex < currentItemIndex) {
@@ -1184,6 +1191,27 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     resizeMode = (resizeMode + 1) % 5;
 
     playerView.setResizeMode(resizeMode);
+  }
+
+  /**
+   * Enable/disable randomized playback ordering of queue.
+   *
+   * @param showCaptions
+   */
+  public void AirPlay_shuffle(boolean shuffle) {
+    if (exoPlayer == null) return;
+
+    if (exoPlayer.getShuffleModeEnabled() != shuffle) {
+      exoPlayer.setShuffleModeEnabled(shuffle);
+
+      if (shuffle) reshuffle();
+    }
+  }
+
+  public void AirPlay_toggle_shuffle() {
+    if (exoPlayer == null) return;
+
+    AirPlay_shuffle(!exoPlayer.getShuffleModeEnabled());
   }
 
   /**
@@ -1685,6 +1713,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     int last = concatenatingMediaSource.getSize() - count;
     if (last > 0)
       concatenatingMediaSource.removeMediaSourceRange(0, last);
+
+    reshuffle();
   }
 
   private void updateCurrentItemIndex() {
@@ -1894,6 +1924,52 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     VideoSource sample      = VideoSource.createVideoSource();
     MediaSource mediaSource = buildRawVideoMediaSource(rawResourceId);
     addItem(sample, mediaSource, remove_previous_items);
+  }
+
+  private void reshuffle() {
+    if (concatenatingMediaSource == null) return;
+
+    // =========================================================================
+    // https://github.com/androidx/media/blob/1.11.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerControlView.java#L773-L776
+    // https://github.com/androidx/media/blob/1.11.0/libraries/ui/src/main/java/androidx/media3/ui/PlayerControlView.java#L2110-L2113
+    // =========================================================================
+    // notes:
+    //   * clicking shuffleButton calls exoPlayer.setShuffleModeEnabled()
+    //   * there is no clean way to add a listener to know when this UI is enabling the feature
+    //   * for this reason, do not skip updating the shuffle order when the feature is disabled..
+    //     - it's a little less efficient, but ensures the ordering is prepared ahead of time
+    // =========================================================================
+    // if ((exoPlayer == null) || !exoPlayer.getShuffleModeEnabled()) return;
+
+    int count = getMediaQueueSize();
+    int[] shuffledIndices = new int[count];
+
+    // Initialize the indices
+    for (int i=0; i < count; i++) shuffledIndices[i] = i;
+
+    // Shuffle the indices
+    Random rng = new Random(System.currentTimeMillis());
+    for (int i = count - 1; i > 0; i--) {
+      int j = rng.nextInt(i + 1);
+      int tmp = shuffledIndices[i];
+
+      shuffledIndices[i] = shuffledIndices[j];
+      shuffledIndices[j] = tmp;
+    }
+
+    // =========================================================================
+    // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/ConcatenatingMediaSource.java#L438
+    // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/ShuffleOrder.java#L35
+    // =========================================================================
+
+    concatenatingMediaSource.setShuffleOrder(new DefaultShuffleOrder(shuffledIndices, /* randomSeed= */ rng.nextLong()));
+  }
+
+  private int getStartIndex() {
+    if ((exoPlayer == null) || !exoPlayer.getShuffleModeEnabled()) return 0;
+
+    Random rng = new Random(System.currentTimeMillis());
+    return rng.nextInt(getMediaQueueSize() + 1);
   }
 
 }

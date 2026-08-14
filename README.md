@@ -393,6 +393,21 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/resize-mode?value=fit"
   ```
+* toggle the 'on/off' state of whether to shuffle the order of queue:
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/shuffle"
+  ```
+* set the state of whether to shuffle the order of queue to 'on':
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/shuffle?toggle=1"
+  ```
+* set the state of whether to shuffle the order of queue to 'off':
+  ```bash
+    curl --silent -X GET \
+      "http://${airplay_ip}/shuffle?toggle=0"
+  ```
 * play audio .flac file (set 'Referer' request header, seek to 50%):
   ```bash
     # note: position < 1 is a percent of the total track length

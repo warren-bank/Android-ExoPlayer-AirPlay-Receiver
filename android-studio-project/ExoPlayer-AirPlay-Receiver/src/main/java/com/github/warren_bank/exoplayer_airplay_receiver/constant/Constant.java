@@ -194,21 +194,22 @@ public class Constant {
         public static final int Msg_Text_Add_Filters            = 21;
         public static final int Msg_Repeat_Mode                 = 22;
         public static final int Msg_Resize_Mode                 = 23;
+        public static final int Msg_Shuffle                     = 24;
 
-        public static final int Msg_Show_Toast                  = 24;
-        public static final int Msg_Show_Settings               = 25;
-        public static final int Msg_Show_Player                 = 26;
-        public static final int Msg_Hide_Player                 = 27;
-        public static final int Msg_Start_Activity              = 28;
-        public static final int Msg_Video_Share                 = 29;
-        public static final int Msg_Preferences_Edit            = 30;
-        public static final int Msg_KeyCode_Map_Set             = 31;
-        public static final int Msg_Delete_Cache                = 32;
-        public static final int Msg_Exit_Service                = 33;
+        public static final int Msg_Show_Toast                  = 25;
+        public static final int Msg_Show_Settings               = 26;
+        public static final int Msg_Show_Player                 = 27;
+        public static final int Msg_Hide_Player                 = 28;
+        public static final int Msg_Start_Activity              = 29;
+        public static final int Msg_Video_Share                 = 30;
+        public static final int Msg_Preferences_Edit            = 31;
+        public static final int Msg_KeyCode_Map_Set             = 32;
+        public static final int Msg_Delete_Cache                = 33;
+        public static final int Msg_Exit_Service                = 34;
 
         public interface Msg_Runtime_Permissions {
-            public static final int Request_EXTERNAL_STORAGE    = 34;
-            public static final int Granted                     = 35;
+            public static final int Request_EXTERNAL_STORAGE    = 35;
+            public static final int Granted                     = 36;
         }
     }
 
@@ -241,6 +242,7 @@ public class Constant {
         public static final String TXT_ADD_FILTERS              = "/add-captions-filters";
         public static final String REPEAT_MODE                  = "/repeat-mode";
         public static final String RESIZE_MODE                  = "/resize-mode";
+        public static final String SHUFFLE                      = "/shuffle";
 
         public static final String TOAST_SHOW                   = "/show-toast";
         public static final String SETTINGS_SHOW                = "/show-settings";

@@ -1153,6 +1153,30 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (target.startsWith(Constant.Target.SHUFFLE)) { //toggle shuffle queue on/off
+        String value = StringUtils.getQueryStringValue(target, "?toggle=");
+        try {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Shuffle;
+
+          if (TextUtils.isEmpty(value)) {
+            Log.d(tag, "airplay shuffle = toggle current state");
+            msg.obj = null;
+          }
+          else {
+            int toggleValue = Integer.parseInt(value, 10);
+            Log.d(tag, "airplay shuffle = " + toggleValue);
+            msg.obj = (toggleValue != 0); //boolean whether to "shuffle"
+          }
+
+          MainApp.broadcastMessage(msg);
+        }
+        catch (NumberFormatException e) {
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+          return;
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (
         (entityContent != null) &&
         target.equals(Constant.Target.TOAST_SHOW)
