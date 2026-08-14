@@ -859,7 +859,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
 
     // Update playback speed.
     // Must be higher than 0.
-    //   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/Player.java#L2871
+    //   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/Player.java#L2890
 
     if (Float.compare(speed, 0.0f) > 0)
       exoPlayer.setPlaybackSpeed(speed);
@@ -1488,7 +1488,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/Player.java#L828-L1261
+  // https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/Player.java#L847-L1280
   // ===========================================================================
   // Player.Listener implementation.
   // ===========================================================================
@@ -1654,9 +1654,9 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   // Internal methods.
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayer.java#L1299-L1303
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L638
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L584
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayer.java#L1339-L1343
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L642
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/ExoPlayerImpl.java#L588
   // ===========================================================================
 
   private void init() {

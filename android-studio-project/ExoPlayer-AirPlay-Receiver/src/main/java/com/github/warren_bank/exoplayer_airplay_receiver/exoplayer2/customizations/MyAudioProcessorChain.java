@@ -2,8 +2,8 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
 
 /*
  * references:
- *   https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/audio/DefaultAudioSink.java#L175-L223
- *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/audio/BaseAudioProcessor.java#L62
+ *   https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/audio/DefaultAudioSink.java#L177-L225
+ *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/BaseAudioProcessor.java#L62
  */
 
 import androidx.media3.common.audio.AudioProcessor;
@@ -48,10 +48,10 @@ public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
 
   /*
    * references:
-   *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L99
-   *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L236
-   *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L262
-   *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L297
+   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L99
+   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L236
+   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L262
+   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L297
    */
 
   public static class DownmixBaseAudioProcessor extends NonFinalChannelMixingAudioProcessor {

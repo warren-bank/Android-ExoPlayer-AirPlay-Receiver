@@ -15,14 +15,14 @@ project.ext {
 
     libVersionDdPlist        = '1.23'
     libVersionJmDNS          = '3.5.8'
-    libVersionAndroidxMedia3 = '1.10.1'
+    libVersionAndroidxMedia3 = '1.11.0'
 
     // keep versions of AndroidX libraries in sync with those used by AndroidX Media3:
-    //   https://github.com/androidx/media/blob/1.10.1/constants.gradle#L42
+    //   https://github.com/androidx/media/blob/1.11.0/gradle/libs.versions.toml#L21
 
     libVersionAndroidxAnnotation = '1.6.0'
     libVersionAndroidxAppCompat  = '1.6.1'
-    libVersionAndroidxCore       = '1.8.0'
+    libVersionAndroidxCore       = '1.9.0'
     libVersionAndroidxMedia      = '1.7.0'
     libVersionAndroidxMaterial   = '1.8.0'
 }

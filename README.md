@@ -1073,7 +1073,7 @@ note: not case sensitive, unless `SHIFT` is explicitly specified.
     * includes AndroidX Media3 [1.5.0](https://github.com/androidx/media/blob/1.5.0/constants.gradle#L17)
 * [v3.14.6](https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/releases/tag/v3.14.6)
   - is the most recent release that supports API 23 (Android 6.0, Marshmallow)
-    * includes AndroidX Media3 [1.10.1](https://github.com/androidx/media/blob/1.10.1/constants.gradle#L17)
+    * includes AndroidX Media3 [1.11.0](https://github.com/androidx/media/blob/1.11.0/gradle/libs.versions.toml#L7)
 
 - - - -
 

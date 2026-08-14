@@ -39,10 +39,10 @@ public class MyLoadErrorHandlingPolicy extends DefaultLoadErrorHandlingPolicy {
   }
 
   // ===========================================================================
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/upstream/DefaultLoadErrorHandlingPolicy.java#L119
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/upstream/LoadErrorHandlingPolicy.java#L76
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/LoadEventInfo.java
-  // https://github.com/androidx/media/blob/1.10.1/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/MediaLoadData.java
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/upstream/DefaultLoadErrorHandlingPolicy.java#L128
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/upstream/LoadErrorHandlingPolicy.java#L76
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/LoadEventInfo.java
+  // https://github.com/androidx/media/blob/1.11.0/libraries/exoplayer/src/main/java/androidx/media3/exoplayer/source/MediaLoadData.java
   // ===========================================================================
 
   @Override

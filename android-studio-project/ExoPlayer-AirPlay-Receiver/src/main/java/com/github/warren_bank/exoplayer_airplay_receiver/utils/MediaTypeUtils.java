@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 
 /*
  * reference:
- *   https://github.com/androidx/media/blob/1.10.1/libraries/common/src/main/java/androidx/media3/common/MimeTypes.java
+ *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/MimeTypes.java
  */
 
 public class MediaTypeUtils {
