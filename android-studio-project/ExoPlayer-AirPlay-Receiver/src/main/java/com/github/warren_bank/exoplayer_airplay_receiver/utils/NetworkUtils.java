@@ -78,6 +78,8 @@ public class NetworkUtils {
       //Obtain the network interface object (that is, the network card), and get the mac address. The mac address exists in a byte array.
       mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
 
+      //API returns null on Android 11+
+      //  https://developer.android.com/training/articles/user-data-ids#mac-11-plus
       if ((mac == null) || (mac.length < 6))
         throw new Exception("");
     }

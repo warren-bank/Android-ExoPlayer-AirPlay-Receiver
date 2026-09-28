@@ -1,15 +1,12 @@
 project.ext {
     applicationId      = 'com.github.warren_bank.exoplayer_airplay_receiver'
 
-    releaseVersionCode = Integer.parseInt("003140823", 10)  //Integer.MAX_VALUE == 2147483647
-    releaseVersion     = '003.14.08-23API'
+    releaseVersionCode = Integer.parseInt("003140923", 10)  //Integer.MAX_VALUE == 2147483647
+    releaseVersion     = '003.14.09-23API'
     javaVersion        = JavaVersion.VERSION_17             //https://docs.gradle.org/8.9/javadoc/org/gradle/api/JavaVersion.html
     minSdkVersion      = 23
 
-    // [Android 11+] if (targetSdkVersion >= 30), error: NetworkUtils.getMACAddress()
-    //   see: https://developer.android.com/training/articles/user-data-ids#mac-11-plus
-
-    targetSdkVersion   = 36 //29
+    targetSdkVersion   = 36
     compileSdkVersion  = 36
     buildToolsVersion  = '36.1.0'
 
