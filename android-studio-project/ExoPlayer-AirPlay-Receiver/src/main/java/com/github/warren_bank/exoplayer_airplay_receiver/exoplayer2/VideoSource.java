@@ -141,6 +141,19 @@ public final class VideoSource {
     this.drm_license_server = drm_license_server;
     this.drmHeadersMap      = drmHeadersMap;
 
+    if (ExternalStorageUtils.isFileUri(uri)) {
+      try {
+        // media is a file in external storage.
+        // search within same directory as media file for external captions in a supported format.
+        // file naming convention: "${video_filename}.*.${supported_caption_extension}"
+
+        this.captions.addAll(
+          ExternalStorageUtils.findMatchingSubtitles(uri)
+        );
+      }
+      catch(Exception ignore) {}
+    }
+
     loadCaptions(caption);
   }
 
@@ -239,55 +252,36 @@ public final class VideoSource {
   // static helper
 
   private static void setSubtitleConfigurations(MediaItem.Builder builder, VideoSource sample) {
-    ArrayList<String> uriCaptions = new ArrayList<String>();
+    if ((builder == null) || (sample == null) || sample.captions.isEmpty()) return;
+
     ArrayList<MediaItem.SubtitleConfiguration> subtitleConfigurations = new ArrayList<MediaItem.SubtitleConfiguration>();
     Uri uri;
     String mimeType;
     String label;
     MediaItem.SubtitleConfiguration.Builder scb;
 
-    try {
-      uriCaptions.addAll(sample.captions);
-    }
-    catch(Exception ignore) {}
+    for (String caption : sample.captions) {
+      uri      = Uri.parse(caption);
+      mimeType = MediaTypeUtils.get_caption_mimeType(caption);
+      label    = MediaTypeUtils.get_caption_label(caption);
 
-    if (uriCaptions.isEmpty() && ExternalStorageUtils.isFileUri(sample.uri)) {
-      try {
-        // loading media from external storage without any captions file explicitly specified.
-        // search within same directory as media file for external captions in a supported format.
-        // file naming convention: "${video_filename}.*.${supported_caption_extension}"
+      if (!TextUtils.isEmpty(mimeType)) {
+        scb = new MediaItem.SubtitleConfiguration.Builder(uri);
 
-        uriCaptions.addAll(
-          ExternalStorageUtils.findMatchingSubtitles(sample.uri)
-        );
-      }
-      catch(Exception ignore) {}
-    }
+        scb
+          .setMimeType(mimeType)
+          .setRoleFlags(C.ROLE_FLAG_SUBTITLE)
+          .setSelectionFlags(C.SELECTION_FLAG_DEFAULT);
 
-    if (!uriCaptions.isEmpty()) {
-      for (String caption : uriCaptions) {
-        uri      = Uri.parse(caption);
-        mimeType = MediaTypeUtils.get_caption_mimeType(caption);
-        label    = MediaTypeUtils.get_caption_label(caption);
-
-        if (!TextUtils.isEmpty(mimeType)) {
-          scb = new MediaItem.SubtitleConfiguration.Builder(uri);
-
+        if (!TextUtils.isEmpty(label)) {
           scb
-            .setMimeType(mimeType)
-            .setRoleFlags(C.ROLE_FLAG_SUBTITLE)
-            .setSelectionFlags(C.SELECTION_FLAG_DEFAULT);
-
-          if (!TextUtils.isEmpty(label)) {
-            scb
-              .setLanguage(label)
-              .setLabel(label);
-          }
-
-          subtitleConfigurations.add(
-            scb.build()
-          );
+            .setLanguage(label)
+            .setLabel(label);
         }
+
+        subtitleConfigurations.add(
+          scb.build()
+        );
       }
     }
 
