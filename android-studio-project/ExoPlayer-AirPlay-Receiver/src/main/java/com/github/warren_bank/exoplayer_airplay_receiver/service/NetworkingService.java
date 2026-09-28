@@ -325,14 +325,14 @@ public class NetworkingService extends Service implements RequestListenerThread.
         if (intent.hasExtra(Constant.PlayURL)) {
 
           HashMap<String, String> dataMap = new HashMap<String, String>();
-          dataMap.put(Constant.PlayURL,    intent.getStringExtra(Constant.PlayURL)    );
-          dataMap.put(Constant.CaptionURL, intent.getStringExtra(Constant.CaptionURL) );
-          dataMap.put(Constant.RefererURL, intent.getStringExtra(Constant.RefererURL) );
-          dataMap.put(Constant.UseCache,   intent.getStringExtra(Constant.UseCache)   );
-          dataMap.put(Constant.Start_Pos,  intent.getStringExtra(Constant.Start_Pos)  );
-          dataMap.put(Constant.Stop_Pos,   intent.getStringExtra(Constant.Stop_Pos)   );
-          dataMap.put(Constant.DRM_Scheme, intent.getStringExtra(Constant.DRM_Scheme) );
-          dataMap.put(Constant.DRM_URL,    intent.getStringExtra(Constant.DRM_URL)    );
+          dataMap.put(Constant.PlayURL,    serializeURLsArrayExtra(intent, Constant.PlayURL)    );
+          dataMap.put(Constant.CaptionURL, serializeURLsArrayExtra(intent, Constant.CaptionURL) );
+          dataMap.put(Constant.RefererURL, intent.getStringExtra(Constant.RefererURL)           );
+          dataMap.put(Constant.UseCache,   intent.getStringExtra(Constant.UseCache)             );
+          dataMap.put(Constant.Start_Pos,  intent.getStringExtra(Constant.Start_Pos)            );
+          dataMap.put(Constant.Stop_Pos,   intent.getStringExtra(Constant.Stop_Pos)             );
+          dataMap.put(Constant.DRM_Scheme, intent.getStringExtra(Constant.DRM_Scheme)           );
+          dataMap.put(Constant.DRM_URL,    intent.getStringExtra(Constant.DRM_URL)              );
 
           HashMap<String, String> reqHeadersMap = StringUtils.parseDuplicateKeyValues((String[]) getStringArrayExtra(intent, Constant.ReqHeader),  /* normalize_lowercase_keys= */ true);
           HashMap<String, String> drmHeadersMap = StringUtils.parseDuplicateKeyValues((String[]) getStringArrayExtra(intent, Constant.DRM_Header), /* normalize_lowercase_keys= */ true);
@@ -351,7 +351,7 @@ public class NetworkingService extends Service implements RequestListenerThread.
         else if (intent.hasExtra(Constant.CaptionURL)) {
           Message msg = Message.obtain();
           msg.what = Constant.Msg.Msg_Text_Load;
-          msg.obj  = intent.getStringExtra(Constant.CaptionURL);
+          msg.obj  = serializeURLsArrayExtra(intent, Constant.CaptionURL);
 
           handler.handleMessage(msg);
         }
@@ -423,6 +423,12 @@ public class NetworkingService extends Service implements RequestListenerThread.
     }
 
     return extra;
+  }
+
+  private String serializeURLsArrayExtra(Intent intent, String key) {
+    String[] strArray = getStringArrayExtra(intent, key);
+
+    return StringUtils.serializeURLs(strArray);
   }
 
   // -------------------------------------------------------------------------

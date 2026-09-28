@@ -2,6 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.MediaTypeUtils;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 import com.github.warren_bank.exoplayer_airplay_receiver.utils.UriUtils;
 
 import androidx.media3.common.C;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ListIterator;
 
 public final class VideoSource {
 
@@ -20,7 +22,7 @@ public final class VideoSource {
 
   public final String uri;
   public final String uri_mimeType;
-  public       String caption;
+  public       ArrayList<String> captions;
   public final String referer;
   public final HashMap<String, String> reqHeadersMap;
   public       boolean useCache;
@@ -83,8 +85,6 @@ public final class VideoSource {
     // enforce that URLs are encoded and RFC 2396-compliant
     if (!TextUtils.isEmpty(uri))
       uri = UriUtils.encodeURI(uri);
-    if (!TextUtils.isEmpty(caption) && !MediaTypeUtils.is_protocol_data(caption))
-      caption = UriUtils.encodeURI(caption);
     if (!TextUtils.isEmpty(referer))
       referer = UriUtils.encodeURI(referer);
 
@@ -131,7 +131,7 @@ public final class VideoSource {
 
     this.uri                = uri;
     this.uri_mimeType       = uri_mimeType;
-    this.caption            = caption;
+    this.captions           = new ArrayList<String>();
     this.referer            = referer;
     this.reqHeadersMap      = reqHeadersMap;
     this.useCache           = useCache;
@@ -140,6 +140,8 @@ public final class VideoSource {
     this.drm_scheme         = drm_scheme;
     this.drm_license_server = drm_license_server;
     this.drmHeadersMap      = drmHeadersMap;
+
+    loadCaptions(caption);
   }
 
   // Public methods.
@@ -149,8 +151,32 @@ public final class VideoSource {
     return uri;
   }
 
-  public void updateCaption(String caption) {
-    this.caption = caption;
+  public boolean loadCaptions(String text) {
+    boolean didLoad = false;
+    if (TextUtils.isEmpty(text)) return didLoad;
+
+    ArrayList<String> urls = StringUtils.deserializeURLs(text);
+    ListIterator<String> it = urls.listIterator(urls.size());
+    String caption;
+
+    // iterate in reverse order
+    while (it.hasPrevious()) {
+      caption = it.previous();
+      if (TextUtils.isEmpty(caption)) continue;
+
+      // enforce that URLs are encoded and RFC 2396-compliant
+      if (!MediaTypeUtils.is_protocol_data(caption))
+        caption = UriUtils.encodeURI(caption);
+
+      // prevent duplicate values
+      if (this.captions.contains(caption)) continue;
+
+      // prepend new value
+      this.captions.add(0, caption);
+      didLoad = true;
+    }
+
+    return didLoad;
   }
 
   public void updateUseCache(boolean useCache) {
@@ -213,26 +239,32 @@ public final class VideoSource {
   // static helper
 
   private static void setSubtitleConfigurations(MediaItem.Builder builder, VideoSource sample) {
+    ArrayList<String> uriCaptions = new ArrayList<String>();
     ArrayList<MediaItem.SubtitleConfiguration> subtitleConfigurations = new ArrayList<MediaItem.SubtitleConfiguration>();
-    ArrayList<String> uriCaptions = null;
     Uri uri;
     String mimeType;
     String label;
     MediaItem.SubtitleConfiguration.Builder scb;
 
-    if (!TextUtils.isEmpty(sample.caption)) {
-      uriCaptions = new ArrayList<String>(1);
-      uriCaptions.add(sample.caption);
+    try {
+      uriCaptions.addAll(sample.captions);
     }
-    else if (ExternalStorageUtils.isFileUri(sample.uri)) {
-      // loading media from external storage without any captions file explicitly specified.
-      // search within same directory as media file for external captions in a supported format.
-      // file naming convention: "${video_filename}.*.${supported_caption_extension}"
+    catch(Exception ignore) {}
 
-      uriCaptions = ExternalStorageUtils.findMatchingSubtitles(sample.uri);
+    if (uriCaptions.isEmpty() && ExternalStorageUtils.isFileUri(sample.uri)) {
+      try {
+        // loading media from external storage without any captions file explicitly specified.
+        // search within same directory as media file for external captions in a supported format.
+        // file naming convention: "${video_filename}.*.${supported_caption_extension}"
+
+        uriCaptions.addAll(
+          ExternalStorageUtils.findMatchingSubtitles(sample.uri)
+        );
+      }
+      catch(Exception ignore) {}
     }
 
-    if ((uriCaptions != null) && !uriCaptions.isEmpty()) {
+    if (!uriCaptions.isEmpty()) {
       for (String caption : uriCaptions) {
         uri      = Uri.parse(caption);
         mimeType = MediaTypeUtils.get_caption_mimeType(caption);

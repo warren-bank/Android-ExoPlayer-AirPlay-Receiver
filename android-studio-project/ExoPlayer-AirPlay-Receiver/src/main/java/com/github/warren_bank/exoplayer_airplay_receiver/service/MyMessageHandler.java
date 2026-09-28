@@ -260,41 +260,33 @@ final class MyMessageHandler extends Handler {
 
             Log.d(tag, ((msgWhat == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
 
-            if (requiresExternalStoragePermission(service, newMsg, playUrl, textUrl))
+            if (requiresExternalStoragePermission(service, newMsg, textUrl, /* deserialize */ true))
               return;
-
-            // normalize references to external storage by converting absolute filesystem paths to file: URIs
-            if (ExternalStorageUtils.isFileUri(playUrl))
-              playUrl = ExternalStorageUtils.normalizeFileUri(playUrl);
-            if (ExternalStorageUtils.isFileUri(textUrl))
-              textUrl = ExternalStorageUtils.normalizeFileUri(textUrl);
 
             ArrayList<String> matches = (playlistUrlsMap != null)
               ? StringUtils.convertHashMapToArrayList(playlistUrlsMap)
               : extractPlaylists(playUrl, null);
 
-            // check runtime permissions
-            if ((playlistUrlsMap == null) && (matches != null)) {
-              boolean requiresPermission = false;
-              String match;
-              for (int i=0; i < matches.size(); i++) {
-                match = matches.get(i);
-                if (ExternalStorageUtils.isFileUri(match)) {
-                  requiresPermission = true;
-                  match = ExternalStorageUtils.normalizeFileUri(match);
-                  matches.set(i, match);
-                }
-              }
-              if (requiresPermission && ExternalStorageUtils.has_permission(service))
-                requiresPermission = false;
-              if (requiresPermission) {
-                msgMap.put(
-                  Constant.Video_Source_Map.PLAYLIST_URLS,
-                  StringUtils.convertArrayListToHashMap(matches)
-                );
+            if (playlistUrlsMap == null) {
+              // check runtime permissions
 
-                requiresExternalStoragePermission(service, newMsg, "/", "/");
-                return;
+              if (matches == null) {
+                // normalize references to external storage by converting absolute filesystem paths to file: URIs
+                if (ExternalStorageUtils.isFileUri(playUrl))
+                  playUrl = ExternalStorageUtils.normalizeFileUri(playUrl);
+
+                if (requiresExternalStoragePermission(service, newMsg, playUrl, /* deserialize */ false))
+                  return;
+              }
+              else {
+                if (requiresExternalStoragePermission(service, newMsg, matches, /* normalize */ true)) {
+                  msgMap.put(
+                    Constant.Video_Source_Map.PLAYLIST_URLS,
+                    StringUtils.convertArrayListToHashMap(matches)
+                  );
+
+                  return;
+                }
               }
             }
 
@@ -340,7 +332,7 @@ final class MyMessageHandler extends Handler {
         newMsg.what = msg.what;
         newMsg.obj  = textUrl;
 
-        if (requiresExternalStoragePermission(service, newMsg, null, textUrl))
+        if (requiresExternalStoragePermission(service, newMsg, textUrl, /* deserialize */ true))
           return;
 
         playerManager.loadCaptions(textUrl);
@@ -632,36 +624,40 @@ final class MyMessageHandler extends Handler {
       intent.setDataAndType(data, sample.uri_mimeType.toLowerCase());
     }
 
-    String[]  string_names = new String[] {"referUrl", "textUrl", "drmScheme", "drmUrl"};
-    String[] hashmap_names = new String[] {"reqHeader", "drmHeader"};
-    String lc_name, alias_name;
+    String[] string_names = new String[] {
+      Constant.RefererURL,
+      Constant.DRM_Scheme,
+      Constant.DRM_URL
+    };
+    String[] array_names = new String[] {
+      Constant.CaptionURL
+    };
+    String[] hashmap_names = new String[] {
+      Constant.ReqHeader,
+      Constant.DRM_Header
+    };
+    String alias_name;
     String string_value;
     HashMap<String, String> hashmap_value;
     String[] array_value;
     Bundle bundle_value;
 
     for (String name : string_names) {
-      lc_name      = name.toLowerCase();
-      alias_name   = (String) map.get(lc_name);
+      alias_name   = (String) map.get(name.toLowerCase());
       string_value = null;
 
-      switch(lc_name) {
-        case "referurl" : {
+      switch(name) {
+        case Constant.RefererURL : {
           string_value = sample.referer;
           break;
         }
 
-        case "texturl" : {
-          string_value = sample.caption;
-          break;
-        }
-
-        case "drmscheme" : {
+        case Constant.DRM_Scheme : {
           string_value = sample.drm_scheme;
           break;
         }
 
-        case "drmurl" : {
+        case Constant.DRM_URL : {
           string_value = sample.drm_license_server;
           break;
         }
@@ -678,18 +674,39 @@ final class MyMessageHandler extends Handler {
       }
     }
 
+    for (String name : array_names) {
+      alias_name  = (String) map.get(name.toLowerCase());
+      array_value = null;
+
+      switch(name) {
+        case Constant.CaptionURL : {
+          array_value = sample.captions.toArray(new String[0]);
+          break;
+        }
+      }
+
+      if ((array_value != null) && (array_value.length != 0)) {
+        // always include a String[] extra that can be read by ExoAirPlayer
+        intent.putExtra(name, (String[]) array_value);
+
+        // conditionally include a String[] extra, when the request provides a name
+        if (!TextUtils.isEmpty(alias_name)) {
+          intent.putExtra(alias_name, (String[]) array_value);
+        }
+      }
+    }
+
     for (String name : hashmap_names) {
-      lc_name       = name.toLowerCase();
-      alias_name    = (String) map.get(lc_name);
+      alias_name    = (String) map.get(name.toLowerCase());
       hashmap_value = null;
 
-      switch(lc_name) {
-        case "reqheader" : {
+      switch(name) {
+        case Constant.ReqHeader : {
           hashmap_value = sample.reqHeadersMap;
           break;
         }
 
-        case "drmheader" : {
+        case Constant.DRM_Header : {
           hashmap_value = sample.drmHeadersMap;
           break;
         }
@@ -854,8 +871,40 @@ final class MyMessageHandler extends Handler {
   // External Storage Permissions
   // ===========================================================================
 
-  private boolean requiresExternalStoragePermission(NetworkingService service, Message msg, String playUrl, String textUrl) {
-    boolean requiresPermission = ExternalStorageUtils.isFileUri(playUrl) || ExternalStorageUtils.isFileUri(textUrl);
+  private boolean requiresExternalStoragePermission(NetworkingService service, Message msg, String uri, boolean deserialize) {
+    if (deserialize) {
+      ArrayList<String> uris = StringUtils.deserializeURLs(uri, /* normalize */ false);
+
+      return requiresExternalStoragePermission(service, msg, uris, /* normalize */ false);
+    }
+    else {
+      boolean requiresPermission = ExternalStorageUtils.isFileUri(uri);
+
+      if (requiresPermission)
+        requiresPermission = !ExternalStorageUtils.has_permission(service);
+
+      if (requiresPermission) {
+        externalStorageMessages.add(msg);
+        startRuntimePermissionsRequestActivity(service, Constant.PermissionRequestCode.READ_EXTERNAL_STORAGE);
+      }
+      return requiresPermission;
+    }
+  }
+
+  private boolean requiresExternalStoragePermission(NetworkingService service, Message msg, ArrayList<String> uris, boolean normalize) {
+    boolean requiresPermission = false;
+
+    for (int i=0; i < uris.size(); i++) {
+      String uri = uris.get(i);
+      if (ExternalStorageUtils.isFileUri(uri)) {
+        requiresPermission = true;
+        if (!normalize) break;
+
+        // normalize references to external storage by converting absolute filesystem paths to file: URIs
+        uri = ExternalStorageUtils.normalizeFileUri(uri);
+        uris.set(i, uri);
+      }
+    }
 
     if (requiresPermission)
       requiresPermission = !ExternalStorageUtils.has_permission(service);

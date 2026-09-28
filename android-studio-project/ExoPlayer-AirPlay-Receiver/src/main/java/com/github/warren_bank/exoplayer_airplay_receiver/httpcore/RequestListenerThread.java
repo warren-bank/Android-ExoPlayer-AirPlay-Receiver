@@ -723,7 +723,7 @@ public class RequestListenerThread extends Thread {
           HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
 
           playUrl   = (String) StringUtils.serializeURLs(  (ArrayList<String>) map.get("content-location"));
-          textUrl   = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("caption-location"));
+          textUrl   = (String) StringUtils.serializeURLs(  (ArrayList<String>) map.get("caption-location"));
           referUrl  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("referer"));
           useCache  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("use-cache"));
           startPos  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("start-position"));
@@ -786,7 +786,7 @@ public class RequestListenerThread extends Thread {
         Log.d(tag, " airplay load caption request content = " + requestBody);
 
         HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
-        String textUrl = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("caption-location"));
+        String textUrl = (String) StringUtils.serializeURLs((ArrayList<String>) map.get("caption-location"));
 
         if (!TextUtils.isEmpty(textUrl)) {
           Message msg = Message.obtain();

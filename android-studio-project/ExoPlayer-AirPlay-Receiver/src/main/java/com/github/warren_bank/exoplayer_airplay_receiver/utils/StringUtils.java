@@ -1,6 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.utils;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.ExternalStorageUtils;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -137,11 +138,9 @@ public class StringUtils {
   }
 
   public static HashMap<String, String> parseDuplicateKeyValues(String[] strArray, boolean normalize_lowercase_keys) {
-    if ((strArray == null) || (strArray.length == 0)) return null;
+    List<String> list = StringUtils.convertStringArrayToList(strArray);
 
-    List<String> list = (List<String>) Arrays.asList(strArray);
-
-    return parseDuplicateKeyValues(list, normalize_lowercase_keys);
+    return StringUtils.parseDuplicateKeyValues(list, normalize_lowercase_keys);
   }
 
   public static HashMap<String, String> parseDuplicateKeyValues(List<String> list) {
@@ -160,12 +159,35 @@ public class StringUtils {
     return requestBody.replaceAll("\\\\n", "\n");
   }
 
+  public static String serializeURLs(String[] strArray) {
+    List<String> list = StringUtils.convertStringArrayToList(strArray);
+
+    return StringUtils.convertListToString(list, Constant.Delimiter.PLAYLIST_URLS);
+  }
+
   public static String serializeURLs(ArrayList<String> list) {
     return StringUtils.convertArrayListToString(list, Constant.Delimiter.PLAYLIST_URLS);
   }
 
   public static ArrayList<String> deserializeURLs(String text) {
-    return StringUtils.convertStringToArrayList(text, Pattern.quote(Constant.Delimiter.PLAYLIST_URLS));
+    return StringUtils.deserializeURLs(text, /* normalize */ true);
+  }
+
+  public static ArrayList<String> deserializeURLs(String text, boolean normalize) {
+    ArrayList<String> list = StringUtils.convertStringToArrayList(text, Pattern.quote(Constant.Delimiter.PLAYLIST_URLS));
+
+    if (normalize) {
+      for (int i=0; i < list.size(); i++) {
+        String uri = list.get(i);
+
+        if (ExternalStorageUtils.isFileUri(uri)) {
+          uri = ExternalStorageUtils.normalizeFileUri(uri);
+          list.set(i, uri);
+        }
+      }
+    }
+
+    return list;
   }
 
   public static String toString(HashMap<String, String> map) {
@@ -326,8 +348,15 @@ public class StringUtils {
       delimiter_token = Pattern.quote(Constant.Delimiter.DEFAULT);
 
     String[] strArray = TextUtils.split(text, delimiter_token);
-    List<String> list = (List<String>) Arrays.asList(strArray);
+    List<String> list = StringUtils.convertStringArrayToList(strArray);
 
+    return list;
+  }
+
+  public static List<String> convertStringArrayToList(String[] strArray) {
+    if ((strArray == null) || (strArray.length == 0)) return null;
+
+    List<String> list = (List<String>) Arrays.asList(strArray);
     return list;
   }
 

@@ -64,6 +64,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -363,7 +364,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       json.put(Constant.MediaItemInfo.IS_PLAYER_PAUSED,       isPlayerPaused());
       json.put(Constant.MediaItemInfo.MEDIA_URL,              (sample == null) ? null : sample.uri);
       json.put(Constant.MediaItemInfo.MEDIA_TYPE,             (sample == null) ? null : sample.uri_mimeType);
-      json.put(Constant.MediaItemInfo.CAPTION_URL,            (sample == null) ? null : sample.caption);
+      json.put(Constant.MediaItemInfo.CAPTION_URL,            (sample == null) ? null : new JSONArray(sample.captions));
       json.put(Constant.MediaItemInfo.REFERER_URL,            (sample == null) ? null : sample.referer);
       json.put(Constant.MediaItemInfo.REQUEST_HEADERS,        req_headers);
       json.put(Constant.MediaItemInfo.USE_OFFLINE_CACHE,      (sample == null) ? null : sample.useCache);
@@ -643,14 +644,13 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     if (sample == null)
       return;
 
-    if (caption.equals(sample.caption))
+    if (!sample.loadCaptions(caption))
       return;
 
     currentItemIndex = C.INDEX_UNSET;
     exoPlayer.setPlayWhenReady(false);
     retry(false);
 
-    sample.updateCaption(caption);
     MediaSource mediaSource = buildMediaSource(sample);
 
     Runnable addCompletionAction = new Runnable() {

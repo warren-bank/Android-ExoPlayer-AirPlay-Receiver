@@ -4,6 +4,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.BuildConfig;
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.PlayerManager;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.VideoSource;
+import com.github.warren_bank.exoplayer_airplay_receiver.utils.StringUtils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -135,7 +136,7 @@ public class ToastUtils {
 
     try {
       VideoSource sample = getVideoSource(playerManager);
-      String video_caption = (sample == null) ? null : sample.caption;
+      String video_caption = (sample == null) ? null : StringUtils.convertArrayListToString(sample.captions, null);
 
       return ToastUtils.interpolate_variable(text, variable_substring, video_caption);
     }

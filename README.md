@@ -563,6 +563,7 @@ __extended APIs:__
     * _content-location_
       - use key on multiple lines to declare more than one value
     * _caption-location_
+      - use key on multiple lines to declare more than one value
     * _referer_
     * _req-header_
       - use key on multiple lines to declare more than one value
@@ -586,6 +587,7 @@ __extended APIs:__
   - keys are not case sensitive
   - recognized keys include:
     * _caption-location_
+      - use key on multiple lines to declare more than one value
 * POST data sent in requests to `/set-captions-style` API endpoint:
   - contains one _key:value_ pair per line of text
   - lines of text containing unrecognized keys are ignored
