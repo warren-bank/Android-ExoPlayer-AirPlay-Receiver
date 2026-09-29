@@ -70,7 +70,7 @@ public final class VideoSource {
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    return new VideoSource(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    return VideoSource.createVideoSource(/* is_audio_track */ false, uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
   }
 
   public static ArrayList<String> getAudioTracksURLsList(VideoSource sample) {
@@ -81,7 +81,25 @@ public final class VideoSource {
     return list;
   }
 
+  private static VideoSource createVideoSource(
+    boolean is_audio_track,
+    String uri,
+    String caption,
+    String audio,
+    String referer,
+    HashMap<String, String> reqHeadersMap,
+    boolean useCache,
+    float startPosition,
+    float stopPosition,
+    String drm_scheme,
+    String drm_license_server,
+    HashMap<String, String> drmHeadersMap
+  ) {
+    return new VideoSource(is_audio_track, uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+  }
+
   private VideoSource(
+    boolean is_audio_track,
     String uri,
     String caption,
     String audio,
@@ -153,6 +171,8 @@ public final class VideoSource {
     this.drm_scheme         = drm_scheme;
     this.drm_license_server = drm_license_server;
     this.drmHeadersMap      = drmHeadersMap;
+
+    if (is_audio_track) return;
 
     if (ExternalStorageUtils.isFileUri(uri)) {
       // media is a file in external storage.
@@ -332,7 +352,8 @@ public final class VideoSource {
 
       tracks.add(
         VideoSource.createVideoSource(
-          uri,
+                    true, /* is_audio_track */
+                    uri,
           (String)  null, /* caption */
           (String)  null, /* audio   */
           (String)  video.referer,
