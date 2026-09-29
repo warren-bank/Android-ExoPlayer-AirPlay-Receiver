@@ -365,6 +365,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       json.put(Constant.MediaItemInfo.MEDIA_URL,              (sample == null) ? null : sample.uri);
       json.put(Constant.MediaItemInfo.MEDIA_TYPE,             (sample == null) ? null : sample.uri_mimeType);
       json.put(Constant.MediaItemInfo.CAPTION_URL,            (sample == null) ? null : new JSONArray(sample.captions));
+      json.put(Constant.MediaItemInfo.AUDIO_URL,              (sample == null) ? null : new JSONArray(VideoSource.getAudioTracksURLsList(sample)));
       json.put(Constant.MediaItemInfo.REFERER_URL,            (sample == null) ? null : sample.referer);
       json.put(Constant.MediaItemInfo.REQUEST_HEADERS,        req_headers);
       json.put(Constant.MediaItemInfo.USE_OFFLINE_CACHE,      (sample == null) ? null : sample.useCache);
@@ -404,6 +405,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void addItem(
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -413,14 +415,15 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
+    addItem(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
   }
 
   /**
    * Appends {@link VideoSource} to the media queue.
    *
    * @param uri                   The URL to a video file or stream.
-   * @param caption               The URL to a file containing text captions (srt or vtt).
+   * @param caption               The URL to external text captions (srt or vtt). May contain a serialized list of URLs.
+   * @param audio                 The URL to external audio track. May contain a serialized list of URLs.
    * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
    * @param reqHeadersMap         Map of HTTP headers to include in requests to retrieve the video file or stream.
    * @param useCache              Boolean flag to indicate whether to prefetch this item to a local cache.
@@ -434,6 +437,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void addItem(
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -444,7 +448,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     HashMap<String, String> drmHeadersMap,
     boolean remove_previous_items
   ) {
-    VideoSource sample = VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    VideoSource sample = VideoSource.createVideoSource(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
     addItem(sample, remove_previous_items);
   }
 
@@ -479,6 +483,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void addItems(
     String[] uris,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -488,14 +493,15 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItems(uris, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
+    addItems(uris, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ false);
   }
 
   /**
    * Appends {@link VideoSource} to the media queue.
    *
    * @param uris                  Array of URLs to video files or streams.
-   * @param caption               The URL to a file containing text captions (srt or vtt).
+   * @param caption               The URL to external text captions (srt or vtt). May contain a serialized list of URLs.
+   * @param audio                 The URL to external audio track. May contain a serialized list of URLs.
    * @param referer               The URL to include in the 'Referer' HTTP header of requests to retrieve the video file or stream.
    * @param reqHeadersMap         Map of HTTP headers to include in requests to retrieve the video file or stream.
    * @param useCache              Boolean flag to indicate whether to prefetch this item to a local cache.
@@ -509,6 +515,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void addItems(
     String[] uris,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -526,8 +533,8 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     for (int i=0; i < uris.length; i++) {
       uri        = uris[i];
       sample     = (i == 0)
-                     ? VideoSource.createVideoSource(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap)
-                     : VideoSource.createVideoSource(uri, null,    referer, reqHeadersMap, useCache, -1f,           -1f,          drm_scheme, drm_license_server, drmHeadersMap)
+                     ? VideoSource.createVideoSource(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap)
+                     : VideoSource.createVideoSource(uri, null,    null,  referer, reqHeadersMap, useCache, -1f,           -1f,          drm_scheme, drm_license_server, drmHeadersMap)
                    ;
       samples[i] = sample;
     }
@@ -623,18 +630,33 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   /**
-   * Update the {@code caption} for the current media queue {@link VideoSource} and corresponding playlist {@link MediaSource}.
+   * Add external caption URL(s) to the current media queue {@link VideoSource} and corresponding playlist {@link MediaSource}.
    *
-   * @param caption The URL to a file containing text captions (srt or vtt).
+   * @param caption The URL to external text captions (srt or vtt). May contain a serialized list of URLs.
    */
   public void loadCaptions(String caption) {
+    loadExternalTracks(caption, /* is_caption */ true, /* is_audio */ false);
+  }
+
+  /**
+   * Add external audio URL(s) to the current media queue {@link VideoSource} and corresponding playlist {@link MediaSource}.
+   *
+   * @param audio The URL to external audio track. May contain a serialized list of URLs.
+   */
+  public void loadAudioTracks(String audio) {
+    loadExternalTracks(audio, /* is_caption */ false, /* is_audio */ true);
+  }
+
+  private void loadExternalTracks(String text, boolean is_caption, boolean is_audio) {
     if (exoPlayer == null)
       return;
     if ((mediaQueue == null) || (concatenatingMediaSource == null))
       return;
     if (currentItemIndex == C.INDEX_UNSET)
       return;
-    if (TextUtils.isEmpty(caption))
+    if (TextUtils.isEmpty(text))
+      return;
+    if (!is_caption && !is_audio)
       return;
 
     int sample_index = currentItemIndex;
@@ -644,8 +666,14 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     if (sample == null)
       return;
 
-    if (!sample.loadCaptions(caption))
-      return;
+    if (is_caption) {
+      if (!sample.loadCaptions(text))
+        return;
+    }
+    else if (is_audio) {
+      if (!sample.loadAudioTracks(text))
+        return;
+    }
 
     currentItemIndex = C.INDEX_UNSET;
     exoPlayer.setPlayWhenReady(false);
@@ -797,6 +825,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_play(
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -806,7 +835,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ true);
+    addItem(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, /* remove_previous_items= */ true);
   }
 
   /**
@@ -926,6 +955,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_queue(
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -935,7 +965,7 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    addItem(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
   }
 
   /**
@@ -1804,25 +1834,29 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   private MediaSource buildMediaSource(VideoSource sample) {
-    MediaSource            video    = buildUriMediaSource(sample);
-    ArrayList<MediaSource> captions = buildCaptionMediaSources(video);
-    MediaSource[] mediaSources;
+    ArrayList<MediaSource> mediaSourceList = new ArrayList<MediaSource>();
+    MediaSource[] mediaSourceArray;
 
-    if ((captions == null) || captions.isEmpty()) {
-      mediaSources = new MediaSource[1];
-      mediaSources[0] = video;
+    MediaSource            video       = buildUriMediaSource(sample);
+    ArrayList<MediaSource> captions    = buildCaptionMediaSources(video);
+    ArrayList<MediaSource> audioTracks = buildAudioMediaSources(sample);
+
+    mediaSourceList.add(video);
+    try {
+      mediaSourceList.addAll(captions);
     }
-    else {
-      // prepend
-      captions.add(0, video);
-
-      mediaSources = new MediaSource[captions.size()];
-      mediaSources = captions.toArray(mediaSources);
+    catch(Exception ignore) {}
+    try {
+      mediaSourceList.addAll(audioTracks);
     }
+    catch(Exception ignore) {}
 
-    MediaSource mergedMediaSource = (mediaSources.length == 1)
-      ? mediaSources[0]
-      : new MergingMediaSource(mediaSources);
+    mediaSourceArray = new MediaSource[mediaSourceList.size()];
+    mediaSourceArray = mediaSourceList.toArray(mediaSourceArray);
+
+    MediaSource mergedMediaSource = (mediaSourceArray.length == 1)
+      ? mediaSourceArray[0]
+      : new MergingMediaSource(mediaSourceArray);
 
     MediaSource clippedMediaSource = applyClippingProperties(mergedMediaSource, sample);
 
@@ -1895,6 +1929,18 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
       captions = null;
 
     return captions;
+  }
+
+  private ArrayList<MediaSource> buildAudioMediaSources(VideoSource sample) {
+    ArrayList<MediaSource> audioTracks = new ArrayList<MediaSource>();
+
+    for (VideoSource audioTrack : sample.audioTracks) {
+      audioTracks.add(
+        buildUriMediaSource(audioTrack)
+      );
+    }
+
+    return audioTracks;
   }
 
   private MediaSource applyClippingProperties(MediaSource mediaSource, VideoSource sample) {

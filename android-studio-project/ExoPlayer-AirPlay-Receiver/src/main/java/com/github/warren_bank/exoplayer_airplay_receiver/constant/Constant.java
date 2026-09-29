@@ -9,6 +9,7 @@ public class Constant {
     public static final String ReverseMsg       = "ReverseMsg";
     public static final String PlayURL          = "playUrl";
     public static final String CaptionURL       = "textUrl";
+    public static final String AudioURL         = "audioUrl";
     public static final String RefererURL       = "referUrl";
     public static final String ReqHeader        = "reqHeader";
     public static final String UseCache         = "useCache";
@@ -182,34 +183,35 @@ public class Constant {
         public static final int Msg_Video_Queue                 =  9;
         public static final int Msg_Video_Next                  = 10;
         public static final int Msg_Video_Prev                  = 11;
-        public static final int Msg_Audio_Volume                = 12;
-        public static final int Msg_Audio_Volume_Offset         = 13;
-        public static final int Msg_Audio_Volume_Mute           = 14;
-        public static final int Msg_Text_Load                   = 15;
-        public static final int Msg_Text_Show                   = 16;
-        public static final int Msg_Text_Set_Style              = 17;
-        public static final int Msg_Text_Set_Time               = 18;
-        public static final int Msg_Text_Add_Time               = 19;
-        public static final int Msg_Text_Set_Filters            = 20;
-        public static final int Msg_Text_Add_Filters            = 21;
-        public static final int Msg_Repeat_Mode                 = 22;
-        public static final int Msg_Resize_Mode                 = 23;
-        public static final int Msg_Shuffle                     = 24;
+        public static final int Msg_Audio_Load                  = 12;
+        public static final int Msg_Audio_Volume                = 13;
+        public static final int Msg_Audio_Volume_Offset         = 14;
+        public static final int Msg_Audio_Volume_Mute           = 15;
+        public static final int Msg_Text_Load                   = 16;
+        public static final int Msg_Text_Show                   = 17;
+        public static final int Msg_Text_Set_Style              = 18;
+        public static final int Msg_Text_Set_Time               = 19;
+        public static final int Msg_Text_Add_Time               = 20;
+        public static final int Msg_Text_Set_Filters            = 21;
+        public static final int Msg_Text_Add_Filters            = 22;
+        public static final int Msg_Repeat_Mode                 = 23;
+        public static final int Msg_Resize_Mode                 = 24;
+        public static final int Msg_Shuffle                     = 25;
 
-        public static final int Msg_Show_Toast                  = 25;
-        public static final int Msg_Show_Settings               = 26;
-        public static final int Msg_Show_Player                 = 27;
-        public static final int Msg_Hide_Player                 = 28;
-        public static final int Msg_Start_Activity              = 29;
-        public static final int Msg_Video_Share                 = 30;
-        public static final int Msg_Preferences_Edit            = 31;
-        public static final int Msg_KeyCode_Map_Set             = 32;
-        public static final int Msg_Delete_Cache                = 33;
-        public static final int Msg_Exit_Service                = 34;
+        public static final int Msg_Show_Toast                  = 26;
+        public static final int Msg_Show_Settings               = 27;
+        public static final int Msg_Show_Player                 = 28;
+        public static final int Msg_Hide_Player                 = 29;
+        public static final int Msg_Start_Activity              = 30;
+        public static final int Msg_Video_Share                 = 31;
+        public static final int Msg_Preferences_Edit            = 32;
+        public static final int Msg_KeyCode_Map_Set             = 33;
+        public static final int Msg_Delete_Cache                = 34;
+        public static final int Msg_Exit_Service                = 35;
 
         public interface Msg_Runtime_Permissions {
-            public static final int Request_EXTERNAL_STORAGE    = 35;
-            public static final int Granted                     = 36;
+            public static final int Request_EXTERNAL_STORAGE    = 36;
+            public static final int Granted                     = 37;
         }
     }
 
@@ -233,6 +235,7 @@ public class Constant {
         public static final String VOLUME                       = "/volume";
         public static final String VOLUME_OFFSET                = "/add-volume-offset";
         public static final String VOLUME_MUTE                  = "/mute-volume";
+        public static final String AUDIO_LOAD                   = "/load-audio-tracks";
         public static final String TXT_LOAD                     = "/load-captions";
         public static final String TXT_SHOW                     = "/show-captions";
         public static final String TXT_SET_STYLE                = "/set-captions-style";
@@ -290,6 +293,7 @@ public class Constant {
         public static final String MEDIA_URL                    = "media_url";
         public static final String MEDIA_TYPE                   = "media_type";
         public static final String CAPTION_URL                  = "caption_url";
+        public static final String AUDIO_URL                    = "audio_url";
         public static final String REFERER_URL                  = "referer_url";
         public static final String REQUEST_HEADERS              = "request_headers";
         public static final String USE_OFFLINE_CACHE            = "use_offline_cache";

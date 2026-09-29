@@ -327,6 +327,7 @@ public class NetworkingService extends Service implements RequestListenerThread.
           HashMap<String, String> dataMap = new HashMap<String, String>();
           dataMap.put(Constant.PlayURL,    serializeURLsArrayExtra(intent, Constant.PlayURL)    );
           dataMap.put(Constant.CaptionURL, serializeURLsArrayExtra(intent, Constant.CaptionURL) );
+          dataMap.put(Constant.AudioURL,   serializeURLsArrayExtra(intent, Constant.AudioURL)   );
           dataMap.put(Constant.RefererURL, intent.getStringExtra(Constant.RefererURL)           );
           dataMap.put(Constant.UseCache,   intent.getStringExtra(Constant.UseCache)             );
           dataMap.put(Constant.Start_Pos,  intent.getStringExtra(Constant.Start_Pos)            );
@@ -352,6 +353,13 @@ public class NetworkingService extends Service implements RequestListenerThread.
           Message msg = Message.obtain();
           msg.what = Constant.Msg.Msg_Text_Load;
           msg.obj  = serializeURLsArrayExtra(intent, Constant.CaptionURL);
+
+          handler.handleMessage(msg);
+        }
+        else if (intent.hasExtra(Constant.AudioURL)) {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Audio_Load;
+          msg.obj  = serializeURLsArrayExtra(intent, Constant.AudioURL);
 
           handler.handleMessage(msg);
         }

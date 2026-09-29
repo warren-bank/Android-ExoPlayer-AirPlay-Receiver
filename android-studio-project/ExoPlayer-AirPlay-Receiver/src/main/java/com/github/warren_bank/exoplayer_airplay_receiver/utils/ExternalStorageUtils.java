@@ -17,29 +17,41 @@ import java.util.regex.Matcher;
 
 public class ExternalStorageUtils {
 
-  private static class CaptionsFileFilter implements FileFilter {
+  private static class VideoFileFilter implements FileFilter {
     private String  video_filename;
-    private Pattern caption_regex;
+    private Pattern filename_regex;
 
-    public CaptionsFileFilter(String video_filename) {
+    public VideoFileFilter(String video_filename, String filename_regex_pattern) {
       int pos = video_filename.lastIndexOf('.');
 
       this.video_filename = (pos >= 0)
         ? video_filename.substring(0, pos + 1)
         : video_filename + ".";
 
-      this.caption_regex = Pattern.compile("\\.(?:srt|ttml[12]?|dfxp|vtt|webvtt|ssa|ass)$");
+      this.filename_regex = Pattern.compile(filename_regex_pattern.toLowerCase());
     }
 
     @Override
-    public boolean accept(File file) {
-      String caption_filename = file.getName();
+    public boolean accept(File subject_file) {
+      String subject_filename = subject_file.getName();
 
-      if (caption_filename.indexOf(video_filename) != 0)
+      if (subject_filename.indexOf(video_filename) != 0)
         return false;
 
-      Matcher matcher = caption_regex.matcher(caption_filename.toLowerCase());
+      Matcher matcher = filename_regex.matcher(subject_filename.toLowerCase());
       return matcher.find();
+    }
+  }
+
+  private static class CaptionsFileFilter extends VideoFileFilter {
+    public CaptionsFileFilter(String video_filename) {
+      super(video_filename, "\\.(?:srt|ttml[12]?|dfxp|vtt|webvtt|ssa|ass)$");
+    }
+  }
+
+  private static class AudioFileFilter extends VideoFileFilter {
+    public AudioFileFilter(String video_filename) {
+      super(video_filename, "\\.(?:mp3|ogg|wav|flac|aac|m4[ab]|f4[ab]|tsa|amr|3ga)$");
     }
   }
 
@@ -92,10 +104,20 @@ public class ExternalStorageUtils {
   }
 
   public static ArrayList<String> findMatchingSubtitles(String uriVideo) {
+    return findMatchingFiles(uriVideo, /* filter_captions */ true, /* filter_audio */ false);
+  }
+
+  public static ArrayList<String> findMatchingAudioFiles(String uriVideo) {
+    return findMatchingFiles(uriVideo, /* filter_captions */ false, /* filter_audio */ true);
+  }
+
+  private static ArrayList<String> findMatchingFiles(String uriVideo, boolean filter_captions, boolean filter_audio) {
     File file = getFile(uriVideo);
     if (file == null)
       return null;
     if (!file.isFile())
+      return null;
+    if (!filter_captions && !filter_audio)
       return null;
 
     String video_filename = file.getName();
@@ -107,22 +129,28 @@ public class ExternalStorageUtils {
       return null;
 
     try {
-      FileFilter filter = new CaptionsFileFilter(video_filename);
-      File[]   captions = file.listFiles(filter);
+      FileFilter filter = null;
 
-      if (captions == null)
+      if (filter_captions)
+        filter = new CaptionsFileFilter(video_filename);
+      else if (filter_audio)
+        filter = new AudioFileFilter(video_filename);
+
+      File[] matchingFiles = file.listFiles(filter);
+
+      if (matchingFiles == null)
         return null;
-      if (captions.length == 0)
+      if (matchingFiles.length == 0)
         return null;
 
-      ArrayList<String> uriCaptions = new ArrayList<String>();
+      ArrayList<String> matchingURIs = new ArrayList<String>();
       String uri;
 
-      for (File caption : captions) {
-        uri = caption.toURI().toString();
-        uriCaptions.add(uri);
+      for (File matchingFile : matchingFiles) {
+        uri = matchingFile.toURI().toString();
+        matchingURIs.add(uri);
       }
-      return uriCaptions;
+      return matchingURIs;
     }
     catch(Exception e) {
       return null;

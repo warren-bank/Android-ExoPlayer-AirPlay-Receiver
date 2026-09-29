@@ -108,13 +108,20 @@ __AirPlay v1 compatible APIs:__
   videos_page='https://test-streams.mux.dev/'
   video_url_1='https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
   video_url_2='https://test-streams.mux.dev/tos_ismc/main.m3u8'
-  video_url_3='https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd'
+  video_url_3='https://assets.walterebert.com/playground/videos/sintel-trailer/sintel_trailer.mpd'
+  video_url_4='https://github.com/ksk-007/newton-netflix/raw/main/TV%20video.m4v'
 
-  # URLs for test video text captions:
-  captions_page='https://github.com/gpac/gpac/tree/master/tests/media/webvtt'
-  caption_url_1='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.workaround-exoplayer-issue-7122.srt'
-  caption_url_2='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.vtt'
-  caption_url_3='https://github.com/gpac/gpac/raw/master/tests/media/webvtt/comments.vtt'
+  # URLs for test video - external text captions:
+  captions_page='https://github.com/moust/MediaPlayer/tree/master/demo'
+  caption_url_1='https://github.com/moust/MediaPlayer/raw/master/demo/subtitles.srt'
+  caption_url_2='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.workaround-exoplayer-issue-7122.srt'
+  caption_url_3='https://github.com/warren-bank/Android-ExoPlayer-AirPlay-Receiver/raw/v02/tests/05.%20issues/ExoPlayer/7122/.captions/counter.vtt'
+
+  # URLs for test video - external audio tracks:
+  audio_page='https://github.com/SergLam/Audio-Sample-files'
+  audio_url_1='https://github.com/SergLam/Audio-Sample-files/raw/refs/heads/master/sample.m4a'
+  audio_url_2='https://github.com/SergLam/Audio-Sample-files/raw/refs/heads/master/sample1.m4a'
+  audio_url_3='https://github.com/SergLam/Audio-Sample-files/raw/refs/heads/master/sample2.m4a'
 
   # URLs for test video DRM:
   #   https://exoplayer.dev/drm.html
@@ -308,12 +315,26 @@ __extended APIs:__
     curl --silent -X GET \
       "http://${airplay_ip}/mute-volume?toggle=0"
   ```
-* load new text captions for current video in queue:
+* play video #4 (add text caption #3, add audio track #3):
   ```bash
     curl --silent -X POST \
       -H "Content-Type: text/parameters" \
-      --data-binary "Caption-Location: ${caption_url_1}" \
+      --data-binary "Content-Location: ${video_url_4}\nCaption-Location: ${caption_url_3}\nAudio-Location: ${audio_url_3}" \
+      "http://${airplay_ip}/play"
+  ```
+* prepend additional external text captions to current video in queue:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Caption-Location: ${caption_url_1}\nCaption-Location: ${caption_url_2}\nCaption-Location: ${caption_url_3}" \
       "http://${airplay_ip}/load-captions"
+  ```
+* prepend additional external audio tracks to current video in queue:
+  ```bash
+    curl --silent -X POST \
+      -H "Content-Type: text/parameters" \
+      --data-binary "Audio-Location: ${audio_url_1}\nAudio-Location: ${audio_url_2}\nAudio-Location: ${audio_url_3}" \
+      "http://${airplay_ip}/load-audio-tracks"
   ```
 * toggle the 'on/off' state of whether the text captions are visible:
   ```bash
@@ -564,6 +585,8 @@ __extended APIs:__
       - use key on multiple lines to declare more than one value
     * _caption-location_
       - use key on multiple lines to declare more than one value
+    * _audio-location_
+      - use key on multiple lines to declare more than one value
     * _referer_
     * _req-header_
       - use key on multiple lines to declare more than one value
@@ -587,6 +610,14 @@ __extended APIs:__
   - keys are not case sensitive
   - recognized keys include:
     * _caption-location_
+      - use key on multiple lines to declare more than one value
+* POST data sent in requests to `/load-audio-tracks` API endpoint:
+  - contains one _key:value_ pair per line of text
+  - lines of text containing unrecognized keys are ignored
+  - keys and values can be separated by either `:` or `=` characters, with optional whitespace
+  - keys are not case sensitive
+  - recognized keys include:
+    * _audio-location_
       - use key on multiple lines to declare more than one value
 * POST data sent in requests to `/set-captions-style` API endpoint:
   - contains one _key:value_ pair per line of text

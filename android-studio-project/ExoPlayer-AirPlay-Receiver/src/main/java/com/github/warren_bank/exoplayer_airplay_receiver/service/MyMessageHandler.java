@@ -228,6 +228,7 @@ final class MyMessageHandler extends Handler {
 
             String playUrl   = dataMap.get(Constant.PlayURL);
             String textUrl   = dataMap.get(Constant.CaptionURL);
+            String audioUrl  = dataMap.get(Constant.AudioURL);
             String referUrl  = dataMap.get(Constant.RefererURL);
             String useCache  = dataMap.get(Constant.UseCache);
             String startPos  = dataMap.get(Constant.Start_Pos);
@@ -240,6 +241,8 @@ final class MyMessageHandler extends Handler {
               playUrl = null;
             if (TextUtils.isEmpty(textUrl))
               textUrl = null;
+            if (TextUtils.isEmpty(audioUrl))
+              audioUrl = null;
             if (TextUtils.isEmpty(referUrl))
               referUrl = null;
             if (TextUtils.isEmpty(startPos))
@@ -261,6 +264,9 @@ final class MyMessageHandler extends Handler {
             Log.d(tag, ((msgWhat == Constant.Msg.Msg_Video_Play) ? "play" : "queue") + " media: url = " + playUrl + "; start at = " + startPos + "; stop at = " + stopPos + "; captions = " + textUrl + "; referer = " + referUrl + "; drm scheme = " + drmScheme + "; drm license url = " + drmUrl);
 
             if (requiresExternalStoragePermission(service, newMsg, textUrl, /* deserialize */ true))
+              return;
+
+            if (requiresExternalStoragePermission(service, newMsg, audioUrl, /* deserialize */ true))
               return;
 
             ArrayList<String> matches = (playlistUrlsMap != null)
@@ -296,6 +302,7 @@ final class MyMessageHandler extends Handler {
               matches,
               /* uri=                   */ playUrl,
               /* caption=               */ textUrl,
+              /* audio=                 */ audioUrl,
               /* referer=               */ referUrl,
               /* reqHeadersMap=         */ reqHeadersMap,
               /* useCache=              */ "true".equals(useCache),
@@ -322,7 +329,7 @@ final class MyMessageHandler extends Handler {
       }
 
       // =======================================================================
-      // Update caption URL to current video in ExoPlayer queue.
+      // Add external caption URL(s) to current video in ExoPlayer queue.
       // =======================================================================
 
       case Constant.Msg.Msg_Text_Load : {
@@ -336,6 +343,42 @@ final class MyMessageHandler extends Handler {
           return;
 
         playerManager.loadCaptions(textUrl);
+        break;
+      }
+
+      // =======================================================================
+      // Add external audio URL(s) to current video in ExoPlayer queue.
+      // =======================================================================
+
+      case Constant.Msg.Msg_Audio_Load : {
+        String audioUrl = (String) msg.obj;
+
+        Message newMsg = Message.obtain();
+        newMsg.what = msg.what;
+        newMsg.obj  = audioUrl;
+
+        if (requiresExternalStoragePermission(service, newMsg, audioUrl, /* deserialize */ true))
+          return;
+
+        if (playerManager.getCurrentItem() != null) {
+          playerManager.loadAudioTracks(audioUrl);
+        }
+        else {
+          // There is no current item in queue. Play audio file(s).
+
+          HashMap<String, String> dataMap = new HashMap<String, String>();
+          dataMap.put(Constant.PlayURL, audioUrl);
+
+          HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+          map.put(Constant.Video_Source_Map.DATA, dataMap);
+
+          newMsg = Message.obtain();
+          newMsg.what = Constant.Msg.Msg_Video_Play;
+          newMsg.obj  = map;
+
+          handleMessage(newMsg);
+        }
+
         break;
       }
 
@@ -630,7 +673,8 @@ final class MyMessageHandler extends Handler {
       Constant.DRM_URL
     };
     String[] array_names = new String[] {
-      Constant.CaptionURL
+      Constant.CaptionURL,
+      Constant.AudioURL
     };
     String[] hashmap_names = new String[] {
       Constant.ReqHeader,
@@ -681,6 +725,11 @@ final class MyMessageHandler extends Handler {
       switch(name) {
         case Constant.CaptionURL : {
           array_value = sample.captions.toArray(new String[0]);
+          break;
+        }
+
+        case Constant.AudioURL : {
+          array_value = VideoSource.getAudioTracksURLsList(sample).toArray(new String[0]);
           break;
         }
       }
@@ -830,6 +879,7 @@ final class MyMessageHandler extends Handler {
     ArrayList<String> matches,
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -847,14 +897,14 @@ final class MyMessageHandler extends Handler {
         String playUrl;
 
         if (matches == null) {
-          playerManager.addItem(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
+          playerManager.addItem(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
 
           playUrl = uri;
         }
         else {
           Log.d(tag, "count of URLs in playlist: " + matches.size());
           String[] uris = matches.toArray(new String[matches.size()]);
-          playerManager.addItems(uris, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
+          playerManager.addItems(uris, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap, remove_previous_items);
           playUrl = uris[0];
         }
 

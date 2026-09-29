@@ -22,7 +22,8 @@ public final class VideoSource {
 
   public final String uri;
   public final String uri_mimeType;
-  public       ArrayList<String> captions;
+  public final ArrayList<String> captions;
+  public final ArrayList<VideoSource> audioTracks;
   public final String referer;
   public final HashMap<String, String> reqHeadersMap;
   public       boolean useCache;
@@ -44,6 +45,7 @@ public final class VideoSource {
     return VideoSource.createVideoSource(
       uri,
       (String)  null, /* caption            */
+      (String)  null, /* audio              */
       (String)  null, /* referer            */
       (HashMap) null, /* reqHeadersMap      */
       false,          /* useCache           */
@@ -58,6 +60,7 @@ public final class VideoSource {
   public static VideoSource createVideoSource(
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -67,12 +70,21 @@ public final class VideoSource {
     String drm_license_server,
     HashMap<String, String> drmHeadersMap
   ) {
-    return new VideoSource(uri, caption, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+    return new VideoSource(uri, caption, audio, referer, reqHeadersMap, useCache, startPosition, stopPosition, drm_scheme, drm_license_server, drmHeadersMap);
+  }
+
+  public static ArrayList<String> getAudioTracksURLsList(VideoSource sample) {
+    ArrayList<String> list = new ArrayList<String>();
+    for (VideoSource track : sample.audioTracks) {
+      list.add(track.uri);
+    }
+    return list;
   }
 
   private VideoSource(
     String uri,
     String caption,
+    String audio,
     String referer,
     HashMap<String, String> reqHeadersMap,
     boolean useCache,
@@ -132,6 +144,7 @@ public final class VideoSource {
     this.uri                = uri;
     this.uri_mimeType       = uri_mimeType;
     this.captions           = new ArrayList<String>();
+    this.audioTracks        = new ArrayList<VideoSource>();
     this.referer            = referer;
     this.reqHeadersMap      = reqHeadersMap;
     this.useCache           = useCache;
@@ -142,8 +155,9 @@ public final class VideoSource {
     this.drmHeadersMap      = drmHeadersMap;
 
     if (ExternalStorageUtils.isFileUri(uri)) {
+      // media is a file in external storage.
+
       try {
-        // media is a file in external storage.
         // search within same directory as media file for external captions in a supported format.
         // file naming convention: "${video_filename}.*.${supported_caption_extension}"
 
@@ -152,16 +166,41 @@ public final class VideoSource {
         );
       }
       catch(Exception ignore) {}
+
+      try {
+        // search within same directory as media file for external audio tracks in a supported format.
+        // file naming convention: "${video_filename}.*.${supported_audio_extension}"
+
+        this.audioTracks.addAll(
+          findMatchingAudioTracks(this)
+        );
+      }
+      catch(Exception ignore) {}
     }
 
     loadCaptions(caption);
+    loadAudioTracks(audio);
   }
 
   // Public methods.
 
   @Override
   public String toString() {
-    return uri;
+    return this.uri;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if ((obj == null) || (getClass() != obj.getClass())) return false;
+
+    VideoSource that = (VideoSource) obj;
+    return this.uri.equals(that.uri);
+  }
+
+  @Override
+  public int hashCode() {
+    return this.uri.hashCode();
   }
 
   public boolean loadCaptions(String text) {
@@ -186,6 +225,31 @@ public final class VideoSource {
 
       // prepend new value
       this.captions.add(0, caption);
+      didLoad = true;
+    }
+
+    return didLoad;
+  }
+
+  public boolean loadAudioTracks(String text) {
+    boolean didLoad = false;
+    if (TextUtils.isEmpty(text)) return didLoad;
+
+    ArrayList<String> audio_track_uris = StringUtils.deserializeURLs(text);
+    ArrayList<VideoSource> tracks = createAudioTracksList(this, audio_track_uris, /* encode_uris */ true);
+    ListIterator<VideoSource> it = tracks.listIterator(tracks.size());
+    VideoSource track;
+
+    // iterate in reverse order
+    while (it.hasPrevious()) {
+      track = it.previous();
+      if (track == null) continue;
+
+      // prevent duplicate values
+      if (this.audioTracks.contains(track)) continue;
+
+      // prepend new value
+      this.audioTracks.add(0, track);
       didLoad = true;
     }
 
@@ -250,6 +314,40 @@ public final class VideoSource {
   }
 
   // static helper
+
+  private static ArrayList<VideoSource> findMatchingAudioTracks(VideoSource video) {
+    ArrayList<String> list = ExternalStorageUtils.findMatchingAudioFiles(video.uri);
+    if ((list == null) || list.isEmpty()) return null;
+
+    return createAudioTracksList(video, list, /* encode_uris */ false);
+  }
+
+  private static ArrayList<VideoSource> createAudioTracksList(VideoSource video, ArrayList<String> audio_track_uris, boolean encode_uris) {
+    ArrayList<VideoSource> tracks = new ArrayList<VideoSource>();
+    for (String uri : audio_track_uris) {
+      if (encode_uris) {
+        // enforce that URLs are encoded and RFC 2396-compliant
+        uri = UriUtils.encodeURI(uri);
+      }
+
+      tracks.add(
+        VideoSource.createVideoSource(
+          uri,
+          (String)  null, /* caption */
+          (String)  null, /* audio   */
+          (String)  video.referer,
+          (HashMap) video.reqHeadersMap,
+                    video.useCache,
+                    video.startPosition,
+                    video.stopPosition,
+          (String)  video.drm_scheme,
+          (String)  video.drm_license_server,
+          (HashMap) video.drmHeadersMap
+        )
+      );
+    }
+    return tracks;
+  }
 
   private static void setSubtitleConfigurations(MediaItem.Builder builder, VideoSource sample) {
     if ((builder == null) || (sample == null) || sample.captions.isEmpty()) return;

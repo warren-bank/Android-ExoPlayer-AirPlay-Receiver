@@ -695,6 +695,7 @@ public class RequestListenerThread extends Thread {
       ) {
         String playUrl   = null;
         String textUrl   = null;
+        String audioUrl  = null;
         String referUrl  = null;
         String useCache  = null;
         String startPos  = null;
@@ -724,6 +725,7 @@ public class RequestListenerThread extends Thread {
 
           playUrl   = (String) StringUtils.serializeURLs(  (ArrayList<String>) map.get("content-location"));
           textUrl   = (String) StringUtils.serializeURLs(  (ArrayList<String>) map.get("caption-location"));
+          audioUrl  = (String) StringUtils.serializeURLs(  (ArrayList<String>) map.get("audio-location"));
           referUrl  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("referer"));
           useCache  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("use-cache"));
           startPos  = (String) StringUtils.getLastListItem((ArrayList<String>) map.get("start-position"));
@@ -752,11 +754,12 @@ public class RequestListenerThread extends Thread {
           }
         }
         else {
-          Log.d(tag, "Media URL = " + playUrl + "; Start At = " + startPos + "; Stop At = " + stopPos + "; Captions = " + textUrl + "; Referer = " + referUrl + "; DRM Scheme = " + drmScheme + "; DRM License URL = " + drmUrl);
+          Log.d(tag, "Media URL = " + playUrl + "; Start At = " + startPos + "; Stop At = " + stopPos + "; Captions = " + textUrl + "; Audio = " + audioUrl + "; Referer = " + referUrl + "; DRM Scheme = " + drmScheme + "; DRM License URL = " + drmUrl);
 
           HashMap<String, String> dataMap = new HashMap<String, String>();
           dataMap.put(Constant.PlayURL,    playUrl);
           dataMap.put(Constant.CaptionURL, textUrl);
+          dataMap.put(Constant.AudioURL,   audioUrl);
           dataMap.put(Constant.RefererURL, referUrl);
           dataMap.put(Constant.UseCache,   useCache);
           dataMap.put(Constant.Start_Pos,  startPos);
@@ -779,7 +782,7 @@ public class RequestListenerThread extends Thread {
           setCommonHeaders(httpResponse, HttpStatus.SC_OK);
         }
       }
-      else if ((entityContent != null) && target.equals(Constant.Target.TXT_LOAD)) { //Load new text captions for current video in queue
+      else if ((entityContent != null) && target.equals(Constant.Target.TXT_LOAD)) { //Add external caption URL(s) to current video in ExoPlayer queue.
         String requestBody;
         requestBody = new String(entityContent);
         requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
@@ -798,6 +801,29 @@ public class RequestListenerThread extends Thread {
         }
         else {
           Log.d(tag, "airplay caption URL missing");
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+        }
+      }
+      else if ((entityContent != null) && target.equals(Constant.Target.AUDIO_LOAD)) { //Add external audio URL(s) to current video in ExoPlayer queue.
+        String requestBody;
+        requestBody = new String(entityContent);
+        requestBody = StringUtils.convertEscapedLinefeeds(requestBody); //Not necessary; courtesy to curl users.
+        Log.d(tag, " airplay load audio request content = " + requestBody);
+
+        HashMap<String, ArrayList<String>> map = StringUtils.parseRequestBody_allowDuplicateKeys(requestBody, /* normalize_lowercase_keys= */ true);
+        String audioUrl = (String) StringUtils.serializeURLs((ArrayList<String>) map.get("audio-location"));
+
+        if (!TextUtils.isEmpty(audioUrl)) {
+          Message msg = Message.obtain();
+          msg.what = Constant.Msg.Msg_Audio_Load;
+          msg.obj = audioUrl;
+          MainApp.broadcastMessage(msg);
+
+          setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+        }
+        else {
+          Log.d(tag, "airplay audio URL missing");
 
           setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
         }

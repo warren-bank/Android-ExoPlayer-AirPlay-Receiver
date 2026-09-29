@@ -175,6 +175,7 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
 
   private Uri processDataUri(Intent newIntent, Uri data) {
     data = filterCaptionFile(newIntent, data);
+    data = filterAudioFile(newIntent, data);
     data = filterDirectory(data);
 
     return data;
@@ -197,6 +198,25 @@ public class StartNetworkingServiceActivity extends Activity implements RuntimeP
 
     String uri = data.toString();
     return MediaTypeUtils.isCaptionFileUrl(uri);
+  }
+
+  private Uri filterAudioFile(Intent newIntent, Uri data) {
+    if (data == null) return null;
+
+    if (isAudioFile(data)) {
+      newIntent.setAction(NetworkingService.ACTION_PLAY);
+      newIntent.putExtra(Constant.AudioURL, data.toString());
+      return null;
+    }
+
+    return data;
+  }
+
+  private boolean isAudioFile(Uri data) {
+    if (data == null) return false;
+
+    String uri = data.toString();
+    return MediaTypeUtils.isAudioFileUrl(uri);
   }
 
   private Uri filterDirectory(Uri data) {
