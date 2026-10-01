@@ -6,16 +6,19 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizati
  *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/BaseAudioProcessor.java#L62
  */
 
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.audio_processors.channels.DownmixStereoToMonoAudioProcessor;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.audio_processors.channels.DownmixSurroundToStereoAudioProcessor;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.audio_processors.sync.TimeOffsetAudioProcessor;
+
 import androidx.media3.common.audio.AudioProcessor;
-import androidx.media3.common.audio.ChannelMixingMatrix;
-import androidx.media3.common.audio.NonFinalChannelMixingAudioProcessor;
 import androidx.media3.exoplayer.audio.DefaultAudioSink.DefaultAudioProcessorChain;
 
 public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
   public static MyAudioProcessorChain getInstance() {
     AudioProcessor[] audioProcessors = new AudioProcessor[] {
       new DownmixSurroundToStereoAudioProcessor(),
-      new DownmixStereoToMonoAudioProcessor()
+      new DownmixStereoToMonoAudioProcessor(),
+      new TimeOffsetAudioProcessor()
     };
 
     return new MyAudioProcessorChain(audioProcessors);
@@ -23,12 +26,14 @@ public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
 
   private DownmixSurroundToStereoAudioProcessor downmix_surround_to_stereo;
   private DownmixStereoToMonoAudioProcessor     downmix_stereo_to_mono;
+  private TimeOffsetAudioProcessor              time_offset;
 
   private MyAudioProcessorChain(AudioProcessor[] audioProcessors) {
     super(audioProcessors);
 
     downmix_surround_to_stereo = (DownmixSurroundToStereoAudioProcessor) audioProcessors[0];
     downmix_stereo_to_mono     = (DownmixStereoToMonoAudioProcessor)     audioProcessors[1];
+    time_offset                = (TimeOffsetAudioProcessor)              audioProcessors[2];
 
     enable_downmix_surround_to_stereo(false);
     enable_downmix_stereo_to_mono(false);
@@ -42,70 +47,11 @@ public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
     downmix_stereo_to_mono.enable(enabled);
   }
 
-  // ---------------------------------------------------------------------------
-  // implement: DownmixBaseAudioProcessor
-  // ---------------------------------------------------------------------------
-
-  /*
-   * references:
-   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L99
-   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L236
-   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L262
-   *   https://github.com/androidx/media/blob/1.11.0/libraries/common/src/main/java/androidx/media3/common/audio/ChannelMixingMatrix.java#L297
-   */
-
-  public static class DownmixBaseAudioProcessor extends NonFinalChannelMixingAudioProcessor {
-    private boolean enabled;
-
-    public DownmixBaseAudioProcessor() {
-      super();
-      this.enabled = false;
-    }
-
-    public void enable(boolean enabled) {
-      this.enabled = enabled;
-    }
-
-    @Override
-    public boolean isActive() {
-      return this.enabled && super.isActive();
-    }
-
-    @Override
-    protected AudioFormat onConfigure(AudioFormat inputAudioFormat) throws UnhandledAudioFormatException {
-      try {
-        return super.onConfigure(inputAudioFormat);
-      }
-      catch(UnhandledAudioFormatException e) {
-        return AudioFormat.NOT_SET;
-      }
-    }
+  public void setTimeOffset(long value) {
+    time_offset.setTimeOffset(value);
   }
 
-  // ---------------------------------------------------------------------------
-  // implement: DownmixSurroundToStereoAudioProcessor
-  // ---------------------------------------------------------------------------
-
-  public static class DownmixSurroundToStereoAudioProcessor extends DownmixBaseAudioProcessor {
-    public DownmixSurroundToStereoAudioProcessor() {
-      super();
-
-      putChannelMixingMatrix(ChannelMixingMatrix.createForConstantPower(6, 2)); // 6 => stereo
-      putChannelMixingMatrix(ChannelMixingMatrix.createForConstantPower(5, 2)); // 5 => stereo
-      putChannelMixingMatrix(ChannelMixingMatrix.createForConstantPower(4, 2)); // 4 => stereo
-      putChannelMixingMatrix(ChannelMixingMatrix.createForConstantPower(3, 2)); // 3 => stereo
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // implement: DownmixStereoToMonoAudioProcessor
-  // ---------------------------------------------------------------------------
-
-  public static class DownmixStereoToMonoAudioProcessor extends DownmixBaseAudioProcessor {
-    public DownmixStereoToMonoAudioProcessor() {
-      super();
-
-      putChannelMixingMatrix(ChannelMixingMatrix.createForConstantPower(2, 1)); // stereo => mono
-    }
+  public void addTimeOffset(long value) {
+    time_offset.addTimeOffset(value);
   }
 }

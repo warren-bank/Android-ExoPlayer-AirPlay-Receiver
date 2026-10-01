@@ -966,6 +966,28 @@ public class RequestListenerThread extends Thread {
         }
         setCommonHeaders(httpResponse, HttpStatus.SC_OK);
       }
+      else if (
+        target.startsWith(Constant.Target.AUDIO_SET_OFFSET) ||
+        target.startsWith(Constant.Target.AUDIO_ADD_OFFSET)
+      ) { //update time offset for audio track
+        String value = StringUtils.getQueryStringValue(target, "?value=");
+        if (!TextUtils.isEmpty(value)) {
+          try {
+            long offset = Long.parseLong(value, 10);
+            Log.d(tag, "airplay audio offset = " + offset);
+
+            Message msg = Message.obtain();
+            msg.what = target.startsWith(Constant.Target.AUDIO_SET_OFFSET) ? Constant.Msg.Msg_Audio_Set_Time : Constant.Msg.Msg_Audio_Add_Time;
+            msg.obj = offset;
+            MainApp.broadcastMessage(msg);
+          }
+          catch (NumberFormatException e) {
+            setCommonHeaders(httpResponse, HttpStatus.SC_BAD_REQUEST);
+            return;
+          }
+        }
+        setCommonHeaders(httpResponse, HttpStatus.SC_OK);
+      }
       else if (target.startsWith(Constant.Target.TXT_SHOW)) { //toggle text captions on/off
         String value = StringUtils.getQueryStringValue(target, "?toggle=");
         try {

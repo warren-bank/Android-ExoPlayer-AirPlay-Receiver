@@ -1077,6 +1077,26 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   }
 
   /**
+   * Set the time offset for audio track.
+   *
+   * @param offset Measured in microseconds
+   */
+  public void AirPlay_set_audio_offset(long offset) {
+    renderersFactory.audioProcessorChain.setTimeOffset(offset);
+  }
+
+  /**
+   * Add to the current time offset for audio track.
+   *
+   * @param offset Measured in microseconds
+   */
+  public void AirPlay_add_audio_offset(long offset) {
+    if (offset == 0) return;
+
+    renderersFactory.audioProcessorChain.addTimeOffset(offset);
+  }
+
+  /**
    * Change visibility of text captions.
    *
    * @param showCaptions

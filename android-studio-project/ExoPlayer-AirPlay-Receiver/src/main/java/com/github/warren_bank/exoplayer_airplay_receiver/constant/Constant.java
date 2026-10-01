@@ -187,31 +187,34 @@ public class Constant {
         public static final int Msg_Audio_Volume                = 13;
         public static final int Msg_Audio_Volume_Offset         = 14;
         public static final int Msg_Audio_Volume_Mute           = 15;
-        public static final int Msg_Text_Load                   = 16;
-        public static final int Msg_Text_Show                   = 17;
-        public static final int Msg_Text_Set_Style              = 18;
-        public static final int Msg_Text_Set_Time               = 19;
-        public static final int Msg_Text_Add_Time               = 20;
-        public static final int Msg_Text_Set_Filters            = 21;
-        public static final int Msg_Text_Add_Filters            = 22;
-        public static final int Msg_Repeat_Mode                 = 23;
-        public static final int Msg_Resize_Mode                 = 24;
-        public static final int Msg_Shuffle                     = 25;
+        public static final int Msg_Audio_Set_Time              = 16;
+        public static final int Msg_Audio_Add_Time              = 17;
 
-        public static final int Msg_Show_Toast                  = 26;
-        public static final int Msg_Show_Settings               = 27;
-        public static final int Msg_Show_Player                 = 28;
-        public static final int Msg_Hide_Player                 = 29;
-        public static final int Msg_Start_Activity              = 30;
-        public static final int Msg_Video_Share                 = 31;
-        public static final int Msg_Preferences_Edit            = 32;
-        public static final int Msg_KeyCode_Map_Set             = 33;
-        public static final int Msg_Delete_Cache                = 34;
-        public static final int Msg_Exit_Service                = 35;
+        public static final int Msg_Text_Load                   = 18;
+        public static final int Msg_Text_Show                   = 19;
+        public static final int Msg_Text_Set_Style              = 20;
+        public static final int Msg_Text_Set_Time               = 21;
+        public static final int Msg_Text_Add_Time               = 22;
+        public static final int Msg_Text_Set_Filters            = 23;
+        public static final int Msg_Text_Add_Filters            = 24;
+        public static final int Msg_Repeat_Mode                 = 25;
+        public static final int Msg_Resize_Mode                 = 26;
+        public static final int Msg_Shuffle                     = 27;
+
+        public static final int Msg_Show_Toast                  = 28;
+        public static final int Msg_Show_Settings               = 29;
+        public static final int Msg_Show_Player                 = 30;
+        public static final int Msg_Hide_Player                 = 31;
+        public static final int Msg_Start_Activity              = 32;
+        public static final int Msg_Video_Share                 = 33;
+        public static final int Msg_Preferences_Edit            = 34;
+        public static final int Msg_KeyCode_Map_Set             = 35;
+        public static final int Msg_Delete_Cache                = 36;
+        public static final int Msg_Exit_Service                = 37;
 
         public interface Msg_Runtime_Permissions {
-            public static final int Request_EXTERNAL_STORAGE    = 36;
-            public static final int Granted                     = 37;
+            public static final int Request_EXTERNAL_STORAGE    = 38;
+            public static final int Granted                     = 39;
         }
     }
 
@@ -236,6 +239,8 @@ public class Constant {
         public static final String VOLUME_OFFSET                = "/add-volume-offset";
         public static final String VOLUME_MUTE                  = "/mute-volume";
         public static final String AUDIO_LOAD                   = "/load-audio-tracks";
+        public static final String AUDIO_SET_OFFSET             = "/set-audio-offset";
+        public static final String AUDIO_ADD_OFFSET             = "/add-audio-offset";
         public static final String TXT_LOAD                     = "/load-captions";
         public static final String TXT_SHOW                     = "/show-captions";
         public static final String TXT_SET_STYLE                = "/set-captions-style";

@@ -459,6 +459,18 @@ final class MyMessageHandler extends Handler {
         break;
       }
 
+      case Constant.Msg.Msg_Audio_Set_Time : {
+        long set_offset = (long) msg.obj;
+        playerManager.AirPlay_set_audio_offset(set_offset);
+        break;
+      }
+
+      case Constant.Msg.Msg_Audio_Add_Time : {
+        long add_offset = (long) msg.obj;
+        playerManager.AirPlay_add_audio_offset(add_offset);
+        break;
+      }
+
       case Constant.Msg.Msg_Text_Show : {
         if (msg.obj == null) {
           playerManager.AirPlay_toggle_captions();
