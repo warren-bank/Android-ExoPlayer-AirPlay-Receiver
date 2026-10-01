@@ -193,20 +193,19 @@ public final class TimeOffsetAudioProcessor extends BaseAudioProcessor {
     /*
      * Adjust delay relative to the amount already emitted.
      */
-    if (newDelayFrames > oldDelayFrames) {
-      silenceFramesRemaining += newDelayFrames - oldDelayFrames;
-    } else if (newDelayFrames < oldDelayFrames) {
-      long framesToRemove = oldDelayFrames - newDelayFrames;
-      silenceFramesRemaining = Math.max(0, silenceFramesRemaining - framesToRemove);
+    silenceFramesRemaining += newDelayFrames - oldDelayFrames;
+    if (silenceFramesRemaining < 0) {
+      framesToDrop -= silenceFramesRemaining;
+      silenceFramesRemaining = 0;
     }
 
     /*
      * Adjust the amount of input that should be discarded.
      */
-    if (newAdvanceFrames > oldAdvanceFrames) {
-      framesToDrop += newAdvanceFrames - oldAdvanceFrames;
-    } else if (newAdvanceFrames < oldAdvanceFrames) {
-      framesToDrop = Math.max(0, framesToDrop - (oldAdvanceFrames - newAdvanceFrames));
+    framesToDrop += newAdvanceFrames - oldAdvanceFrames;
+    if (framesToDrop < 0) {
+      silenceFramesRemaining -= framesToDrop;
+      framesToDrop = 0;
     }
   }
 
