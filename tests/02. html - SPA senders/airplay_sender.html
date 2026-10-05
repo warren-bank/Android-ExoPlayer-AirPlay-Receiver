@@ -241,6 +241,14 @@ window.onload  = () => {
   const $add_txt_offset_seconds       = document.querySelector('input#add_txt_offset_seconds')
   const $add_txt_offset_ms            = document.querySelector('input#add_txt_offset_ms')
   const $add_txt_offset               = document.querySelector('button#add_txt_offset')
+  const $set_audio_offset_minutes     = document.querySelector('input#set_audio_offset_minutes')
+  const $set_audio_offset_seconds     = document.querySelector('input#set_audio_offset_seconds')
+  const $set_audio_offset_ms          = document.querySelector('input#set_audio_offset_ms')
+  const $set_audio_offset             = document.querySelector('button#set_audio_offset')
+  const $add_audio_offset_minutes     = document.querySelector('input#add_audio_offset_minutes')
+  const $add_audio_offset_seconds     = document.querySelector('input#add_audio_offset_seconds')
+  const $add_audio_offset_ms          = document.querySelector('input#add_audio_offset_ms')
+  const $add_audio_offset             = document.querySelector('button#add_audio_offset')
   const $font_size                    = document.querySelector('input#font_size')
   const $apply_embedded               = document.querySelector('select#apply_embedded')
   const $set_captions_style           = document.querySelector('button#set_captions_style')
@@ -1220,6 +1228,44 @@ window.onload  = () => {
       const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
 
       const path = `/add-captions-offset?value=${offset}`
+      const data = null
+
+      send_message(path, data)
+    }
+    catch(e){}
+  }
+
+  $set_audio_offset.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      const min = get_value($set_audio_offset_minutes, 0)    // const min = parseInt($set_audio_offset_minutes.value, 10) || 0
+      const sec = get_value($set_audio_offset_seconds, 0)    // const sec = parseInt($set_audio_offset_seconds.value, 10) || 0
+      const ms  = get_value($set_audio_offset_ms,      0)    // const ms  = parseInt($set_audio_offset_ms.value,      10) || 0
+
+      const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+
+      const path = `/set-audio-offset?value=${offset}`
+      const data = null
+
+      send_message(path, data)
+    }
+    catch(e){}
+  }
+
+  $add_audio_offset.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    try {
+      const min = get_value($add_audio_offset_minutes, 0)    // const min = parseInt($add_audio_offset_minutes.value, 10) || 0
+      const sec = get_value($add_audio_offset_seconds, 0)    // const sec = parseInt($add_audio_offset_seconds.value, 10) || 0
+      const ms  = get_value($add_audio_offset_ms,      0)    // const ms  = parseInt($add_audio_offset_ms.value,      10) || 0
+
+      const offset = (ms * 1000) + (sec * 1000 * 1000) + (min * 60 * 1000 * 1000)
+
+      const path = `/add-audio-offset?value=${offset}`
       const data = null
 
       send_message(path, data)
@@ -2384,6 +2430,34 @@ window.onload  = () => {
             </td>
             <td class="oneline fullwidth">
               <button id="add_txt_offset">Add CC Offset</button>
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline">
+              <input id="set_audio_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
+            </td>
+            <td class="oneline">
+              <input id="set_audio_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
+            </td>
+            <td class="oneline">
+              <input id="set_audio_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="set_audio_offset">Set Audio Offset</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="oneline">
+              <input id="add_audio_offset_minutes" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="min" /> : 
+            </td>
+            <td class="oneline">
+              <input id="add_audio_offset_seconds" type="number" x-type="range" x-min="-59"  x-max="59"  x-step="1" min="-59"  max="59"  step="1" size="3" placeholder="sec" /> : 
+            </td>
+            <td class="oneline">
+              <input id="add_audio_offset_ms"      type="number" x-type="range" x-min="-999" x-max="999" x-step="1" min="-999" max="999" step="1" size="3" placeholder="ms" />
+            </td>
+            <td class="oneline fullwidth">
+              <button id="add_audio_offset">Add Audio Offset</button>
             </td>
           </tr>
         </table>
