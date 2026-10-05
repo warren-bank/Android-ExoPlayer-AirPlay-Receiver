@@ -195,6 +195,7 @@ window.onload  = () => {
   const $airplay_tls                  = document.querySelector('input#airplay_tls')
   const $video_url                    = document.querySelector('input#video_url')
   const $caption_url                  = document.querySelector('input#caption_url')
+  const $audio_url                    = document.querySelector('input#audio_url')
   const $referer_url                  = document.querySelector('input#referer_url')
   const $req_headers                  = document.querySelector('textarea#req_headers')
   const $use_cache                    = document.querySelector('input#use_cache')
@@ -210,6 +211,7 @@ window.onload  = () => {
   const $play                         = document.querySelector('button#play')
   const $queue                        = document.querySelector('button#queue')
   const $load_captions                = document.querySelector('button#load_captions')
+  const $load_audio                   = document.querySelector('button#load_audio')
   const $pause                        = document.querySelector('button#pause')
   const $resume                       = document.querySelector('button#resume')
   const $toggle_mute                  = document.querySelector('button#toggle_mute')
@@ -291,7 +293,7 @@ window.onload  = () => {
 
   const reset_video_form_fields = () => {
     const text_fields = [
-      $video_url, $caption_url, $referer_url, $req_headers,
+      $video_url, $caption_url, $audio_url, $referer_url, $req_headers,
       $start_position_hours, $start_position_minutes, $start_position_seconds,
       $stop_position_hours,  $stop_position_minutes,  $stop_position_seconds,
       $drm_license_server, $drm_headers
@@ -324,29 +326,40 @@ window.onload  = () => {
   const encoded_urls = {
     video:   null,
     caption: null,
+    audio:   null,
     referer: null,
     drm:     null
   }
 
-  const get_encoded_video_url = () => {
-    let b64, hash_regex_pattern, matches
+  const get_encoded_video_url = (hash) => {
+    if (!hash) hash = window.location.hash
+    if (!hash) return
 
-    b64 = '[A-Za-z0-9+/=%]'
-    hash_regex_pattern = '^#/watch/(' + b64 + '+?)(?:/subtitle/(' + b64 + '+?))?(?:/referer/(' + b64 + '+?))?(?:/drm/(' + b64 + '+?))?$'
-    hash_regex_pattern = new RegExp(hash_regex_pattern)
+    const regex = {
+      keys: new RegExp('(/(?:watch|subtitle|audio|referer|drm)/)'),
+      b64:  new RegExp('^[A-Za-z0-9+/=%]+$')
+    }
 
-    matches = hash_regex_pattern.exec(window.location.hash)
-    if (matches && matches.length && matches[1]) {
-      encoded_urls.video = matches[1]
+    const hash_chunks = hash.split(regex.keys)
+    if (!hash_chunks || !Array.isArray(hash_chunks) || (hash_chunks.length < 2)) return
 
-      if ((matches.length > 2) && matches[2])
-        encoded_urls.caption = matches[2]
+    const hash_to_url_keys_map = {
+      '/watch/':    'video',
+      '/subtitle/': 'caption',
+      '/audio/':    'audio',
+      '/referer/':  'referer',
+      '/drm/':      'drm'
+    }
 
-      if ((matches.length > 3) && matches[3])
-        encoded_urls.referer = matches[3]
-
-      if ((matches.length > 4) && matches[4])
-        encoded_urls.drm = matches[4]
+    let url_key = null
+    for (let chunk of hash_chunks) {
+      if (regex.keys.test(chunk)) {
+        url_key = hash_to_url_keys_map[chunk]
+      }
+      else if (url_key && regex.b64.test(chunk)) {
+        encoded_urls[url_key] = chunk
+        url_key = null
+      }
     }
   }
 
@@ -406,6 +419,9 @@ window.onload  = () => {
     if (encoded_urls.caption)
       $caption_url.value = decode_URL(encoded_urls.caption)
 
+    if (encoded_urls.audio)
+      $audio_url.value = decode_URL(encoded_urls.audio)
+
     if (encoded_urls.referer)
       $referer_url.value = decode_URL(encoded_urls.referer)
 
@@ -428,6 +444,7 @@ window.onload  = () => {
       data.push('referUrl:  Referer')
       data.push('reqHeader: android.media.intent.extra.HTTP_HEADERS')
       data.push('textUrl:   ')
+      data.push('audioUrl:  ')
       data.push('drmScheme: ')
       data.push('drmUrl:    ')
       data.push('drmHeader: ')
@@ -803,6 +820,7 @@ window.onload  = () => {
     if (!url)
           url = $video_url.value.trim()
     const txt = $caption_url.value.trim()
+    const aud = $audio_url.value.trim()
     const ref = $referer_url.value.trim()
 
     const use_cache = $use_cache.checked
@@ -825,6 +843,9 @@ window.onload  = () => {
     let data = `Content-Location: ${url}`
     if (txt) {
       data += `\nCaption-Location: ${txt}`
+    }
+    if (aud) {
+      data += `\nAudio-Location: ${aud}`
     }
     if (ref) {
       data += `\nReferer: ${ref}`
@@ -1024,6 +1045,18 @@ window.onload  = () => {
     const data = `Caption-Location: ${txt}`
 
     if (txt)
+      send_message(path, data)
+  }
+
+  $load_audio.onclick = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const path = '/load-audio-tracks'
+    const aud  = $audio_url.value.trim()
+    const data = `Audio-Location: ${aud}`
+
+    if (aud)
       send_message(path, data)
   }
 
@@ -1634,6 +1667,7 @@ window.onload  = () => {
         'chooser-title:   Open video in:',
         `extra-referUrl:  ${json.referer_url || ''}`,
         `extra-textUrl:   ${json.caption_url || ''}`,
+        `extra-audioUrl:  ${json.audio_url   || ''}`,
         `extra-useCache:  ${json.use_offline_cache ? 'true' : 'false'}`,
         `extra-startPos:  ${start_offset || ''}`,
         `extra-stopPos:   ${stop_offset  || ''}`,
@@ -1699,6 +1733,7 @@ window.onload  = () => {
       'chooser-title:   Open video in:',
       `extra-referUrl:  ${$referer_url.value.trim()}`,
       `extra-textUrl:   ${$caption_url.value.trim()}`,
+      `extra-audioUrl:  ${$audio_url.value.trim()}`,
       `extra-useCache:  ${$use_cache.checked ? 'true' : 'false'}`,
       `extra-startPos:  ${start_offset ? start_offset : ''}`,
       `extra-stopPos:   ${stop_offset  ? stop_offset  : ''}`,
@@ -1766,7 +1801,7 @@ window.onload  = () => {
       }
 
       const regexs = {
-        line_parser: /^\s*(data|extra-(?:referUrl|textUrl|useCache|startPos|stopPos|drmScheme|drmUrl|reqHeader|drmHeader))\s*[:=]\s*(.*)$/
+        line_parser: /^\s*(data|extra-(?:referUrl|textUrl|audioUrl|useCache|startPos|stopPos|drmScheme|drmUrl|reqHeader|drmHeader))\s*[:=]\s*(.*)$/
       }
 
       const req_headers = []
@@ -1789,6 +1824,9 @@ window.onload  = () => {
                 break
               case 'extra-textUrl':
                 $caption_url.value = val
+                break
+              case 'extra-audioUrl':
+                $audio_url.value = val
                 break
               case 'extra-useCache':
                 $use_cache.checked = (val.toLowerCase() === 'true')
@@ -2007,6 +2045,7 @@ window.onload  = () => {
     const item = $sample_videos.selectedOptions[0]
     const url  = item.getAttribute('x-video-url')
     const txt  = item.getAttribute('x-caption-url')
+    const aud  = item.getAttribute('x-audio-url')
     const ref  = item.getAttribute('x-referer-url')
     const drm  = {
       scheme:    item.getAttribute('x-drm-license-scheme'),
@@ -2016,6 +2055,7 @@ window.onload  = () => {
     if (url) {
       $video_url.value   = url
       $caption_url.value = (txt) ? txt : ''
+      $audio_url.value   = (aud) ? aud : ''
       $referer_url.value = (ref) ? ref : ''
 
       set_time_offset('start', item)
@@ -2093,6 +2133,14 @@ window.onload  = () => {
             </td>
             <td class="oneline left">
               <input id="caption_url" type="url" size="100" placeholder="https://example.com/subtitles.srt" />
+            </td>
+          </tr>
+          <tr class="advanced_ui_mode">
+            <td class="oneline right">
+              <label for="audio_url">Audio Track URL:</label>
+            </td>
+            <td class="oneline left">
+              <input id="audio_url" type="url" size="100" placeholder="https://example.com/audio_track.m4a" />
             </td>
           </tr>
           <tr>
@@ -2215,6 +2263,7 @@ window.onload  = () => {
           <tr class="advanced_ui_mode">
             <td colspan=2 align="center" class="oneline">
               <button id="load_captions">Load Captions</button>
+              <button id="load_audio">Load Audio Track</button>
             </td>
           </tr>
         </table>
