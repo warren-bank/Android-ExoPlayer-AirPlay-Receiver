@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">прикажи</string>
+  <string name="hide">скриј</string>
+  <string name="toast_registration_started">Регистрација AirPlay услуга...</string>
+  <string name="toast_registration_success">AirPlay Успешна регистрација</string>
+  <string name="toast_registration_failure">AirPlay регистрација није успела</string>
+  <string name="toast_start_activity_error_activity_not_found">Није пронађена никаква активност\n\nНиједан Intent филтер не одговара Intent-у</string>
+  <string name="toast_start_activity_error_security">Недовољно овлашћење\n\nExoAirPlayer Не може да покрене активност</string>
+  <string name="toast_downloadtracker_error_download_start">Преузимање није успело</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Није успело да се добије офлајн лиценца</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Преузимање стримованог садржаја није подржано.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Садржај није подржан на API нивои испод 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Пријемник: услуга ради</string>
+  <string name="notification_service_content_line1">ExoAirPlayer трчећи на:</string>
+  <string name="notification_service_content_line3">Кликните да зауставите услугу.</string>
+  <string name="track_selection_button">Изабери\nТраке</string>
+  <string name="text_offset_selection_button">Синхронизуј\nНаслови</string>
+  <string name="text_offset_selection_title">Померање времена натписа напред или назад</string>
+  <string name="audio_offset_selection_button">Синхронизуј\nАудио</string>
+  <string name="audio_offset_selection_title">Померање времена аудио траке за унапред или уназад</string>
+  <string name="toggle_download_button_start">Почни\nПреузми</string>
+  <string name="toggle_download_button_stop">Стоп\nПреузми</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Подешавања</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Назив услуге</string>
+  <string name="pref_mdsn_server_name_summary">име оглашено од стране mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Лозинка</string>
+  <string name="pref_http_api_password_summary">тајна подељена само са овлашћеним клијентима..</string>
+  <string name="pref_default_user_agent_title">Кориснички агент</string>
+  <string name="pref_default_user_agent_summary">вредност заглавља захтева..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Повећање максималног звучног нивоа (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">ограничити појачавање на..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Макс паралелних преузимања</string>
+  <string name="pref_max_parallel_downloads_summary">величина пула нити у менаџеру за преузимање..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Повећај претрагу уназад (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Временски инкремент за тражење уназад..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Помери напред за јединицу (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Временско повећање за тражење напред..</string>
+  <string name="pref_audio_volume_percent_increment_title">Повећање звучног нивоа (проценат))</string>
+  <string name="pref_audio_volume_percent_increment_summary">када је мање од 100%, повећање обима..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Повећање јачине звука (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">када на 100%, повећање појачања..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">фактор x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">коефицијент за примену релативне корекције..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Праћење тунелизације</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Тунелирани плејбек је омогућен</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Тунелисано репродуковање је онемогућено</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS аудио токови</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Руковач тока је омогућен</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Руковач тока је онемогућен</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Пауза при промени уређаја за аудио излаз</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Пауза је омогућена</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Пауза је онемогућена</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Декодери за медије</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Декодери софтверских проширења су омогућени и преферирани у односу на хардверске декодере.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Декодери софтверских екстензија су онемогућени, омогућени су само хардверски декодери</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Пропуштање звука</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Пропуштање је омогућено</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Пропуштање је онемогућено; декодер врши конверзију у PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Смањите сурраунд звук у стерео</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">када има између 3 и 6 аудио канала, смањити на 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Плеј аудио траке са окружним звуком</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Претвори стерео звук у моно</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Када постоје два аудио канала, смањити на један.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Плеј аудио траке са стерео звуком</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode обавештења о догађајима</string>
+  <string name="pref_footer_notation_summary">Промене у овим подешавањама ступиће на снагу након поновног покретања апликације..</string>
+</resources>

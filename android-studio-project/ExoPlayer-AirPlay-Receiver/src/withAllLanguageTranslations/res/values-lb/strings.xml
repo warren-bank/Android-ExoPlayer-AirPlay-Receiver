@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Wise</string>
+  <string name="hide">verstoppen</string>
+  <string name="toast_registration_started">Registréieren AirPlay Déngscht...</string>
+  <string name="toast_registration_success">AirPlay Registréierung erfollegräich</string>
+  <string name="toast_registration_failure">AirPlay Registréierung gescheitert</string>
+  <string name="toast_start_activity_error_activity_not_found">Keng Aktivitéit fonnt\n\nKeng Intent-Filteren passen zur Intent.</string>
+  <string name="toast_start_activity_error_security">Onbäständege Erlaabnis\n\nExoAirPlayer Kann d\'Aktivitéit net starten</string>
+  <string name="toast_downloadtracker_error_download_start">Download huet net ugefaangen</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Offline-Lizenz net kritt</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Live-Inhalter erofzelueden gëtt net ënnerstëtzt.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Inhalt gëtt net ënnerstëtzt op API Niveaue ënner 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Empfänger: Service leeft</string>
+  <string name="notification_service_content_line1">ExoAirPlayer lafend op:</string>
+  <string name="notification_service_content_line3">Klickt fir de Service ze stoppen.</string>
+  <string name="track_selection_button">Auswielen\nSpuren</string>
+  <string name="text_offset_selection_button">Synchroniséieren\nBildunterschrëften</string>
+  <string name="text_offset_selection_title">Text-Bildunterschrëften: Viraus- oder Verzögerungs-Offset vun der Fräizäit</string>
+  <string name="audio_offset_selection_button">Synchroniséieren\nToun</string>
+  <string name="audio_offset_selection_title">Audio-Spur Viraus- oder Verzögerungszäit-Offset</string>
+  <string name="toggle_download_button_start">Ufänken\nEroflueden</string>
+  <string name="toggle_download_button_stop">Stopp\nEroflueden</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Astellungen</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Numm vum Service</string>
+  <string name="pref_mdsn_server_name_summary">de Numm, deen annoncéiert gëtt vun mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Passwuert</string>
+  <string name="pref_http_api_password_summary">geheim, nëmmen mat autoriséierten Clienten gedeelt..</string>
+  <string name="pref_default_user_agent_title">Benotzeragent</string>
+  <string name="pref_default_user_agent_summary">Ufro-Header-Wäert..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Maximal Audio-Volumen-Erhéijung (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Verstäerkung begrenzen fir..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maximal gläichzäiteg Downloads</string>
+  <string name="pref_max_parallel_downloads_summary">Gréisst vum Thread-Pool am Download-Manager..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Zréck-Sich-Schrëtt (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Zäitincrement fir zréck ze sichen..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Viraus Sichschrëtt (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Zäitincrement fir no vir ze sichen..</string>
+  <string name="pref_audio_volume_percent_increment_title">Erhéijung vum Audio-Volumen (Prozent))</string>
+  <string name="pref_audio_volume_percent_increment_summary">wann manner wéi 100%, Volumenzousaz..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Erhéijung vum Audio-Volumen (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">wann bei 100%, Verstäerkungszousaz..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Multiplikatiounsfaktor fir eng relativ Upassung unzewenden..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Trassentunneléierung</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tunneléiert Widderginn ass aktivéiert.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tunneléiert Widderginn ass ausgeschalt</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Audio-Streamen</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Stream-Handler ass aktivéiert</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Stream-Handler ass deaktivéiert</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Paus bei der Ännerung vum Audioausgabegerät</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">D\'Paus ass aktivéiert.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Paus ass deaktivéiert</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Medie-Decoder</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Software-Erweiderungsdekoder si aktivéiert a ginn Hardware-Dekoder virgezunn.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Software-Dekoder sinn deaktivéiert, nëmmen Hardware-Dekoder sinn aktivéiert.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Audio-Duerchléit</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital passthrough ass aktivéiert</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough ass deaktivéiert; de Dekoder féiert d\'Ëmwandlung op PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Surround-Sound op Stereo mëschen</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Wann et tëscht 3 a 6 Audiokanäl sinn, reduzéiert op 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Spillt Audiospuren mat Surround-Sound</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo-Toun op Mono mëschen</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Wann et zwou Audiokanäl ginn, reduzéiert op ee.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Audiotracken mat Stereoklang ofspillen</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Evenementnotifikatiounen</string>
+  <string name="pref_footer_notation_summary">Ännerungen un dëse Astellungen ginn no engem Neustart vun der App gëlt..</string>
+</resources>

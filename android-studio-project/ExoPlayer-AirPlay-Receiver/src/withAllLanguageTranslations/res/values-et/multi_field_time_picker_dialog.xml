@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Nullini taastamine</string>
+  <string name="accessibility_time_picker_sign">Positiivne või negatiivne märk</string>
+  <string name="accessibility_time_picker_hour">Tund</string>
+  <string name="accessibility_time_picker_minute">Protokoll</string>
+  <string name="accessibility_time_picker_second">Teiseks</string>
+  <string name="accessibility_time_picker_milli">millisekund</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

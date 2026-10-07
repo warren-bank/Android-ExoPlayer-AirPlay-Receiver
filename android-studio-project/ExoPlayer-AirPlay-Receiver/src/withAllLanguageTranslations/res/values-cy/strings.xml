@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">dangos</string>
+  <string name="hide">Cuddio</string>
+  <string name="toast_registration_started">Cofrestru AirPlay gwasanaeth...</string>
+  <string name="toast_registration_success">AirPlay Cofrestru llwyddiannus</string>
+  <string name="toast_registration_failure">AirPlay Methodd y cofrestriad</string>
+  <string name="toast_start_activity_error_activity_not_found">Ni chanfuwyd unrhyw weithgarwch\n\nNid oes unrhyw Hidlyddion Bwriad yn cyfateb i\'r Bwriad</string>
+  <string name="toast_start_activity_error_security">Caniatâd Annigonol\n\nExoAirPlayer Ni ellir dechrau\'r Gweithgaredd</string>
+  <string name="toast_downloadtracker_error_download_start">Methodd lawrlwytho</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Methodd â chael trwydded all-lein</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Nid yw lawrlwytho cynnwys byw yn cael ei gefnogi.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Nid yw cynnwys yn cael ei gefnogi ar API lefelau islaw 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Derbynnydd: gwasanaeth yn rhedeg</string>
+  <string name="notification_service_content_line1">ExoAirPlayer yn rhedeg ar:</string>
+  <string name="notification_service_content_line3">Cliciwch i atal y gwasanaeth.</string>
+  <string name="track_selection_button">Dewis\nTraciau</string>
+  <string name="text_offset_selection_button">Cydamseru\nCapsiynau</string>
+  <string name="text_offset_selection_title">Gwella neu oedi gwrthbwyso amser y pennawd</string>
+  <string name="audio_offset_selection_button">Cydamseru\nClyw</string>
+  <string name="audio_offset_selection_title">Gwrthbwyso Amser Symud Ymlaen neu Oedi\'r Llinell Sain</string>
+  <string name="toggle_download_button_start">Dechrau\nLawrlwytho</string>
+  <string name="toggle_download_button_stop">Stopia\nLawrlwytho</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Gosodiadau</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Enw\'r Gwasanaeth</string>
+  <string name="pref_mdsn_server_name_summary">y name a hysbysebwyd gan mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Cyfrinair</string>
+  <string name="pref_http_api_password_summary">cyfrinach a rennir yn unig â chleientiaid awdurdodedig..</string>
+  <string name="pref_default_user_agent_title">Asiant Defnyddiwr</string>
+  <string name="pref_default_user_agent_summary">gwerth pennawd y cais..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Hwb i\'r Sŵn Uchaf (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">cyfyngu ar y gwaethygiad i..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Uchafswm Lawrlwythiadau Paralel</string>
+  <string name="pref_max_parallel_downloads_summary">Maint pwll edafedd y rheolwr lawrlwytho..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Cynyddu Chwilio\'n ôl (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">cynyddiad amser i chwilio am yn ôl..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Chwilio ymlaen am gynnydd (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">cynyddiad amser i chwilio ymlaen..</string>
+  <string name="pref_audio_volume_percent_increment_title">Cynyddiad yn lefel sain (canran))</string>
+  <string name="pref_audio_volume_percent_increment_summary">pan fo llai na 100%, cynydd cyfaint..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Cynyddu lefel sain (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">pan yn 100%, cynydd amlhau..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">ffactor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">ffactor lluosiad i gymhwyso addasiad cymharol..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Twnelu Traciau</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Mae chwarae drwodd wedi\'i alluogi</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Mae chwarae\'n ôl twneli wedi\'i analluogi</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ffrydiau sain</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Mae\'r trinydd ffrwd wedi\'i alluogi</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Mae\'r trinydd ffrwd wedi\'i analluogi</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Seibiant ar newid i\'r ddyfais allbwn sain</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Mae seibiant wedi\'i alluogi</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Mae\'r saib wedi\'i analluogi</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dadgodwyr Cyfryngau</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Mae dadgodwyr estyniad meddalwedd wedi\'u galluogi a\'u ffafrio dros ddadgodwyr caledwedd</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Mae dadgodwyr estyniad meddalwedd wedi\'u analluogi, dim ond dadgodwyr caledwedd sydd wedi\'u galluogi.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Trosglwyddiad Sain</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Mae passthrough wedi\'i alluogi</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Mae passthrough wedi\'i analluogi; mae\'r dadgodwr yn perfformio trosi i PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Cymysgu sain amgylchynol i stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">pan fo rhwng 3 a 6 sianel sain, lleihau i 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Chwarae traciau sain gyda sain amgylchynol</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Cymysgu sain stereo i lawr i mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">pan fo 2 sianel sain, lleihau i 1</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Chwarae traciau sain stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Hysbysiadau digwyddiadau</string>
+  <string name="pref_footer_notation_summary">Bydd newidiadau i\'r gosodiadau hyn yn dod i rym ar ôl ailgychwyn yr ap..</string>
+</resources>

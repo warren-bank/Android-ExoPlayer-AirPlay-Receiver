@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ցուցադրել</string>
+  <string name="hide">թաքցնել</string>
+  <string name="toast_registration_started">Գրանցում AirPlay ծառայություն...</string>
+  <string name="toast_registration_success">AirPlay Գրանցումը հաջողությամբ ավարտվեց</string>
+  <string name="toast_registration_failure">AirPlay Գրանցումը ձախողվեց</string>
+  <string name="toast_start_activity_error_activity_not_found">Գործունեություն չի հայտնաբերվել\n\nՈչ մի Intent Filter չի համապատասխանում Intent-ին։</string>
+  <string name="toast_start_activity_error_security">Թույլտվություն չի բավարարում\n\nExoAirPlayer Գործունեությունը չի կարող սկսվել</string>
+  <string name="toast_downloadtracker_error_download_start">Ներբեռնումը չհաջողվեց սկսել</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Չհաջողվեց ստանալ օֆլայն լիցենզիա</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ուղիղ բովանդակության ներբեռնումը չի աջակցվում։</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Բովանդակությունը չի աջակցվում API 18-ից ցածր մակարդակներ</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Ստացողը՝ ծառայությունը աշխատում է</string>
+  <string name="notification_service_content_line1">ExoAirPlayer գործում է:</string>
+  <string name="notification_service_content_line3">Սեղմեք ծառայությունը դադարեցնելու համար.</string>
+  <string name="track_selection_button">Ընտրել\nԵրգեր</string>
+  <string name="text_offset_selection_button">Համաժամեցնել\nՆկարագրություններ</string>
+  <string name="text_offset_selection_title">Տեքստային վերնագրերի առաջ կամ հետաձգման ժամանակային տեղաշարժ</string>
+  <string name="audio_offset_selection_button">Համաժամեցնել\nՁայն</string>
+  <string name="audio_offset_selection_title">Ձայնային տրակտի առաջ կամ հետ ձգման ժամանակի տեղաշարժ</string>
+  <string name="toggle_download_button_start">Սկսել\nՆերբեռնել</string>
+  <string name="toggle_download_button_stop">Դադարեցնել\nՆերբեռնել</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Կարգավորումներ</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Ծառայության անվանումը</string>
+  <string name="pref_mdsn_server_name_summary">անունը գովազդված է mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Գաղտնաբառ</string>
+  <string name="pref_http_api_password_summary">Գաղտնիք, որը կիսվում է միայն թույլատրված հաճախորդների հետ..</string>
+  <string name="pref_default_user_agent_title">Օգտվողի գործակալ</string>
+  <string name="pref_default_user_agent_summary">պահանջի վերնագրի արժեքը..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Աուդիո ծավալը առավելագույնի հասցնել (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">ամպլիֆիկացիան զսպել..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Մաքսիմալ զուգահեռ ներբեռնումներ</string>
+  <string name="pref_max_parallel_downloads_summary">Ներբեռնումների մենեջերի թելերի havաքածուի չափը..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Հետընթաց որոնման ավելացում (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Հետադարձ որոնման ժամանակային ավելացում..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Առաջ շարժվել՝ փնտրման քայլ (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">առաջ շարժվելու ժամանակային ավելացում..</string>
+  <string name="pref_audio_volume_percent_increment_title">Ձայնի բարձրացման տոկոս)</string>
+  <string name="pref_audio_volume_percent_increment_summary">երբ պակաս է 100%, ծավալային ավելացում..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ձայնի ծավալը մեծացնել (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">երբ at-ում 100%, ուժեղացման ավելացում..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">գործոն x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Հարաբերական շտկման կիրառման բազմապատկիչ գործակից..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Թունելավորում</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Թունելացված նվագարկումը միացված է</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Թունելացված նվագարկումը անջատված է</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ձայնային հոսքեր</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Հոսքի մշակիչը միացված է</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Հոսքի մշակիչը անջատված է</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Ձայնային ելքային սարքի փոփոխման դադարեցում</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Դադարը միացված է</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Դադարեցումը անջատված է</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Մեդիա դեկոդերներ</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Ծրագրային ընդլայնման դեկոդերները միացված են և նախընտրելի են ապարատային դեկոդերների նկատմամբ։</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Ծրագրային դեկոդերները անջատված են, միայն սարքային դեկոդերները միացված են։</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Օդիո փոխանցում</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Պասթռութը միացված է</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough-ը անջատված է; դեկոդերը կատարում է փոխարկում դեպի PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Սարաունդ ձայնը ստերեո ձևաչափով խառնել</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">երբ աուդիոալիքների քանակը 3-ից մինչև 6 է, նվազեցնել այն մինչև 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Նվագարկել աուդիո հետքեր շրջապատող ձայնով</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Ստերեո ձայնը մոնո ձևաչափով խառնել</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Երբ կան 2 աուդիո ալիքներ, նվազեցնել դրանք մեկի։</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Նվագարկել աուդիո հետքեր ստերեո ձայնով</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Միջադեպերի ծանուցումներ</string>
+  <string name="pref_footer_notation_summary">Այս կարգավորումների փոփոխությունները ուժի մեջ կմտնեն հավելվածը վերագործարկելուց հետո։.</string>
+</resources>

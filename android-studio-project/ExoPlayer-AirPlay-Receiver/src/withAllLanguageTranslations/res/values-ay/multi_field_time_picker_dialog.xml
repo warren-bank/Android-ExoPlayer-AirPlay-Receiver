@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Ch\'usar kutt\'ayaña</string>
+  <string name="accessibility_time_picker_sign">Askïki jan ukax jan walïki</string>
+  <string name="accessibility_time_picker_hour">Ura</string>
+  <string name="accessibility_time_picker_minute">Juk\'a pacha</string>
+  <string name="accessibility_time_picker_second">Payïri</string>
+  <string name="accessibility_time_picker_milli">Juk\'a pacha</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

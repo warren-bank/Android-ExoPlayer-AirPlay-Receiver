@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">montri</string>
+  <string name="hide">Kaŝi</string>
+  <string name="toast_registration_started">Registriĝante AirPlay servo...</string>
+  <string name="toast_registration_success">AirPlay Sukcesa registrado</string>
+  <string name="toast_registration_failure">AirPlay Registriĝo malsukcesis</string>
+  <string name="toast_start_activity_error_activity_not_found">Neniuj agadoj trovitaj\n\nNeniuj intencaj filtriloj kongruas kun la intenco.</string>
+  <string name="toast_start_activity_error_security">Mankas permeso\n\nExoAirPlayer Ne eblas starti la agadon.</string>
+  <string name="toast_downloadtracker_error_download_start">Malsukcesis komenci elŝuton</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Malsukcesis akiri eksterretan licencon</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Elŝutado de viva enhavo ne estas subtenata.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Enhavo ne estas subtenata sur API niveloj sub 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Ricevilisto: servo funkcias</string>
+  <string name="notification_service_content_line1">ExoAirPlayer kurante je:</string>
+  <string name="notification_service_content_line3">Klaku por ĉesigi la servon.</string>
+  <string name="track_selection_button">Elekti\nSpuroj</string>
+  <string name="text_offset_selection_button">Sinkronigi\nSubskriboj</string>
+  <string name="text_offset_selection_title">Tekstaj bildotekstoj: Antaŭenigi aŭ malfruigi la tempan delokiĝon</string>
+  <string name="audio_offset_selection_button">Sinkronigi\nSono</string>
+  <string name="audio_offset_selection_title">Ofseto de antaŭtempo aŭ malfruotempo de la sontrako</string>
+  <string name="toggle_download_button_start">Komenco\nElŝuti</string>
+  <string name="toggle_download_button_stop">Ĉesu\nElŝuti</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Agordoj</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nomo de la servo</string>
+  <string name="pref_mdsn_server_name_summary">la nomo reklamita de mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Pasvorto</string>
+  <string name="pref_http_api_password_summary">sekreto dividita nur kun rajtigitaj klientoj..</string>
+  <string name="pref_default_user_agent_title">Uzanto-agento</string>
+  <string name="pref_default_user_agent_summary">valoro de petkapaĵo..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Plimalto de maksimuma aŭdvolumo (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">bridi plifortigon al..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maksimumo da paralelaj elŝutoj</string>
+  <string name="pref_max_parallel_downloads_summary">Grandeco de fadeno-poolo en elŝutmanaĝero..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Pliigo de retroira serĉo (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">tempa pliiĝo por serĉi malantaŭen..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Antaŭen serĉi pliiĝon (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">tempa pliiĝo por serĉi antaŭen..</string>
+  <string name="pref_audio_volume_percent_increment_title">Pliigo de la aŭdvolumo (procento))</string>
+  <string name="pref_audio_volume_percent_increment_summary">kiam malpli ol 100%, volumpliiĝo..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Pliigo de la aŭdvolumeno (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">kiam ĉe 100%, pligrandiga pliiĝo..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktoro x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">multiplikiga faktoro por apliki relativan alĝustigon..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Traka tunelado</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tunelita reproduktado estas ebligita.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tunelita reproduktado estas malŝaltita.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS sonfluoj</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">La flu-traktilo estas aktivigita.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Flusprizorganto estas malŝaltita.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Paŭzo dum ŝanĝo de la aŭdio-elsenda aparato</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Paŭzo estas ebligita</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Paŭzo estas malŝaltita</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Mezilaj deĉifriloj</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Programaj deĉifriloj estas ebligitaj kaj preferataj ol aparataj deĉifriloj.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Softvaraj deĉifriloj estas malŝaltitaj, nur aparataj deĉifriloj estas ŝaltitaj.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Aŭda Trapaso</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Pasa traigo estas ebligita.</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Pasa traigo estas malŝaltita; la dekodilo faras konvertiĝon al PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Miksu ĉirkaŭsonon al stereofonio.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Kiam estas inter tri kaj ses aŭdaj kanaloj, reduktu al du.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Ludu aŭdion kun ĉirkaŭsona sono.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Konverti stereofonan sonon al monofona</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Kiam estas du aŭdkanaloj, reduktu al unu.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Ludu aŭdotrakojn kun stereofonia sono.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Okazaĵaj sciigoj</string>
+  <string name="pref_footer_notation_summary">Ŝanĝoj al ĉi tiuj agordoj ekvalidiĝos post kiam la aplikaĵo estos restartigita..</string>
+</resources>

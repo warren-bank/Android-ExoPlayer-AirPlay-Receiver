@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">શૂન્ય પર રીસેટ કરો</string>
+  <string name="accessibility_time_picker_sign">ધન કે ઋણ ચિહ્ન</string>
+  <string name="accessibility_time_picker_hour">કલાક</string>
+  <string name="accessibility_time_picker_minute">મિનિટ</string>
+  <string name="accessibility_time_picker_second">બીજું</string>
+  <string name="accessibility_time_picker_milli">મિલીસેકન્ડ</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

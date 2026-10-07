@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">കാണിക്കുക</string>
+  <string name="hide">മറയ്ക്കുക</string>
+  <string name="toast_registration_started">രജിസ്റ്റർ ചെയ്യുക AirPlay സേവനം...</string>
+  <string name="toast_registration_success">AirPlay രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി</string>
+  <string name="toast_registration_failure">AirPlay രജിസ്ട്രേഷൻ പരാജയപ്പെട്ടു</string>
+  <string name="toast_start_activity_error_activity_not_found">പ്രവർത്തനങ്ങളൊന്നും കണ്ടെത്തിയില്ല\n\nയാതൊരു ഇന്റന്റ് ഫിൽട്ടറുകളും ഇന്റന്റുമായി പൊരുത്തപ്പെടുന്നില്ല.</string>
+  <string name="toast_start_activity_error_security">പര്യാപ്തമായ അനുമതിയില്ല\n\nExoAirPlayer ആക്റ്റിവിറ്റി ആരംഭിക്കാൻ കഴിയുന്നില്ല</string>
+  <string name="toast_downloadtracker_error_download_start">ഡൗൺലോഡ് ആരംഭിക്കുന്നതിൽ പരാജയപ്പെട്ടു</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">ഓഫ്‌ലൈൻ ലൈസൻസ് ലഭിക്കുന്നതിൽ പരാജയപ്പെട്ടു</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">ലൈവ് ഉള്ളടക്കം ഡൗൺലോഡ് ചെയ്യുന്നത് പിന്തുണയ്ക്കുന്നില്ല.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM ഉള്ളടക്കം പിന്തുണയ്ക്കുന്നില്ല API 18-ന് താഴെയുള്ള തലങ്ങൾ</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay റിസീവർ: സേവനം പ്രവർത്തിക്കുന്നു</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ഓടുന്നു:</string>
+  <string name="notification_service_content_line3">സേവനം നിർത്താനായി ക്ലിക്ക് ചെയ്യുക.</string>
+  <string name="track_selection_button">തിരഞ്ഞെടുക്കുക\nപാതകൾ</string>
+  <string name="text_offset_selection_button">സിങ്ക് ചെയ്യുക\nഅടിക്കുറിപ്പുകൾ</string>
+  <string name="text_offset_selection_title">ടെക്സ്റ്റ് ക്യാപ്ഷനുകളുടെ മുന്നോട്ടോ പിന്നോട്ടോ ഉള്ള സമയ ഇടവേള ക്രമീകരിക്കുക</string>
+  <string name="audio_offset_selection_button">സിങ്ക് ചെയ്യുക\nശബ്ദം</string>
+  <string name="audio_offset_selection_title">ഓഡിയോ ട്രാക്ക് മുൻകൂറോ വൈകിയോ ഉള്ള സമയ വ്യത്യാസം</string>
+  <string name="toggle_download_button_start">തുടങ്ങുക\nഡൗൺലോഡ് ചെയ്യുക</string>
+  <string name="toggle_download_button_stop">നിൽക്കുക\nഡൗൺലോഡ് ചെയ്യുക</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer ക്രമീകരണങ്ങൾ</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour സേവനത്തിൻ്റെ പേര്</string>
+  <string name="pref_mdsn_server_name_summary">പരസ്യം ചെയ്ത പേര് mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API പാസ്‌വേഡ്</string>
+  <string name="pref_http_api_password_summary">അംഗീകൃത ഉപഭോക്താക്കൾക്ക് മാത്രമായി പങ്കുവെച്ച രഹസ്യം..</string>
+  <string name="pref_default_user_agent_title">ഉപയോക്തൃ ഏജന്റ്</string>
+  <string name="pref_default_user_agent_summary">അഭ്യർത്ഥന ഹെഡർ മൂല്യം..</string>
+  <string name="pref_max_audio_volume_boost_db_title">മാക്സ് ഓഡിയോ വോളിയം ബൂസ്റ്റ് (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">വർദ്ധനവ് നിയന്ത്രിക്കുക..</string>
+  <string name="pref_max_parallel_downloads_title">(*) പരമാവധി സമാന്തര ഡൗൺലോഡുകൾ</string>
+  <string name="pref_max_parallel_downloads_summary">ഡൗൺലോഡ് മാനേജറിലെ ത്രെഡ് പൂളിന്റെ വലുപ്പം..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) പിന്നോട്ട് തിരയുക, വർദ്ധിപ്പിക്കുക (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">പിന്നോട്ട് തിരയാൻ സമയ വർദ്ധനവ്..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) മുന്നോട്ട് തിരയുക (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">മുന്നോട്ട് തിരയാൻ സമയ വർദ്ധനവ്..</string>
+  <string name="pref_audio_volume_percent_increment_title">ഓഡിയോ വോളിയം വർദ്ധിപ്പിക്കൽ (ശതമാനം))</string>
+  <string name="pref_audio_volume_percent_increment_summary">കുറവായിരിക്കുമ്പോൾ 100%, അളവ് വർദ്ധനവ്..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">ഓഡിയോ വോളിയം വർദ്ധിപ്പിക്കുക (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">എപ്പോൾ 100%, വർദ്ധനവ്..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">ഘടകം x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">ആപേക്ഷിക ക്രമീകരണം വരുത്താനുള്ള ഗുണന ഘടകം..</string>
+  <string name="pref_enable_tunneled_video_playback_title">ട്രാക്ക് തുരന്നുള്ള യാത്ര</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">ടണലൈസ്ഡ് പ്ലേബാക്ക് പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുന്നു</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">ടണലൈസ്ഡ് പ്ലേബാക്ക് പ്രവർത്തനരഹിതമാക്കിയിരിക്കുന്നു</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ഓഡിയോ സ്ട്രീമുകൾ</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">സ്ട്രീം ഹാൻഡ്ലർ പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുന്നു</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">സ്ട്രീം ഹാൻഡ്ലർ പ്രവർത്തനരഹിതമാക്കിയിരിക്കുന്നു</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">ഓഡിയോ ഔട്ട്പുട്ട് ഉപകരണം മാറ്റുന്നതിന് ഒരു നിമിഷം നിർത്തുക</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">വിരാമം പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുന്നു</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">പോസ് പ്രവർത്തനരഹിതമാക്കിയിരിക്കുന്നു</string>
+  <string name="pref_prefer_extension_renderer_title">(*) മീഡിയ ഡീകോഡറുകൾ</string>
+  <string name="pref_prefer_extension_renderer_summary_on">സോഫ്റ്റ്‌വെയർ എക്സ്റ്റൻഷൻ ഡീകോഡറുകൾ പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുന്നു, കൂടാതെ ഹാർഡ്‌വെയർ ഡീകോഡറുകളേക്കാൾ അവയ്ക്കാണ് മുൻഗണന.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">സോഫ്റ്റ്‌വെയർ എക്സ്റ്റൻഷൻ ഡീകോഡറുകൾ പ്രവർത്തനരഹിതമാക്കിയിരിക്കുന്നു, ഹാർഡ്‌വെയർ ഡീകോഡറുകൾ മാത്രം പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുന്നു.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) ഓഡിയോ പാസ്സ്ത്രൂ</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital പാസ്ത്രൂ ഇടനൽകിയിരിക്കുന്നു</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital പാസ്ത്രൂ ഇടത്താവട്ടം; ഡീകോഡർ പരിവർത്തനം നടത്തുന്നു PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">സറൗണ്ട് സൗണ്ട് സ്റ്റീരിയോയിലേക്ക് ഡൗൺമിക്സ് ചെയ്യുക</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3-നും 6-നും ഇടയിൽ ഓഡിയോ ചാനലുകൾ ഉള്ളപ്പോൾ, 2 ആയി കുറയ്ക്കുക.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">സറൗണ്ട് സൗണ്ടിൽ ഓഡിയോ ട്രാക്കുകൾ പ്ലേ ചെയ്യുക</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">സ്റ്റീരിയോ ശബ്ദം മോണോ ആയി ഡൗൺമിക്സ് ചെയ്യുക</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">രണ്ട് ഓഡിയോ ചാനലുകൾ ഉള്ളപ്പോൾ ഒന്നായി കുറയ്ക്കുക</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">സ്റ്റീരിയോ ശബ്ദത്തിൽ ഓഡിയോ ട്രാക്കുകൾ പ്ലേ ചെയ്യുക</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode പരിപാടി അറിയിപ്പുകൾ</string>
+  <string name="pref_footer_notation_summary">ആപ്പ് റീസ്റ്റാർട്ട് ചെയ്തതിന് ശേഷമേ ഈ ക്രമീകരണങ്ങളിലെ മാറ്റങ്ങൾ പ്രാബല്യത്തിൽ വരുകയുള്ളൂ..</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">0으로 초기화</string>
+  <string name="accessibility_time_picker_sign">양수 또는 음수 부호</string>
+  <string name="accessibility_time_picker_hour">시간</string>
+  <string name="accessibility_time_picker_minute">분</string>
+  <string name="accessibility_time_picker_second">둘째</string>
+  <string name="accessibility_time_picker_milli">밀리초</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

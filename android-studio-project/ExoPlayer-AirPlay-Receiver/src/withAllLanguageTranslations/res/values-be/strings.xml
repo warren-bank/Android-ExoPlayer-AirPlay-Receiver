@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">паказаць</string>
+  <string name="hide">Схаваць</string>
+  <string name="toast_registration_started">Рэгістрацыя AirPlay паслуга...</string>
+  <string name="toast_registration_success">AirPlay Рэгістрацыя паспяхова завершана</string>
+  <string name="toast_registration_failure">AirPlay Рэгістрацыя не ўдалася</string>
+  <string name="toast_start_activity_error_activity_not_found">Ніякай актыўнасці не знойдзена\n\nНіводзін фільтраў намерыў не адпавядае намерам</string>
+  <string name="toast_start_activity_error_security">Недастатковая дазвол\n\nExoAirPlayer Нельга запусціць актыўнасць</string>
+  <string name="toast_downloadtracker_error_download_start">Спампоўка не пачалася</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Не ўдалося атрымаць афлайн-ліцэнзію</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Спампоўка жывога кантэнту не падтрымліваецца.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Кантэнт не падтрымліваецца на API роўні ніжэй за 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Прыёмнік: сэрвіс працуе</string>
+  <string name="notification_service_content_line1">ExoAirPlayer рухаючыся з хуткасцю:</string>
+  <string name="notification_service_content_line3">Націсніце, каб спыніць абслугоўванне.</string>
+  <string name="track_selection_button">Выбраць\nТрэкі</string>
+  <string name="text_offset_selection_button">Сінхранізаваць\nПодпісы</string>
+  <string name="text_offset_selection_title">Скарачэнне часу папярэджання/затрымкі для тэкставых подпісаў</string>
+  <string name="audio_offset_selection_button">Сінхранізаваць\nАўдыя</string>
+  <string name="audio_offset_selection_title">Перадзапіс або затрымка аўдыятрэка</string>
+  <string name="toggle_download_button_start">Пачаць\nСпампаваць</string>
+  <string name="toggle_download_button_stop">Спыніся\nСпампаваць</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Налады</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Назва сэрвісу</string>
+  <string name="pref_mdsn_server_name_summary">назва, якой рэкламуюць mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Параў</string>
+  <string name="pref_http_api_password_summary">таемніца, якой дзеляцца толькі з аўтарызаванымі кліентамі..</string>
+  <string name="pref_default_user_agent_title">Карыстальніцкі агент</string>
+  <string name="pref_default_user_agent_summary">значэнне загалоўка запыту..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Павелічэнне максімальнага гучнасці (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">абмежаваць узмацненне..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Макс. адначасовых спамповак</string>
+  <string name="pref_max_parallel_downloads_summary">Памер пула нітак у менеджары спампоўванняў..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Папярэдні пошук з крокам (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Часавы інкрэмент для пошуку назад..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Перадрук пошуку (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Павелічэнне часу для пошуку наперад..</string>
+  <string name="pref_audio_volume_percent_increment_title">Павелічэнне гучнасці (працэнт))</string>
+  <string name="pref_audio_volume_percent_increment_summary">калі менш за 100%, прырост аб\'ёму..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Павелічэнне гучнасці гуку (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">калі на 100%, прырост узмацнення..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">фактар x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">множнік для прымянення адноснага карэктавання..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Трасаванне тунэлявання</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Уключана паскоранае прайграванне</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Заглушаны гук адключаны</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS аўдыяпатокі</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Апрацоўшчык патоку ўключаны</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Апрацоўшчык патоку адключаны</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Паўза ў пераключэнні на аўдыявыхад</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Паўза ўключана</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Паўза адключана</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Дэкадатары медыя</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Дэкадатары праграмнага пашырэння ўключаны і маюць перавагу перад апаратнымі дэкадатарамі.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Дэкадатары праграмнага пашырэння адключаны, уключаны толькі апаратныя.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Прапусканне аўдыя</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Прасцей (passthrough) уключаны</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Прасёмачны рэжым адключаны; дэкадэр выконвае канвертаванне ў PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Змешванне аб\'ёмнага гуку ў стэрэа</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Калі ёсць ад 3 да 6 аўдыяканалаў, скараціць да 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Прайграваць аўдыятракі з аб\'ёмным гукам</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Змяшаць стэрэагук у мана</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Калі ёсць 2 аўдыяканала, змяншыць да 1.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Прайграваць аўдыядарожкі са стэрэагукам</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Абвесткі аб падзеях</string>
+  <string name="pref_footer_notation_summary">Змены ў гэтых наладах уступяць у сілу пасля перазапуску праграмы..</string>
+</resources>

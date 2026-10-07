@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ჩვენება</string>
+  <string name="hide">დამალვა</string>
+  <string name="toast_registration_started">რეგისტრაცია AirPlay მომსახურება...</string>
+  <string name="toast_registration_success">AirPlay რეგისტრაცია წარმატებით დასრულდა</string>
+  <string name="toast_registration_failure">AirPlay რეგისტრაცია არ წარმატებულა</string>
+  <string name="toast_start_activity_error_activity_not_found">აქტივობა არ მოიძებნა\n\nარცერთი Intent ფილტრი არ ემთხვევა Intent-ს</string>
+  <string name="toast_start_activity_error_security">არასაკმარისი ნებართვა\n\nExoAirPlayer აქტივობის გაშვება შეუძლებელია</string>
+  <string name="toast_downloadtracker_error_download_start">ჩამოტვირთვის დაწყება ვერ მოხერხდა</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">ოფლაინ ლიცენზიის მიღება ვერ მოხერხდა</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">ცოცხალი კონტენტის ჩამოტვირთვა მხარდაჭერილი არ არის</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM შინაარსი არ არის მხარდაჭერილი API 18-ის ქვემოთ დონეები</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay მიმღები: სერვისი მუშაობს</string>
+  <string name="notification_service_content_line1">ExoAirPlayer რბოლა:</string>
+  <string name="notification_service_content_line3">დააჭირეთ სერვისის შესაჩერებლად.</string>
+  <string name="track_selection_button">არჩევა\nტრეკები</string>
+  <string name="text_offset_selection_button">სინქრონიზაცია\nწარწერები</string>
+  <string name="text_offset_selection_title">ტექსტის წარწერების წინასწარ ან დაგვიანებული დროის ოფსეტი</string>
+  <string name="audio_offset_selection_button">სინქრონიზაცია\nაუდიო</string>
+  <string name="audio_offset_selection_title">აუდიო ტრეკის წინასწარ ან დაყოვნებით დროის გადახრა</string>
+  <string name="toggle_download_button_start">დაიწყე\nგადმოწერა</string>
+  <string name="toggle_download_button_stop">შეჩერდი\nგადმოწერა</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer პარამეტრები</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour მომსახურების დასახელება</string>
+  <string name="pref_mdsn_server_name_summary">სახელი, რომელიც რეკლამირებულია mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API პაროლი</string>
+  <string name="pref_http_api_password_summary">საიდუმლო, გაზიარებული მხოლოდ ავტორიზებულ კლიენტებს..</string>
+  <string name="pref_default_user_agent_title">მომხმარებლის აგენტი</string>
+  <string name="pref_default_user_agent_summary">მოთხოვნის სათაურის მნიშვნელობა..</string>
+  <string name="pref_max_audio_volume_boost_db_title">მაქსიმალური ხმის გაძლიერება (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">ამპლიფიკაციის შეზღუდვა..</string>
+  <string name="pref_max_parallel_downloads_title">(*) მაქსიმალური პარალელური ჩამოტვირთვები</string>
+  <string name="pref_max_parallel_downloads_summary">მოსახსნელი ფაილების მენეჯერში ძაფების havzis ზომა..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) უკან ძიების ინკრემენტი (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">უკან ძიების დროის ინკრემენტი..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) წინსვლა ძიების ინკრემენტი (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">დროის ინკრემენტი წინ საძიებლად..</string>
+  <string name="pref_audio_volume_percent_increment_title">აუდიო ხმის გაზრდა (პროცენტული))</string>
+  <string name="pref_audio_volume_percent_increment_summary">როდესაც ნაკლებია 100%, მოცულობის მატება..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">აუდიო ხმის გაძლიერება (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">როდესაც 100%, გაძლიერების მატება..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">ფაქტორი x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">რელატიური კორექტირების მისანიჭებელი გამრავლების კოეფიციენტი..</string>
+  <string name="pref_enable_tunneled_video_playback_title">სარკინიგზო გვირაბგამყვანი სამუშაოები</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">გამტარებელი რეპროდუქცია ჩართულია</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">გამორთულია გათხრილი დაკვრა</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS აუდიო ნაკადები</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">ნაკადის დამმუშავებელი ჩართულია</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">ნაკადის დამმუშავებელი გამორთულია</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">პაუზა აუდიო გამომავალ მოწყობილობაზე ცვლილებისას</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">პაუზა ჩართულია</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">პაუზა გამორთულია</string>
+  <string name="pref_prefer_extension_renderer_title">(*) მედია დეკოდერები</string>
+  <string name="pref_prefer_extension_renderer_summary_on">პროგრამული დეკოდერები ჩართულია და უპირატესია აპარატურულ დეკოდერებთან შედარებით.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">პროგრამული დეკოდერები გამორთულია, ჩართულია მხოლოდ აპარატურული დეკოდერები</string>
+  <string name="pref_enable_audio_passthrough_title">(*) აუდიოს გამტარი</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital გამტარობა ჩართულია</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough გამორთულია; დეკოდერი ახდენს კონვერტაციას PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">სარაფინგო ხმის სტერეოში შერევა</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">როდესაც აუდიო არხების რაოდენობა 3-დან 6-მდეა, შეამცირეთ 2-მდე.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">სარაფინგო ხმის ეფექტით აუდიო ტრეკების დაკვრა</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">სტერეო ხმის მონოს გარდაქმნა</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">როდესაც 2 აუდიო არხია, შეამცირეთ 1-მდე</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">გაუშვით აუდიო ტრეკები სტერეო ხმით</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode ღონისძიებების შეტყობინებები</string>
+  <string name="pref_footer_notation_summary">ამ პარამეტრებში შეტანილი ცვლილებები ძალაში შევა აპლიკაციის გადატვირთვის შემდეგ..</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Rikuchiy</string>
+  <string name="hide">Pakasqa</string>
+  <string name="toast_registration_started">Qillqaykukuy AirPlay Yanapay...</string>
+  <string name="toast_registration_success">AirPlay Allin qillqachikuy</string>
+  <string name="toast_registration_failure">AirPlay Qillqay mana allinchu karqan</string>
+  <string name="toast_start_activity_error_activity_not_found">Mana imapas tarisqachu\n\nMana munay suysunakunapas munaywan tupanchu.</string>
+  <string name="toast_start_activity_error_security">Mana hunt\'asqa saqillay\n\nExoAirPlayer Ruraytaqa manam qallarichiyta atikunchu</string>
+  <string name="toast_downloadtracker_error_download_start">Uraykachiy mana qallarirqanchu</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Mana llikamanta hawapi lisinsiyata tarirqachu</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Kawsachkaq willaykunata uraykachiyqa manam atikunchu.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Manam kaypiqa imayaypas llamk\'anchu. API Chunka pusaqniyuqmanta urayman patakuna</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Chaskiq: llamk\'ay purishan</string>
+  <string name="notification_service_content_line1">ExoAirPlayer phawaykuchkaspa:</string>
+  <string name="notification_service_content_line3">Serviciota sayachinapaq ñit\'iy.</string>
+  <string name="track_selection_button">Akllay\nTakikuna</string>
+  <string name="text_offset_selection_button">T\'inkichiy\nQillqasqa sut\'inchaykuna</string>
+  <string name="text_offset_selection_title">Qillqa Sut\'inchaykunap Ñawpaqman utaq Qhipaman Pacha Chikanchaynin</string>
+  <string name="audio_offset_selection_button">T\'inkichiy\nUyarina</string>
+  <string name="audio_offset_selection_title">Uyarina Ñanpa Ñawpaqman utaq Qhipaman Pacha T\'ikraynin</string>
+  <string name="toggle_download_button_start">Qallariy\nUraykachiy</string>
+  <string name="toggle_download_button_stop">Sayay\nUraykachiy</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Allichaykuna</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Servicio Suti</string>
+  <string name="pref_mdsn_server_name_summary">Willasqa suti mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Pakasqa simi</string>
+  <string name="pref_http_api_password_summary">Kamachisqa rantikuqkunallawan pakallapi rakinakusqa..</string>
+  <string name="pref_default_user_agent_title">Ruraq Apachikuq</string>
+  <string name="pref_default_user_agent_summary">Mañakuy umallpa chaninta..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Uyarina Kallpata Aswan Kallpachay (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Kallpachayta hark\'ay..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Aswan achka kuskalla uraykachiykuna</string>
+  <string name="pref_max_parallel_downloads_summary">Urayachina kamachiqpi q\'aytukuna huñup sayaynin..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Ñawpaqman Maskan Yapay (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Qhipaman maskhanapaq pacha yapay..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Ñawpaqman mask\'ay yapay (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Ñawpaqman maskhanapaq pacha yapay..</string>
+  <string name="pref_audio_volume_percent_increment_title">Uyarina Kallpata Yapay (pachakmanta))</string>
+  <string name="pref_audio_volume_percent_increment_summary">mana hunt\'a kachkaspa 100%, Tupun yapakuy..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Uyarina Kallpata Wicharichiy (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">maypi kachkaspa 100%, Kallpachay yapay..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Ruruchiq x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Tupachina yupay, huk tupachisqa allichayta churaykunapaq..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Ñan T\'uquy</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">T\'uqupi qhawachiy atichisqa kachkan.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">T\'uqupi qhawachiyqa wañuchisqam kachkan.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Uyarina phinkiykuna</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Mayu kamachiqqa kawsachisqam kachkan</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Mayu kamachiq wañuchisqa kachkan</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Uyarina lluqsichina llamk\'anaman t\'ikraypi sayay</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Sayachiy atichisqa kachkan</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Sayachiyqa hark\'asqam kachkan</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Willay Chaskiqkuna</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Software mast\'ariq kichariqkunaqa atichisqam kachkan, hardware kichariqkunamantapas aswan allin qhawarisqam.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Software mast\'ariq kichariqkuna wañuchisqa kachkanku, hardware kichariqkunalla sayarichisqa kachkanku.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Uyarina Chaski</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough kacharisqa kachkan.</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough wañuchisqa kachkan; decoder tikrayta ruwan PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Muyuriq uyarinata iskay uyariman urayachiy</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Kimsa suqta uyarina ñankuna kaptinqa, iskayman pisiyachiy.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Muyuriq uyarina takikunata waqachiy</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo uyarinata mono nisqaman urayachiy</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Iskay uyarina ñankuna kaptinqa, hukllaman pisiyachiy.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Iskay ñan uyarinayuq takikunata waqachiy</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Willakuykuna</string>
+  <string name="pref_footer_notation_summary">Kay allichaykunapi ruwasqa hukmanyaykunaqa ruwanqa app musuqmanta qallarichisqa kaqtin..</string>
+</resources>

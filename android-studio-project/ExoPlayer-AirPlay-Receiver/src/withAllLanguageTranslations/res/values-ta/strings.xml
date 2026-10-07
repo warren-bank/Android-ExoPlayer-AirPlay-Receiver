@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">காட்டு</string>
+  <string name="hide">மறை</string>
+  <string name="toast_registration_started">பதிவு செய்க AirPlay சேவை...</string>
+  <string name="toast_registration_success">AirPlay பதிவு வெற்றிகரமாக முடிந்தது</string>
+  <string name="toast_registration_failure">AirPlay பதிவு தோல்வியடைந்தது</string>
+  <string name="toast_start_activity_error_activity_not_found">செயல்பாடு எதுவும் கண்டறியப்படவில்லை\n\nஎந்த நோக்க வடிகட்டிகளும் நோக்கத்துடன் பொருந்தவில்லை</string>
+  <string name="toast_start_activity_error_security">பதிலற்ற அனுமதி\n\nExoAirPlayer செயலியைத் தொடங்க முடியவில்லை</string>
+  <string name="toast_downloadtracker_error_download_start">பதிவிறக்கத்தைத் தொடங்கத் தவறியது</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">ஆஃப்லைன் உரிமத்தைப் பெறத் தவறியது</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">நேரடி உள்ளடக்கத்தைப் பதிவிறக்குவது ஆதரிக்கப்படவில்லை</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM உள்ளடக்கம் ஆதரிக்கப்படவில்லை API 18-க்குக் கீழ் உள்ள நிலைகள்</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay பெறுநர்: சேவை இயங்குகிறது</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ஓடுகிறது:</string>
+  <string name="notification_service_content_line3">சேவையை நிறுத்த கிளிக் செய்யவும்.</string>
+  <string name="track_selection_button">தேர்ந்தெடு\nபாடல்கள்</string>
+  <string name="text_offset_selection_button">ஒத்திசைவு\nவிளக்கக்குறிப்புகள்</string>
+  <string name="text_offset_selection_title">உரை தலைப்புகளின் முன்னோக்கி அல்லது தாமதமான நேர இடப்பெயர்ச்சி</string>
+  <string name="audio_offset_selection_button">ஒத்திசைவு\nஒலி</string>
+  <string name="audio_offset_selection_title">ஒலிப்பாதை முன்னமைப்பு அல்லது தாமத நேர இடப்பெயர்ச்சி</string>
+  <string name="toggle_download_button_start">தொடங்கு\nபதிவிறக்கவும்</string>
+  <string name="toggle_download_button_stop">நிறுத்து\nபதிவிறக்கவும்</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer அமைப்புகள்</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour சேவையின் பெயர்</string>
+  <string name="pref_mdsn_server_name_summary">விளம்பரப்படுத்தப்பட்ட பெயர் mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API கடவுச்சொல்</string>
+  <string name="pref_http_api_password_summary">அங்கீகரிக்கப்பட்ட வாடிக்கையாளர்களுடன் மட்டுமே பகிரப்பட்ட இரகசியம்..</string>
+  <string name="pref_default_user_agent_title">பயனர் முகவர்</string>
+  <string name="pref_default_user_agent_summary">கோரிக்கை தலைப்பு மதிப்பு..</string>
+  <string name="pref_max_audio_volume_boost_db_title">அதிகபட்ச ஒலி அளவு அதிகரிப்பு (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">பெருக்கத்தை அடக்கு..</string>
+  <string name="pref_max_parallel_downloads_title">(*) அதிகபட்ச இணையதள பதிவிறக்கங்கள்</string>
+  <string name="pref_max_parallel_downloads_summary">பதிவிறக்க மேலாளரில் இழைக் குழுவின் அளவு..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) பின்னோக்கித் தேடல் அதிகரிப்பு (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">பின்னோக்கித் தேட நேர அதிகரிப்பு..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) முன்னோக்கி தேடல் அதிகரிப்பு (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">முன்னோக்கித் தேட நேரம்..</string>
+  <string name="pref_audio_volume_percent_increment_title">ஒலி அளவு அதிகரிப்பு (சதவீதம்))</string>
+  <string name="pref_audio_volume_percent_increment_summary">குறைவாக இருக்கும்போது 100%, அளவு அதிகரிப்பு..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">ஒலி அளவை கூட்டவும் (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">எப்போது எங்கே 100%, பெருக்க அதிகரிப்பு..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">காரணி x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">சார்புத் திருத்தத்தைச் செய்யப் பெருக்கீட்டு காரணி..</string>
+  <string name="pref_enable_tunneled_video_playback_title">பாதை சுரங்கம்</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">சுரங்கப்பட்ட பிளேபேக் இயக்கப்பட்டது</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">சுரங்கப்படுத்துதல் பிளேபேக் முடக்கப்பட்டுள்ளது</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ஒலி ஓடைகள்</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">ஸ்ட்ரீம் ஹேண்டலர் இயக்கப்பட்டது</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">ஸ்ட்ரீம் ஹேண்டலர் முடக்கப்பட்டுள்ளது</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">ஆடியோ வெளியீட்டுச் சாதனத்தை மாற்றுவதில் இடைநிறுத்தம்</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">நிறுத்தம் இயக்கப்பட்டது</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">நிறுத்தம் செயலிழக்கப்பட்டுள்ளது</string>
+  <string name="pref_prefer_extension_renderer_title">(*) ஊடக குறியாக்க நீக்கிகள்</string>
+  <string name="pref_prefer_extension_renderer_summary_on">மென்பொருள் நீட்டிப்பு டீகோடர்கள் இயக்கப்பட்டுள்ளன மற்றும் வன்பொருள் டீகோடர்களை விட முன்னுரிமை அளிக்கப்படுகின்றன.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">மென்பொருள் நீட்டிப்பு டீகோடர்கள் முடக்கப்பட்டுள்ளன, வன்பொருள் டீகோடர்கள் மட்டுமே செயல்படுத்தப்பட்டுள்ளன.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) ஆடியோ பாஸ்ட் த்ரூ</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital பாஸ் த்ரூ இயக்கப்பட்டது</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital பாஸ்ட்ரூ தடுக்கப்பட்டுள்ளது; டீகோடர் மாற்றத்தைச் செய்கிறது PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">சரவுண்ட் ஒலியை ஸ்டீரியோவாகக் குறைத்தல்</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3 முதல் 6 வரையிலான ஆடியோ சேனல்கள் இருக்கும்போது, அவற்றை 2 ஆகக் குறைக்கவும்.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">சரவுண்ட் சத்தத்துடன் ஆடியோ டிராக்குகளை இயக்கவும்</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">ஸ்டீரியோ ஒலியை மோனோவாகக் குறைக்கவும்</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">2 ஆடியோ சேனல்கள் இருக்கும்போது, 1 ஆகக் குறைக்கவும்.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">ஸ்டீரியோ ஒலியுடன் ஆடியோ டிராக்குகளை இயக்கவும்</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode நிகழ்வு அறிவிப்புகள்</string>
+  <string name="pref_footer_notation_summary">இந்த அமைப்புகளில் செய்யப்படும் மாற்றங்கள், செயலியை மீண்டும் தொடங்கிய பிறகு நடைமுறைக்கு வரும்..</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">শূন্যলৈ পুনৰুদ্ধাৰ</string>
+  <string name="accessibility_time_picker_sign">ধনাত্মক বা ঋণাত্মক চিহ্ন</string>
+  <string name="accessibility_time_picker_hour">ঘণ্টা</string>
+  <string name="accessibility_time_picker_minute">মিনিট</string>
+  <string name="accessibility_time_picker_second">দ্বিতীয়</string>
+  <string name="accessibility_time_picker_milli">মিলিছেকেণ্ড</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

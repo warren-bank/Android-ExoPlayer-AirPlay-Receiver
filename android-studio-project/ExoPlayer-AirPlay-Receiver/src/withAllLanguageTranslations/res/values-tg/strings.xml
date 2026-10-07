@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">нишон додан</string>
+  <string name="hide">пинҳон кардан</string>
+  <string name="toast_registration_started">Сабти ном AirPlay хизматрасонӣ...</string>
+  <string name="toast_registration_success">AirPlay Сабти ном муваффақ шуд</string>
+  <string name="toast_registration_failure">AirPlay Сабти ном ноком шуд</string>
+  <string name="toast_start_activity_error_activity_not_found">Ҳеҷ фаъолият пайдо нашуд\n\nҲеҷ яке аз филтрҳои ният бо ният мувофиқат намекунад.</string>
+  <string name="toast_start_activity_error_security">Иҷозатнома нокифоя\n\nExoAirPlayer Фаъолиятро оғоз кардан ғайриимкон аст</string>
+  <string name="toast_downloadtracker_error_download_start">Зарурӣ кардани зеркашӣ ноком шуд</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Дар гирифтани иҷозатномаи офлайн ноком шуд</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Зеркашии мундариҷаи зинда дастгирӣ намешавад</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Мундариҷа дастгирӣ намешавад. API сатҳҳо поёнтар аз 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Қабулкунанда: хидмат дар ҳоли кор аст</string>
+  <string name="notification_service_content_line1">ExoAirPlayer давидан дар:</string>
+  <string name="notification_service_content_line3">Барои қатъ кардани хидмат клик кунед.</string>
+  <string name="track_selection_button">Интихоб кунед\nҚисмҳо</string>
+  <string name="text_offset_selection_button">Ҳамгиро кардан\nШарҳҳо</string>
+  <string name="text_offset_selection_title">Ҷойгузини вақти сарлавҳаҳои матн: пеш ё таъхир</string>
+  <string name="audio_offset_selection_button">Ҳамгиро кардан\nСадо</string>
+  <string name="audio_offset_selection_title">Ҷудошавии вақти пеш ё таъхири треки аудио</string>
+  <string name="toggle_download_button_start">Оғоз\nЗеркашӣ</string>
+  <string name="toggle_download_button_stop">Ист\nЗеркашӣ</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Танзимот</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Номи хидмат</string>
+  <string name="pref_mdsn_server_name_summary">номи таблиғшуда аз ҷониби mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Парол</string>
+  <string name="pref_http_api_password_summary">сирре, ки танҳо бо муштариёни иҷозатдодашуда мубодила мешавад..</string>
+  <string name="pref_default_user_agent_title">Агенти корбар</string>
+  <string name="pref_default_user_agent_summary">арзиши сарлавҳаи дархост..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Баландкунии ҳадди аксари ҳаҷми аудио (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">афзоишро маҳдуд кунед ба..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Ҳадди аксари зеркашиҳои параллелӣ</string>
+  <string name="pref_max_parallel_downloads_summary">Андозаи пули риштаҳо дар менежери зеркаши..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Иловаи ҷустуҷӯ ба қафо (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Иловаи вақти ҷустуҷӯ ба қафо..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Пешравӣ ҷустуҷӯ афзоиш (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Иловаи вақт барои ҷустуҷӯ ба пеш..</string>
+  <string name="pref_audio_volume_percent_increment_title">Афзоиши ҳаҷми аудио (фоиз))</string>
+  <string name="pref_audio_volume_percent_increment_summary">вақте ки камтар аз 100%, афзоиши ҳаҷм..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Афзоиши ҳаҷми садо (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">вақте ки дар 100%, афзоиши тақвият..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">омил x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">коэффисиенти афзоиш барои татбиқи танзими нисбӣ..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Туннелкунии роҳ</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Навозиши каналӣ фаъол карда шудааст</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Навозиши каналӣ ғайрифаъол карда шудааст</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ҷараёнҳои аудиоӣ</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Идоракунандаи ҷараён фаъол аст</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Мудири ҷараён ғайрифаъол аст</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Таваққуф дар тағйир додани дастгоҳи баромади аудио</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Таваққуф фаъол аст</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Таваққуф ғайрифаъол карда шудааст</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Декодерҳои расонаӣ</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Декодерҳои васеъкунии нармафзор фаъол карда шудаанд ва нисбат ба декодерҳои сахтафзор афзалият доранд.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Декодерҳои васеъкунии нармафзор ғайрифаъоланд, танҳо декодерҳои сахтафзор фаъоланд.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Гузарондани аудио</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Пасстрюф фаъол карда шудааст</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough ғайрифаъол аст; декодер табдилро ба PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Садои чанҷонибаро ба стерео табдил диҳед</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Вақте ки шумораи каналҳои аудио байни 3 ва 6 аст, онро ба 2 кам кунед.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Плеи кардани трекҳои аудио бо садои атрофӣ</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Садои стереоро ба моно табдил диҳед</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Вақте ки ду канали аудио ҳаст, онҳоро ба як канал кам кунед.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Плеер кардани трекҳои аудио бо садои стерео</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Огоҳиномаҳои рӯйдод</string>
+  <string name="pref_footer_notation_summary">Тағйирот дар ин танзимот пас аз аз нав оғоз шудани барнома ба кор медароянд..</string>
+</resources>

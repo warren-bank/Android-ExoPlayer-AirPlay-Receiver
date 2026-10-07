@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Seta kwakhona kwisithoba</string>
+  <string name="accessibility_time_picker_sign">Uphawu oluhle okanye olubi</string>
+  <string name="accessibility_time_picker_hour">Iyure</string>
+  <string name="accessibility_time_picker_minute">Umzuzu</string>
+  <string name="accessibility_time_picker_second">Okwesibini</string>
+  <string name="accessibility_time_picker_milli">Isekhondi encinci kakhulu</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

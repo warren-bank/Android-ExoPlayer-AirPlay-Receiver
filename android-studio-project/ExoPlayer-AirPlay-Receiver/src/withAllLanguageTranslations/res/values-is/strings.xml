@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">sýna</string>
+  <string name="hide">fela</string>
+  <string name="toast_registration_started">Að skrá sig AirPlay þjónusta...</string>
+  <string name="toast_registration_success">AirPlay Skráning tókst</string>
+  <string name="toast_registration_failure">AirPlay Skráning mistókst</string>
+  <string name="toast_start_activity_error_activity_not_found">Engin starfsemi fannst\n\nEngin ásetningssíur passa við ásetninginn</string>
+  <string name="toast_start_activity_error_security">Ófullnægjandi leyfi\n\nExoAirPlayer Ekki hægt að hefja virkni</string>
+  <string name="toast_downloadtracker_error_download_start">Niðurhal tókst ekki að hefja</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Ekki tókst að afla afslóðsleyfis</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Að hlaða niður lifandi efni er ekki studd.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Innihald er ekki studd á API Stig undir 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Móttakari: þjónustan er í gangi</string>
+  <string name="notification_service_content_line1">ExoAirPlayer keyrir á:</string>
+  <string name="notification_service_content_line3">Smelltu til að stöðva þjónustu.</string>
+  <string name="track_selection_button">Velja\nLög</string>
+  <string name="text_offset_selection_button">Samsvara\nMyndatextar</string>
+  <string name="text_offset_selection_title">Breyta tímamismun texta- og myndatextaáritana: flýta eða seinka</string>
+  <string name="audio_offset_selection_button">Samsvara\nHljóð</string>
+  <string name="audio_offset_selection_title">Forskubót eða seinkun hljóðrásar</string>
+  <string name="toggle_download_button_start">Byrja\nSækja</string>
+  <string name="toggle_download_button_stop">Hættu\nSækja</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Stillingar</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nafn þjónustunnar</string>
+  <string name="pref_mdsn_server_name_summary">nafn auglýst af mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Lykilorð</string>
+  <string name="pref_http_api_password_summary">leyndarmál deilt einungis með heimilaðri viðskiptavinum..</string>
+  <string name="pref_default_user_agent_title">Notendaboði</string>
+  <string name="pref_default_user_agent_summary">gildi beiðniforhöfuðs..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Hámarks hljóðstyrksaukning (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Hafa hemil á magnun..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Hámarks samhliða niðurhöl</string>
+  <string name="pref_max_parallel_downloads_summary">Stærð þráðapotts í niðurhalsstjóra..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Aukning í baklásarleit (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Tímabækkun til að leita aftur á bak..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Framsækja leitarskref (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Tímabæting til að leita áfram..</string>
+  <string name="pref_audio_volume_percent_increment_title">Hljóðstyrksaukning (prósenta))</string>
+  <string name="pref_audio_volume_percent_increment_summary">þegar minna en 100%, magnaukning..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Hljóðstyrkur eykst um eitt stig (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">þegar á 100%, aukning í magnun..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">þáttur x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Fjölgunarstuðull til að beita hlutfallslegri aðlögun..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Lestaröngun</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Gönguð endurspilun er virkjuð</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Gönguð endurspilun er óvirk</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS hljóðstreymi</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Streymmeðhöndlari er virkur</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Streymmeðhöndlari er óvirkur</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pása í breytingu á hljóðútgáfutæki</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pásan er virkjuð</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pásan er óvirk</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Miðlaafkóðarar</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Forritarútbótakóðarar eru virkjaðir og forgangsraðaðir fram yfir vélbúnaðarkóðara</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Hugbúnaðar-afkóðarar eru óvirkir, aðeins vélbúnaðar-afkóðarar eru virkir</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Hljóð-í gegnumstreymi</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Pass-through er virkjaður</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Pass-through er óvirkur; afkóðari framkvæmir umreikning í PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Blandið umhverfishljóð í stereó</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Þegar 3 til 6 hljóðrásir eru til staðar, fækkaðu þeim í 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Spilaðu hljóðrásir með umlykjandi hljóði</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Blandið stereóhljóð niður í mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Þegar tvær hljóðrásir eru til, fækkaðu þeim í eina.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Spilaðu hljóðbrautir með stereóhljóði</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Tilkynningar um atburði</string>
+  <string name="pref_footer_notation_summary">Breytingar á þessum stillingum taka gildi eftir að forritið er endurræst..</string>
+</resources>

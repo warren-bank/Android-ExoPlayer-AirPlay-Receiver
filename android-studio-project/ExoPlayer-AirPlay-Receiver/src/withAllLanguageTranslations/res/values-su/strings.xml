@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">témbongkeun</string>
+  <string name="hide">nyumputkeun</string>
+  <string name="toast_registration_started">Ngadaptar AirPlay layanan...</string>
+  <string name="toast_registration_success">AirPlay Pendaptaran suksés</string>
+  <string name="toast_registration_failure">AirPlay Pendaptaran gagal</string>
+  <string name="toast_start_activity_error_activity_not_found">Teu aya kagiatan anu kapanggih\n\nTeu aya saringan Niat anu cocog jeung Niat</string>
+  <string name="toast_start_activity_error_security">Idin anu teu cukup\n\nExoAirPlayer Henteu tiasa ngamimitian kagiatan</string>
+  <string name="toast_downloadtracker_error_download_start">Gagal ngamimitian unduhan</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Gagal meunang lisénsi offline</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ngundeur eusi langsung teu dirojong</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Eusi teu dirojong dina API tingkat di handapeun 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Panampa: layanan keur dijalankeun</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ngajalankeun di:</string>
+  <string name="notification_service_content_line3">Klik pikeun ngeureunkeun layanan.</string>
+  <string name="track_selection_button">Milih\nLagu</string>
+  <string name="text_offset_selection_button">Sinkronkeun\nKaterangan gambar</string>
+  <string name="text_offset_selection_title">Panangtayungan Teks: Geser Waktos Maju atawa Tunda</string>
+  <string name="audio_offset_selection_button">Sinkronkeun\nSora</string>
+  <string name="audio_offset_selection_title">Offset Waktu Maju atawa Tunda Jalur Audio</string>
+  <string name="toggle_download_button_start">Mimitian\nUnduh</string>
+  <string name="toggle_download_button_stop">Eureun\nUnduh</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Setélan</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Ngaran Layanan</string>
+  <string name="pref_mdsn_server_name_summary">nami anu diiklankeun ku mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Sandhi</string>
+  <string name="pref_http_api_password_summary">rahasia dibagikeun ngan ka klien anu diwenangkeun..</string>
+  <string name="pref_default_user_agent_title">Agén Pamaké</string>
+  <string name="pref_default_user_agent_summary">Nilai header pamundut..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Panguat Volume Audio Maksimal (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Nahan pangagedean ka..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Unduhan Paralel Maksimal</string>
+  <string name="pref_max_parallel_downloads_summary">Ukuran kolam benang dina manajer unduhan..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Panambahan Pilarian Mundur (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Tambahan waktos pikeun néangan ka tukang..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Maju néangan inkremen (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Tambahan waktos pikeun néangan ka hareup..</string>
+  <string name="pref_audio_volume_percent_increment_title">Panambahan Volume Audio (perséntase))</string>
+  <string name="pref_audio_volume_percent_increment_summary">lamun kirang ti 100%, panambahan volume..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Panambahan volume sora audio (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">lamun di 100%, paningkatan amplifikasi..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">faktor pangali pikeun nerapkeun panyesuaian relatif..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Panggalian Terowongan</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Puteran terowongan parantos diaktipkeun</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Puteran terowongan parantos dinonaktipkeun</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Aliran audio</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Penangani aliran geus diaktipkeun</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Penangani aliran teu diaktipkeun</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Eureun nalika ngarobah ka alat kaluaran audio</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pause geus diaktipkeun</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pause teu diaktipkeun</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dekoder Média</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Dekoder ekstensi parangkat lunak diaktipkeun sarta leuwih dipikaresep tibatan dekoder parangkat keras.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Dekoder ekstensi parangkat lunak dinonaktipkeun, ngan dekoder parangkat keras anu diaktipkeun.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Panyaluran Audio</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital passthrough geus diaktipkeun</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough dinonaktipkeun; dékoder ngalaksanakeun konvérsi ka PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Ngahijikeun sora surround kana stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Lamun aya antara 3 jeung 6 saluran audio, turunkeun jadi 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Muter trek audio kalayan sora surround</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Ngahijikeun sora stereo kana mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Lamun aya dua saluran audio, ngurangan jadi hiji.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Muter trek audio kalayan sora stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode béwara acara</string>
+  <string name="pref_footer_notation_summary">Parobahan kana setélan ieu bakal berlaku sanggeus aplikasi di-restart..</string>
+</resources>

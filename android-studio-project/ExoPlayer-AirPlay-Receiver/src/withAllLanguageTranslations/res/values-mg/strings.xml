@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">aseho</string>
+  <string name="hide">Afina</string>
+  <string name="toast_registration_started">Misoratra anarana AirPlay Serivisy...</string>
+  <string name="toast_registration_success">AirPlay Nandaitra ny fisoratana anarana</string>
+  <string name="toast_registration_failure">AirPlay Tsy nahomby ny fisoratana anarana</string>
+  <string name="toast_start_activity_error_activity_not_found">Tsy nisy hetsika hita\n\nTsy misy sivana fikasana mifanaraka amin\'ilay fikasana.</string>
+  <string name="toast_start_activity_error_security">Tsy ampy ny fahazoan-dàlana\n\nExoAirPlayer Tsy afaka manomboka ny hetsika.</string>
+  <string name="toast_downloadtracker_error_download_start">Tsy tafapetraka ny fampidinana</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Tsy nahazo ny fahazoan-dàlana tsy an-tserasera</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Tsy azo atao ny misintona votoaty mivantana.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Tsy tohanana ny votoaty amin\'ny API Haavo ambanin\'ny 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Mpandray: mandeha ny tolotra</string>
+  <string name="notification_service_content_line1">ExoAirPlayer mandeha haingana:</string>
+  <string name="notification_service_content_line3">Tsindrio mba hampitsahatra ny serivisy.</string>
+  <string name="track_selection_button">Safidio\nHira</string>
+  <string name="text_offset_selection_button">Fampifandrindrana\nSoratra fanazavana</string>
+  <string name="text_offset_selection_title">Fandrosoana na fampiatoana ny fotoana fanemorana ny soratra fanazavana</string>
+  <string name="audio_offset_selection_button">Fampifandrindrana\nFeo</string>
+  <string name="audio_offset_selection_title">Fanovana ny fotoana fampifanarahana ny làlan-peo mialoha na tara</string>
+  <string name="toggle_download_button_start">Atombohy\nAmpidino</string>
+  <string name="toggle_download_button_stop">Atsaharo\nAmpidino</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Fikirana</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Anaran\'ny tolotra</string>
+  <string name="pref_mdsn_server_name_summary">ny anarana nampahafantarina mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Tsiambaratelo</string>
+  <string name="pref_http_api_password_summary">Tsiambaratelo zaraina amin\'ireo mpanjifa nahazo alalana ihany..</string>
+  <string name="pref_default_user_agent_title">Solontenan\'ny mpampiasa</string>
+  <string name="pref_default_user_agent_summary">Sanda lohatenin\'ny fangatahana..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Fampitomboana ny feo ambony indrindra (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Mametra ny fampitomboana..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Fampidinana maromaro indrindra</string>
+  <string name="pref_max_parallel_downloads_summary">Habean\'ny dobo kofehy ao amin\'ny mpitantana fampidinana..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Fikarohana miverina miakatra (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Fampitomboana ny fotoana hikarohana miverina..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Manohy mitady miakatra (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Fampitomboana ny fotoana hikarohana mandroso..</string>
+  <string name="pref_audio_volume_percent_increment_title">Fampitomboana ny feon\'ny feo (isanjato))</string>
+  <string name="pref_audio_volume_percent_increment_summary">rehefa latsaky ny 100%, fitomboan\'ny habetsahana..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Fampitomboana ny feon\'ny feo (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">rehefa any 100%, fitomboan\'ny fanamafisana..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">antony x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">sanda fampitomboana ampiharina amin\'ny fanitsiana ara-pifandraisana..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Fandavahana lalankely</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Voafehin\'ny tunneled playback</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Voakajy ny fandefasana an-tsehatra.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Fandaharana feo</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Voafehin\'ny mpikarakara fikorianana</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Voalefaka ny mpikarakara fikorianana</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Fijanonana amin\'ny fanovana ny fitaovana famoahana feo</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Voafehin\'ny pause</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Voafandrika ny fijanonana</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Fandikana haino aman-jery</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Ny decoder fanitarana rindrambaiko dia azo ampiasaina ary aleo kokoa noho ny decoder fitaovana.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Voavaky ny decoder rindrambaiko, decoder fitaovana ihany no mandeha.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Fampitana feo</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Voafehin\'ny passthrough</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Voasakana ny passthrough; manao fanovana ho PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Afangaro ny feo manodidina ho stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Rehefa misy fantsona feo telo ka hatramin\'ny enina, ahenao ho roa.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Alaivo feo amin\'ny surround</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Afangaro ny feo stereo ho mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Rehefa misy fantsona feo roa, ahenao ho iray.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Alaivo feo amin\'ny stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Fampandrenesana momba ny hetsika</string>
+  <string name="pref_footer_notation_summary">Ny fanovana ireo fikirakirana ireo dia hampiharina rehefa averina alefa indray ny fampiharana..</string>
+</resources>

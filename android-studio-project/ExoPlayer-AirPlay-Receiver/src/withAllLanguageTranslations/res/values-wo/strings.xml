@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Wone</string>
+  <string name="hide">Lëb</string>
+  <string name="toast_registration_started">Binduji AirPlay Liggéey bi...</string>
+  <string name="toast_registration_success">AirPlay Bind bi jàll na</string>
+  <string name="toast_registration_failure">AirPlay Bind bi jàllul</string>
+  <string name="toast_start_activity_error_activity_not_found">Amul benn jëf bu ñu gis\n\nAmul benn filtre bu jëm ci yéene bi moo ko dëppoo.</string>
+  <string name="toast_start_activity_error_security">Sa ndigal doyul\n\nExoAirPlayer Mënul a tambali Jëf bi.</string>
+  <string name="toast_downloadtracker_error_download_start">Téléchargement bi doxul</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Mënul am lisãs bi ci biti internet.</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Mënuloo yebbi li ñuy wone ci direct.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Li ci biir doxul ci API Niveau yu suufe 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Jotkat bi: servis bi mi ngi dox</string>
+  <string name="notification_service_content_line1">ExoAirPlayer di daw ci:</string>
+  <string name="notification_service_content_line3">Bësal ngir taxawal servis bi.</string>
+  <string name="track_selection_button">Tànnal\nAy yoon</string>
+  <string name="text_offset_selection_button">Jokkoo\nAy kàddu yu ànd ak nataal yi</string>
+  <string name="text_offset_selection_title">Yéegal walla wàññi waxtu wuñu tekki mbind mi</string>
+  <string name="audio_offset_selection_button">Jokkoo\nKàddu</string>
+  <string name="audio_offset_selection_title">Jàllante waxtu ci kanam walla ginnaaw ci piste audio bi</string>
+  <string name="toggle_download_button_start">Tàmbali\nYebbi</string>
+  <string name="toggle_download_button_stop">Taxawal\nYebbi</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Tànneef yi</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Turu Sarwiis bi</string>
+  <string name="pref_mdsn_server_name_summary">tur bi ñu siiwal mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Baatub-jàll</string>
+  <string name="pref_http_api_password_summary">Sëkret bu ñu bokk rekk ak kilian yu am sañ-sañ..</string>
+  <string name="pref_default_user_agent_title">Jëfandikukat bu taxawu</string>
+  <string name="pref_default_user_agent_summary">Nattalu boppu laaj bi..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Yokk kàttanu kàddu gi ba mu mën a gën a kawe (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Tekk ay àpparëy ngir wàññi son bi..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Yebbi yu mën a doxandoo yu gën a bari</string>
+  <string name="pref_max_parallel_downloads_summary">Dayoo poolu fil yi ci njiitu teleśars..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Gën a sori ci wut gi (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Yokkte ci waxtu ngir wut gannaaw..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Dem kanam, wut yokkute (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Yokkte ci waxtu ngir wut ci kanam..</string>
+  <string name="pref_audio_volume_percent_increment_title">Yokkteg kàttanug baat bi (ci téeméer))</string>
+  <string name="pref_audio_volume_percent_increment_summary">bu néewee 100%, Yokkuteg volim..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Yokk kàttanug baat bi (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">bu nekkee ca 100%, Yokkteg yokkute..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Cër, sabab, wàll x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Lim bu ñuy yokke ngir defaral ab jublu..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Gëstu yooni suuf</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tunneled playback taxaw na.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tunneled playback dafa fey.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Ay flux audio</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Jàppalekat bu wal bi taxaw na</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Jàppalekat bu stream bi dafa fey</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Taxawal ci soppi jumtukaayu génne kàddu gi</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Taxawal bi taxaw na</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Taxawaay bi dafa fey</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dikkodër yu média</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Dekodeerukaay yu yokkute ci software dañu leen taxawal te ñu leen jël ci kanamu dekodeerukaay yu matériel yi.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Dekodeer yu software yi dañu leen fay, dekodeer yu matériel yi rekk a dox.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Jàllale kàddu</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough taxaw na</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Passthrough dafa fey; dekodeer bi dafay def soppi jëm ci PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Wàññi son surround bi def ko stereo.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Su amee diggante ñetti ba juróom-benn yooni kàddu, wàññil ko ba ñaar.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Tëggal ay wóoy yu am son bu wër</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Wàññi son stereo bi def ko mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Su amee ñaari kanaalu kàddu, wàññil ba benn.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Taalal woy yi ci son stereo.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Xibaari xew-xew yi</string>
+  <string name="pref_footer_notation_summary">Soppi yii ci réglage yi dinañu dox gannaaw buñu taalatee aplikasion bi..</string>
+</resources>

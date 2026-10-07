@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">wys</string>
+  <string name="hide">Verberg</string>
+  <string name="toast_registration_started">Registrasie AirPlay diens...</string>
+  <string name="toast_registration_success">AirPlay Registrasie sukses</string>
+  <string name="toast_registration_failure">AirPlay Registrasie het misluk</string>
+  <string name="toast_start_activity_error_activity_not_found">Geen aktiwiteit gevind\n\nGeen Intent-filters pas by die Intent nie.</string>
+  <string name="toast_start_activity_error_security">Onvoldoende toestemming\n\nExoAirPlayer Kan nie die aktiwiteit begin nie</string>
+  <string name="toast_downloadtracker_error_download_start">Misluk om aflaai te begin</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Misluk om \'n aflynlisensie te verkry</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Aflaai van regstreekse inhoud word nie ondersteun nie.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Inhoud word nie ondersteun op API vlakke onder 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Ontvanger: diens aan die gang</string>
+  <string name="notification_service_content_line1">ExoAirPlayer hardloop by:</string>
+  <string name="notification_service_content_line3">Klik om diens te stop.</string>
+  <string name="track_selection_button">Kies\nSpore</string>
+  <string name="text_offset_selection_button">Sinkroniseer\nOnderskrifte</string>
+  <string name="text_offset_selection_title">Tekunskaarte: Voorskof of vertraag tydverskuiwing</string>
+  <string name="audio_offset_selection_button">Sinkroniseer\nGeluid</string>
+  <string name="audio_offset_selection_title">Oudiobaan vooruit- of uitstel-tydverskuiwing</string>
+  <string name="toggle_download_button_start">Begin\nAflaai</string>
+  <string name="toggle_download_button_stop">Stop\nAflaai</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Instellings</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Diensnaam</string>
+  <string name="pref_mdsn_server_name_summary">die naam geadverteer deur mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Wagwoord</string>
+  <string name="pref_http_api_password_summary">geheim gedeel slegs met gemagtigde kliënte..</string>
+  <string name="pref_default_user_agent_title">Gebruikeragent</string>
+  <string name="pref_default_user_agent_summary">versoekkoperswaarde..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Maximum klankvolume-versterking (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">beperk versterking tot..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maximum gelyktydige aflaaie</string>
+  <string name="pref_max_parallel_downloads_summary">Grootte van die draadpoel in die aflaaibestuurder..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Terugwaartse soek-inkrement (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">tydstap om agtertoe te soek..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Voorskou soekstap (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">tydstap om vorentoe te soek..</string>
+  <string name="pref_audio_volume_percent_increment_title">Oudio-volume-toename (persentasie))</string>
+  <string name="pref_audio_volume_percent_increment_summary">wanneer minder as 100%, volumetoename..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Oudioomvangverhoging met een stap (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">wanneer by 100%, versterkingsincrement..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">vermenigvuldigingsfaktor om \'n relatiewe aanpassing toe te pas..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Spoorspoeling</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Getoëde afspel is geaktiveer.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Getoëde afspel is gedeaktiveer</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS klankstroomme</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Stroomhanteerder is geaktiveer</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Stroomhanteerder is gedeaktiveer</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pauzeer die verandering na die klankuitsetapparaat</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pouse is geaktiveer</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pouse is gedeaktiveer</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Media-dekodeerders</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Sagteware-uitbreidingontkoderings word geaktiveer en verkies bo hardeware-ontkoderings.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Sagteware-uitbreiding-dekodeerders is gedeaktiveer, slegs hardeware-dekodeerders is geaktiveer.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Oudioordrag</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Deurstuur is geaktiveer</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Deurstuur is gedeaktiveer; dekodeerder voer omskakeling na PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Omringklank na stereo afmeng</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Wanneer daar tussen 3 en 6 klankkanale is, verminder dit tot 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Speel oudio-opnames met omgewingsklank</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Meng stereoklank af na mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Wanneer daar 2 klankkanale is, verminder dit tot 1.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Speel oudio-opnames met stereoklank.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode gebeurtenis-kennisgewings</string>
+  <string name="pref_footer_notation_summary">Veranderings aan hierdie instellings sal in werking tree nadat die app weer begin is..</string>
+</resources>

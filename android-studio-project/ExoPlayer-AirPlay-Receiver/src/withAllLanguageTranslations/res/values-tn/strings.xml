@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Bontsha</string>
+  <string name="hide">Fitha</string>
+  <string name="toast_registration_started">Go ikwadisa AirPlay Tirelo...</string>
+  <string name="toast_registration_success">AirPlay Ikwadiso e atlegile</string>
+  <string name="toast_registration_failure">AirPlay Ikwadiso e paletswe</string>
+  <string name="toast_start_activity_error_activity_not_found">Ga go na tiro e e fitlhetsweng\n\nGa go na ditlhotlho tsa maikaelelo tse di tsamaelanang le maikaelelo</string>
+  <string name="toast_start_activity_error_security">Tetla e e sa lekang\n\nExoAirPlayer Ga go kgone go simolola Tiro</string>
+  <string name="toast_downloadtracker_error_download_start">Go paletswe go simolola go laolola</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Go paletswe go bona laesense ya offline</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Go folosa diteng tse di tshelang ga go tshegediwe.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Diteng ga di tshegediwe mo API Maemo a kwa tlase ga 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Moamogedi: tirelo e a tsamaya</string>
+  <string name="notification_service_content_line1">ExoAirPlayer e taboga ka:</string>
+  <string name="notification_service_content_line3">Tobetsa go emisa tirelo.</string>
+  <string name="track_selection_button">Tlhopha\nDipina</string>
+  <string name="text_offset_selection_button">Lomaganya\nDitlhaloso tsa ditshwantsho</string>
+  <string name="text_offset_selection_title">Ditshwaelo tsa Mokwalo: Fetola Pele kgotsa Morago Nako ya Kgaogano</string>
+  <string name="audio_offset_selection_button">Lomaganya\nModumo</string>
+  <string name="audio_offset_selection_title">Phapanyetsano ya nako ya go etelelapele kgotsa go diegisa modumo</string>
+  <string name="toggle_download_button_start">Simolola\nKopolola</string>
+  <string name="toggle_download_button_stop">Ema\nKopolola</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Ditlhophiso</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Leina la Tirelo</string>
+  <string name="pref_mdsn_server_name_summary">leina le le phasaladitsweng ke mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Lefoko la sephiri</string>
+  <string name="pref_http_api_password_summary">Sephiri se abalanwang fela le bareki ba ba letleletsweng..</string>
+  <string name="pref_default_user_agent_title">Moemedi wa Modirisi</string>
+  <string name="pref_default_user_agent_summary">Boleng jwa tlhogo ya kopo..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Koketso ya Modumo o o kwa Godimo (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Thibela koketso go..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Palogare e e kwa godimo ya go kopolola ka nako e le nngwe</string>
+  <string name="pref_max_parallel_downloads_summary">Bogolo jwa letlapa la dithapo mo motsamaising wa go kopolola..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Oketsa go Batla kwa Morago (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Koketso ya nako go batla kwa morago..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Tswelela kwa pele go batla kgato e e latelang (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Koketso ya nako go batla kwa pele..</string>
+  <string name="pref_audio_volume_percent_increment_title">Koketso ya Modumo (phesente))</string>
+  <string name="pref_audio_volume_percent_increment_summary">fa e le kwa tlase ga 100%, Koketsego ya bolumo..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Oketsa modumo wa modumo (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">fa kwa 100%, Koketso ya kgodiso..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">lebaka x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Selekanyo sa go atisa go dira paakanyo e e amanang..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Go epa mosima wa seporo</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tshameko e e kgethegileng e kgontsheditswe</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tshameko e e phunyeletsang ga e bereke</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Ditshwantsho tsa modumo</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Motsamaisi wa molaetsa o kgontsheditswe</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Motsamaisi wa molaetsa o timilwe</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Ema go fetola sedirisiwa sa go ntsha modumo</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Khemiso e letleletswe</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Khemisetso e timilwe</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Ditharabolodi tsa Bobegakgang</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Di-decoder tsa katoloso ya software di kgoniseditswe e bile di ratiwa go feta di-decoder tsa hardware.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Di-decoder tsa katoloso ya software di tima, go letleletswe fela di-decoder tsa hardware.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Phetisetso ya modumo</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Go fetisetsa go kgontsheditswe</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough e timilwe; decoder e dira phetolo go PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Kopanya modumo o o dikologileng go nna wa stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Fa go na le dikanale tsa modumo di le 3 go ya go 6, di fokotse go nna 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Tshameka dipina tsa modumo ka modumo o o dikologileng</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Kopanya modumo wa stereo go nna wa mono.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Fa go na le dikanale tsa modumo di le pedi, di fokotse go nna e le nngwe.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Tshameka dipina tsa modumo wa stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Dikitsiso tsa ditiragalo</string>
+  <string name="pref_footer_notation_summary">Diphetogo tsa ditlhophiso tse di tla simolola go dira fa app e simolotswe gape..</string>
+</resources>

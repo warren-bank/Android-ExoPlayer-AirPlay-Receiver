@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">montre</string>
+  <string name="hide">kache</string>
+  <string name="toast_registration_started">Anrejistre AirPlay Sèvis...</string>
+  <string name="toast_registration_success">AirPlay Enskripsyon an reyisi</string>
+  <string name="toast_registration_failure">AirPlay Enskripsyon an echwe</string>
+  <string name="toast_start_activity_error_activity_not_found">Pa gen aktivite ki jwenn\n\nPa gen okenn filtè Entansyon ki matche ak Entansyon an.</string>
+  <string name="toast_start_activity_error_security">Pèmisyon ensifizan\n\nExoAirPlayer Pa ka demare aktivite a.</string>
+  <string name="toast_downloadtracker_error_download_start">Deskàj la pa t reyisi kòmanse</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Pa t reyisi jwenn lisans offline</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Telechaje kontni an dirèk pa sipòte.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Kontni pa sipòte sou API Nivo ki anba 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Reseptè: sèvis ap fonksyone</string>
+  <string name="notification_service_content_line1">ExoAirPlayer k ap kouri nan:</string>
+  <string name="notification_service_content_line3">Klike pou kanpe sèvis la.</string>
+  <string name="track_selection_button">Chwazi\nMizik</string>
+  <string name="text_offset_selection_button">Senkronize\nTit</string>
+  <string name="text_offset_selection_title">Avanse oswa retade deplasman tan titèk la</string>
+  <string name="audio_offset_selection_button">Senkronize\nOdyo</string>
+  <string name="audio_offset_selection_title">Avans oswa reta tan pou tras odyo</string>
+  <string name="toggle_download_button_start">Kòmanse\nTelechaje</string>
+  <string name="toggle_download_button_stop">Sispann\nTelechaje</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Aranjman</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Non Sèvis la</string>
+  <string name="pref_mdsn_server_name_summary">non ki pibliye a mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Modpas</string>
+  <string name="pref_http_api_password_summary">sekrè pataje sèlman ak kliyan otorize..</string>
+  <string name="pref_default_user_agent_title">Ajan itilizatè</string>
+  <string name="pref_default_user_agent_summary">valè antèt demann lan..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Ogmantasyon Volim Son Maksimòm (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">kontwole anplifikasyon an..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maximòm telechajman paralèl</string>
+  <string name="pref_max_parallel_downloads_summary">Gwosè pisin fil la nan manadjè telechajman an..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Ogmantasyon rechèch bak (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Ogmantasyon tan pou chèche dèyè..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Avanse rechèch pa inkreman (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Ogmantasyon tan pou chèche pi devan..</string>
+  <string name="pref_audio_volume_percent_increment_title">Ogmantasyon Volim Odyo (pousantaj))</string>
+  <string name="pref_audio_volume_percent_increment_summary">lè mwens pase 100%, Ogmantasyon volim..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ogmantasyon volim odyo (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">lè nan 100%, ogmantasyon amplifikasyon..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktè x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Faktè miltiplikasyon pou aplike yon ajisteman relatif..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tunèl tras</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Repwodiksyon anba tè a aktive.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Repwodiksyon anba tè a dezaktive.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Kouran odyo</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Manejan kouran an aktive</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Manipilatè kouran an dezaktive</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pause sou chanjman aparèy sòti odyo a</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Poz la aktive</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Poz la dezaktive</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dekodè Medya</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Dekodè ekstansyon lojisyèl yo aktive epi yo gen preferans sou dekodè materyèl yo.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Dekodè ekstansyon lojisyèl yo dezaktive, se sèlman dekodè materyèl yo ki aktive.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Transpò Audio</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Pase-atravè a aktive</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough la dezaktive; dekodè a fè konvèsyon pou PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Melanje son anvironman an nan estereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">lè genyen ant 3 ak 6 chanèl odyo, redwi yo a 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Jwe tras odyo ak son anbyans.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Konvèti son estereo an monò.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">lè gen 2 chanèl odyo, redwi a 1</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Jwe tras odyo ak son estereo.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Notifikasyon evènman</string>
+  <string name="pref_footer_notation_summary">Chanjman nan paramèt sa yo ap pran efè apre aplikasyon an rekòmanse..</string>
+</resources>

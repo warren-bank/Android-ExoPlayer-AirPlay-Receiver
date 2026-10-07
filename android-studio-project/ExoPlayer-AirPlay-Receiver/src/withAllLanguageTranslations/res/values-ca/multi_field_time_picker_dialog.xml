@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Restablir a zero</string>
+  <string name="accessibility_time_picker_sign">Sign positiu o negatiu</string>
+  <string name="accessibility_time_picker_hour">Hora</string>
+  <string name="accessibility_time_picker_minute">Minut</string>
+  <string name="accessibility_time_picker_second">Segon</string>
+  <string name="accessibility_time_picker_milli">Mil·lisegon</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

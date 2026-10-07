@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">ตั้งกลับเป็นศูนย์</string>
+  <string name="accessibility_time_picker_sign">เครื่องหมายบวกหรือลบ</string>
+  <string name="accessibility_time_picker_hour">ชั่วโมง</string>
+  <string name="accessibility_time_picker_minute">นาที</string>
+  <string name="accessibility_time_picker_second">ที่สอง</string>
+  <string name="accessibility_time_picker_milli">มิลลิเซคันด์</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

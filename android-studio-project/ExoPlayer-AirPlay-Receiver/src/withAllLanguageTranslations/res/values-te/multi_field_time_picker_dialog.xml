@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">సున్నాకు రీసెట్</string>
+  <string name="accessibility_time_picker_sign">ధనాత్మక లేదా ప్రతికూల సంకేతం</string>
+  <string name="accessibility_time_picker_hour">గంట</string>
+  <string name="accessibility_time_picker_minute">నిమిషం</string>
+  <string name="accessibility_time_picker_second">రెండవ</string>
+  <string name="accessibility_time_picker_milli">మిల్లీసెకను</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

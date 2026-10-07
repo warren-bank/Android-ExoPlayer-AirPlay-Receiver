@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">trego</string>
+  <string name="hide">Fshi</string>
+  <string name="toast_registration_started">Regjistrim AirPlay shërbim...</string>
+  <string name="toast_registration_success">AirPlay Regjistrimi u krye me sukses</string>
+  <string name="toast_registration_failure">AirPlay Regjistrimi dështoi</string>
+  <string name="toast_start_activity_error_activity_not_found">Nuk u gjet asnjë aktivitet\n\nAsnjë filtër qëllimi nuk përputhet me qëllimin</string>
+  <string name="toast_start_activity_error_security">Leje e pamjaftueshme\n\nExoAirPlayer Nuk mund të fillojë aktiviteti</string>
+  <string name="toast_downloadtracker_error_download_start">Dështoi nisja e shkarkimit</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Dështoi të merret licenca jashtë linje</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Shkarkimi i përmbajtjes live nuk mbështetet.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Përmbajtja nuk mbështetet në API nivele nën 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Pranuesi: shërbimi po funksionon</string>
+  <string name="notification_service_content_line1">ExoAirPlayer po vrapon në:</string>
+  <string name="notification_service_content_line3">Kliko për të ndaluar shërbimin.</string>
+  <string name="track_selection_button">Zgjidh\nKëngë</string>
+  <string name="text_offset_selection_button">Sinkronizo\nTitra</string>
+  <string name="text_offset_selection_title">Avancimi ose vonesa e kohë-zgjatjes së titrave të tekstit</string>
+  <string name="audio_offset_selection_button">Sinkronizo\nAudio</string>
+  <string name="audio_offset_selection_title">Zhvendosje e kohës së avancimit ose vonesës së pistës audio</string>
+  <string name="toggle_download_button_start">Filloni\nShkarko</string>
+  <string name="toggle_download_button_stop">Ndalo\nShkarko</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Cilatime</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Emri i shërbimit</string>
+  <string name="pref_mdsn_server_name_summary">emri i reklamuar nga mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Fjalëkalimi</string>
+  <string name="pref_http_api_password_summary">Sekret i ndarë vetëm me klientë të autorizuar..</string>
+  <string name="pref_default_user_agent_title">Agjenti i përdoruesit</string>
+  <string name="pref_default_user_agent_summary">vlera e kokës së kërkesës..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Rritja e volumit maksimal të audios (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">të kufizosh përforcimin te..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Shkarkime paralele maksimale</string>
+  <string name="pref_max_parallel_downloads_summary">madhësia e pishinës së fijeve në menaxherin e shkarkimeve..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Rritje e kërkimit prapa (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Rritje e kohës për të kërkuar mbrapsht..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Përpara kërko rritje (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Rritje e kohës për të kërkuar përpara..</string>
+  <string name="pref_audio_volume_percent_increment_title">Rritje e volumit të audios (përqindje))</string>
+  <string name="pref_audio_volume_percent_increment_summary">kur më pak se 100%, Rritje e vëllimit..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Rritja e volumit të audios (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">kur në 100%, rritje e amplifikimit..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">faktor shumëzimi për të aplikuar një rregullim relativ..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Gërmimi i tunelit</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Luajtja e tunelizuar është e mundësuar</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Luajtja e tunelizuar është çaktivizuar</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS rrjedhat audio</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Dorezuesi i rrjedhës është aktivizuar</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Dorezuesi i rrjedhës është çaktivizuar</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Ndërprerje në ndryshimin e pajisjes së daljes së audios</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pushimi është aktivizuar</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pauza është çaktivizuar</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dekoduesit e mediave</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Dekoduesit e zgjatjes së softuerit janë të mundësuar dhe preferohen mbi dekoduesit harduerikë.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Dekoduesit e zgjerimit softuerik janë çaktivizuar, vetëm dekoduesit harduerikë janë aktivizuar.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Transmetim audio</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital passthrough është aktivizuar</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough është çaktivizuar; dekoderi kryen konvertim në PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Përzierje e zërit rrethues në stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Kur ka midis 3 dhe 6 kanale audio, uleni në 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Luaj shiritat audio me tingull rrethues</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Konverto tingullin stereo në mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Kur ka dy kanale audio, redukto në një.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Luaj shiritat audio me tingull stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Njoftimet e ngjarjeve</string>
+  <string name="pref_footer_notation_summary">Ndryshimet në këto cilësime do të hyjnë në fuqi pasi aplikacioni të rifillojë..</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Görkez</string>
+  <string name="hide">Gizlä</string>
+  <string name="toast_registration_started">Hasaba alynmak AirPlay Hyzmat...</string>
+  <string name="toast_registration_success">AirPlay Hasaba alyş üstünlikli boldy</string>
+  <string name="toast_registration_failure">AirPlay Hasaba alyş şowsuz boldy</string>
+  <string name="toast_start_activity_error_activity_not_found">Heç bir iş tapylmady\n\nHiç bir niýet süzgüçleri niýete gabat gelmeýär.</string>
+  <string name="toast_start_activity_error_security">Ýeterlik rugsat ýok\n\nExoAirPlayer Päýdalanyşy başlap bolmaýar</string>
+  <string name="toast_downloadtracker_error_download_start">Ýüklänişi başlatmak mümkin bolmady</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Oflaýn lisenziýany almaga synanyşyk başa barmady</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Göni mazmuny ýükläp bolmaýar.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Mazmun goldanylmaýar. API 18-den aşak derejeler</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Alýan tarap: hyzmat işleýär</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ýygymyzda:</string>
+  <string name="notification_service_content_line3">Hyzmaty togtatmak üçin basyň.</string>
+  <string name="track_selection_button">Saýla\nÝollary</string>
+  <string name="text_offset_selection_button">Senkronizasiýa\nÝazma düşündirişler</string>
+  <string name="text_offset_selection_title">Tekst ýazgylarynyň öňe ýa-da gijikdirme wagty öwrülişini sazlamak</string>
+  <string name="audio_offset_selection_button">Senkronizasiýa\nSes</string>
+  <string name="audio_offset_selection_title">Ses ýoly öňe ýa-da gijikdirmäge wagtyň öwrülişi</string>
+  <string name="toggle_download_button_start">Başla\nÝüklä</string>
+  <string name="toggle_download_button_stop">Durnuň\nÝüklä</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Täze sazlamalar</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Hyzmatyň ady</string>
+  <string name="pref_mdsn_server_name_summary">ýyglanýan at mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Parol</string>
+  <string name="pref_http_api_password_summary">Gizlinlik diňe ygtyýarly müşderiler bilen paýlaşyldy..</string>
+  <string name="pref_default_user_agent_title">Ulanyjy agenti</string>
+  <string name="pref_default_user_agent_summary">sorag başlygynyň gymmaty..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Ses derejesini iň ýokary derejä çenli ýokarlandyrmak (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">güýçlendirişi çäklendirmek üçin..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maksimum paralel ýüklämeler</string>
+  <string name="pref_max_parallel_downloads_summary">Ýükläp almak dolandyryjysyndaky ipler havzasynyň ululygy..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Öňki gözleg ädimi (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Arka tarap gözlemek üçin wagt artdyryş..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Öňe gözleg artdyrmak (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Öňe gözlemegiň wagt artdyryşy..</string>
+  <string name="pref_audio_volume_percent_increment_title">Ses derejesini ýokarlandyrmak (gysgaça göterim))</string>
+  <string name="pref_audio_volume_percent_increment_summary">az bolanda 100%, häcm artdyryşy..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ses derejesini ýokarlandyrmak (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">haçan at 100%, güýçlendiriş artyşy..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Göni düzediş girizmek üçin köpelme faktory..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Ýoly tunelleşdirmek</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tünelirlenen pleýbek ýyglanýar</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tünel usulyndaky oýnamagy öçürildi</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS audio akymlar</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Akym işleýjisi işjeňdir</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Akym işleýjisi öçürilipdir</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Ses çykyş enjamyny üýtgetmegi togtatmak</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Durnak işjeňleşdirildi</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Durnak işden çykaryldy</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Media dekoderleri</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Programma üpjünçiligi giňeldiş dekoderleri işjeňleşdirilip, enjam dekoderlerine garanyňda artyk tutulýar.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Programma üpjünçiligi giňeldiş dekoderleri öçürilipdir, diňe enjam dekoderleri işjeňdir.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Audio geçiriş</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough ýyglanýar</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough öçürilendir; dekoder öwürmegi ýerine ýetirýär PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Çemeleşdirilen ses sistemasyny stereoga geçiriň</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3-den 6-a çenli ses kanallary bar bolanda, olary 2-e azalt</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Ses ýollaryny gurşawly ses bilen çal</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo sesi monoga öwür</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">2 ses kanaly bar bolanda, olary 1-e azalt</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Stereo sesli audio ýollary çal</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Wakalar baradaky bildirişler</string>
+  <string name="pref_footer_notation_summary">Bu sazlamalardaky üýtgeşmeler programma gaýtadan işlenenden soň güýje girer..</string>
+</resources>

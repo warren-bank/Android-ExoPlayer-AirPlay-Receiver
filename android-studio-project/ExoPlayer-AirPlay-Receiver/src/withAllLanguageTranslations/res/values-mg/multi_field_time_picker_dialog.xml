@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Avereno amin\'ny aotra</string>
+  <string name="accessibility_time_picker_sign">Marika tsara na ratsy</string>
+  <string name="accessibility_time_picker_hour">Ora</string>
+  <string name="accessibility_time_picker_minute">Minitra</string>
+  <string name="accessibility_time_picker_second">Faharoa</string>
+  <string name="accessibility_time_picker_milli">Mila-segondra</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

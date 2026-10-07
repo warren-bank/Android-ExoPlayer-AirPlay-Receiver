@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ပြသပါ</string>
+  <string name="hide">ဖုံးကွယ်</string>
+  <string name="toast_registration_started">မှတ်ပုံတင်ခြင်း AirPlay ဝန်ဆောင်မှု...</string>
+  <string name="toast_registration_success">AirPlay မှတ်ပုံတင်အောင်မြင်ပါပြီ</string>
+  <string name="toast_registration_failure">AirPlay မှတ်ပုံတင်ခြင်း မအောင်မြင်ပါ။</string>
+  <string name="toast_start_activity_error_activity_not_found">လှုပ်ရှားမှု မတွေ့ရှိပါ\n\nရည်ရွယ်ချက်နှင့် ကိုက်ညီသော ရည်ရွယ်ချက် စစ်ထုတ်ကိရိယာများ မရှိပါ။</string>
+  <string name="toast_start_activity_error_security">ခွင့်ပြုချက်မလုံလောက်ပါ\n\nExoAirPlayer လှုပ်ရှားမှုကို စတင်၍ မရပါ။</string>
+  <string name="toast_downloadtracker_error_download_start">ဒေါင်းလုဒ် စတင်ရန် မအောင်မြင်ပါ။</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">အော့ဖ်လိုင်းလိုင်စင် မရရှိနိုင်ခဲ့ပါ</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">တိုက်ရိုက်အကြောင်းအရာများကို ဒေါင်းလုဒ်ဆွဲခြင်း မထောက်ပံ့ပါ။</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM အကြောင်းအရာကို မထောက်ပံ့ပါ။ API ၁၈ အောက်ရှိ အဆင့်များ</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay လက်ခံသူ: ဝန်ဆောင်မှု လည်ပတ်နေသည်</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ပြေးနေသည်:</string>
+  <string name="notification_service_content_line3">ဝန်ဆောင်မှုကို ရပ်ရန် နှိပ်ပါ.</string>
+  <string name="track_selection_button">ရွေးချယ်ပါ\nလမ်းကြောင်းများ</string>
+  <string name="text_offset_selection_button">ညှိနှိုင်း\nဖော်ပြချက်များ</string>
+  <string name="text_offset_selection_title">စာသားခေါင်းစဉ်များအတွက် ထွက်ချိန် အချိန်ရွေ့လျား</string>
+  <string name="audio_offset_selection_button">ညှိနှိုင်း\nအသံ</string>
+  <string name="audio_offset_selection_title">အသံလမ်းကြောင်း ကြိုတင် သို့မဟုတ် နောက်ကျ အချိန် ကွာဟချက်</string>
+  <string name="toggle_download_button_start">စတင်\nဒေါင်းလုဒ်</string>
+  <string name="toggle_download_button_stop">ရပ်ပါ\nဒေါင်းလုဒ်</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer ဆက်တင်များ</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour ဝန်ဆောင်မှုအမည်</string>
+  <string name="pref_mdsn_server_name_summary">ကြော်ငြာထားသော အမည် mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API စကားဝှက်</string>
+  <string name="pref_http_api_password_summary">ခွင့်ပြုထားသော ဖောက်သည်များနှင့်သာ မျှဝေထားသော လျှို့ဝှက်ချက်..</string>
+  <string name="pref_default_user_agent_title">အသုံးပြုသူ ကိုယ်စားလှယ်</string>
+  <string name="pref_default_user_agent_summary">တောင်းဆိုမှု ခေါင်းစဉ် တန်ဖိုး..</string>
+  <string name="pref_max_audio_volume_boost_db_title">အများဆုံး အသံထွက် အမြင့် တိုးမြှင့် (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">တိုးတက်မှုကို ကန့်သတ်ရန်..</string>
+  <string name="pref_max_parallel_downloads_title">(*) အများဆုံး တပြိုင်နက် ဒေါင်းလုဒ်များ</string>
+  <string name="pref_max_parallel_downloads_summary">ဒေါင်းလုဒ်မန်နေဂျာတွင် thread pool ၏ အရွယ်အစား..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) နောက်ပြန်ရှာဖွေ တိုးမြှင့်ခြင်း (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">နောက်ပြန်ရှာဖွေရန် အချိန် တိုးမြှင့်ခြင်း..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) ရှေ့ဆက်ရှာဖွေ တိုးမြှင့်ခြင်း (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">ရှေ့ဆက်ရှာဖွေရန် အချိန်တိုးမြှင့်ခြင်း..</string>
+  <string name="pref_audio_volume_percent_increment_title">အသံအဆင့် တိုးမြှင့် (ရာခိုင်နှုန်း))</string>
+  <string name="pref_audio_volume_percent_increment_summary">နည်းသောအခါ 100%, ပမာဏ တိုးခြင်း..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">အသံထွက်အဆင့် တိုးမြှင့်ခြင်း (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">အချိန်မှာ 100%, တိုးမြှင့်မှု တိုးတက်မှု..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">အချက်၊ အကြောင်းရင်း၊ အကြောင်းအရာ၊ အချက်အလက်၊ အကြောင်းကြောင်း၊ အကြောင်းအ x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">ဆက်စပ်ပြင်ဆင်မှုတစ်ခုကို လျှောက်ရန် မြှောက်ကိန်း..</string>
+  <string name="pref_enable_tunneled_video_playback_title">လမ်းကြောင်းတူးဖော်ခြင်း</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">တူးနယ်လ်ဖွင့်ထားသော ပြန်လည်ဖွင့်ခြင်းကို ဖွင့်ထားသည်။</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">တူးနယ်လ်ဖြင့် ပြန်လည်ဖွင့်ခြင်း ပိတ်ထားသည်</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS အသံထွက်စီးများ</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">stream handler ဖွင့်ထားသည်</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">stream handler ပိတ်ထားသည်</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">အသံထွက်ကိရိယာပြောင်းလဲမှုကို ရပ်ဆိုင်းပါ။</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">ရပ်နားခြင်း ဖွင့်ထားသည်</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">ရပ်နားခြင်း ပိတ်ထားသည်</string>
+  <string name="pref_prefer_extension_renderer_title">(*) မီဒီယာဒिकोဒါများ</string>
+  <string name="pref_prefer_extension_renderer_summary_on">ဆော့ဖ်ဝဲ တိုးချဲ့ဒစ်ကုဒ်များသည် ဖွင့်ထားပြီး ဦးစားပေးအသုံးပြုပြီး၊ ဟာ့ဒ်ဝဲ ဒစ်ကုဒ်များထက် ပိုမိုနှစ်သက်သည်။</string>
+  <string name="pref_prefer_extension_renderer_summary_off">ဆော့ဖ်ဝဲအပိုဆက်ကိရိယာ ဖော်ပြန်ကိရိယာများကို ပိတ်ထားပြီး၊ ဟာ့ဒ်ဝဲအပိုဆက်ကိရိယာ ဖော်ပြန်ကိရိယာများကိုသာ ဖွင့်ထားသည်။</string>
+  <string name="pref_enable_audio_passthrough_title">(*) အသံဖြတ်သန်းခြင်း</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital passthrough ဖွင့်ထားသည်</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough ကို ပိတ်ထားသည်; decoder သည် သို့ ပြောင်းလဲခြင်း ဆောင်ရွက်သည်။ PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">ဆာရာဝိုင်းအသံကို စတီရီယိုသို့ downmix ပြုလုပ်ပါ။</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">အသံလိုင်းများသည် ၃ မှ ၆ အထိရှိပါက ၂ ခုအထိ လျော့ချပါ။</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">အသံပတ်လည်ထွက်သံဖြင့် အော်ဒီယိုသီချင်းများကို ဖွင့်ပါ။</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">စတီရီယိုအသံကို မိုနိုသို့ ပြောင်းပါ။</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">အသံလိုင်း ၂ လိုင်းရှိပါက တစ်လိုင်းအဖြစ် လျော့ချပါ။</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">စတီရီယိုအသံဖြင့် အော်ဒီယိုသီချင်းများကို ဖွင့်ပါ။</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode အခမ်းအနား အသိပေးချက်များ</string>
+  <string name="pref_footer_notation_summary">ဤဆက်တင်များပြောင်းလဲမှုများသည် အက်ပ်ကို ပြန်လည်စတင်ပြီးနောက်မှ အကျိုးသက်ရောက်မည်။.</string>
+</resources>

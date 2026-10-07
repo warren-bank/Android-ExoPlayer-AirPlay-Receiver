@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">mostrar</string>
+  <string name="hide">amagar</string>
+  <string name="toast_registration_started">Registrar-se AirPlay servei...</string>
+  <string name="toast_registration_success">AirPlay Registre completat amb èxit</string>
+  <string name="toast_registration_failure">AirPlay El registre ha fallat</string>
+  <string name="toast_start_activity_error_activity_not_found">No s\'ha trobat cap activitat\n\nCap filtre d\'intenció no coincideix amb l\'intenció.</string>
+  <string name="toast_start_activity_error_security">Permís insuficient\n\nExoAirPlayer No es pot iniciar l\'activitat</string>
+  <string name="toast_downloadtracker_error_download_start">S\'ha fallat l\'inici de la descàrrega</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Impossible d\'obtenir la llicència sense connexió</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">No es permet la descàrrega de contingut en directe.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM El contingut no està disponible a API nivells per sota de 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Receptor: servei en funcionament</string>
+  <string name="notification_service_content_line1">ExoAirPlayer correnent a:</string>
+  <string name="notification_service_content_line3">Feu clic per aturar el servei.</string>
+  <string name="track_selection_button">Seleccionar\nCançons</string>
+  <string name="text_offset_selection_button">Sincronitzar\nPeus de foto</string>
+  <string name="text_offset_selection_title">Desplaçament temporal d\'avanç o retard dels subtítols</string>
+  <string name="audio_offset_selection_button">Sincronitzar\nÀudio</string>
+  <string name="audio_offset_selection_title">Desplaçament temporal de l\'avanç o retard de la pista d\'àudio</string>
+  <string name="toggle_download_button_start">Inicia\nDescarrega</string>
+  <string name="toggle_download_button_stop">Atura\'t\nDescarrega</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Configuració</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nom del servei</string>
+  <string name="pref_mdsn_server_name_summary">el nom publicitat per mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Contrasenya</string>
+  <string name="pref_http_api_password_summary">secret compartit només amb clients autoritzats..</string>
+  <string name="pref_default_user_agent_title">Agent d\'usuari</string>
+  <string name="pref_default_user_agent_summary">valor del capçal de la sol·licitud..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Amplificador de volum màxim d\'àudio (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">restrèure l\'amplificació a..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Màx. de descàrregues en paral·lel</string>
+  <string name="pref_max_parallel_downloads_summary">Mida de la piscina de fils al gestor de descàrregues..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Increment de cerca enrere (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">increment de temps per cercar enrere..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Avançar cerca incremental (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">increment de temps per cercar endavant..</string>
+  <string name="pref_audio_volume_percent_increment_title">Augment del volum d\'àudio (percentatge))</string>
+  <string name="pref_audio_volume_percent_increment_summary">quan menys que 100%, increment de volum..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Augment de volum d\'àudio (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">quan a 100%, increment d\'amplificació..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">factor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">factor de multiplicació per aplicar un ajustament relatiu..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Túnel de pista</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">La reproducció en túnel està habilitada.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">La reproducció en túnel està desactivada.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS corrents d\'àudio</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">El gestor de flux està habilitat</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">El gestor de flux està desactivat</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pausa en el canvi del dispositiu de sortida d\'àudio</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">La pausa està habilitada</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">La pausa està desactivada</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Descodificadors de mitjans</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Els descodificadors d\'extensions de programari estan habilitats i són preferits respecte als descodificadors de maquinari.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Els descodificadors d\'extensions de programari estan desactivats, només els descodificadors de maquinari estan activats.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Passatger d\'àudio</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital El passthrough està habilitat</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital El passthrough està desactivat; el descodificador realitza la conversió a PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Mescla de so envoltant a estèreo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Quan hi hagi entre 3 i 6 canals d\'àudio, redueix-los a 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Reprodueix pistes d\'àudio amb so envoltant</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Convertiu l\'àudio estèreo en mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Quan hi ha 2 canals d\'àudio, redueix-los a 1.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Reprodueix pistes d\'àudio amb so estèreo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode notificacions d\'esdeveniments</string>
+  <string name="pref_footer_notation_summary">Els canvis en aquests ajustaments s\'aplicaran després de reiniciar l\'aplicació..</string>
+</resources>

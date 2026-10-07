@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">بازنشانی به صفر</string>
+  <string name="accessibility_time_picker_sign">علامت مثبت یا منفی</string>
+  <string name="accessibility_time_picker_hour">ساعت</string>
+  <string name="accessibility_time_picker_minute">دقیقه</string>
+  <string name="accessibility_time_picker_second">دوم</string>
+  <string name="accessibility_time_picker_milli">میلی‌ثانیه</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

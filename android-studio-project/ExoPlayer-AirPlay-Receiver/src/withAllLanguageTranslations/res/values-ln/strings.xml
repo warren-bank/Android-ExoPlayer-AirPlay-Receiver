@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Lakisa</string>
+  <string name="hide">Bomba</string>
+  <string name="toast_registration_started">Kokomisa nkombo AirPlay mosala...</string>
+  <string name="toast_registration_success">AirPlay Kokomisa nkombo esili malamu</string>
+  <string name="toast_registration_failure">AirPlay Kokomisa nkombo elongi te</string>
+  <string name="toast_start_activity_error_activity_not_found">Mosala moko te emonani\n\nFiltre moko te ya Mokano ekokani na Mokano.</string>
+  <string name="toast_start_activity_error_security">Ndanga ekoki te\n\nExoAirPlayer Ekoki te kobanda mosala</string>
+  <string name="toast_downloadtracker_error_download_start">Kobanda ko-télécharger elongi te</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Ekosimbi te kozwa lisansi ya offline</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Kotélécharger biloko ya mbala moko esimbami te.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Contenu esimbami te na API Ba nivo na nse ya 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Modɛkɛlɛ: Mosala ezali kotambola</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ezali kokima na:</string>
+  <string name="notification_service_content_line3">Fina mpo na kotɛlɛmisa mosala.</string>
+  <string name="track_selection_button">Pona\nNzela</string>
+  <string name="text_offset_selection_button">Kosangisa\nMaloba ya nse</string>
+  <string name="text_offset_selection_title">Bongola liboso to sima ya ntango ya kokata makomi</string>
+  <string name="audio_offset_selection_button">Kosangisa\nKoyoka</string>
+  <string name="audio_offset_selection_title">Bokeseni ya ntango ya liboso to nsima ya nzela ya mongongo</string>
+  <string name="toggle_download_button_start">Banda\nKokita</string>
+  <string name="toggle_download_button_stop">Tika\nKokita</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Bongiseli</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nkombo ya mosala</string>
+  <string name="pref_mdsn_server_name_summary">nkombo oyo elakisami na mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Liloba ya sekele</string>
+  <string name="pref_http_api_password_summary">Sekele oyo ekabolami kaka na bakiliya oyo bandimami..</string>
+  <string name="pref_default_user_agent_title">Agent ya mosaleli</string>
+  <string name="pref_default_user_agent_summary">Motuya ya titre ya bosengi..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Bakisá makasi ya mongongo na yango koleka (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Kanga bokoli kino..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maxim ya ba téléchargements parallèle</string>
+  <string name="pref_max_parallel_downloads_summary">Bonene ya liboke ya ba threads na mokambi ya kotélécharger..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Zonga sima, luka kobakisa (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Kobakisa ntango mpo na koluka na sima..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Kende liboso na boluki (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Kobakisa ntango mpo na koluka liboso..</string>
+  <string name="pref_audio_volume_percent_increment_title">Komatisa makasi ya mongongo (na kati ya nkama))</string>
+  <string name="pref_audio_volume_percent_increment_summary">ntango moke koleka 100%, Bokóli ya volume..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Komata soni ya mongongo (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">ntango na 100%, Bokoli ya amplification..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Eloko ya ntina x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Motango ya kobakisa mpo na kobongisa na boyokani..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Kotimola nzela ya masanga</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Botamboli ya nzela na nzela epesami nzela</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Botangi ya nzela na nzela ekangami</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Bapanzani ya mongongo</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Mokangi ya molongo efungwami</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Mokangi ya molongo ekangami</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Tɛlɛmá na mbongwana ya esaleli ya kobimisa mongongo</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pause efungwami</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pause ekangami</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Bafungoli ya media</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Ba décodeurs ya extension ya logiciel efungwami mpe eleki ba décodeurs ya matériel na bolingo.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Ba décodeurs ya logiciel bakangami, kaka ba décodeurs ya matériel nde bafungwami.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Kolekisa mongongo</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough efungwami</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Passage epekisami; décodeur esali conversion na PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Sangisa son surround na stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Soki ezali na ba chaines ya mongongo kati ya misato na motoba, kitisa na mibale.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Tángá banzembo ya audio na son surround</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Bokitisa son ya stéréo na mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Soki banzela ya mongongo ezali mibale, ekisá yango na moko.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Tángá banzembo ya audio na mongongo ya stéréo.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Mayebisi ya makambo</string>
+  <string name="pref_footer_notation_summary">Mbongwana na ba réglage oyo ekokota na mosala sima ya ko redémarrer application..</string>
+</resources>

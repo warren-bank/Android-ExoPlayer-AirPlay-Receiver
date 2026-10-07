@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">प्रदर्शय</string>
+  <string name="hide">लुप्तयतु</string>
+  <string name="toast_registration_started">पञ्जीकरणम् AirPlay सेवा...</string>
+  <string name="toast_registration_success">AirPlay पञ्जीकरणसफलम्</string>
+  <string name="toast_registration_failure">AirPlay पञ्जीकरणविफलम्</string>
+  <string name="toast_start_activity_error_activity_not_found">कोऽपि क्रिया न दृष्टा\n\nकोऽपि अभिप्राय-छन्निकाः अभिप्रायं न मेलयन्ति।</string>
+  <string name="toast_start_activity_error_security">अनुमति अपर्याप्ता\n\nExoAirPlayer क्रिया आरभितुं न शक्यते।</string>
+  <string name="toast_downloadtracker_error_download_start">डाउनलोड् आरम्भः विफलः</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">अन्तर्जालरहितपरवाना प्राप्तुम् असफलः</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">प्रत्यक्षसामग्री डाउनलोड् कर्तुं समर्थितम् नास्ति।</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM सामग्री समर्थिता नास्ति। API अष्टादशस्य अधस्तात् स्तराः</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay ग्राहकः सेवा प्रवर्तते</string>
+  <string name="notification_service_content_line1">ExoAirPlayer धावन्:</string>
+  <string name="notification_service_content_line3">सेवां विरामयितुं क्लिक् कुर्वन्तु.</string>
+  <string name="track_selection_button">चयनय\nपथाः</string>
+  <string name="text_offset_selection_button">समकालिकीकरणम्\nशीर्षिकाः</string>
+  <string name="text_offset_selection_title">पाठ-शीर्षकानां अग्रगमनं वा विलम्बनं अवकाश-समय-स्थानान्तरणम्</string>
+  <string name="audio_offset_selection_button">समकालिकीकरणम्\nश्रव्यम्</string>
+  <string name="audio_offset_selection_title">ध्वनिपथस्य अग्रवाढ्यन्तरसमयविक्षेपः</string>
+  <string name="toggle_download_button_start">आरभ्यताम्\nअवहर्तुम्</string>
+  <string name="toggle_download_button_stop">विरामः\nअवहर्तुम्</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer विन्यासाः</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour सेवानाम</string>
+  <string name="pref_mdsn_server_name_summary">द्वारा विज्ञापितं नाम mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API गुप्तशब्दः</string>
+  <string name="pref_http_api_password_summary">केवलम् अधिकृतग्राहकैः सह गोपनीयम्..</string>
+  <string name="pref_default_user_agent_title">उपयोक्ता-प्रतिनिधि</string>
+  <string name="pref_default_user_agent_summary">अनुरोध-शीर्षक-मूल्यम्..</string>
+  <string name="pref_max_audio_volume_boost_db_title">अधिकतम ध्वनि-स्तरवर्धनम् (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">प्रवर्धनं संयोजयतु..</string>
+  <string name="pref_max_parallel_downloads_title">(*) अधिकतम समांतर डाउनलोड्</string>
+  <string name="pref_max_parallel_downloads_summary">डाउनलोड्-प्रबन्धकस्य थ्रेड्-समूहस्य आकारः..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) पुनरागमनार्थं अग्रे अनुसन्धानम् (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">पुनरागमनाय कालवृद्धिः..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) अग्रं अन्वेष्टुं वृद्धिः (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">अग्रान्वेषणार्थं समयवृद्धिः..</string>
+  <string name="pref_audio_volume_percent_increment_title">ध्वनि-परिमाणवृद्धिः (प्रतिशततः))</string>
+  <string name="pref_audio_volume_percent_increment_summary">यदा अल्पतरम् 100%, परिमाणवृद्धिः..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">ध्वनि-स्तरवृद्धिकरणम् (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">यदा 100%, वर्धनवृद्धिः..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">कारकः x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">सापेक्षसमायोजनार्थं गुणकः..</string>
+  <string name="pref_enable_tunneled_video_playback_title">मार्गसुरङ्गकरणम्</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">सुरङ्गित पुनःप्रसारणम् सक्रियम् अस्ति।</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">सुरङ्गित पुनःप्रसारणं अक्षमम् अस्ति।</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ध्वनिस्रवाः</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">प्रवाह-सञ्चालकः सक्रियः अस्ति।</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">प्रवाह-सञ्चालकः निष्क्रियः अस्ति।</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">ध्वनि-निष्कासन-यन्त्रपरिवर्तनस्य विरामः</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">विरामः सक्षमः अस्ति।</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">विरामः अक्षमः अस्ति</string>
+  <string name="pref_prefer_extension_renderer_title">(*) माध्यमविमोचकाः</string>
+  <string name="pref_prefer_extension_renderer_summary_on">सॉफ्टवेयर् विस्तार-डिकोडराः सक्षमन्ति तथा हार्डवेयर् डिकोडराभ्यः प्राधान्यं लभन्ते।</string>
+  <string name="pref_prefer_extension_renderer_summary_off">सॉफ़्टवेयर-विस्तार-डिकोडराः निष्क्रियांते, केवलं हार्डवेयर-डिकोडराः क्रियाशीलाः भवन्ति।</string>
+  <string name="pref_enable_audio_passthrough_title">(*) ध्वनि-प्रवाह-संवहनम्</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital पासथ्रू सक्रियम् अस्ति।</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital पासथ्रू अक्षमः अस्ति; डिकोडरः रूपांतरणं करोति PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">परिवेष्टितध्वनिं स्टीरियोध्वनौ रूपान्तरय।</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">यदा ध्वनिनिर्गममार्गाणां संख्या त्रयात् षट् पर्यन्तम् अस्ति तदा तां द्वौ एव न्यूनयतु।</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">परिवेष्टनध्वनिभिः सह ध्वनिपट्टिकाः वादनम्</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">डाउनमिक्स् स्टीरियो ध्वनिं मोनो रूपेण परिवर्तयतु।</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">यदा द्वे ध्वनिनलिकाः सन्ति तदा एकं कुर्वीत।</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">स्टीरियोध्वनिभिः सहितं ध्वनिपथान् वादनम्</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode घटना-सूचनाः</string>
+  <string name="pref_footer_notation_summary">एतेषु विन्यासेषु परिवर्तनानि अनुप्रयोगस्य पुनरारम्भानन्तरम् प्रभाविनी भविष्यन्ति।.</string>
+</resources>

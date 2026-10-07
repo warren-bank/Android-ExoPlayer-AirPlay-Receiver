@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Ailosod i Sero</string>
+  <string name="accessibility_time_picker_sign">Arwydd Cadarnhaol neu Negyddol</string>
+  <string name="accessibility_time_picker_hour">Awr</string>
+  <string name="accessibility_time_picker_minute">Funud</string>
+  <string name="accessibility_time_picker_second">Ail</string>
+  <string name="accessibility_time_picker_milli">Milieiliad</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

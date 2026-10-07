@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">பூஜ்ஜியத்திற்கு மீட்டமை</string>
+  <string name="accessibility_time_picker_sign">நேர்மறை அல்லது எதிர்மறை அறிகுறி</string>
+  <string name="accessibility_time_picker_hour">மணி</string>
+  <string name="accessibility_time_picker_minute">நிமிடம்</string>
+  <string name="accessibility_time_picker_second">இரண்டாவது</string>
+  <string name="accessibility_time_picker_milli">மில்லிவினாடி</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Diskouez</string>
+  <string name="hide">Kuzhat</string>
+  <string name="toast_registration_started">Enskrivañ AirPlay servij...</string>
+  <string name="toast_registration_success">AirPlay Enroladenn deuet mat</string>
+  <string name="toast_registration_failure">AirPlay C\'hwitet eo ar marilh</string>
+  <string name="toast_start_activity_error_activity_not_found">N\'eus bet kavet obererezh ebet\n\nN\'eus siladenn youl ebet a glot gant ar youl</string>
+  <string name="toast_start_activity_error_security">Aotre dian-walc\'h\n\nExoAirPlayer N\'haller ket loc\'hañ an oberiantiz.</string>
+  <string name="toast_downloadtracker_error_download_start">C\'hwitet war lañs an telekargadenn</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">C\'hwitet war ar goulenn aotre-implijout digevreadel</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ne vez ket harpet pellgargañ danvez war-eeun.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM N\'eo ket harpet ar c\'hontenidigezh war API liveoù dindan 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Degemerer: ar servij a zo o vont en-dro</string>
+  <string name="notification_service_content_line1">ExoAirPlayer o redek da:</string>
+  <string name="notification_service_content_line3">Klikit evit paouez ar servij.</string>
+  <string name="track_selection_button">Diuzit\nHentoù</string>
+  <string name="text_offset_selection_button">Kenporzhiañ\nTitloù</string>
+  <string name="text_offset_selection_title">Digresk pe kresk an amzer-diforc\'h evit an titloù</string>
+  <string name="audio_offset_selection_button">Kenporzhiañ\nSon</string>
+  <string name="audio_offset_selection_title">Digresk amzer an araokañ pe an dale evit ar roudenn son</string>
+  <string name="toggle_download_button_start">Kregiñ\nPellgargañ</string>
+  <string name="toggle_download_button_stop">Paouez\nPellgargañ</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Arventennoù</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Anv ar servij</string>
+  <string name="pref_mdsn_server_name_summary">an anv brudet gant mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Ger-tremen</string>
+  <string name="pref_http_api_password_summary">Sekret rannet nemet gant ar pratikoù aotreet..</string>
+  <string name="pref_default_user_agent_title">Ajañt implijer</string>
+  <string name="pref_default_user_agent_summary">Talvoud talbenn ar goulenn..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Kresk son kreñvañ (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Harzañ ar c\'hresk da..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Pellgargadennoù paralel d\'ar muiañ</string>
+  <string name="pref_max_parallel_downloads_summary">Ment ar poull neudennoù er merer pellgargañ..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Kresk klask war-gil (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Kresk amzer evit klask war-gil..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Klask war-raok ur pazenn (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Kresk amzer evit klask war-raok..</string>
+  <string name="pref_audio_volume_percent_increment_title">Kresk live ar son (dregantad))</string>
+  <string name="pref_audio_volume_percent_increment_summary">pa eo nebeutoc\'h eget 100%, Kresk ar volumm..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Kresk unanenn e lakaad ar son (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">pa emaon e 100%, Kresk ampledadur..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Faktor lieskementiñ da lakaat un azasadenn gevatal..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tunelerezh hent-houarn</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Gweredekaet eo al lennadenn dre zunel.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Lakaet eo bet diwered ar c\'hoari dre ganol.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Froudoù klevet</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Gweredekaet eo merer ar froud.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Mouezhiet eo merer ar froud.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Paouez war ar cheñchamant da benveg ezvont son</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">An ehan a zo gweredekaet</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Ehan dizurzhiet</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dideulerioù media</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Gweredekaet eo an digoderioù astenn meziantel, ha gwelloc\'h int eget an digoderioù periantel.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Dizgweredet eo an digoderioù ec\'honveziantel, n\'eus nemet an digoderioù periantel a zo gweredet.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Treuzkas son</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Gweredekaet eo ar pasadur.</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Ar passthrough a zo diweredekaet; an digoder a seven an treuzfurmadur da PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Kendeuziñ ar son tro-dro e stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Pa vez etre 3 ha 6 kanal son, bihanaat da 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Lenn heñchoù son gant son tro-dro</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Gwellaat son stereo da vono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Pa vez 2 ganolenn son, bihanaat da 1.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Lenn heñchoù son stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Kemennoù an darvoudoù</string>
+  <string name="pref_footer_notation_summary">Ar c\'hemmoù en arventennoù-mañ a yelo e talvoud goude adloc\'hañ an arload..</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ښودل</string>
+  <string name="hide">پټول</string>
+  <string name="toast_registration_started">راجستر کول AirPlay خدمت...</string>
+  <string name="toast_registration_success">AirPlay راجسترېشن بریالی شو</string>
+  <string name="toast_registration_failure">AirPlay راجستر کول ناکام شول</string>
+  <string name="toast_start_activity_error_activity_not_found">هیڅ فعالیت وموندل شو\n\nهیڅ نیت فلټرونه له نیت سره سمون نه خوري</string>
+  <string name="toast_start_activity_error_security">ناکافي اجازه\n\nExoAirPlayer فعالیت نشي پیل کیدای</string>
+  <string name="toast_downloadtracker_error_download_start">ډاونلوډ پیل کولو کې پاتې راغی</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">د آفلاین لایسنس په ترلاسه کولو کې پاتې راغی</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">د ژوندیو منځپانګو ډاونلوډ کول نه ملاتړیږي</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM منځپانګه نه ده ملاتړ کېدونکې API له ۱۸ څخه ټیټې کچې</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay گیرونکی: خدمت روان دی</string>
+  <string name="notification_service_content_line1">ExoAirPlayer په ... منډه وهل:</string>
+  <string name="notification_service_content_line3">د خدمت د بندولو لپاره کلیک وکړئ.</string>
+  <string name="track_selection_button">غوره کړئ\nلارې</string>
+  <string name="text_offset_selection_button">همغږي\nسرلیکونه</string>
+  <string name="text_offset_selection_title">د متن سرلیکونو د پرمختګ یا ځنډ وخت توپیر</string>
+  <string name="audio_offset_selection_button">همغږي\nغږ</string>
+  <string name="audio_offset_selection_title">د غږیزې برخې د پرمختګ یا ځنډ وخت توپیر</string>
+  <string name="toggle_download_button_start">پیل\nښکته کول</string>
+  <string name="toggle_download_button_stop">درې\nښکته کول</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer تنظیمات</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour د خدمت نوم</string>
+  <string name="pref_mdsn_server_name_summary">د ... لخوا اعلان شوی نوم mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API پټ نوم</string>
+  <string name="pref_http_api_password_summary">پټ، یوازې له مجازو پیرودونکو سره شریک شوی..</string>
+  <string name="pref_default_user_agent_title">کاروونکي استازی</string>
+  <string name="pref_default_user_agent_summary">د غوښتنې سرلیک ارزښت..</string>
+  <string name="pref_max_audio_volume_boost_db_title">د غږ لوړوالی اعظمي زیاتوالی (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">خپرېدل محدود کړئ..</string>
+  <string name="pref_max_parallel_downloads_title">(*) د یو وخت تر ټولو ډېرې ډاونلوډونې</string>
+  <string name="pref_max_parallel_downloads_summary">د ډاونلوډ مدیر کې د تارونو پول اندازه..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) شاته لټون زیاتول (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">شاته لټون لپاره د وخت زیاتوالی..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) مخکې لټون زیاتول (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">مخکې لټون لپاره وخت زیاتول..</string>
+  <string name="pref_audio_volume_percent_increment_title">د غږ لوړول (فیصد))</string>
+  <string name="pref_audio_volume_percent_increment_summary">کله چې له ... څخه کم وي 100%, د حجم زیاتوالی..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">د غږ لوړولو زیاتوالی (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">کله چې په 100%, د تقویې زیاتوالی..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">عامل x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">د نسبي تعدیل پلي کولو لپاره ضرب کوونکی فکتور..</string>
+  <string name="pref_enable_tunneled_video_playback_title">د ټریک تونل کول</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">تونل شوی پلې بیک فعال دی</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">ټونل شوی پلې بیک غیر فعال دی</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS غږیزې جریانونې</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">د سټریم سمبالوونکی فعال دی</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">د سټریم سمبالوونکی غیر فعال دی</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">د غږیزو آوټپوټ وسیلې د بدلولو ځنډ</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">ځنډ فعال دی</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">ځنډ غیر فعال دی</string>
+  <string name="pref_prefer_extension_renderer_title">(*) د رسنیو کوډ شکنه کوونکي</string>
+  <string name="pref_prefer_extension_renderer_summary_on">د سافټویر توسیعي ډیکوډرونه فعال دي او د هارډویر ډیکوډرونو په پرتله غوره ګڼل کیږي.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">د سافټویر اکسټینشن ډیکوډرونه غیر فعال دي، یوازې هارډویر ډیکوډرونه فعال دي</string>
+  <string name="pref_enable_audio_passthrough_title">(*) غږیز پاسټرو</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital پاسټرېف فعال دی</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital پاسټرېف غیر فعال دی؛ ډیکوډر تهبدیل ترسره کوي PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">سوراډ ساوونډ سټیریو ته ښکته کړئ</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">کله چې د غږ ۳ او ۶ چینلونو ترمنځ وي، ۲ ته یې راکم کړئ.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">د چاپېریال غږ سره غږیزې ټراکونه غږوئ</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">سټیریو غږ مونو ته راټیټ کړئ</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">کله چې دوه غږیز چینلونه وي، یو ته یې راکم کړئ.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">د سټیریو غږ سره غږیزې ټراکونه وغږوئ</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode د پیښو خبرتیاوې</string>
+  <string name="pref_footer_notation_summary">په دې ترتیباتو کې بدلونونه به د اپلیکیشن له بیا پیل کولو وروسته اغېزمن شي..</string>
+</resources>

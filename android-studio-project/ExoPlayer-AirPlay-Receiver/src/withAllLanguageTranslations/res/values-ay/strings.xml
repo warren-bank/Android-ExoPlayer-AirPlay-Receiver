@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Uñacht\'ayaña</string>
+  <string name="hide">Imantaña</string>
+  <string name="toast_registration_started">Qillqayasiña AirPlay Yanapawi...</string>
+  <string name="toast_registration_success">AirPlay Qillqantasiwix walikïxiwa</string>
+  <string name="toast_registration_failure">AirPlay Qillqayasiwix janiw walïkiti</string>
+  <string name="toast_start_activity_error_activity_not_found">Janiw kuna lurañas jikxatatakiti\n\nJaniw kuna Munañ Suyt\'awinakas uka Munañampix chikäkiti</string>
+  <string name="toast_start_activity_error_security">Jani walja iyawsawi\n\nExoAirPlayer Luräwix janiw qalltayaskaspati</string>
+  <string name="toast_downloadtracker_error_download_start">Apaqaña janiw qalltkänti</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Jan internetan licencia katuqañjamäkänti</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Jakäwi yänaka apaqañax janiw iyawsatakiti.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Manq\'ax janiw yanapt\'atäkiti API Tunk paqallqun manqhankir patanakapa</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Katuqiri: irnaqawix sarantaskiwa</string>
+  <string name="notification_service_content_line1">ExoAirPlayer t\'ijuña:</string>
+  <string name="notification_service_content_line3">Servicio sayt\'ayañatak ch\'iqt\'aña.</string>
+  <string name="track_selection_button">Ajlliña\nThakhinaka</string>
+  <string name="text_offset_selection_button">Mayachaña\nQillqatanaka</string>
+  <string name="text_offset_selection_title">Qillqat qhanañchirinakan nayraru jan ukax qhiparuw pachap mayjt\'ayaña</string>
+  <string name="audio_offset_selection_button">Mayachaña\nIst\'aña</string>
+  <string name="audio_offset_selection_title">Ist\'añ Thakhi Nayraru Jan Ukax Qhipar Jich\'a Pacha Mayjt\'awi</string>
+  <string name="toggle_download_button_start">Qalltaña\nApaqaña</string>
+  <string name="toggle_download_button_stop">Sayt\'am\nApaqaña</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Kamachinaka</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Irnaqäwi Suti</string>
+  <string name="pref_mdsn_server_name_summary">Uñt\'ayata suti mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Imantat aru</string>
+  <string name="pref_http_api_password_summary">Iyawsata alirinakampiki imantata..</string>
+  <string name="pref_default_user_agent_title">Apariri Apnaqiri</string>
+  <string name="pref_default_user_agent_summary">Mayiwi p\'iqinchiri chani..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Ist\'añan jach\'a ch\'amapa jilxattayaña (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Jach\'aptayawi jark\'aqaña..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Jilpacha Paralelo Apaqañanaka</string>
+  <string name="pref_max_parallel_downloads_summary">Apaqañ apnaqirin chinu qutu sayt\'apa..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Qhipäxar Thaqhañ Jilxattayaña (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Qhipäxar thaqhañatak pacha jilxattayaña..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Nayraru Thaqhañataki Jilxattayaña (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Nayraru thaqhañatak pacha jilxataña..</string>
+  <string name="pref_audio_volume_percent_increment_title">Ist\'añan ch\'amapa jilxatayaña (patakat))</string>
+  <string name="pref_audio_volume_percent_increment_summary">pisi ukhaxa 100%, Jilxataña..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ist\'añan ch\'amapa jilxattayaña (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">kunapachatix 100%, Jilxattäwi yapxata..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Luriri x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Maynit maynikam askichañatak mirantayiri..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Thakhi manqha t\'uqtaña</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Túnel tuqi uñt\'ayäwix ch\'amanchatawa.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Manqha anatañax jark\'atawa.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Ist\'añatak jalsunaka</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Jalsu apnaqirixa wakicht\'atawa</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Jalsu apnaqirix jark\'atawa</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Istuñatak yäru mayjt\'ayaña sayt\'ayaña</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Sayt\'äwix ch\'amanchatawa</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Sayt\'äwix jark\'atawa</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Yatiyäwi Qhananchirinaka</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Software extensión decodificadores ukax hardware decodificadores ukarux atipt\'ayatawa ukat juk\'amp munatawa.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Software decoders ukax jark\'atawa, hardware decoders ukakiw wakt\'ayata.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Ist\'añataki Passthrough</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough ukax wakicht\'atawa.</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough ukax jark\'atawa; decoder ukax ... ukaru jaqukipañ luri. PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Muyt\'iri ist\'añanakxa paya ist\'añaruw mayachaña.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Kimsa suxtan aru thakhinakax utjki ukhaxa, payaruw jisk\'aptayaña.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Muyt\'iri ist\'awimpi audio q\'uchunaka phust\'aña</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo ist\'asiña mono-ru aynachaptayaña</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Paya audio thakhinakax utjki ukhaxa, mayaruw jisk\'aptayaña.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Estéreo arunampi audio qillqatanaka phust\'aña</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Yatiyäwinaka</string>
+  <string name="pref_footer_notation_summary">Aka wakiyäwinakan mayjt\'äwinakapaxa, aplicación wasitat qalltayata qhipatwa apnaqasiñ qalltapxani..</string>
+</resources>

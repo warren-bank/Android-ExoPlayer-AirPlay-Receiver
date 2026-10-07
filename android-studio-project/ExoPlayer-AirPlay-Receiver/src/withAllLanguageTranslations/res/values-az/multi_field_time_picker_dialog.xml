@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Sıfıra sıfırlama</string>
+  <string name="accessibility_time_picker_sign">Müsbət və ya mənfi işarə</string>
+  <string name="accessibility_time_picker_hour">Saat</string>
+  <string name="accessibility_time_picker_minute">Dəqiqə</string>
+  <string name="accessibility_time_picker_second">İkincisi</string>
+  <string name="accessibility_time_picker_milli">millisaniyə</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

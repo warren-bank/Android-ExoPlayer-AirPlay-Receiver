@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">သုညသို့ ပြန်လည်သတ်မှတ်</string>
+  <string name="accessibility_time_picker_sign">အကောင်း သို့မဟုတ် အနုတ် အမှတ်</string>
+  <string name="accessibility_time_picker_hour">နာရီ</string>
+  <string name="accessibility_time_picker_minute">မိနစ်</string>
+  <string name="accessibility_time_picker_second">ဒုတိယ</string>
+  <string name="accessibility_time_picker_milli">မီလီစက္ကန့်</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

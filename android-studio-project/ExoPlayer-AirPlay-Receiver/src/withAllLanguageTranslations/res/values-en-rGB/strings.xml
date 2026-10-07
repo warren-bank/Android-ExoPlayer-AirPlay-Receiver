@@ -17,9 +17,14 @@
   <string name="notification_service_content_line3">Click to stop service.</string>
   <string name="track_selection_button">Select\nTracks</string>
   <string name="text_offset_selection_button">Sync\nCaptions</string>
-  <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+  <string name="text_offset_selection_title">Text Captions Advance or Delay Time Offset</string>
+  <string name="audio_offset_selection_button">Sync\nAudio</string>
+  <string name="audio_offset_selection_title">Audio Track Advance or Delay Time Offset</string>
   <string name="toggle_download_button_start">Start\nDownload</string>
   <string name="toggle_download_button_stop">Stop\nDownload</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
   <string name="pref_settings_title">ExoAirPlayer Settings</string>
   <string name="pref_mdsn_server_name_title">(*) Bonjour Service Name</string>
   <string name="pref_mdsn_server_name_summary">the name advertised by mDNS..</string>

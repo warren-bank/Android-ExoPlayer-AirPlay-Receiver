@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">onyesha</string>
+  <string name="hide">Ficha</string>
+  <string name="toast_registration_started">Kujisajili AirPlay Huduma...</string>
+  <string name="toast_registration_success">AirPlay Usajili umefanikiwa</string>
+  <string name="toast_registration_failure">AirPlay Usajili umeshindikana</string>
+  <string name="toast_start_activity_error_activity_not_found">Hakuna shughuli iliyopatikana\n\nHakuna vichujio vya nia vinavyolingana na nia.</string>
+  <string name="toast_start_activity_error_security">Idhini haitoshi\n\nExoAirPlayer Haiwezi kuanzisha shughuli</string>
+  <string name="toast_downloadtracker_error_download_start">Imeshindwa kuanza kupakua</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Imeshindwa kupata leseni ya nje ya mtandao</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Upakuaji wa maudhui ya moja kwa moja haujaungwa mkono</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Maudhui hayawezi kutumika kwenye API Viwango chini ya 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Mpokeaji: huduma inaendelea</string>
+  <string name="notification_service_content_line1">ExoAirPlayer kwa kasi ya:</string>
+  <string name="notification_service_content_line3">Bofya kusitisha huduma.</string>
+  <string name="track_selection_button">Chagua\nNyimbo</string>
+  <string name="text_offset_selection_button">Sawazisha\nMaelezo ya picha</string>
+  <string name="text_offset_selection_title">Kifupisho cha maandishi: Ongeza au punguza ucheleweshaji wa muda</string>
+  <string name="audio_offset_selection_button">Sawazisha\nSauti</string>
+  <string name="audio_offset_selection_title">Upishaji au Ucheleweshaji wa Wakati wa Njia ya Sauti</string>
+  <string name="toggle_download_button_start">Anza\nPakua</string>
+  <string name="toggle_download_button_stop">Simama\nPakua</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Mipangilio</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Jina la Huduma</string>
+  <string name="pref_mdsn_server_name_summary">jina lililotangazwa na mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Nenosiri</string>
+  <string name="pref_http_api_password_summary">siri inayotolewa kwa wateja walioidhinishwa pekee..</string>
+  <string name="pref_default_user_agent_title">Wakala wa Mtumiaji</string>
+  <string name="pref_default_user_agent_summary">Thamani ya kichwa cha ombi..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Ongeza Sauti Kuu Zaidi (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">zuia kuongeza sauti..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Upakuaji sambamba zaidi</string>
+  <string name="pref_max_parallel_downloads_summary">Ukubwa wa bwawa la nyuzi katika kidhibiti cha upakuaji..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Ongeza Utafutaji wa Nyuma (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">ongezo la muda wa kutafuta nyuma..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Songa mbele kiongezo (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">ongezo la muda wa kusonga mbele..</string>
+  <string name="pref_audio_volume_percent_increment_title">Kuongeza sauti ya sauti (asilimia))</string>
+  <string name="pref_audio_volume_percent_increment_summary">wakati ni kidogo kuliko 100%, ongezeko la kiasi..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ongeza kiwango cha sauti (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">wakati katika 100%, ongezeko la ukuaji..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Kigezo x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Kipengele cha kuzidisha cha kutumia marekebisho ya uhusiano..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Uchimbaji wa Njia ya Reli</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Uchezaji uliopachikwa umewezeshwa</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Uchezaji uliochimbwa umezimwa</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Mitiririko ya sauti</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Mshikaji wa mtiririko umewezeshwa</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Mshikaji wa mtiririko umezimwa</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Sita kwa mabadiliko ya kifaa cha kutoa sauti</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Kusitishwa kumewezeshwa</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Kusitisha kimezimwa</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Visimbuzi vya Midia</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Visimbuzi vya kiendelezi cha programu vimewezeshwa na vinapendekezwa zaidi kuliko visimbuzi vya vifaa.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Defaiki za programu zimezimwa, na zile za vifaa pekee ndizo zimewashwa.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Upitishaji Sauti</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough imewezekwa</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough imezimwa; dekoda hufanya uongofu hadi PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Punguza sauti ya mzunguko kuwa stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">wakati kuna kati ya chaneli 3 na 6 za sauti, punguza hadi 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Cheza nyimbo za sauti zenye mwangwi wa pande zote.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Punguza sauti ya stereo hadi mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">wakati kuna chaneli mbili za sauti, punguza hadi moja</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Cheza nyimbo za sauti zenye sauti ya stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Arifa za matukio</string>
+  <string name="pref_footer_notation_summary">Mabadiliko ya mipangilio hii yataanza kutumika baada ya programu kuanzishwa upya..</string>
+</resources>

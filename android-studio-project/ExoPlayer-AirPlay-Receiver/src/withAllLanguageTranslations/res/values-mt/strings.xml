@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">uri</string>
+  <string name="hide">Aħbi</string>
+  <string name="toast_registration_started">Irreġistra AirPlay servizz...</string>
+  <string name="toast_registration_success">AirPlay Ir-reġistrazzjoni rnexxiet</string>
+  <string name="toast_registration_failure">AirPlay Ir-reġistrazzjoni ma rnexxietx</string>
+  <string name="toast_start_activity_error_activity_not_found">Ma nstab l-ebda attività\n\nL-ebda filtru tal-intenzjoni ma jaqbel mal-intenzjoni.</string>
+  <string name="toast_start_activity_error_security">Permess insuffiċjenti\n\nExoAirPlayer Ma jistax jibda l-attività</string>
+  <string name="toast_downloadtracker_error_download_start">Ma rnexxiex tibda t-tniżżil</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Ma rnexxiex tikseb liċenzja offline</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">It-tniżżil ta\' kontenut ħaj mhux appoġġjat.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Il-kontenut mhux appoġġjat fuq API livelli taħt 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Ricevitur: servizz għaddej</string>
+  <string name="notification_service_content_line1">ExoAirPlayer qed jaħdem f\':</string>
+  <string name="notification_service_content_line3">Ikklikkja biex twaqqaf is-servizz.</string>
+  <string name="track_selection_button">Agħżel\nTrakkijiet</string>
+  <string name="text_offset_selection_button">Sinċronizza\nKaptions</string>
+  <string name="text_offset_selection_title">Offset tal-ħin għall-avvanz jew id-dewmien tat-titli tat-test</string>
+  <string name="audio_offset_selection_button">Sinċronizza\nAwdjo</string>
+  <string name="audio_offset_selection_title">Offset tal-ħin ta\' avvanz jew dewmien tal-korsa tal-awdjo</string>
+  <string name="toggle_download_button_start">Ibda\nNiżżel</string>
+  <string name="toggle_download_button_stop">Waqqaf\nNiżżel</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Issettjarijiet</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Isem tas-Servizz</string>
+  <string name="pref_mdsn_server_name_summary">l-isem imħabbar minn mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Password</string>
+  <string name="pref_http_api_password_summary">sigriet maqsum biss ma\' klijenti awtorizzati..</string>
+  <string name="pref_default_user_agent_title">Aġent tal-Utent</string>
+  <string name="pref_default_user_agent_summary">valur tal-intestatura tat-talba..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Żieda fil-volum massimu tal-awdjo (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Jillimita t-tisħiħ..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Massimu ta\' tniżżil parallelu</string>
+  <string name="pref_max_parallel_downloads_summary">Id-daqs tal-pool tal-fili fil-maniġer tat-tniżżil..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Żieda fil-fittxija lura (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Żieda fil-ħin biex tfittex lura..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Tfittxija \'l quddiem żieda (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Żieda fil-ħin biex tfittex \'il quddiem..</string>
+  <string name="pref_audio_volume_percent_increment_title">Żieda fil-volum tal-awdjo (perċentwal))</string>
+  <string name="pref_audio_volume_percent_increment_summary">meta inqas minn 100%, żieda fil-volum..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Żieda fil-volum tal-awdjo (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">meta f\' 100%, żieda fl-amplifikazzjoni..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">fattur x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">fattur ta\' moltiplikazzjoni biex japplika aġġustament relattiv..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tunnellar tat-traċċa</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Il-plejbek tat-tunnell huwa attivat.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Il-plejbek tat-tunnellar huwa diżattivat</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS xmajriet awdjo</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Il-maniġer tal-fluss huwa attivat</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Il-maniġer tal-fluss huwa diżattivat</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Waqqaf il-bidla għall-apparat tal-ħruġ tal-awdjo</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Il-waqfa hija attivata</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Il-waqfa hija diżattivata</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Dekoders tal-midja</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Id-dekoders tal-estensjoni tas-softwer huma attivati u preferuti fuq id-dekoders tal-hardware.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Id-dekoders tal-estensjoni tas-softwer huma diżattivati, u huma attivati biss id-dekoders tal-hardware.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Passatġġ tal-awdjo</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Il-passthrough huwa attivat</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough huwa diżattivat; id-dekoder iwettaq konverżjoni għal PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Imxejja \'l isfel l-awdjo surround f\'stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">meta jkun hemm bejn 3 u 6 kanali tal-awdjo, naqqas għal 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Tilgħab traċċi awdjo b\'ħoss surround</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Inniżżel il-ħoss stereo għal mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Meta jkun hemm żewġ kanali tal-awdjo, naqqashom għal wieħed.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Aqra traċċi tal-awdjo b\'ħoss stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode notifiki tal-avvenimenti</string>
+  <string name="pref_footer_notation_summary">Il-bidliet f\'dawn l-issettjar se jkunu effettivi wara li l-app terġa\' tibda..</string>
+</resources>

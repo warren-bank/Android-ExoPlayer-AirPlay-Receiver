@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Възстановяване на нулевото състояние</string>
+  <string name="accessibility_time_picker_sign">Положителен или отрицателен знак</string>
+  <string name="accessibility_time_picker_hour">Час</string>
+  <string name="accessibility_time_picker_minute">Протокол</string>
+  <string name="accessibility_time_picker_second">Второ</string>
+  <string name="accessibility_time_picker_milli">Милисекунда</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

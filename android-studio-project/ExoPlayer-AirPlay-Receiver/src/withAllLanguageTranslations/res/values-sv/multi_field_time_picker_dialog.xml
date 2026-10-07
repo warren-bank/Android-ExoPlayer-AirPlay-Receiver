@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Återställ till noll</string>
+  <string name="accessibility_time_picker_sign">Positivt eller negativt tecken</string>
+  <string name="accessibility_time_picker_hour">Timme</string>
+  <string name="accessibility_time_picker_minute">Protokoll</string>
+  <string name="accessibility_time_picker_second">Andra</string>
+  <string name="accessibility_time_picker_milli">Millisekund</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

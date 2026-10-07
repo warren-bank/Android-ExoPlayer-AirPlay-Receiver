@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">نمایش</string>
+  <string name="hide">پنهان کردن</string>
+  <string name="toast_registration_started">ثبت‌نام AirPlay خدمات...</string>
+  <string name="toast_registration_success">AirPlay ثبت‌نام موفقیت‌آمیز</string>
+  <string name="toast_registration_failure">AirPlay ثبت‌نام ناموفق بود</string>
+  <string name="toast_start_activity_error_activity_not_found">هیچ فعالیتی یافت نشد\n\nهیچ فیلتر نیت با نیت مطابقت ندارد.</string>
+  <string name="toast_start_activity_error_security">مجوز ناکافی\n\nExoAirPlayer فعالیت را نمی‌توان راه‌اندازی کرد</string>
+  <string name="toast_downloadtracker_error_download_start">دانلود با موفقیت آغاز نشد</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">در دریافت مجوز آفلاین ناموفق بود.</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">دانلود محتوای زنده پشتیبانی نمی‌شود.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM محتوا پشتیبانی نمی‌شود API سطح‌های زیر ۱۸</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay گیرنده: سرویس در حال اجرا</string>
+  <string name="notification_service_content_line1">ExoAirPlayer با سرعت:</string>
+  <string name="notification_service_content_line3">برای متوقف کردن سرویس کلیک کنید.</string>
+  <string name="track_selection_button">انتخاب\nقطعات</string>
+  <string name="text_offset_selection_button">همگام‌سازی\nزیرنویس‌ها</string>
+  <string name="text_offset_selection_title">تغییر جابجایی زمانی زیرنویس‌ها</string>
+  <string name="audio_offset_selection_button">همگام‌سازی\nصدا</string>
+  <string name="audio_offset_selection_title">تغییر زمان جابه‌جایی پیش‌رو یا تأخیر در مسیر صوتی</string>
+  <string name="toggle_download_button_start">شروع\nدانلود</string>
+  <string name="toggle_download_button_stop">ایست\nدانلود</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer تنظیمات</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour نام سرویس</string>
+  <string name="pref_mdsn_server_name_summary">نام تبلیغ‌شده توسط mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API رمز عبور</string>
+  <string name="pref_http_api_password_summary">مخفی، فقط با مشتریان مجاز به اشتراک گذاشته شده..</string>
+  <string name="pref_default_user_agent_title">نماینده کاربر</string>
+  <string name="pref_default_user_agent_summary">مقدار هدر درخواست..</string>
+  <string name="pref_max_audio_volume_boost_db_title">افزایش حداکثر حجم صدا (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">تشدید را مهار کن..</string>
+  <string name="pref_max_parallel_downloads_title">(*) حداکثر دانلودهای موازی</string>
+  <string name="pref_max_parallel_downloads_summary">اندازهٔ استخر نخ در مدیر دانلود..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) افزایش جستجوی معکوس (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">افزایش زمان برای جستجوی معکوس..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) افزایش جستجوی پیشرونده (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">افزایش زمان برای جستجوی رو به جلو..</string>
+  <string name="pref_audio_volume_percent_increment_title">افزایش حجم صدا (درصد))</string>
+  <string name="pref_audio_volume_percent_increment_summary">زمانی که کمتر از 100%, افزایش حجم..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">افزایش گام‌دار حجم صدا (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">وقتی در 100%, افزایش تقویت..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">عامل x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">ضریب برای اعمال تعدیل نسبی..</string>
+  <string name="pref_enable_tunneled_video_playback_title">تونل‌زنی مسیر</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">پخش تونلی فعال است</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">پخش تونلی غیرفعال است</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS جریان‌های صوتی</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">پردازشگر جریان فعال است</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">پردازشگر جریان غیرفعال است</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">مکث در تغییر دستگاه خروجی صدا</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">وقفه فعال است</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">مکث غیرفعال است</string>
+  <string name="pref_prefer_extension_renderer_title">(*) دیکودرهای رسانه‌ای</string>
+  <string name="pref_prefer_extension_renderer_summary_on">دکودکننده‌های افزونه نرم‌افزاری فعال و بر دکودکننده‌های سخت‌افزاری ارجح هستند.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">رمزگشای‌های افزونه نرم‌افزاری غیرفعال هستند، تنها رمزگشای‌های سخت‌افزاری فعال هستند.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) عبور صدا</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital گذرگاه فعال است</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital گذراندازی غیرفعال است؛ دیکودر تبدیل را انجام می‌دهد به PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">صوت فراگیر را به استریو کاهش دهید</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">وقتی بین ۳ تا ۶ کانال صوتی وجود دارد، به ۲ کاهش دهید.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">پخش ترک‌های صوتی با صدای فراگیر</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">صوت استریو را به مونو کاهش دهید</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">وقتی دو کانال صوتی وجود دارد، به یک کاهش دهید.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">پخش ترک‌های صوتی با صدای استریو</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode اطلاعات رویداد</string>
+  <string name="pref_footer_notation_summary">تغییرات این تنظیمات پس از راه‌اندازی مجدد برنامه اعمال می‌شوند..</string>
+</resources>

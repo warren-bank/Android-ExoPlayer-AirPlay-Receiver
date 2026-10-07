@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">bonisa</string>
+  <string name="hide">Fihla</string>
+  <string name="toast_registration_started">Ukubhalisa AirPlay Inkonzo...</string>
+  <string name="toast_registration_success">AirPlay Ubhaliso luyimpumelelo</string>
+  <string name="toast_registration_failure">AirPlay Ubhaliso luyitshile</string>
+  <string name="toast_start_activity_error_activity_not_found">Akukho nto ifunyenweyo\n\nAkukho Zihluzo zeNjongo ezihambelana neNjongo</string>
+  <string name="toast_start_activity_error_security">Igunya elingonelanga\n\nExoAirPlayer Akukwazi ukuqalisa i-Activity</string>
+  <string name="toast_downloadtracker_error_download_start">Ukukhuphela akuphumelelanga</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Akuphumelelanga ukufumana ilayisensi ekhayeni</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ukukhuphela umxholo osasazwayo bukhoma akuxhaswanga.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Umxholo awuxhaswanga kwi API amanqanaba angaphantsi kwe-18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Umamkeli: inkonzo iyaqhubeka</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ubaleka kwi:</string>
+  <string name="notification_service_content_line3">Cofa ukuze umise inkonzo.</string>
+  <string name="track_selection_button">Khetha\nIingoma</string>
+  <string name="text_offset_selection_button">Dibanisa\nIinkcazelo zemifanekiso</string>
+  <string name="text_offset_selection_title">Utshintsho lwexesha lwezihlomelo zombhalo: Yandisa okanye ulibazise</string>
+  <string name="audio_offset_selection_button">Dibanisa\nIsandi</string>
+  <string name="audio_offset_selection_title">Utshintsho lwexesha lokuqaliswa kwesigaba sesandi</string>
+  <string name="toggle_download_button_start">Qala\nKhuphela</string>
+  <string name="toggle_download_button_stop">Yima\nKhuphela</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Iisetingi</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Igama leNkonzo</string>
+  <string name="pref_mdsn_server_name_summary">igama elibhengezwayo ngu mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Igama lokugqitha</string>
+  <string name="pref_http_api_password_summary">imfihlo ekwabelwana ngayo kuphela nabathengi abagunyazisiweyo..</string>
+  <string name="pref_default_user_agent_title">I-Arhente yomsebenzisi</string>
+  <string name="pref_default_user_agent_summary">ixabiso le-header yesicelo..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Ukunyuswa kweVolumu yoSindo ePhakamileyo (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Thintela ukwanda kwe..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Elona nani liphezulu lokukhuphela ngaxeshanye</string>
+  <string name="pref_max_parallel_downloads_summary">Ubungakanani be-thread pool kumphathi wokukhuphela..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Yandisa ukukhangela umva (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Ukonyuswa kwexesha lokukhangela umva..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Yandisa ukhangelo eliya phambili (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Ukonyuswa kwexesha lokufuna phambili..</string>
+  <string name="pref_audio_volume_percent_increment_title">Ukunyuswa komthamo wesandi (ipesenti))</string>
+  <string name="pref_audio_volume_percent_increment_summary">xa ingaphantsi kwe 100%, Ukunyuka komthamo..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ukunyusa ivolyum yesandi (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">xa ukwi 100%, Ukwanda kokwandisa..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Isizathu x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Isibonelelo sokuphinda-phinda esisetyenziselwa ulungiso oluxhomekeke kwesinye...</string>
+  <string name="pref_enable_tunneled_video_playback_title">Ukumbiwa kwemigodi yezikhululo zikaloliwe</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Udlalo olusetyenziswe i-tunnel luyavulwa</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Ukudlalwa okusembindini kumisiwe</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Imilambo yesandi</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Umphathi womsinga uvuliwe</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Umphathi womsinga uyakhubaziswe</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Yima kutyalo-gugu lwesixhobo sokukhupha isandi</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Ukujima kuvuliwe</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Ukuphazamiseka kuvaliwe</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Izicombululi zeMidiya</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Ii-decoder zolwandiso lwesoftware ziyavulwa kwaye zikhethwa kune-decoder ze-hardware.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Ii-decoder zesongezelelo zesoftware azisebenzi, zisebenza kuphela ii-decoder ze-hardware.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Ukudlulisela Isandi</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital I-passthrough ivuliwe</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital I-passthrough ivaliwe; i-decoder yenza uguqulo iye ku PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Dibanisa isandi esijikelezayo sibe sisandi se-stereo.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Xa kukho iitshaneli zomsindo eziphakathi kwezintathu nezintandathu, zinciphise zibe zimbini.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Dlala iitraki zomsindo ezinesandi esijikelezayo</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Dibanisa isandi se-stereo sibe yi-mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Xa kukho iitshaneli ezimbini zomsindo, zinciphise zibe yenye.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Dlala iitraki zomsindo ezinesandi se-stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Izaziso zeziganeko</string>
+  <string name="pref_footer_notation_summary">Utshintsho kwezi setingi luza kuqala ukusebenza emva kokuba i-app iqaliswe ngokutsha..</string>
+</resources>

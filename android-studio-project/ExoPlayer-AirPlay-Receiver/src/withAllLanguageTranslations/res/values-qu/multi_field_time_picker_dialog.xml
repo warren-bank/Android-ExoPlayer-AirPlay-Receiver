@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Ch\'usaqman kutichiy</string>
+  <string name="accessibility_time_picker_sign">Allin unancha utaq mana allin unancha</string>
+  <string name="accessibility_time_picker_hour">Hora</string>
+  <string name="accessibility_time_picker_minute">Huk ch\'ipikilla</string>
+  <string name="accessibility_time_picker_second">Iskay ñiqin</string>
+  <string name="accessibility_time_picker_milli">Hunu-segundo</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

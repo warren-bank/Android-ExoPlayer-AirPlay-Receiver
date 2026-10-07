@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Riestim në zero</string>
+  <string name="accessibility_time_picker_sign">Shenjë pozitive ose negative</string>
+  <string name="accessibility_time_picker_hour">Orë</string>
+  <string name="accessibility_time_picker_minute">Minutë</string>
+  <string name="accessibility_time_picker_second">I dyti</string>
+  <string name="accessibility_time_picker_milli">Milisekondë</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

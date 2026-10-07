@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">tunjukkan</string>
+  <string name="hide">sembunyikan</string>
+  <string name="toast_registration_started">Mendaftar AirPlay perkhidmatan...</string>
+  <string name="toast_registration_success">AirPlay Pendaftaran berjaya</string>
+  <string name="toast_registration_failure">AirPlay pendaftaran gagal</string>
+  <string name="toast_start_activity_error_activity_not_found">Tiada aktiviti ditemui\n\nTiada penapis niat yang sepadan dengan niat tersebut.</string>
+  <string name="toast_start_activity_error_security">Kebenaran tidak mencukupi\n\nExoAirPlayer Tidak dapat memulakan Aktiviti</string>
+  <string name="toast_downloadtracker_error_download_start">Gagal memulakan muat turun</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Gagal mendapatkan lesen luar talian</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Muat turun kandungan langsung tidak disokong</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Kandungan tidak disokong pada API tingkat di bawah 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Penerima: perkhidmatan sedang berjalan</string>
+  <string name="notification_service_content_line1">ExoAirPlayer berlari pada:</string>
+  <string name="notification_service_content_line3">Klik untuk menghentikan perkhidmatan.</string>
+  <string name="track_selection_button">Pilih\nLagu</string>
+  <string name="text_offset_selection_button">Segerakkan\nKapsyen</string>
+  <string name="text_offset_selection_title">Aplikasi Penulisan Teks: Atur Selang Masa Awal atau Tertunda</string>
+  <string name="audio_offset_selection_button">Segerakkan\nAudio</string>
+  <string name="audio_offset_selection_title">Peralihan masa trek audio: Awal atau lewat</string>
+  <string name="toggle_download_button_start">Mula\nMuat turun</string>
+  <string name="toggle_download_button_stop">Berhenti\nMuat turun</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Tetapan</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nama Perkhidmatan</string>
+  <string name="pref_mdsn_server_name_summary">nama yang diiklankan oleh mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Kata laluan</string>
+  <string name="pref_http_api_password_summary">rahsia dikongsi hanya dengan pelanggan yang dibenarkan..</string>
+  <string name="pref_default_user_agent_title">Ejen Pengguna</string>
+  <string name="pref_default_user_agent_summary">nilai header permintaan..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Peningkat Kelantangan Audio Maksimum (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">mengekang penguatan kepada..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Muat Turun Selari Maksimum</string>
+  <string name="pref_max_parallel_downloads_summary">Saiz kolam benang dalam pengurus muat turun..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Increment Carian Mundur (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">penambahan masa untuk mencari ke belakang..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Maju Cari Increment (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">penambahan masa untuk mencari ke hadapan..</string>
+  <string name="pref_audio_volume_percent_increment_title">Peningkatan Isipadu Audio (peratusan))</string>
+  <string name="pref_audio_volume_percent_increment_summary">apabila kurang daripada 100%, penambahan isipadu..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Penambahan kelantangan audio (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">apabila di 100%, penambahan penguatan..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">faktor pengganda untuk menerapkan pelarasan relatif..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Penjejakan Terowong</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Main balik terowong telah diaktifkan</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Main balik terowong dilumpuhkan</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS aliran audio</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Pengendali aliran telah diaktifkan</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Pengendali aliran dilumpuhkan</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Jeda pada perubahan ke peranti keluaran audio</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pause telah diaktifkan</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pause telah dilumpuhkan</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Pemapar Kod Media</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Pemapar kata kunci sambungan perisian diaktifkan dan diutamakan berbanding pemapar perkakasan.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Pemapar kata kunci perisian dilumpuhkan, hanya pemapar perkakasan diaktifkan.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Penyampaian Audio</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital passthrough telah diaktifkan</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough dilumpuhkan; penyahkod melakukan penukaran kepada PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Campurkan semula bunyi sekeliling ke stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Apabila terdapat antara 3 dan 6 saluran audio, kurangkan kepada 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Mainkan trek audio dengan bunyi sekeliling</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Menyusutkan bunyi stereo ke mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Apabila terdapat dua saluran audio, kurangkan kepada satu.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Mainkan trek audio dengan bunyi stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode pemberitahuan acara</string>
+  <string name="pref_footer_notation_summary">Perubahan pada tetapan ini akan berkuat kuasa selepas aplikasi dimulakan semula..</string>
+</resources>

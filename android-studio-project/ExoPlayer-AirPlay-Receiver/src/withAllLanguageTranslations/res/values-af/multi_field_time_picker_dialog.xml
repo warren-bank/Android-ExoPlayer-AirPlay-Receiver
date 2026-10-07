@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Stel terug na nul</string>
+  <string name="accessibility_time_picker_sign">Positiewe of Negatiewe Teken</string>
+  <string name="accessibility_time_picker_hour">Uur</string>
+  <string name="accessibility_time_picker_minute">Minuut</string>
+  <string name="accessibility_time_picker_second">Tweede</string>
+  <string name="accessibility_time_picker_milli">Millisekonde</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">pakita</string>
+  <string name="hide">Itago</string>
+  <string name="toast_registration_started">Pagpaparehistro AirPlay serbisyo...</string>
+  <string name="toast_registration_success">AirPlay Matagumpay ang pagpaparehistro</string>
+  <string name="toast_registration_failure">AirPlay Nabigo ang pagpaparehistro</string>
+  <string name="toast_start_activity_error_activity_not_found">Walang aktibidad na natagpuan\n\nWalang Intent Filters na tumutugma sa Intent.</string>
+  <string name="toast_start_activity_error_security">Hindi sapat na pahintulot\n\nExoAirPlayer Hindi ma-start ang Aktibidad</string>
+  <string name="toast_downloadtracker_error_download_start">Hindi nagawa simulan ang pag-download</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Hindi nakuha ang lisensyang offline</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Hindi sinusuportahan ang pagda-download ng live na nilalaman.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Hindi sinusuportahan ang nilalaman sa API mga antas sa ibaba ng 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Tumatanggap: tumatakbo ang serbisyo</string>
+  <string name="notification_service_content_line1">ExoAirPlayer tumatakbo sa:</string>
+  <string name="notification_service_content_line3">I-click para ihinto ang serbisyo.</string>
+  <string name="track_selection_button">Piliin\nMga riles</string>
+  <string name="text_offset_selection_button">I-sync\nMga caption</string>
+  <string name="text_offset_selection_title">Pag-aayos ng oras ng pag-aantala ng mga caption ng teksto: maaga o huli</string>
+  <string name="audio_offset_selection_button">I-sync\nTunog</string>
+  <string name="audio_offset_selection_title">Paunang o huling oras ng pag-offset ng audio track</string>
+  <string name="toggle_download_button_start">Magsimula\nI-download</string>
+  <string name="toggle_download_button_stop">Tumigil\nI-download</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Mga setting</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Pangalan ng Serbisyo</string>
+  <string name="pref_mdsn_server_name_summary">ang pangalang inia-anunsyo ng mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Password</string>
+  <string name="pref_http_api_password_summary">Lihim na ibinabahagi lamang sa mga awtorisadong kliyente..</string>
+  <string name="pref_default_user_agent_title">Ahente ng Gumagamit</string>
+  <string name="pref_default_user_agent_summary">Halaga ng header ng kahilingan..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Pinakamataas na Pagpapalakas ng Bolyum ng Audio (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">pigilan ang pagpapalakas..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Pinakamaraming sabay-sabay na pag-download</string>
+  <string name="pref_max_parallel_downloads_summary">Laki ng thread pool sa download manager..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Pagtaas ng paghahanap paatras (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Pagtaas ng oras para maghanap pabalik..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Pasulong na paghahanap ng pagtaas (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Pagtaas ng oras para maghanap pasulong..</string>
+  <string name="pref_audio_volume_percent_increment_title">Pagtaas ng Bolyum ng Audio (porsyento))</string>
+  <string name="pref_audio_volume_percent_increment_summary">kapag mas mababa kaysa 100%, pagtaas ng dami..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Pagtaas ng lakas ng tunog ng audio (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">kapag sa 100%, pagtaas ng pagpapalakas..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">salik x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">salik ng pagdodoble para magpatupad ng relatibong pagsasaayos..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Pagtatagos ng lagusan</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Naka-enable ang tunneled playback.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Pinatay ang tunneled playback.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS daloy ng tunog</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Naka-enable ang tagahawak ng daloy.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Ang stream handler ay naka-disable.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pagtigil sa pagbabago ng audio output device</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Naka-enable ang pause</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pinagbawalan ang pause</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Mga Dekoder ng Midya</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Pinagana at mas pinipili ang mga decoder ng software extension kaysa sa mga hardware decoder.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Hindi pinapagana ang mga software extension decoder, pinapagana lamang ang mga hardware decoder.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Pagpapasa ng Audio</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Naka-enable ang passthrough.</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Naka-disable ang passthrough; isinasagawa ng decoder ang konbersyon sa PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">I-downmix ang surround sound sa stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Kapag mayroon nang 3 hanggang 6 na audio channel, bawasan sa 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Patugtugin ang mga audio track na may surround sound.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">I-downmix ang stereo na tunog sa mono.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Kapag may dalawang audio channel, gawing isa.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Patugtugin ang mga audio track na may stereo na tunog.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode mga abiso ng kaganapan</string>
+  <string name="pref_footer_notation_summary">Magkakabisa ang mga pagbabago sa mga setting na ito pagkatapos muling simulan ang app..</string>
+</resources>

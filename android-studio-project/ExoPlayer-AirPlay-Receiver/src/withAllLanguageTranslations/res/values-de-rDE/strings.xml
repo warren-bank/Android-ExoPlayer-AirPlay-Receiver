@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">anzeigen</string>
+  <string name="hide">ausblenden</string>
+  <string name="toast_registration_started">Registrieren AirPlay Dienstleistung...</string>
+  <string name="toast_registration_success">AirPlay Anmeldung erfolgreich</string>
+  <string name="toast_registration_failure">AirPlay Die Registrierung ist fehlgeschlagen.</string>
+  <string name="toast_start_activity_error_activity_not_found">Keine Aktivität gefunden\n\nEs gibt keine Intent-Filter, die mit dem Intent übereinstimmen</string>
+  <string name="toast_start_activity_error_security">Unzureichende Berechtigung\n\nExoAirPlayer Die Aktivität kann nicht gestartet werden</string>
+  <string name="toast_downloadtracker_error_download_start">Der Download konnte nicht gestartet werden</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Offline-Lizenz konnte nicht abgerufen werden</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Das Herunterladen von Live-Inhalten wird nicht unterstützt</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Der Inhalt wird auf folgenden Geräten nicht unterstützt: API Stufen unter 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Empfänger: Dienst läuft</string>
+  <string name="notification_service_content_line1">ExoAirPlayer läuft bei:</string>
+  <string name="notification_service_content_line3">Klicken Sie hier, um den Dienst zu beenden.</string>
+  <string name="track_selection_button">Auswählen\nTitel</string>
+  <string name="text_offset_selection_button">Synchronisieren\nBildunterschriften</string>
+  <string name="text_offset_selection_title">Zeitversatz für Textuntertitel (vorverlegen oder verzögern)</string>
+  <string name="audio_offset_selection_button">Synchronisieren\nAudio</string>
+  <string name="audio_offset_selection_title">Zeitversatz für den Vorlauf oder Rücklauf der Audiospur</string>
+  <string name="toggle_download_button_start">Start\nHerunterladen</string>
+  <string name="toggle_download_button_stop">Stopp\nHerunterladen</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Einstellungen</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Name des Dienstes</string>
+  <string name="pref_mdsn_server_name_summary">der von … beworbene Name mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Passwort</string>
+  <string name="pref_http_api_password_summary">Ein Geheimnis, das nur autorisierten Kunden bekannt ist..</string>
+  <string name="pref_default_user_agent_title">Benutzeragent</string>
+  <string name="pref_default_user_agent_summary">Wert des Request-Headers..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Maximale Lautstärkenanhebung (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">die Verstärkung auf..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maximale Anzahl gleichzeitiger Downloads</string>
+  <string name="pref_max_parallel_downloads_summary">Größe des Thread-Pools im Download-Manager..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Schrittweise Rückwärtssuche (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Zeitschritt für den Rücklauf..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Schrittweite beim Vorwärtssuchen (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Zeitinkrement für den Vorlauf..</string>
+  <string name="pref_audio_volume_percent_increment_title">Lautstärke erhöhen (Prozent)</string>
+  <string name="pref_audio_volume_percent_increment_summary">wenn weniger als 100%, Lautstärkeschritt..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Schrittweite der Lautstärkenerhöhung (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">wenn man bei 100%, Verstärkungszuwachs..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Multiplikationsfaktor zur Durchführung einer relativen Anpassung..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Gleisbau</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Die getunnelte Wiedergabe ist aktiviert</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Die Tunnel-Wiedergabe ist deaktiviert</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Audiostreams</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Der Stream-Handler ist aktiviert</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Der Stream-Handler ist deaktiviert</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pause bei Wechsel des Audioausgabegeräts</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Die Pause ist aktiviert</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Die Pause ist deaktiviert</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Mediendekoder</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Software-Erweiterungsdecoder sind aktiviert und werden gegenüber Hardware-Decodern bevorzugt</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Software-Decoder sind deaktiviert, nur Hardware-Decoder sind aktiviert</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Audio-Passthrough</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough ist aktiviert</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Passthrough ist deaktiviert; der Decoder führt eine Konvertierung in PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Surround-Sound auf Stereo heruntermischen</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Wenn zwischen 3 und 6 Audiokanäle vorhanden sind, auf 2 reduzieren</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Audiospuren mit Surround-Sound abspielen</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereoton auf Mono heruntermischen</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Wenn 2 Audiokanäle vorhanden sind, auf 1 reduzieren</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Audiotitel mit Stereoton abspielen</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Ereignisbenachrichtigungen</string>
+  <string name="pref_footer_notation_summary">Änderungen an diesen Einstellungen werden erst nach einem Neustart der App wirksam..</string>
+</resources>

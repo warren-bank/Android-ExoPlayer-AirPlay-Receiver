@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">Ponastavi na nič</string>
+  <string name="accessibility_time_picker_sign">Pozitivni ali negativni znak</string>
+  <string name="accessibility_time_picker_hour">Ura</string>
+  <string name="accessibility_time_picker_minute">Zapisnik</string>
+  <string name="accessibility_time_picker_second">Drugo</string>
+  <string name="accessibility_time_picker_milli">milisekunda</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>

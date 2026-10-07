@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">erakutsi</string>
+  <string name="hide">ezkutatu</string>
+  <string name="toast_registration_started">Erregistratzen AirPlay zerbitzu...</string>
+  <string name="toast_registration_success">AirPlay Erregistroa arrakastatsua izan da</string>
+  <string name="toast_registration_failure">AirPlay Erregistroa huts egin du</string>
+  <string name="toast_start_activity_error_activity_not_found">Ez da jarduerarik aurkitu\n\nEz dago Intent Filters-ek Intentarekin bat datorrena.</string>
+  <string name="toast_start_activity_error_security">Baimen nahikorik ez\n\nExoAirPlayer Jarduera ezin da hasi</string>
+  <string name="toast_downloadtracker_error_download_start">Deskarga hastea huts egin du</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Lineaz kanpoko lizentzia lortzeko huts egin da</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Eduki zuzenekoak deskargatzea ez dago onartuta.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Edukia ez da onartzen API 18 azpiko mailak</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Hartzailea: zerbitzua martxan</string>
+  <string name="notification_service_content_line1">ExoAirPlayer abiatzen ari den:</string>
+  <string name="notification_service_content_line3">Zerbitzua gelditzeko klik egin.</string>
+  <string name="track_selection_button">Hautatu\nAbestiak</string>
+  <string name="text_offset_selection_button">Sinkronizatu\nAzpitituluak</string>
+  <string name="text_offset_selection_title">Testu azpitituluen aurrerapen edo atzerapen denbora-tartea</string>
+  <string name="audio_offset_selection_button">Sinkronizatu\nEntzuteko</string>
+  <string name="audio_offset_selection_title">Audio-bidearen aurrerapen edo atzerapen denbora-desplazamendua</string>
+  <string name="toggle_download_button_start">Hasi\nJaistea</string>
+  <string name="toggle_download_button_stop">Gelditu\nJaistea</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Ezarpenak</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Zerbitzuaren izena</string>
+  <string name="pref_mdsn_server_name_summary">iragarkiak zabaldutako izena mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Pasahitza</string>
+  <string name="pref_http_api_password_summary">Besterik gabe baimendutako bezeroekin soilik partekatzen den sekretua..</string>
+  <string name="pref_default_user_agent_title">Erabiltzaile-agentzia</string>
+  <string name="pref_default_user_agent_summary">eskaeraren buru-lerroaren balioa..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Audio bolumen maximoaren handitzea (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Handitzea murriztu..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maximo paralelo deskargak</string>
+  <string name="pref_max_parallel_downloads_summary">Deskarga-kudeatzaileko hari-multzoaren tamaina..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Atzera bilaketa-incrementoa (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Atzera bilatzeko denbora-gehikuntza..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Aurrerako bilaketa-incrementoa (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Aurrera bilatzeko denbora-incrementoa..</string>
+  <string name="pref_audio_volume_percent_increment_title">Audio bolumena handitu (ehuneko))</string>
+  <string name="pref_audio_volume_percent_increment_summary">gutxiago denean 100%, bolumenaren igoera..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Audio bolumena handitzeko igoera (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">noiz at 100%, amplifikazio-gehikuntza..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktore x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Erlaziozko egokitzapena aplikatzeko biderketa-faktorea..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tunelatze-ibilbidea</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tunelatutako erreprodukzioa gaituta dago.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tunelatutako erreprodukzioa desgaituta dago</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS audio-uhinak</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Fluxu-kudeatzailea gaituta dago</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Etenaldiaren kudeatzailea desgaituta dago</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Audio-irteerako gailuaren aldaketa geldiarazi</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Atzerapena gaituta dago</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Atzerapena desgaituta dago</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Media deskodetzaileak</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Software luzapeneko deskodatzaileak gaituta daude eta hardware deskodatzaileen gainetik lehenesten dira.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Software luzapeneko deskodetzaileak desgaituta daude, hardware deskodetzaileak soilik gaituta daude.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Audio-pasatze</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Pasatze-aukera gaituta dago</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough desgaituta dago; dekodifikatzaileak bihurketa egiten du PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Inguruko soinua stereoan nahastea</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3 eta 6 audio kanal artean daudenean, murriztu 2ra.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Entzun audio-bideok inguruko soinuarekin.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Nahastu stereo soinua monora</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Bi audio kanal daudenean, bat bakarrera murriztu.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Entzun audio-bideok stereo soinuarekin</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Ekitaldien jakinarazpenak</string>
+  <string name="pref_footer_notation_summary">Ezarpen hauetako aldaketak aplikazioa berriro abiarazi ondoren indarrean jarriko dira..</string>
+</resources>

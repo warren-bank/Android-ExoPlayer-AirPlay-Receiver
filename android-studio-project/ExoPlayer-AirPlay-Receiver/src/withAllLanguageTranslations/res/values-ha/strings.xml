@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">nuna</string>
+  <string name="hide">Boye</string>
+  <string name="toast_registration_started">Yin rijista AirPlay Sabis...</string>
+  <string name="toast_registration_success">AirPlay An yi nasarar rajista</string>
+  <string name="toast_registration_failure">AirPlay An gaza rajista</string>
+  <string name="toast_start_activity_error_activity_not_found">Ba a sami wani aiki ba\n\nBabu matattarar niyya da ta dace da niyyar.</string>
+  <string name="toast_start_activity_error_security">Ba a ba izini isasshe\n\nExoAirPlayer Ba za a iya fara aikin ba</string>
+  <string name="toast_downloadtracker_error_download_start">An gaza fara saukarwa</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Ba a samu lasisin na\'urar ba</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ba a tallafa saukar da abun ciki kai tsaye</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Ba a tallafa wa abun ciki a API matakai ƙasa da 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Mai karɓa: sabis yana gudana</string>
+  <string name="notification_service_content_line1">ExoAirPlayer gudu a:</string>
+  <string name="notification_service_content_line3">Danna don dakatar da sabis.</string>
+  <string name="track_selection_button">Zaɓa\nWaƙoƙi</string>
+  <string name="text_offset_selection_button">Daidaita\nRubutun ƙasa</string>
+  <string name="text_offset_selection_title">Daidaita lokacin gaba ko jinkiri na rubutun kiran hoto</string>
+  <string name="audio_offset_selection_button">Daidaita\nSauti</string>
+  <string name="audio_offset_selection_title">Gabatarwa ko jinkiri na lokacin bambanci na layin sauti</string>
+  <string name="toggle_download_button_start">Fara\nSauke</string>
+  <string name="toggle_download_button_stop">Dakata\nSauke</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Saituna</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Sunan Sabis</string>
+  <string name="pref_mdsn_server_name_summary">sunan da aka talla mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Kalmar sirri</string>
+  <string name="pref_http_api_password_summary">Asiri da aka raba ne kawai ga kwastomomi masu izini..</string>
+  <string name="pref_default_user_agent_title">Mai wakiltar mai amfani</string>
+  <string name="pref_default_user_agent_summary">ƙimar taken buƙata..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Ƙara ƙarar sauti zuwa matsayi mafi girma (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Hana ƙara..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Mafi girman saukarwa a lokaci guda</string>
+  <string name="pref_max_parallel_downloads_summary">girman tafkin zare-zare a manajan saukarwa..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Ƙara bincike baya (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Ƙarin lokaci don bincika baya..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Ci gaba da neman ƙari (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Ƙarin lokaci don neman gaba..</string>
+  <string name="pref_audio_volume_percent_increment_title">Ƙarin ƙarar sauti (kashi))</string>
+  <string name="pref_audio_volume_percent_increment_summary">idan ƙasa da 100%, ƙarin yawa..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Ƙara ƙarar sauti (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">lokacin a 100%, ƙarin ƙara..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">abun tasiri x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">ƙimar ninka don aiwatar da gyara na dangantaka..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Hangar Hanyar</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">An kunna kunnawa ta tashar.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">An kashe kunnawa ta tashar.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS kwararar sauti</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">An kunna mai sarrafa kwarara</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">An kashe mai sarrafa kwarara</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Tsaya kan canjin na\'urar fitar sauti</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">An kunna dakatawa</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">An kashe dakatawa</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Na\'urorin fassara kafofin watsa labarai</string>
+  <string name="pref_prefer_extension_renderer_summary_on">An kunna masu fassara na ƙarin software kuma ana fifita su kan masu fassara na kayan aiki.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">An kashe masu fassara na faɗaɗa software, an kunna masu fassara na kayan aiki kawai.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Mika sauti</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital An kunna passthrough</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital An kashe passthrough; decoder yana aiwatar da maida zuwa PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Haɗa sautin kewaye zuwa stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">idan akwai tashoshin sauti daga 3 zuwa 6, rage zuwa 2</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Yi kunna waƙoƙin sauti tare da sautin kewaye</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Sa sautin stereo ya koma mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">idan akwai tashoshi biyu na sauti, rage zuwa daya</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Yi kunna waƙoƙin sauti masu sauti na stereo</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Sanarwar abubuwan da suka faru</string>
+  <string name="pref_footer_notation_summary">Canjin waɗannan saituna zai fara aiki bayan an sake kunna manhajar..</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">күрсәт</string>
+  <string name="hide">Яшерергә</string>
+  <string name="toast_registration_started">Теркәлү AirPlay Хезмәт...</string>
+  <string name="toast_registration_success">AirPlay Теркәлү уңышлы</string>
+  <string name="toast_registration_failure">AirPlay Теркәлү уңышсыз булды</string>
+  <string name="toast_start_activity_error_activity_not_found">Чара табылмады\n\nНиәт фильтрлары ниәткә туры килми</string>
+  <string name="toast_start_activity_error_security">Рөхсәт җитәрлек түгел\n\nExoAirPlayer Чараны башлап булмый</string>
+  <string name="toast_downloadtracker_error_download_start">Йөкләүне башлау уңышсыз булды</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Офлайн лицензия алу уңышсыз булды</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Туры эфир контентын йөкләү хупланмый</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Контент хупланмый API 18-дән түбән дәрәҗәләр</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Кабул итүче: хезмәт эшләп тора</string>
+  <string name="notification_service_content_line1">ExoAirPlayer йөгерүче:</string>
+  <string name="notification_service_content_line3">Хезмәтне туктату өчен басыгыз.</string>
+  <string name="track_selection_button">Сайлагыз\nТрекләр</string>
+  <string name="text_offset_selection_button">Синхронлаштыру\nИскәрмәләр</string>
+  <string name="text_offset_selection_title">Текст язуларының алга яки артка вакыт тайпылышын көйләү</string>
+  <string name="audio_offset_selection_button">Синхронлаштыру\nАудио</string>
+  <string name="audio_offset_selection_title">Аудио трекның алга яки артка күчү вакыты тайпылышы</string>
+  <string name="toggle_download_button_start">Башлау\nЙөкләү</string>
+  <string name="toggle_download_button_stop">Тукта\nЙөкләү</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Көйләүләр</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Хезмәт исеме</string>
+  <string name="pref_mdsn_server_name_summary">исеме рекламаланган mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Параметр</string>
+  <string name="pref_http_api_password_summary">сер, бары тик рөхсәт ителгән клиентлар белән генә уртаклашыла..</string>
+  <string name="pref_default_user_agent_title">Кулланучы агент</string>
+  <string name="pref_default_user_agent_summary">сорау башлыгының кыйммәте..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Аудио тавыш дәрәҗәсен максималь арттыру (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">көчәйтүне чикләргә..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Максималь параллель йөкләүләр</string>
+  <string name="pref_max_parallel_downloads_summary">Йөкләү менеджерындагы җеп пулының зурлыгы..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Алдагы эзләү адымы (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Кирегә эзләү өчен вакыт арта..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Алга эзләү адымы (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Алға эзләү вакыты арту..</string>
+  <string name="pref_audio_volume_percent_increment_title">Аудио тавыш дәрәҗәсен арттыру (процент))</string>
+  <string name="pref_audio_volume_percent_increment_summary">ким булганда 100%, күләм артуы..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Аудио тавыш күләмен арттыру (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">кайчан булганда 100%, көчәйтү артуы..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">фактор x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Чагыштырмалы төзәтүне гамәлгә ашыру өчен тапкырлау коэффициенты..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Трекне тишеп үтү</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Тоннельләнгән уйнату активлаштырылган</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Тоннельләнгән уйнату сүндерелгән</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS аудио агымнары</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Агым эшкәртүче эшләтеп җибәрелгән</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Агым эшкәртүче сүндерелгән</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Аудио чыгару җайланмасын үзгәртүне туктату</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Пауза активлаштырылган</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Пауза сүндерелгән</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Медиа декодерлар</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Программалы киңәйтмә декодерлары активлаштырылган һәм аппарат декодерларына караганда өстенрәк</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Программалы киңәйтмә декодерлары сүндерелгән, бары тик аппаратлы декодерлар гына эшләтеп куелган</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Аудио үткәрү</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Пасстhru эшләтеп куелган</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Пасстhru сүндерелгән; декодер конверсияне башкара PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Сурраунд тавышны стереога төшерү</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3тән 6га кадәр аудио каналлар булганда, аларны 2гә киметегез.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Сурраунд тавышлы аудио трекларны уйнатыгыз</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Стерео тавышны монога кыскарту</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Ике аудио канал булганда, бергә киметергә.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Стерео тавышлы аудио трекларны уйнатыгыз</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Чаралар турында хәбәрләр</string>
+  <string name="pref_footer_notation_summary">Бу көйләүләрдәге үзгәрешләр кушымтаны яңадан эшләтеп җибәргәннән соң гамәлгә керәчәк..</string>
+</resources>

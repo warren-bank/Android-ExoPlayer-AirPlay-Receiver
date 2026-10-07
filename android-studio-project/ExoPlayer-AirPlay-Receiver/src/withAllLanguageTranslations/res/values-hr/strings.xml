@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">prikaži</string>
+  <string name="hide">sakrij</string>
+  <string name="toast_registration_started">Registracija AirPlay usluga...</string>
+  <string name="toast_registration_success">AirPlay Uspješna registracija</string>
+  <string name="toast_registration_failure">AirPlay Registracija nije uspjela</string>
+  <string name="toast_start_activity_error_activity_not_found">Nije pronađena nikakva aktivnost\n\nNijedan Intent filter ne odgovara namjeri.</string>
+  <string name="toast_start_activity_error_security">Nedovoljna dozvola\n\nExoAirPlayer Ne može se pokrenuti aktivnost</string>
+  <string name="toast_downloadtracker_error_download_start">Neuspjelo pokretanje preuzimanja</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Nije uspjelo dobiti licencu izvan mreže</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Preuzimanje uživo sadržaja nije podržano.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Sadržaj nije podržan na API razine ispod 18</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Prijemnik: usluga radi</string>
+  <string name="notification_service_content_line1">ExoAirPlayer trčeći na:</string>
+  <string name="notification_service_content_line3">Kliknite za zaustavljanje usluge.</string>
+  <string name="track_selection_button">Odaberi\nPjesme</string>
+  <string name="text_offset_selection_button">Sinkroniziraj\nOpisi</string>
+  <string name="text_offset_selection_title">Pomak unaprijed ili unazad vremena natpisa teksta</string>
+  <string name="audio_offset_selection_button">Sinkroniziraj\nAudio</string>
+  <string name="audio_offset_selection_title">Pomak vremena napred ili odgode audio staze</string>
+  <string name="toggle_download_button_start">Počni\nPreuzmi</string>
+  <string name="toggle_download_button_stop">Stani\nPreuzmi</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Postavke</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Naziv usluge</string>
+  <string name="pref_mdsn_server_name_summary">ime oglašeno od mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Lozenca</string>
+  <string name="pref_http_api_password_summary">tajna podijeljena samo s ovlaštenim klijentima..</string>
+  <string name="pref_default_user_agent_title">Korisnički agent</string>
+  <string name="pref_default_user_agent_summary">vrijednost zaglavlja zahtjeva..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Pojačanje maksimalne glasnoće zvuka (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">ograničiti pojačanje na..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maksimalno istovremenih preuzimanja</string>
+  <string name="pref_max_parallel_downloads_summary">Veličina bazena niti u upravitelju preuzimanja..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Povećaj pretraživanje unatrag (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Povećanje vremena za traženje unatrag..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Naprijed traži pomak (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Povećanje vremena za traženje naprijed..</string>
+  <string name="pref_audio_volume_percent_increment_title">Povećanje glasnoće zvuka (postotak))</string>
+  <string name="pref_audio_volume_percent_increment_summary">kada je manje od 100%, povećanje volumena..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Povećanje glasnoće zvuka (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">kad na 100%, povećanje pojačanja..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">faktor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">faktor množenja za primjenu relativnog prilagođavanja..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tuneliranje staze</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Omogućen je tunelski reprodukcijski način.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Omogućen je tunelski reprodukcijski način rada.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS audio streamovi</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Rukovatelj toka je omogućen</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Rukovatelj toka je onemogućen</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pauza pri promjeni uređaja za audio izlaz</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pauza je omogućena</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pauza je onemogućena</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Medijski dekoderi</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Omogućen je softverski dekodir i on je preferiran u odnosu na hardverski dekodir.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Deaktivirani su dekoderi softverskih ekstenzija, omogućeni su samo hardverski dekoderi.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Propuštanje zvuka</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Prijenos je omogućen</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Prijenos je onemogućen; dekoder obavlja pretvorbu u PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Konvertirajte surround zvuk u stereo</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Kada je između 3 i 6 audio kanala, smanjiti na 2.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Pustite audiozapise sa surround zvukom</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Konvertirajte stereo zvuk u mono</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Kada postoje dva audio kanala, smanjiti na jedan.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Pustite audiozapise sa stereo zvukom</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Obavijesti o događajima</string>
+  <string name="pref_footer_notation_summary">Promjene ovih postavki stupit će na snagu nakon ponovnog pokretanja aplikacije..</string>
+</resources>

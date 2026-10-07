@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">చూపించు</string>
+  <string name="hide">దాచు</string>
+  <string name="toast_registration_started">నమోదు చేయుట AirPlay సేవ...</string>
+  <string name="toast_registration_success">AirPlay నమోదు విజయవంతం</string>
+  <string name="toast_registration_failure">AirPlay నమోదు విఫలమైంది</string>
+  <string name="toast_start_activity_error_activity_not_found">కార్యకలాపాలు కనుగొనబడలేదు\n\nఉద్దేశ్యానికి ఎటువంటి ఉద్దేశ్య ఫిల్టర్‌లు సరిపోలలేదు</string>
+  <string name="toast_start_activity_error_security">సరిపడా అనుమతి లేదు\n\nExoAirPlayer యాక్టివిటీని ప్రారంభించలేము</string>
+  <string name="toast_downloadtracker_error_download_start">డౌన్‌లోడ్ ప్రారంభించడంలో విఫలమైంది</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">ఆఫ్‌లైన్ లైసెన్స్ పొందడంలో విఫలమైంది</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">లైవ్ కంటెంట్ డౌన్‌లోడ్ చేయడం మద్దతు ఇవ్వబడదు</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM కంటెంట్ మద్దతు లేదు API 18 కంటే తక్కువ స్థాయిలు</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay రిసీవర్: సేవ నడుస్తోంది</string>
+  <string name="notification_service_content_line1">ExoAirPlayer వెళ్తున్న:</string>
+  <string name="notification_service_content_line3">సేవను ఆపడానికి క్లిక్ చేయండి.</string>
+  <string name="track_selection_button">ఎంచుకోండి\nట్రాక్‌లు</string>
+  <string name="text_offset_selection_button">సింక్\nవివరణలు</string>
+  <string name="text_offset_selection_title">టెక్స్ట్ క్యాప్షన్‌ల ముందుకు లేదా వెనుకకు సమయ ఆఫ్‌సెట్</string>
+  <string name="audio_offset_selection_button">సింక్\nశ్రవణం</string>
+  <string name="audio_offset_selection_title">ఆడియో ట్రాక్ ముందు లేదా ఆలస్య సమయ స్థానభ్రంశం</string>
+  <string name="toggle_download_button_start">ప్రారంభించు\nడౌన్‌లోడ్</string>
+  <string name="toggle_download_button_stop">ఆపండి\nడౌన్‌లోడ్</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer సెట్టింగ్‌లు</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour సేవ పేరు</string>
+  <string name="pref_mdsn_server_name_summary">ప్రకటన చేయబడిన పేరు mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API పాస్‌వర్డ్</string>
+  <string name="pref_http_api_password_summary">అధికారప్రాప్త క్లయింట్‌లతో మాత్రమే పంచుకోబడిన రహస్యం..</string>
+  <string name="pref_default_user_agent_title">వినియోగదారు ఏజెంట్</string>
+  <string name="pref_default_user_agent_summary">రిక్వెస్ట్ హెడర్ విలువ..</string>
+  <string name="pref_max_audio_volume_boost_db_title">గరిష్ట ఆడియో వాల్యూమ్ పెంపు (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">అధిక ప్రసారాన్ని నిరోధించు..</string>
+  <string name="pref_max_parallel_downloads_title">(*) గరిష్ట సమాంతర డౌన్‌లోడ్‌లు</string>
+  <string name="pref_max_parallel_downloads_summary">డౌన్‌లోడ్ మేనేజర్‌లో థ్రెడ్ పూల్ పరిమాణం..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) వెనుకకు వెతకడం పెంచు (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">వెనక్కి వెతకడానికి సమయ వృద్ధి..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) ముందుకు వెతకడం పెంచు (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">ముందుకు వెతకడానికి సమయ వృద్ధి..</string>
+  <string name="pref_audio_volume_percent_increment_title">ఆడియో వాల్యూమ్ పెంపు (శాతం))</string>
+  <string name="pref_audio_volume_percent_increment_summary">కంటే తక్కువ అయినప్పుడు 100%, పరిమాణ పెరుగుదల..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">ఆడియో వాల్యూమ్ పెంపు (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">ఎప్పుడు వద్ద 100%, అభివృద్ధి పెరుగుదల..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">కారకం x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">సాపేక్ష సర్దుబాటును వర్తింపజేయడానికి గుణకం..</string>
+  <string name="pref_enable_tunneled_video_playback_title">ట్రాక్ టన్నలింగ్</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">టన్నెల్డ్ ప్లేబ్యాక్ ప్రారంభించబడింది</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">టన్నెల్డ్ ప్లేబ్యాక్ నిలిపివేయబడింది</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ఆడియో ప్రవాహాలు</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">స్ట్రీమ్ హ్యాండ్లర్ ప్రారంభించబడింది</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">స్ట్రీమ్ హ్యాండ్లర్ నిలిపివేయబడింది</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">ఆడియో అవుట్‌పుట్ పరికరాన్ని మార్చడం నిలిపివేయండి</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">విరామం ప్రారంభించబడింది</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">విరామం నిలిపివేయబడింది</string>
+  <string name="pref_prefer_extension_renderer_title">(*) మీడియా డీకోడర్‌లు</string>
+  <string name="pref_prefer_extension_renderer_summary_on">సాఫ్ట్‌వేర్ ఎక్స్‌టెన్షన్ డీకోడర్‌లు ప్రారంభించబడ్డాయి మరియు హార్డ్‌వేర్ డీకోడర్‌ల కంటే ప్రాధాన్యత ఇవ్వబడతాయి.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">సాఫ్ట్‌వేర్ ఎక్స్‌టెన్షన్ డీకోడర్‌లు నిలిపివేయబడ్డాయి, కేవలం హార్డ్‌వేర్ డీకోడర్‌లు మాత్రమే ప్రారంభించబడ్డాయి.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) ఆడియో పాస్‌త్రూ</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital పాస్‌త్రూ ప్రారంభించబడింది</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital పాస్‌త్రూ నిలిపివేయబడింది; డీకోడర్ మార్పిడిని నిర్వహిస్తుంది PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">సరౌండ్ సౌండ్‌ను స్టీరియోకు డౌన్‌మిక్స్ చేయండి</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3 నుండి 6 ఆడియో ఛానెళ్ల మధ్య ఉన్నప్పుడు, వాటిని 2కి తగ్గించండి.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">సరౌండ్ సౌండ్‌తో ఆడియో ట్రాక్‌లను ప్లే చేయండి</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">స్టెరియో సౌండ్‌ను మోనోగా డౌన్‌మిక్స్ చేయండి</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">రెండు ఆడియో ఛానెళ్లు ఉన్నప్పుడు, వాటిని ఒకటిగా తగ్గించండి.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">స్టెరియో సౌండ్‌తో ఆడియో ట్రాక్‌లను ప్లే చేయండి</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode ఈవెంట్ నోటిఫికేషన్లు</string>
+  <string name="pref_footer_notation_summary">యాప్‌ను పునఃప్రారంభించిన తర్వాత ఈ సెట్టింగ్‌లలోని మార్పులు అమలులోకి వస్తాయి..</string>
+</resources>

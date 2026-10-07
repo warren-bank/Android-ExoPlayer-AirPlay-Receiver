@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ਦਿਖਾਓ</string>
+  <string name="hide">ਛੁਪਾਓ</string>
+  <string name="toast_registration_started">ਰਜਿਸਟਰ ਕਰ ਰਹੇ AirPlay ਸੇਵਾ...</string>
+  <string name="toast_registration_success">AirPlay ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਸਫਲ</string>
+  <string name="toast_registration_failure">AirPlay ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਅਸਫਲ ਹੋ ਗਈ</string>
+  <string name="toast_start_activity_error_activity_not_found">ਕੋਈ ਗਤੀਵਿਧੀ ਨਹੀਂ ਮਿਲੀ\n\nਕੋਈ ਇੰਟੈਂਟ ਫਿਲਟਰ ਇੰਟੈਂਟ ਨਾਲ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ।</string>
+  <string name="toast_start_activity_error_security">ਪਰਵਾਨਗੀ ਨਾਕਾਫ਼ੀ\n\nExoAirPlayer ਗਤੀਵਿਧੀ ਸ਼ੁਰੂ ਨਹੀਂ ਹੋ ਸਕੀ</string>
+  <string name="toast_downloadtracker_error_download_start">ਡਾਊਨਲੋਡ ਸ਼ੁਰੂ ਕਰਨ ਵਿੱਚ ਅਸਫਲ ਰਿਹਾ</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">ਆਫਲਾਈਨ ਲਾਇਸੈਂਸ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">ਲਾਈਵ ਸਮੱਗਰੀ ਡਾਊਨਲੋਡ ਕਰਨਾ ਸਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ।</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM ਸਮੱਗਰੀ ਸਪੋਰਟ ਨਹੀਂ ਕੀਤੀ ਜਾਂਦੀ API 18 ਤੋਂ ਹੇਠਾਂ ਪੱਧਰ</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay ਰਿਸੀਵਰ: ਸੇਵਾ ਚੱਲ ਰਹੀ ਹੈ</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ਤੇ ਦੌੜ ਰਿਹਾ:</string>
+  <string name="notification_service_content_line3">ਸੇਵਾ ਰੋਕਣ ਲਈ ਕਲਿੱਕ ਕਰੋ.</string>
+  <string name="track_selection_button">ਚੁਣੋ\nਟ੍ਰੈਕਸ</string>
+  <string name="text_offset_selection_button">ਸਿੰਕ\nਕੈਪਸ਼ਨ</string>
+  <string name="text_offset_selection_title">ਟੈਕਸਟ ਕੈਪਸ਼ਨ: ਅੱਗੇ ਜਾਂ ਦੇਰੀ ਲਈ ਸਮਾਂ ਅਫਸੈੱਟ</string>
+  <string name="audio_offset_selection_button">ਸਿੰਕ\nਆਡੀਓ</string>
+  <string name="audio_offset_selection_title">ਆਡੀਓ ਟਰੈਕ ਅਗਾਂਹ ਜਾਂ ਦੇਰੀ ਸਮੇਂ ਦਾ ਅਫਸੈੱਟ</string>
+  <string name="toggle_download_button_start">ਸ਼ੁਰੂ ਕਰੋ\nਡਾਊਨਲੋਡ</string>
+  <string name="toggle_download_button_stop">ਰੁਕੋ\nਡਾਊਨਲੋਡ</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer ਸੈਟਿੰਗਾਂ</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour ਸੇਵਾ ਦਾ ਨਾਮ</string>
+  <string name="pref_mdsn_server_name_summary">ਦੁਆਰਾ ਵਿਗਿਆਪਿਤ ਨਾਮ mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API ਪਾਸਵਰਡ</string>
+  <string name="pref_http_api_password_summary">ਸਿਰਫ਼ ਅਧਿਕਾਰਤ ਗਾਹਕਾਂ ਨਾਲ ਸਾਂਝਾ ਕੀਤਾ ਗਿਆ..</string>
+  <string name="pref_default_user_agent_title">ਉਪਭੋਗਤਾ ਏਜੰਟ</string>
+  <string name="pref_default_user_agent_summary">ਬੇਨਤੀ ਹੈਡਰ ਦਾ ਮੁੱਲ..</string>
+  <string name="pref_max_audio_volume_boost_db_title">ਵੱਧ ਤੋਂ ਵੱਧ ਆਡੀਓ ਵਾਲੀਅਮ ਵਧਾਓ (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">ਵਧਾਉਣ ਨੂੰ ਰੋਕੋ..</string>
+  <string name="pref_max_parallel_downloads_title">(*) ਵੱਧ ਤੋਂ ਵੱਧ ਸਮਾਂਤਰ ਡਾਊਨਲੋਡ</string>
+  <string name="pref_max_parallel_downloads_summary">ਡਾਊਨਲੋਡ ਮੈਨੇਜਰ ਵਿੱਚ ਥ੍ਰੈਡ ਪੂਲ ਦਾ ਆਕਾਰ..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) ਪਿਛਲੇ ਵੱਲ ਖੋਜ ਵਾਧਾ (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">ਪਿਛਾਂ ਵੱਲ ਖੋਜਣ ਲਈ ਸਮਾਂ ਵਾਧਾ..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) ਅੱਗੇ ਵਧਣ ਲਈ ਖੋਜ ਵਾਧਾ (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">ਅੱਗੇ ਖੋਜਣ ਲਈ ਸਮਾਂ ਵਾਧਾ..</string>
+  <string name="pref_audio_volume_percent_increment_title">ਆਡੀਓ ਵਾਲੀਅਮ ਵਾਧਾ (ਫੀਸਦੀ))</string>
+  <string name="pref_audio_volume_percent_increment_summary">ਜਦੋਂ ਘੱਟ 100%, ਮਾਤਰਾ ਵਿੱਚ ਵਾਧਾ..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">ਆਡੀਓ ਵਾਲੀਅਮ ਵਾਧਾ (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">ਜਦੋਂ \'ਤੇ 100%, ਵਰਧਾ..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">ਕਾਰਕ x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">ਸੰਬੰਧਤ ਸਮਾਯੋਜਨ ਲਾਗੂ ਕਰਨ ਲਈ ਗੁਣਾਕ..</string>
+  <string name="pref_enable_tunneled_video_playback_title">ਟ੍ਰੈਕ ਸੁਰੰਗੀਕਰਨ</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">ਟਨਲਡ ਪਲੇਬੈਕ ਚਾਲੂ ਹੈ।</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">ਟਨਲਡ ਪਲੇਬੈਕ ਅਸਮਰੱਥ ਹੈ।</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS ਆਡੀਓ ਸਟ੍ਰੀਮਾਂ</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">ਸਟ੍ਰੀਮ ਹੈਂਡਲਰ ਚਾਲੂ ਹੈ</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">ਸਟ੍ਰੀਮ ਹੈਂਡਲਰ ਅਸਮਰੱਥ ਹੈ।</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">ਆਡੀਓ ਆਉਟਪੁੱਟ ਡਿਵਾਈਸ ਬਦਲਣ \'ਤੇ ਰੋਕੋ</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">ਰੋਕ ਚਾਲੂ ਹੈ</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">ਰੋਕ ਅਯੋਗ ਹੈ</string>
+  <string name="pref_prefer_extension_renderer_title">(*) ਮੀਡੀਆ ਡੀਕੋਡਰ</string>
+  <string name="pref_prefer_extension_renderer_summary_on">ਸਾਫਟਵੇਅਰ ਐਕਸਟੈਂਸ਼ਨ ਡੀਕੋਡਰ ਚਾਲੂ ਹਨ ਅਤੇ ਹਾਰਡਵੇਅਰ ਡੀਕੋਡਰਾਂ ਨਾਲੋਂ ਤਰਜੀਹ ਦਿੱਤੀ ਜਾਂਦੀ ਹੈ।</string>
+  <string name="pref_prefer_extension_renderer_summary_off">ਸਾਫਟਵੇਅਰ ਐਕਸਟੈਂਸ਼ਨ ਡੀਕੋਡਰ ਅਯੋਗ ਹਨ, ਸਿਰਫ਼ ਹਾਰਡਵੇਅਰ ਡੀਕੋਡਰ ਹੀ ਯੋਗ ਹਨ।</string>
+  <string name="pref_enable_audio_passthrough_title">(*) ਆਡੀਓ ਪਾਸਥਰੂ</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital ਪਾਸਥਰੂ ਚਾਲੂ ਹੈ</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital ਪਾਸਥਰੂ ਅਸਮਰੱਥ ਹੈ; ਡੀਕੋਡਰ ਪਰਿਵਰਤਨ ਕਰਦਾ ਹੈ PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">ਸਰਾਊਂਡ ਸਾਊਂਡ ਨੂੰ ਸਟੀਰੀਓ ਵਿੱਚ ਡਾਊਨਮਿਕਸ ਕਰੋ</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">ਜਦੋਂ ਆਡੀਓ ਚੈਨਲਾਂ ਦੀ ਗਿਣਤੀ 3 ਤੋਂ 6 ਦੇ ਵਿਚਕਾਰ ਹੋਵੇ, ਤਾਂ ਇਸਨੂੰ 2 ਕਰ ਦਿਓ।</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">ਸਰਰਾਊਂਡ ਸਾਊਂਡ ਨਾਲ ਆਡੀਓ ਟਰੈਕ ਚਲਾਓ</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">ਸਟੀਰੀਓ ਆਵਾਜ਼ ਨੂੰ ਮੋਨੋ ਵਿੱਚ ਡਾਊਨਮਿਕਸ ਕਰੋ</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">ਜਦੋਂ 2 ਆਡੀਓ ਚੈਨਲ ਹੋਣ, ਤਾਂ 1 ਕਰ ਦਿਓ।</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">ਸਟੀਰੀਓ ਆਵਾਜ਼ ਨਾਲ ਆਡੀਓ ਟਰੈਕ ਚਲਾਓ</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode ਸਮਾਗਮ ਸੂਚਨਾਵਾਂ</string>
+  <string name="pref_footer_notation_summary">ਇਹਨਾਂ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਕੀਤੀਆਂ ਤਬਦੀਲੀਆਂ ਐਪ ਨੂੰ ਦੁਬਾਰਾ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਬਾਅਦ ਲਾਗੂ ਹੋਣਗੀਆਂ।.</string>
+</resources>

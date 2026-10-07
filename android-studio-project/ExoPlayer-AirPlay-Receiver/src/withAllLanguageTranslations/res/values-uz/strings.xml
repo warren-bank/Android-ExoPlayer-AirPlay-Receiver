@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">ko\'rsat</string>
+  <string name="hide">yashir</string>
+  <string name="toast_registration_started">Ro\'yxatdan o\'tish AirPlay xizmat...</string>
+  <string name="toast_registration_success">AirPlay Ro\'yxatdan o\'tish muvaffaqiyatli bo\'ldi</string>
+  <string name="toast_registration_failure">AirPlay Ro\'yxatdan o\'tish muvaffaqiyatsiz bo\'ldi</string>
+  <string name="toast_start_activity_error_activity_not_found">Faoliyat topilmadi\n\nHech bir Intent filtrlari Intentga mos kelmaydi.</string>
+  <string name="toast_start_activity_error_security">Ruxsatnomalar yetarli emas\n\nExoAirPlayer Faoliyatni ishga tushirib bo\'lmaydi</string>
+  <string name="toast_downloadtracker_error_download_start">Yuklab olishni boshlash muvaffaqiyatsiz bo\'ldi</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Oflayn litsenziyani olish muvaffaqiyatsiz bo\'ldi</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Jonli kontentni yuklab olish qo\'llab-quvvatlanmaydi.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Mazmun qo\'llab-quvvatlanmaydi API 18 dan pastki darajalar</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Qabul qiluvchi: xizmat ishlamoqda</string>
+  <string name="notification_service_content_line1">ExoAirPlayer da yugurish:</string>
+  <string name="notification_service_content_line3">Xizmatni to\'xtatish uchun bosing.</string>
+  <string name="track_selection_button">Tanlang\nQo\'shiqlar</string>
+  <string name="text_offset_selection_button">Senkronlashtirish\nSarlavhalar</string>
+  <string name="text_offset_selection_title">Matn sarlavhalarining oldindan yoki kechiktirib boshlanish vaqtining ofseti</string>
+  <string name="audio_offset_selection_button">Senkronlashtirish\nAudio</string>
+  <string name="audio_offset_selection_title">Audio trekni oldindan o\'tkazish yoki kechiktirish vaqtining siljishi</string>
+  <string name="toggle_download_button_start">Boshlang\nYuklab olish</string>
+  <string name="toggle_download_button_stop">To\'xtang\nYuklab olish</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Sozlamalar</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Xizmat nomi</string>
+  <string name="pref_mdsn_server_name_summary">e\'lon qilingan nom mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Parol</string>
+  <string name="pref_http_api_password_summary">faqat vakolatli mijozlar bilan baham ko\'rilgan sir..</string>
+  <string name="pref_default_user_agent_title">Foydalanuvchi agenti</string>
+  <string name="pref_default_user_agent_summary">so\'rov sarlavha qiymati..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Audio ovoz balandligini maksimal darajada oshirish (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">kuchaytirishni cheklashga..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maximallashgan parallel yuklab olishlar</string>
+  <string name="pref_max_parallel_downloads_summary">Yuklab olish menejeridagi iplar havzasining hajmi..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Orqaga izlashni oshirish (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Orqaga izlash vaqt oralig\'i..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Oldinga izlash qadamini sozlash (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Oldinga izlash uchun vaqt oralig\'i..</string>
+  <string name="pref_audio_volume_percent_increment_title">Audio balandligini oshirish (foizda))</string>
+  <string name="pref_audio_volume_percent_increment_summary">kamroq bo\'lganda 100%, hajmning oshishi..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Audio ovoz balandligini oshirish (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">qachon at 100%, kuchaytirish o\'sishi..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">omil x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">nisbiy tuzatishni qo\'llash uchun ko\'paytirish omili..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Yo\'l tunnellash</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Tunnel qilingan ijro yoqilgan</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Tunnel orqali ijro o\'chirib qo\'yilgan</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS audio oqimlari</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Oqim ishlovchisi yoqilgan</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Oqim ishlovchisi o\'chirilgan</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Audio chiqish qurilmasini o\'zgartirishni to\'xtatish</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Tanaffus yoqilgan</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Tanaffus o\'chirilgan</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Media dekoderlari</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Dasturiy kengaytma dekoderlari yoqilgan va apparat dekoderlariga nisbatan afzalroq hisoblanadi.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Dasturiy kengaytma dekoderlari o\'chirilgan, faqat apparat dekoderlari yoqilgan</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Audio o\'tkazish</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Passthrough yoqilgan</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough o\'chirilgan; dekoder konvertatsiyani bajaradi PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Atrof-muhit tovushini stereoga aralashtirish</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Audio kanallari soni 3 dan 6 gacha bo\'lsa, ularni 2 taga kamaytiring.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Atrof-muhit ovozi bilan audio treklarni ijro eting</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Stereo tovushni monoga aralashtirish</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">2 ta audio kanal bo\'lsa, ularni bittaga kamaytiring.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Audio treklarni stereo tovush bilan ijro eting</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Tadbir bildirishnomalari</string>
+  <string name="pref_footer_notation_summary">Ushbu sozlamalardagi o\'zgarishlar ilova qayta ishga tushirilgandan so\'ng kuchga kiradi..</string>
+</resources>

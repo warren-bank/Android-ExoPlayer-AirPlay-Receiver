@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">харуулах</string>
+  <string name="hide">нуух</string>
+  <string name="toast_registration_started">Бүртгүүлэх AirPlay үйлчилгээ...</string>
+  <string name="toast_registration_success">AirPlay Бүртгэл амжилттай боллоо</string>
+  <string name="toast_registration_failure">AirPlay Бүртгэл амжилтгүй боллоо</string>
+  <string name="toast_start_activity_error_activity_not_found">Ямар ч үйл ажиллагаа илрээгүй\n\nЯмар ч Intent шүүлтүүр энэ Intent-тэй таарахгүй</string>
+  <string name="toast_start_activity_error_security">Зөвшөөрөл хангалтгүй\n\nExoAirPlayer Активтыг эхлүүлж чадахгүй байна</string>
+  <string name="toast_downloadtracker_error_download_start">Татаж авах эхлэхэд алдаа гарлаа</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Офлайн лиценз авах боломжгүй боллоо</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Шууд контент татаж авах боломжгүй байна</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Агуулга дэмжигдэхгүй байна API 18-аас доошхи түвшинүүд</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Хүлээн авагч: үйлчилгээ ажиллаж байна</string>
+  <string name="notification_service_content_line1">ExoAirPlayer дээр гүйх:</string>
+  <string name="notification_service_content_line3">Үйлчилгээг зогсоохын тулд дарна уу.</string>
+  <string name="track_selection_button">Сонгох\nТрэкүүд</string>
+  <string name="text_offset_selection_button">Хамгийн сүүлд шинэчлэгдсэн: 2020-06-01\nТайлбар бичвэрүүд</string>
+  <string name="text_offset_selection_title">Текстийн гарчгийн эхлэх/хойшлуулах хугацааны зөрүү</string>
+  <string name="audio_offset_selection_button">Хамгийн сүүлд шинэчлэгдсэн: 2020-06-01\nДуу</string>
+  <string name="audio_offset_selection_title">Дууны замыг урьдчилан эсвэл хойшлуулах хугацааны зөрүү</string>
+  <string name="toggle_download_button_start">Эхлэх\nТатаж авах</string>
+  <string name="toggle_download_button_stop">Зогсоо\nТатаж авах</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Тохиргоо</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Үйлчилгээний нэр</string>
+  <string name="pref_mdsn_server_name_summary">зарласан нэр mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Нууц үг</string>
+  <string name="pref_http_api_password_summary">Зөвшөөрөгдсөн үйлчлүүлэгчидтэй л хуваалцсан нууц..</string>
+  <string name="pref_default_user_agent_title">Хэрэглэгчийн агент</string>
+  <string name="pref_default_user_agent_summary">шаардлагын толгойн утга..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Дээд зэргийн аудио дууны түвшин нэмэгдүүлэгч (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">өсөлтийг хязгаарлах..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Зэрэг татаж авах дээд хязгаар</string>
+  <string name="pref_max_parallel_downloads_summary">Татаж авах менежерийн утасны сангийн хэмжээ..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Өмнөх хайлтын нэмэгдүүлэлт (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Ухрах хайлтын хугацааны нэмэгдэл..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Урагш хайх нэмэгдэл (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Урагш хайх хугацааны нэмэгдэл..</string>
+  <string name="pref_audio_volume_percent_increment_title">Дууны өндрийг нэмэгдүүлэх (хувь))</string>
+  <string name="pref_audio_volume_percent_increment_summary">бага байх үед 100%, Эзлэхүүн нэмэгдэл..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Дууны хэмжээг нэмэгдүүлэх (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">хаана байхдаа 100%, өсөлтийн нэмэгдэл..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">фактор x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Харилцан харьцааны тохируулга хийх үржүүлэгч..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Замын хонгил гаргах</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Туннелж тоглуулах горим идэвхжүүлсэн байна</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Туннелж тоглуулах унтраасан байна</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS аудио урсгалууд</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Стрeмийн гаргуулагч идэвхжүүлсэн байна</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off"> урсгалын боловсруулагч идэвхгүй байна</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Дууны гаралт төхөөрөмжийг солих үйлдлийг түр зогсоох</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Саатал идэвхжүүлсэн байна</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Саатуулалт идэвхгүй байна</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Медиа декодерүүд</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Программ хангамжийн өргөтгөлийн декодерүүд идэвхжүүлэгдсэн бөгөөд техник хангамжийн декодерүүдээс илүүд тооцогдоно.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Программ хангамжийн өргөтгөлийн декодерууд идэвхгүй, зөвхөн техник хангамжийн декодерууд идэвхтэй байна</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Дууны дамжуулалт</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Пасстрюф идэвхжүүлсэн байна</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital passthrough идэвхгүй байна; декодер хөрвүүлэлтийг гүйцэтгэнэ PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Орон нутгийн дууг стерео болгон холих</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">3-аас 6 хүртэл аудио суваг байвал 2 болгож бууруулах</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Дууны трекүүдийг хүрээлэн дуугаарай тоглуулах</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Стерео дуу хоолойг моно болгон бууруулах</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Хоёр аудио суваг байвал нэгийг болгож бууруулах</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Стерео дуутай аудио трекүүдийг тоглуулах</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode үйл явдлын мэдэгдлүүд</string>
+  <string name="pref_footer_notation_summary">Эдгээр тохиргооны өөрчлөлтүүд аппликейшн дахин эхэлсний дараа хүчин төгөлдөр болно..</string>
+</resources>

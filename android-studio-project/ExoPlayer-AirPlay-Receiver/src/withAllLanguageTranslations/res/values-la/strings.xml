@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Monstra</string>
+  <string name="hide">occultare</string>
+  <string name="toast_registration_started">Registratio AirPlay Ministerium...</string>
+  <string name="toast_registration_success">AirPlay Registratio prospera</string>
+  <string name="toast_registration_failure">AirPlay Registratio defecit.</string>
+  <string name="toast_start_activity_error_activity_not_found">Nulla actio reperta est.\n\nNulli filtri intentionis cum intentione congruunt.</string>
+  <string name="toast_start_activity_error_security">Permissus Insufficiens\n\nExoAirPlayer Actio incipere non potest</string>
+  <string name="toast_downloadtracker_error_download_start">Depromptio incipere non potuit.</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Licentia extra rete obtinenda defecit.</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Materia viva deonerari non sustinetur.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Materia non sustinetur in API gradus infra duodeviginti</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Accipiens: ministerium fungitur</string>
+  <string name="notification_service_content_line1">ExoAirPlayer currens ad:</string>
+  <string name="notification_service_content_line3">Preme ut ministerium sistas.</string>
+  <string name="track_selection_button">Elige\nViae</string>
+  <string name="text_offset_selection_button">Sincronizare\nTituli</string>
+  <string name="text_offset_selection_title">Tituli Textuum Praecurrere vel Morari Tempus Discrimen</string>
+  <string name="audio_offset_selection_button">Sincronizare\nSonus</string>
+  <string name="audio_offset_selection_title">Offsetum Temporis Prolationis vel Dilationis Cursus Audibilis</string>
+  <string name="toggle_download_button_start">Incipe\nDeprome</string>
+  <string name="toggle_download_button_stop">Siste\nDeprome</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Configurationes</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Nomen Ministerii</string>
+  <string name="pref_mdsn_server_name_summary">nomen praedicatum a mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Tessera</string>
+  <string name="pref_http_api_password_summary">Secretum clientibus probatis solis communicatum..</string>
+  <string name="pref_default_user_agent_title">Agentis Usoris</string>
+  <string name="pref_default_user_agent_summary">Valor capitis petitionis..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Maximus sonitus amplificator (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">amplificationem cohibere ad..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Maxima Onerationum Parallelarum</string>
+  <string name="pref_max_parallel_downloads_summary">Magnitudo piscinae filorum in moderatore depromptionum..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Incrementum Quaerendi Retrogradum (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Incrementum temporis ad retro quaerendum..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Procurre Incrementum (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Incrementum temporis ad quaerendum prorsum..</string>
+  <string name="pref_audio_volume_percent_increment_title">Incrementum Voluminis Audibilis (pro centum))</string>
+  <string name="pref_audio_volume_percent_increment_summary">cum minus quam 100%, Volumen incrementum..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Volumen Sonitus Incrementum (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">cum ad 100%, Incrementum Amplificationis..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">factor x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">coefficientia ad accommodationem relativam adhibendam..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tunnellatio Cursus</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Reproductio per cuniculum habilitata est.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Reproductio per cuniculum obstructa est.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Flussus audibiles</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Curator fluminis habilis est.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Curator fluminis inhabilitatus est.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Intermitte mutationem ad instrumentum soni emissorium.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pausa permittitur</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Intermissio inhabilitata est.</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Decodificatores Mediorum</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Decodificatores extensionis programmaturae activati sunt et decodificatoribus machinalibus praeferuntur.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Decodificatores programmales inhabilitati sunt, solum decodificatores machinales habilitati sunt.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Transitus Sonorum</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Transitus patet</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Transitus interdictus est; decoder conversionem ad PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Sonum circumfluum in sonum bicipitem redige.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Cum tres ad sex canales audibiles sunt, ad duos redige.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Sonus circumfluos ede.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Sonum stereophonicum in monophonicum redige.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Cum duae canales soni sunt, ad unam redige.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Sonus stereophonicus producatur.</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Nuntii eventuum</string>
+  <string name="pref_footer_notation_summary">Mutationes horum conformationum post applicationem denuo inceptam valebunt..</string>
+</resources>

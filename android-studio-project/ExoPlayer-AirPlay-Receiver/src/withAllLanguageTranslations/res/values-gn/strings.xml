@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">ExoAirPlayer</string>
+  <string name="show">Ohechauka</string>
+  <string name="hide">ñomi</string>
+  <string name="toast_registration_started">Jehaikuaauka AirPlay Tembiapo pytyvõrã...</string>
+  <string name="toast_registration_success">AirPlay Oñemboguapy porã</string>
+  <string name="toast_registration_failure">AirPlay Ndoikói pe ñemboguapy</string>
+  <string name="toast_start_activity_error_activity_not_found">Ndojejuhúi mba\'eve oikóva\n\nNdaipóri Mbohasaha Tembipota pegua ojoajúva pe Tembipotáre.</string>
+  <string name="toast_start_activity_error_security">Permiso ndohupytýiva\n\nExoAirPlayer Ndaikatúi oñepyrũ pe Tembiapo.</string>
+  <string name="toast_downloadtracker_error_download_start">Ndoñepyrũi pe ñemboguejy</string>
+  <string name="toast_downloadtracker_error_download_start_offline_license">Ndojehupytýi kuatia\'atã ndaipórihápe ñandutípe</string>
+  <string name="toast_downloadtracker_error_download_live_unsupported">Ndaikatúi oñemboguejy tembiporu oikóva.</string>
+  <string name="toast_downloadtracker_error_drm_unsupported_before_api_18">DRM Ndaikatúi ojeporu tembiporu ko\'ápe. API Pyképe 18 guýpe</string>
+  <string name="notification_service_ticker">ExoPlayer AirPlay Oñembohasahína</string>
+  <string name="notification_service_content_line1">ExoAirPlayer ohóvo:</string>
+  <string name="notification_service_content_line3">Eikutu rembopoi hag̃ua tembiapo.</string>
+  <string name="track_selection_button">Eiporavo\nPurahéi rape</string>
+  <string name="text_offset_selection_button">Ñembojoja\nTa\'anga mombe\'u</string>
+  <string name="text_offset_selection_title">Moñe\'ẽrã Ta\'anga Guýpegua Mboyvegua térã Mbeguegua Ára Ñemboheko</string>
+  <string name="audio_offset_selection_button">Ñembojoja\nPundie</string>
+  <string name="audio_offset_selection_title">Pu Rape Ñemotenonde térã Ñembotapykue Ára Ñemboheko</string>
+  <string name="toggle_download_button_start">Ñepyrũ\nEmboguejy</string>
+  <string name="toggle_download_button_stop">Pytáke\nEmboguejy</string>
+  <string translatable="false" name="prefval_mdsn_server_name"></string>
+  <string translatable="false" name="prefval_http_api_password"></string>
+  <string translatable="false" name="prefval_serialized_keycode_map"></string>
+  <string name="pref_settings_title">ExoAirPlayer Mbohekorã</string>
+  <string name="pref_mdsn_server_name_title">(*) Bonjour Tembiapo réra</string>
+  <string name="pref_mdsn_server_name_summary">Téra oñemoherakuãva mDNS..</string>
+  <string name="pref_http_api_password_title">HTTP API Ñe\'ẽñemi</string>
+  <string name="pref_http_api_password_summary">Ñemimby oñembohasáva umi kliénte oñeme\'ẽvape añónte..</string>
+  <string name="pref_default_user_agent_title">Puruhára Rembiguái</string>
+  <string name="pref_default_user_agent_summary">Jerure akãrague mba\'e..</string>
+  <string name="pref_max_audio_volume_boost_db_title">Puapy Puveve Mombareteve (dB)</string>
+  <string name="pref_max_audio_volume_boost_db_summary">Joko ñembotuichave..</string>
+  <string name="pref_max_parallel_downloads_title">(*) Mboguejyeta Paralelo Iñakãrapu\'ãvéva</string>
+  <string name="pref_max_parallel_downloads_summary">Mbovypa umi tembiaporã aty pe mba\'e\'oguejy mohendahápe..</string>
+  <string name="pref_seek_back_ms_increment_title">(*) Jejuka tenonde gotyo (ms)</string>
+  <string name="pref_seek_back_ms_increment_summary">Ára ñembohetave oheka hag̃ua tapykue gotyo..</string>
+  <string name="pref_seek_forward_ms_increment_title">(*) Tenonde gotyo oheka ñembohetave (ms)</string>
+  <string name="pref_seek_forward_ms_increment_summary">Ára ñembohetave oñemotenonde hag̃ua..</string>
+  <string name="pref_audio_volume_percent_increment_title">Pu ñembohetave (por ciento-pe))</string>
+  <string name="pref_audio_volume_percent_increment_summary">sa\'ive jave 100%, Hetave..</string>
+  <string name="pref_audio_volume_boost_db_increment_title">Pu ñembotuichave (dB)</string>
+  <string name="pref_audio_volume_boost_db_increment_summary">ojeimévo 100%, Ñembohetave..</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_title">Mba\'e omoambuéva x TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES</string>
+  <string name="pref_ts_extractor_timestamp_search_bytes_factor_summary">Mbohetaha ojepurúva oñemyatyrõ hag̃ua joja rupive..</string>
+  <string name="pref_enable_tunneled_video_playback_title">Tape Yvyguy Ñembohasa</string>
+  <string name="pref_enable_tunneled_video_playback_summary_on">Ñembohasa tape pypegua oñemohenda.</string>
+  <string name="pref_enable_tunneled_video_playback_summary_off">Ñembohasa túnel rupive oñembogue.</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_title">HDMV DTS Puhoe ñembohasa</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_on">Mbyry myatyrõhára oñemoĩ omba\'apo hag̃ua</string>
+  <string name="pref_enable_hdmv_dts_audio_streams_summary_off">Mbyry rape mohendaha oñembogue.</string>
+  <string name="pref_pause_on_change_to_audio_output_device_title">Pytu\'u ñemoambuépe ñe\'ẽrenduha tembiporúpe</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_on">Pytu\'u oñemoinge</string>
+  <string name="pref_pause_on_change_to_audio_output_device_summary_off">Pytu\'u oñembogue</string>
+  <string name="pref_prefer_extension_renderer_title">(*) Marandu Mbohasaha</string>
+  <string name="pref_prefer_extension_renderer_summary_on">Umi decodificador software rupivegua oñemohenda ha ojeiporavove umi hardware rupiveguágui.</string>
+  <string name="pref_prefer_extension_renderer_summary_off">Software decodificador-kuéra oñembogue, hardware decodificador-kuéra añónte oñemyendy.</string>
+  <string name="pref_enable_audio_passthrough_title">(*) Pu Mbohasa</string>
+  <string name="pref_enable_audio_passthrough_summary_on">AC3 Dolby Digital Ñembohasa oñemoĩmba.</string>
+  <string name="pref_enable_audio_passthrough_summary_off">AC3 Dolby Digital Mbohasa oñembogue; mbohasaha ojapo ñemoambue...-pe PCM</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_title">Ñemboguejy purahéi jerére oñehendúva estereópe</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_on">Oĩramo mbohapy térã poteĩ tape ñe\'ẽrã, emboguejy mokõime.</string>
+  <string name="pref_enable_downmix_surround_sound_to_stereo_summary_off">Ehendu purahéi oñehendúva ijerére.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_title">Ñemboguejy purahéi stereo mono-pe</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_on">Oĩramo mokõi tape pu rehegua, emomichĩ peteĩme.</string>
+  <string name="pref_enable_downmix_stereo_sound_to_mono_summary_off">Epu\'ã purahéi rape stereo-pe</string>
+  <string name="pref_enable_keycode_event_notifications_title">KeyCode Marandu tembiaporã rehegua</string>
+  <string name="pref_footer_notation_summary">Ko\'ã ñemohenda ñemoambue oñepyrũta ojeipuru app oñepyrũ jey rire..</string>
+</resources>

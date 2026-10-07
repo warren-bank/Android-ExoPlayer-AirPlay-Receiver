@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="time_picker_dialog_reset">ゼロにリセット</string>
+  <string name="accessibility_time_picker_sign">正の符号か負の符号か</string>
+  <string name="accessibility_time_picker_hour">時間</string>
+  <string name="accessibility_time_picker_minute">議事録</string>
+  <string name="accessibility_time_picker_second">第二</string>
+  <string name="accessibility_time_picker_milli">ミリ秒</string>
+  <string translatable="false" name="time_picker_dialog_sign_hour_separator"></string>
+  <string translatable="false" name="time_picker_dialog_milli_ampm_separator"></string>
+</resources>
