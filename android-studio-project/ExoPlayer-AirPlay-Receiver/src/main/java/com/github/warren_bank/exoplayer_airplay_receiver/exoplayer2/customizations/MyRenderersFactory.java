@@ -19,7 +19,7 @@ import android.os.Looper;
 
 import java.util.ArrayList;
 
-public class MyRenderersFactory extends DefaultRenderersFactory implements TextSynchronizer, TextFilter {
+public class MyRenderersFactory extends DefaultRenderersFactory {
   private boolean useDefaultAudioCapabilities;
   private MyTextRenderer textRenderer;
   public MyAudioProcessorChain audioProcessorChain;
@@ -63,43 +63,16 @@ public class MyRenderersFactory extends DefaultRenderersFactory implements TextS
       .build();
   }
 
-  // ---------------------------------------------------------------------------
-  // implement: TextSynchronizer
-  // ---------------------------------------------------------------------------
-
-  @Override
-  public long getTextOffset() {
-    return (textRenderer != null)
-      ? textRenderer.getTextOffset()
-      : 0l;
+  public AudioSynchronizer getAudioSynchronizer() {
+    return (AudioSynchronizer) audioProcessorChain;
   }
 
-  @Override
-  public void setTextOffset(long value) {
-    if (textRenderer != null)
-      textRenderer.setTextOffset(value);
+  public TextSynchronizer getTextSynchronizer() {
+    return (TextSynchronizer) textRenderer;
   }
 
-  @Override
-  public void addTextOffset(long value) {
-    if (textRenderer != null)
-      textRenderer.addTextOffset(value);
-  }
-
-  // ---------------------------------------------------------------------------
-  // implement: TextFilter
-  // ---------------------------------------------------------------------------
-
-  @Override
-  public void setTextFilters(String[] textFilters) {
-    if (textRenderer != null)
-      textRenderer.setTextFilters(textFilters);
-  }
-
-  @Override
-  public void addTextFilters(String[] textFilters) {
-    if (textRenderer != null)
-      textRenderer.addTextFilters(textFilters);
+  public TextFilter getTextFilter() {
+    return (TextFilter) textRenderer;
   }
 
 }

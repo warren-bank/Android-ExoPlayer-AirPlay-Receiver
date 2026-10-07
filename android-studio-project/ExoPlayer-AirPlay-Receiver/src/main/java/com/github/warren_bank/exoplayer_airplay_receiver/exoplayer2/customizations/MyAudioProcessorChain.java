@@ -13,7 +13,7 @@ import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizatio
 import androidx.media3.common.audio.AudioProcessor;
 import androidx.media3.exoplayer.audio.DefaultAudioSink.DefaultAudioProcessorChain;
 
-public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
+public class MyAudioProcessorChain extends DefaultAudioProcessorChain implements AudioSynchronizer {
   public static MyAudioProcessorChain getInstance() {
     AudioProcessor[] audioProcessors = new AudioProcessor[] {
       new DownmixSurroundToStereoAudioProcessor(),
@@ -47,11 +47,26 @@ public class MyAudioProcessorChain extends DefaultAudioProcessorChain {
     downmix_stereo_to_mono.enable(enabled);
   }
 
-  public void setTimeOffset(long value) {
-    time_offset.setTimeOffset(value);
+  // ---------------------------------------------------------------------------
+  // implement: AudioSynchronizer
+  // ---------------------------------------------------------------------------
+
+  @Override
+  public long getAudioOffset() {
+    return (time_offset != null)
+      ? time_offset.getTimeOffset()
+      : 0l;
   }
 
-  public void addTimeOffset(long value) {
-    time_offset.addTimeOffset(value);
+  @Override
+  public void setAudioOffset(long value) {
+    if (time_offset != null)
+      time_offset.setTimeOffset(value);
+  }
+
+  @Override
+  public void addAudioOffset(long value) {
+    if (time_offset != null)
+      time_offset.addTimeOffset(value);
   }
 }

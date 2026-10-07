@@ -2,6 +2,7 @@ package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
 import com.github.warren_bank.exoplayer_airplay_receiver.constant.Constant;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.AudioSynchronizer;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyLoadErrorHandlingPolicy;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.MyRenderersFactory;
 import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextFilter;
@@ -107,8 +108,6 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   private Handler handler;
   private LoudnessEnhancer loudnessEnhancer;
 
-  public TextFilter       textFilter;
-  public TextSynchronizer textSynchronizer;
   public ExoPlayer exoPlayer;
 
   /**
@@ -128,8 +127,6 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     this.renderersFactory         = new MyRenderersFactory(context, PreferencesMgr.get_prefer_extension_renderer(), !PreferencesMgr.get_enable_audio_passthrough());
     this.extractorsFactory        = new DefaultExtractorsFactory();
     this.trackSelector            = new DefaultTrackSelector(context);
-    this.textFilter               = (TextFilter)       renderersFactory;
-    this.textSynchronizer         = (TextSynchronizer) renderersFactory;
 
     renderersFactory.audioProcessorChain.enable_downmix_surround_to_stereo(
       PreferencesMgr.get_enable_downmix_surround_sound_to_stereo()
@@ -241,6 +238,24 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
     }
 
     return builder.build();
+  }
+
+  public AudioSynchronizer getAudioSynchronizer() {
+    return (renderersFactory != null)
+      ? renderersFactory.getAudioSynchronizer()
+      : null;
+  }
+
+  public TextSynchronizer getTextSynchronizer() {
+    return (renderersFactory != null)
+      ? renderersFactory.getTextSynchronizer()
+      : null;
+  }
+
+  public TextFilter getTextFilter() {
+    return (renderersFactory != null)
+      ? renderersFactory.getTextFilter()
+      : null;
   }
 
   /**
@@ -1082,7 +1097,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @param offset Measured in microseconds
    */
   public void AirPlay_set_audio_offset(long offset) {
-    renderersFactory.audioProcessorChain.setTimeOffset(offset);
+    AudioSynchronizer audioSynchronizer = getAudioSynchronizer();
+
+    if (audioSynchronizer != null)
+      audioSynchronizer.setAudioOffset(offset);
   }
 
   /**
@@ -1093,7 +1111,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_add_audio_offset(long offset) {
     if (offset == 0) return;
 
-    renderersFactory.audioProcessorChain.addTimeOffset(offset);
+    AudioSynchronizer audioSynchronizer = getAudioSynchronizer();
+
+    if (audioSynchronizer != null)
+      audioSynchronizer.addAudioOffset(offset);
   }
 
   /**
@@ -1176,7 +1197,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @param offset Measured in microseconds
    */
   public void AirPlay_set_captions_offset(long offset) {
-    textSynchronizer.setTextOffset(offset);
+    TextSynchronizer textSynchronizer = getTextSynchronizer();
+
+    if (textSynchronizer != null)
+      textSynchronizer.setTextOffset(offset);
   }
 
   /**
@@ -1187,7 +1211,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
   public void AirPlay_add_captions_offset(long offset) {
     if (offset == 0) return;
 
-    textSynchronizer.addTextOffset(offset);
+    TextSynchronizer textSynchronizer = getTextSynchronizer();
+
+    if (textSynchronizer != null)
+      textSynchronizer.addTextOffset(offset);
   }
 
   /**
@@ -1196,7 +1223,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @param textFilters List of regex patterns
    */
   public void AirPlay_set_captions_filters(String[] textFilters) {
-    textFilter.setTextFilters(textFilters);
+    TextFilter textFilter = getTextFilter();
+
+    if (textFilter != null)
+      textFilter.setTextFilters(textFilters);
   }
 
   /**
@@ -1205,7 +1235,10 @@ public final class PlayerManager implements Player.Listener, PreferencesMgr.OnPr
    * @param textFilters List of additional regex patterns
    */
   public void AirPlay_add_captions_filters(String[] textFilters) {
-    textFilter.addTextFilters(textFilters);
+    TextFilter textFilter = getTextFilter();
+
+    if (textFilter != null)
+      textFilter.addTextFilters(textFilters);
   }
 
   /**

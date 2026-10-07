@@ -32,10 +32,11 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
   private PlayerManager playerManager;
   private Button        selectTracksButton;
   private Button        selectTextOffsetButton;
+  private Button        selectAudioOffsetButton;
   private Button        toggleDownloadButton;
   private ImageButton   openSettingsButton;
   private boolean       isShowingTrackSelectionDialog;
-  private boolean       isShowingTextOffsetSelectionDialog;
+  private boolean       isShowingTimeOffsetSelectionDialog;
 
   // Activity lifecycle methods.
 
@@ -71,12 +72,14 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
     selectTracksButton.setOnClickListener(this);
     selectTextOffsetButton = (Button) findViewById(R.id.select_text_offset_button);
     selectTextOffsetButton.setOnClickListener(this);
+    selectAudioOffsetButton = (Button) findViewById(R.id.select_audio_offset_button);
+    selectAudioOffsetButton.setOnClickListener(this);
     toggleDownloadButton = (Button) findViewById(R.id.toggle_download_button);
     toggleDownloadButton.setOnClickListener(this);
     openSettingsButton = (ImageButton) findViewById(R.id.open_settings_button);
     openSettingsButton.setOnClickListener(this);
     isShowingTrackSelectionDialog      = false;
-    isShowingTextOffsetSelectionDialog = false;
+    isShowingTimeOffsetSelectionDialog = false;
   }
 
   @Override
@@ -117,6 +120,7 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
 
     selectTracksButton.setVisibility(visibility);
     selectTextOffsetButton.setVisibility(visibility);
+    selectAudioOffsetButton.setVisibility(visibility);
     toggleDownloadButton.setVisibility(visibility);
     openSettingsButton.setVisibility(visibility);
   }
@@ -141,15 +145,31 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
 
     if (
          view == selectTextOffsetButton
-      && !isShowingTextOffsetSelectionDialog
+      && !isShowingTimeOffsetSelectionDialog
       && (playerManager != null)
-      && (playerManager.textSynchronizer != null)
+      && (playerManager.getTextSynchronizer() != null)
     ) {
-      isShowingTextOffsetSelectionDialog = true;
+      isShowingTimeOffsetSelectionDialog = true;
       MultiFieldTimePickerDialogContainer.show(
         /* context= */ this,
-        playerManager.textSynchronizer,
-        /* onDismissListener= */ dismissedDialog -> isShowingTextOffsetSelectionDialog = false
+        /* title= */ R.string.text_offset_selection_title,
+        playerManager.getTextSynchronizer(),
+        /* onDismissListener= */ dismissedDialog -> isShowingTimeOffsetSelectionDialog = false
+      );
+    }
+
+    if (
+         view == selectAudioOffsetButton
+      && !isShowingTimeOffsetSelectionDialog
+      && (playerManager != null)
+      && (playerManager.getAudioSynchronizer() != null)
+    ) {
+      isShowingTimeOffsetSelectionDialog = true;
+      MultiFieldTimePickerDialogContainer.show(
+        /* context= */ this,
+        /* title= */ R.string.audio_offset_selection_title,
+        playerManager.getAudioSynchronizer(),
+        /* onDismissListener= */ dismissedDialog -> isShowingTimeOffsetSelectionDialog = false
       );
     }
 
@@ -177,7 +197,10 @@ public class VideoActivity extends AppCompatActivity implements PlayerView.Contr
         (playerManager != null) && (playerManager.exoPlayer != null) && TrackSelectionDialog.willHaveContent(playerManager.exoPlayer)
       );
       selectTextOffsetButton.setEnabled(
-        (playerManager != null) && (playerManager.textSynchronizer != null)
+        (playerManager != null) && (playerManager.getTextSynchronizer() != null)
+      );
+      selectAudioOffsetButton.setEnabled(
+        (playerManager != null) && (playerManager.getAudioSynchronizer() != null)
       );
       toggleDownloadButton.setEnabled(
         (playerManager != null) && (playerManager.getCurrentItem() != null)

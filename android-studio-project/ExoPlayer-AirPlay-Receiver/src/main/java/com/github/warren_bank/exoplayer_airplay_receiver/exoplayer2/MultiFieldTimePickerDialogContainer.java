@@ -1,7 +1,7 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2;
 
 import com.github.warren_bank.exoplayer_airplay_receiver.R;
-import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TextSynchronizer;
+import com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations.TimeSynchronizer;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,31 +17,32 @@ public class MultiFieldTimePickerDialogContainer {
         return mDialog != null && mDialog.isShowing();
     }
 
-    private static class TextSynchronizerListener implements MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener {
-        private final TextSynchronizer textSynchronizer;
+    private static class TimeSynchronizerListener implements MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener {
+        private final TimeSynchronizer timeSynchronizer;
 
-        TextSynchronizerListener(TextSynchronizer textSynchronizer) {
-            this.textSynchronizer = textSynchronizer;
+        TimeSynchronizerListener(TimeSynchronizer timeSynchronizer) {
+            this.timeSynchronizer = timeSynchronizer;
         }
 
         @Override
         public void onTimeSet(boolean isNegative, int hourOfDay, int minute, int second, int milli) {
-            long textOffsetMs = (milli) + (second * 1000) + (minute * 60 * 1000) + (hourOfDay * 60 * 60 * 1000);
-            long textOffsetUs = (textOffsetMs * 1000);
+            long timeOffsetMs = (milli) + (second * 1000) + (minute * 60 * 1000) + (hourOfDay * 60 * 60 * 1000);
+            long timeOffsetUs = (timeOffsetMs * 1000);
 
             if (isNegative)
-                textOffsetUs *= -1;
+                timeOffsetUs *= -1;
 
-            textSynchronizer.setTextOffset(textOffsetUs);
+            timeSynchronizer.setTimeOffset(timeOffsetUs);
         }
 
-        public void onTimeSet(long textOffsetUs) {
-            textSynchronizer.setTextOffset(textOffsetUs);
+        public void onTimeSet(long timeOffsetUs) {
+            timeSynchronizer.setTimeOffset(timeOffsetUs);
         }
     }
 
     private static void showPickerDialog(
         Context mContext,
+        int title,
         boolean isNegative,
         int hourOfDay, int minute, int second, int millis,
         int min, int max, int step, boolean is24hourFormat, boolean isSigned, boolean isValueChangeListener,
@@ -52,7 +53,7 @@ public class MultiFieldTimePickerDialogContainer {
 
         mDialog = new MultiFieldTimePickerDialog(
             mContext,
-            /* theme= */ 0,
+            /* theme= */ 0, title,
             isNegative,
             hourOfDay, minute, second, millis,
             min, max, step, is24hourFormat, isSigned, isValueChangeListener,
@@ -71,7 +72,7 @@ public class MultiFieldTimePickerDialogContainer {
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ((TextSynchronizerListener) mListener).onTimeSet(0l);
+                    ((TimeSynchronizerListener) mListener).onTimeSet(0l);
                 }
             }
         );
@@ -94,12 +95,13 @@ public class MultiFieldTimePickerDialogContainer {
 
     public static void show(
         Context mContext,
-        TextSynchronizer textSynchronizer,
+        int title,
+        TimeSynchronizer timeSynchronizer,
         DialogInterface.OnDismissListener onDismissListener
     ) {
-        MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener mListener = new TextSynchronizerListener(textSynchronizer);
+        MultiFieldTimePickerDialog.OnMultiFieldTimeSetListener mListener = new TimeSynchronizerListener(timeSynchronizer);
 
-        long offsetPositionUs = textSynchronizer.getTextOffset();
+        long offsetPositionUs = timeSynchronizer.getTimeOffset();
 
         boolean isNegative = (offsetPositionUs < 0);
 
@@ -121,6 +123,7 @@ public class MultiFieldTimePickerDialogContainer {
 
         showPickerDialog(
             mContext,
+            title,
             isNegative,
             hourOfDay, minute, second, millis,
             min, max, step, is24hourFormat, isSigned, isValueChangeListener,

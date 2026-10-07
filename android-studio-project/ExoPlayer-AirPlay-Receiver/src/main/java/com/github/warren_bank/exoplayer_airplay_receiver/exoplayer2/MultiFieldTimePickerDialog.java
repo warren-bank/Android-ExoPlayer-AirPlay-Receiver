@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -61,7 +62,7 @@ public class MultiFieldTimePickerDialog
 
     public MultiFieldTimePickerDialog(
             Context context,
-            int theme,
+            int theme, int title,
             boolean isNegative,
             int hour, int minute, int second, int milli,
             int min, int max, int step, boolean is24hourFormat, boolean isSigned, boolean isValueChangeListener,
@@ -86,6 +87,9 @@ public class MultiFieldTimePickerDialog
                         Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.multi_field_time_picker_dialog, null);
         setView(view);
+
+        TextView titleTextView = (TextView) view.findViewById(R.id.time_picker_dialog_title);
+        if (titleTextView != null) titleTextView.setText(title);
 
         mSignSpinner = (NumberPicker) view.findViewById(R.id.sign);
         mHourSpinner = (NumberPicker) view.findViewById(R.id.hour);

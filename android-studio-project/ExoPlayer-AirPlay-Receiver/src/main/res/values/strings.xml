@@ -33,7 +33,11 @@
 
   <!-- text captions offset selection dialog -->
   <string name="text_offset_selection_button">Sync\nCaptions</string>
-  <string name="text_offset_selection_title">Text Captions Advance/Delay Time Offset</string>
+  <string name="text_offset_selection_title">Text Captions Advance or Delay Time Offset</string>
+
+  <!-- audio track offset selection dialog -->
+  <string name="audio_offset_selection_button">Sync\nAudio</string>
+  <string name="audio_offset_selection_title">Audio Track Advance or Delay Time Offset</string>
 
   <!-- toggle download to offline cache -->
   <string name="toggle_download_button_start">Start\nDownload</string>

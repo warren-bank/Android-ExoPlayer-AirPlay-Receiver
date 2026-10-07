@@ -1,22 +1,22 @@
 package com.github.warren_bank.exoplayer_airplay_receiver.exoplayer2.customizations;
 
-public interface TextSynchronizer extends TimeSynchronizer {
-  long getTextOffset();
-  void setTextOffset(long value);
-  void addTextOffset(long value);
+public interface AudioSynchronizer extends TimeSynchronizer {
+  long getAudioOffset();
+  void setAudioOffset(long value);
+  void addAudioOffset(long value);
 
   @Override
   default long getTimeOffset() {
-    return getTextOffset();
+    return getAudioOffset();
   }
 
   @Override
   default void setTimeOffset(long value) {
-    setTextOffset(value);
+    setAudioOffset(value);
   }
 
   @Override
   default void addTimeOffset(long value) {
-    addTextOffset(value);
+    addAudioOffset(value);
   }
 }
